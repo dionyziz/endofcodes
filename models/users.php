@@ -41,10 +41,9 @@
                 password = ?,
                 email = ?,
                 salt = ?;', array( $username, $array[ 'password' ], $email, $array[ 'salt' ] ) );
-        die( $array[ 'salt' ] );
     }
 
-    function athenticateUser( $username, $password ) {
+    function authenticateUser( $username, $password ) {
         $res = prep_query(
             'SELECT
                 userid, password, salt

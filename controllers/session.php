@@ -5,10 +5,10 @@
             $password = $_POST[ 'password' ];
             $username = $_POST[ 'username' ];
             if ( isset( $username ) && isset( $password ) ) {
-                if ( $id = athenticateUser( $username, $password ) ) {
+                if ( $id = authenticateUser( $username, $password ) ) {
                     $_SESSION[ 'userid' ] = $id;
                     $_SESSION[ 'username' ] = $username;
-                    header( 'Location: index.php?resource=file&method=listing' );
+                    header( 'Location: index.php?resource=dashboard&method=listing' );
                 }
                 else {
                     header( 'Location: views/login.php?error=yes' );
@@ -21,7 +21,7 @@
 
         public static function delete() {
             unset( $_SESSION[ 'userid' ] );
-            header( 'Location: index.php?resource=file&method=listing' );
+            header( 'Location: index.php?resource=dashboard&method=listing' );
         }
     }
 ?>

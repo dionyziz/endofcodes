@@ -9,8 +9,8 @@
 
 <form action="../index.php?resource=session&method=create" method="post">
     <label for="username">Username</label>
-    <input type="text" name="username" id="username" /> 
+    <p><input type="text" name="username" id="username" /></p>
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" />
-    <input type="submit" value="Login" />
+    <p><input type="password" name="password" id="password" /></p>
+    <p><input type="submit" value="Login" /></p>
 </form>
