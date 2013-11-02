@@ -3,7 +3,7 @@
     $resource = $_GET[ 'resource' ];
     $method = $_GET[ 'method' ];
     if ( !isset( $resource ) && !isset( $method ) ) {
-        $resource = 'File';
+        $resource = 'Dashboard';
         $method = 'listing';
     }
     $controller = $resource . 'Controller';
