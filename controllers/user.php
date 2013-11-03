@@ -2,10 +2,16 @@
     class UserController {
         public static function create() {
             include 'models/users.php';
-            if ( isset( $_POST[ 'username' ] ) && isset( $_POST[ 'password' ] ) && isset( $_POST[ 'email' ] ) ) {
+            if ( !empty( $_POST[ 'username' ] ) && !empty( $_POST[ 'password' ] ) && !empty( $_POST[ 'email' ] ) ) {
                 $username = htmlspecialchars( $_POST[ 'username' ] );
                 $password = htmlspecialchars( $_POST[ 'password' ] );
                 $email = htmlspecialchars( $_POST[ 'email' ] );
+                $posat = strrpos( $email, "@" );
+                $posdot = strrpos( $email, "." );
+                if ( $posat < 1 || $posat === false || $posdot == strlen( $email ) || $posdot === false ) {
+                    header( 'Location: views/register.php?mail_notvalid=yes' );
+                    die();
+                }
                 if ( userExists( $username ) ) {
                     header( 'Location: views/register.php?user_used=yes' );
                     die();

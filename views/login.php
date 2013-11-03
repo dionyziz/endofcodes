@@ -3,7 +3,7 @@
         ?><p>Invalid username or password!</p><?php
     }
     else if ( isset ( $_GET[ 'empty' ] ) ) {
-        ?><p>Some fields are empty</p><?php
+        ?><p>Please fill all the forms.</p><?php
     }
 ?>
 

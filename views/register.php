@@ -19,6 +19,9 @@
         if ( isset( $_GET[ 'mail_used' ] ) ) {
             ?><p>Mail is already used</p><?php
         }
+        else if ( isset( $_GET[ 'mail_notvalid' ] ) ) {
+            ?><p>This is not a valid email</p><?php
+        }
     ?>
     <p><input type="text" id="email" name="email" /></p>
     <p><input type="submit" value="Register" /></p>
