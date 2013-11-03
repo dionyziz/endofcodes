@@ -4,7 +4,7 @@
             if ( isset( $_SESSION[ 'userid' ] ) ) {
                 $username = $_SESSION[ 'username' ];
             }
-            view( "home" );
+            view( "home", $username );
         }
     }
 ?>
