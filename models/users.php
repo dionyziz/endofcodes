@@ -1,15 +1,15 @@
 <?php
-    include 'query.php';
+    include 'db.php';
     include 'encrypt.php';
     function userExists( $username ) {
-        $res = prep_query(
+        $res = db(
             'SELECT
                 username
             FROM
                 users
             WHERE
-                username = ?
-            LIMIT 1;', array( $username ) );
+                username = :username
+            LIMIT 1;', array( "username" => $username ) );
         if ( mysql_num_rows( $res ) == 1 ) {
             return true;
         }
@@ -17,14 +17,14 @@
     }
 
     function mailExists( $mail ) {
-        $res = prep_query(
+        $res = db(
             'SELECT
                 username
             FROM
                 users
             WHERE
-                email = ?
-            LIMIT 1;', array( $mail ) );
+                email = :mail
+            LIMIT 1;', array( "mail" => $mail ) );
         if ( mysql_num_rows( $res ) == 1 ) {
             return true;
         }
@@ -33,28 +33,28 @@
 
     function createUser( $username, $password, $email ) {
         $array = encrypt( $password );
-        prep_query(
+        db(
             'INSERT INTO
                 users
             SET
-                username = ?,
-                password = ?,
-                email = ?,
-                salt = ?;', array( $username, $array[ 'password' ], $email, $array[ 'salt' ] ) );
+                username = :username,
+                password = :password,
+                email = :email,
+                salt = :salt;', array( "username" => $username, "password" => $array[ 'hash' ], "email" => $email, "salt" => $array[ 'salt' ] ) );
     }
 
     function authenticateUser( $username, $password ) {
-        $res = prep_query(
+        $res = db(
             'SELECT
                 userid, password, salt
             FROM
                 users
             WHERE
-                username = ?
-            LIMIT 1;', array( $username ) );
+                username = :username
+            LIMIT 1;', array( "username" => $username ) );
         if ( mysql_num_rows( $res ) == 1 ) {
             $row = mysql_fetch_array( $res );
-            if ( $row[ 'password' ] == hash( 'sha256', $password . $row[ 'salt' ] ) ) {
+            if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
                 return $row[ 'userid' ];
             }
         }
