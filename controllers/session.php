@@ -5,7 +5,7 @@
             $password = $_POST[ 'password' ];
             $username = $_POST[ 'username' ];
             if ( isset( $username ) && isset( $password ) ) {
-                if ( $id = authenticateUser( $username, $password ) ) {
+                if ( $id = User::authenticateUser( $username, $password ) ) {
                     $_SESSION[ 'userid' ] = $id;
                     $_SESSION[ 'username' ] = $username;
                     header( 'Location: index.php?resource=dashboard&method=listing' );

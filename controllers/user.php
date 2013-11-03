@@ -12,16 +12,16 @@
                     header( 'Location: views/register.php?mail_notvalid=yes' );
                     die();
                 }
-                if ( userExists( $username ) ) {
+                if ( User::userExists( $username ) ) {
                     header( 'Location: views/register.php?user_used=yes' );
                     die();
                 }
-                else if ( mailExists( $email ) ) {
+                else if ( User::mailExists( $email ) ) {
                     header( 'Location: views/register.php?mail_used=yes' );
                     die();
                 }
-                createUser( $username, $password, $email );
-                $id = authenticateUser( $username, $password );
+                User::createUser( $username, $password, $email );
+                $id = User::authenticateUser( $username, $password );
                 $_SESSION[ 'userid' ] = $id; 
                 $_SESSION[ 'username' ] = $username;
                 header( 'Location: index.php?resource=dashboard&method=listing' );
