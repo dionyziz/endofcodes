@@ -1,5 +1,6 @@
 <?php
     include 'models/database.php';
+    include 'views/layout.php';
     if ( $_GET[ 'wrong_contr' ] ) {
         ?><p>Wrong controller</p><?php
     }
