@@ -13,6 +13,11 @@
     ?>
     <p><input type="text" id="username" name="username" /></p>
     <label for="password">Password</label>
+    <?php
+        if ( isset( $_GET[ 'small_pass' ) ) {
+            ?><p>Password should be at leaste 7 characters long</p><?php
+        }
+    ?>
     <p><input type="password" id="password" name="password" /></p>
     <label for="email">Email</label>
     <?php
