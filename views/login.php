@@ -7,7 +7,7 @@
     }
 ?>
 
-<form action="../index.php?resource=session&method=create" method="post">
+<form action="index.php?resource=session&method=create" method="POST">
     <label for="username">Username</label>
     <p><input type="text" name="username" id="username" /></p>
     <label for="password">Password</label>

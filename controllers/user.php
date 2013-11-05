@@ -1,23 +1,20 @@
 <?php
     class UserController {
-        public static function create() {
+        public static function create( $username = '', $password = '', $email = '' ) {
             include 'models/users.php';
-            if ( !empty( $_POST[ 'username' ] ) && !empty( $_POST[ 'password' ] ) && !empty( $_POST[ 'email' ] ) ) {
-                $username = $_POST[ 'username' ];
-                $password = $_POST[ 'password' ];
-                $email = $_POST[ 'email' ];
+            if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
                 $posat = strrpos( $email, "@" );
                 $posdot = strrpos( $email, "." );
                 if ( $posat < 1 || $posat === false || $posdot == strlen( $email ) || $posdot === false ) {
-                    header( 'Location: views/register.php?mail_notvalid=yes' );
+                    header( 'Location: index.php?mail_notvalid=yes&resource=user&method=create' );
                     die();
                 }
                 if ( User::userExists( $username ) ) {
-                    header( 'Location: views/register.php?user_used=yes' );
+                    header( 'Location: index.php?user_used=yes&resource=user&method=create' );
                     die();
                 }
                 else if ( User::mailExists( $email ) ) {
-                    header( 'Location: views/register.php?mail_used=yes' );
+                    header( 'Location: index.php?mail_used=yes&resource=user&method=create' );
                     die();
                 }
                 User::createUser( $username, $password, $email );
@@ -27,8 +24,12 @@
                 header( 'Location: index.php?resource=dashboard&method=listing' );
             }
             else {
-                header( 'Location: views/register.php?empty=yes' );
+                header( 'Location: index.php?empty=yes&resource=user&method=create' );
             }
+        }
+
+        public static function createView() {
+            include 'views/register.php';
         }
     }
 ?>

@@ -4,7 +4,7 @@
     }
 ?>
 
-<form action="../index.php?resource=user&method=create" method="post">
+<form action="index.php?resource=user&method=create" method="post">
     <label for="username">Username</label>
     <?php
         if ( isset( $_GET[ 'user_used' ] ) ) {

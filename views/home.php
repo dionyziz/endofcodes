@@ -3,6 +3,6 @@
         ?><a href="index.php?resource=session&amp;method=delete">Logout</a><?php
     }
     else {
-        ?><a href="views/login.php">Login</a> or <a href="views/register.php">Register</a><?php
+        ?><a href="index.php?resource=session&amp;method=create">Login</a> or <a href="index.php?resource=user&amp;method=create">Register</a><?php
     }
 ?>
