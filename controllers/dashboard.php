@@ -4,9 +4,9 @@
             if ( isset( $_SESSION[ 'userid' ] ) ) {
                 $username = $_SESSION[ 'username' ];
             }
-            else if ( isset( $_GET[ 'wrong_contr' ] ) ) {
-            }
-            view( "home", $username );
+            include 'views/header.php';
+            include 'views/home.php';
+            include 'views/footer.php';
         }
     }
 ?>
