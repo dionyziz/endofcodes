@@ -1,9 +1,9 @@
 <?php
     include 'views/header.php';
-    if ( isset( $_GET[ 'error' ] ) ) {
+    if ( isset( $error ) ) {
         ?><p>Invalid username or password!</p><?php
     }
-    else if ( isset ( $_GET[ 'empty' ] ) ) {
+    else if ( isset( $empty ) ) {
         ?><p>Please fill all the forms.</p><?php
     }
 ?>
