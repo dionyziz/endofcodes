@@ -1,4 +1,5 @@
 <?php
+    include 'header.php';
     if ( isset( $_GET[ 'empty' ] ) ) {
         ?><p>Please fill all the forms.</p><?php
     }
@@ -31,3 +32,7 @@
     <p><input type="text" id="email" name="email" /></p>
     <p><input type="submit" value="Register" /></p>
 </form>
+
+<?php
+    include 'footer.php';
+?>
