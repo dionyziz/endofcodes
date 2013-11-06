@@ -5,6 +5,7 @@
             if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
                 if ( strlen( $password ) < 6 ) {
                     header( 'Location: index.php?resource=user&method=create&small_pass=yes' );
+                    die();
                 }
                 $posat = strrpos( $email, "@" );
                 $posdot = strrpos( $email, "." );
@@ -31,7 +32,7 @@
             }
         }
 
-        public static function createView() {
+        public static function createView( $empty, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
             include 'views/register.php';
         }
     }
