@@ -1,4 +1,5 @@
 <?php
+    include 'views/header.php';
     if ( isset( $_GET[ 'error' ] ) ) {
         ?><p>Invalid username or password!</p><?php
     }
@@ -14,3 +15,6 @@
     <p><input type="password" name="password" id="password" /></p>
     <p><input type="submit" value="Login" /></p>
 </form>
+<?php
+    include 'views/footer.php';
+?>
