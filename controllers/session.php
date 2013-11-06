@@ -22,7 +22,7 @@
             header( 'Location: index.php?resource=dashboard&method=listing' );
         }
 
-        public static function createView() {
+        public static function createView( $error, $empty ) {
             include 'views/login.php';
         }
 
