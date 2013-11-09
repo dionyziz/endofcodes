@@ -7,9 +7,8 @@
                     header( 'Location: index.php?resource=user&method=create&small_pass=yes' );
                     die();
                 }
-                $posat = strrpos( $email, "@" );
-                $posdot = strrpos( $email, "." );
-                if ( $posat < 1 || $posat === false || $posdot == strlen( $email ) || $posdot === false ) {
+                $valid = User::validMail( $email );
+                if ( !$valid ) {
                     header( 'Location: index.php?mail_notvalid=yes&resource=user&method=create' );
                     die();
                 }
