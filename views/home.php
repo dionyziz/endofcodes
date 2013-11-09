@@ -1,6 +1,9 @@
 <?php
     if ( isset( $username ) ) {
-        ?><p>Hello, <?php echo $username; ?>.</p>
+        ?><p>Hello, 
+        <?php 
+            echo htmlspecialchars( $username );
+        ?>.</p>
         <?php
             include 'logoutform.php';
     }
