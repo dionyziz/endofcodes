@@ -1,8 +1,5 @@
 <?php
     include 'header.php';
-    if ( $_GET[ 'wrong_contr' ] ) {
-        ?><p>Wrong controller</p><?php
-    }
     $methods = array(
         'create' => 1,
         'listing' => 0,
