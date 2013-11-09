@@ -4,8 +4,8 @@
             include 'models/users.php';
             if ( !empty( $username ) && !empty( $password ) ) {
                 if ( $id = User::authenticateUser( $username, $password ) ) {
-                    $_SESSION[ 'userid' ] = $id;
-                    $_SESSION[ 'username' ] = $username;
+                    $_SESSION[ 'user' ][ 'userid' ] = $id;
+                    $_SESSION[ 'user' ][ 'username' ] = $username;
                     header( 'Location: index.php?resource=dashboard&method=view' );
                 }
                 else {
@@ -18,7 +18,7 @@
         }
 
         public static function delete() {
-            unset( $_SESSION[ 'userid' ] );
+            unset( $_SESSION[ 'user' ][ 'userid' ] );
             header( 'Location: index.php?resource=dashboard&method=view' );
         }
 
