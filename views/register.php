@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include 'views/header.php';
     if ( isset( $empty ) ) {
         ?><p>Please fill all the forms.</p><?php
     }
@@ -34,5 +34,5 @@
 </form>
 
 <?php
-    include 'footer.php';
+    include 'views/footer.php';
 ?>
