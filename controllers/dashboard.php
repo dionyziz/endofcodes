@@ -1,6 +1,6 @@
 <?php
     class DashboardController {
-        public static function listing() {
+        public static function view() {
             if ( isset( $_SESSION[ 'userid' ] ) ) {
                 $username = $_SESSION[ 'username' ];
             }

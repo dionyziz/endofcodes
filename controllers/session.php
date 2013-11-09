@@ -6,7 +6,7 @@
                 if ( $id = User::authenticateUser( $username, $password ) ) {
                     $_SESSION[ 'userid' ] = $id;
                     $_SESSION[ 'username' ] = $username;
-                    header( 'Location: index.php?resource=dashboard&method=listing' );
+                    header( 'Location: index.php?resource=dashboard&method=view' );
                 }
                 else {
                     header( 'Location: index.php?resource=session&method=create&error=yes' );
@@ -19,7 +19,7 @@
 
         public static function delete() {
             unset( $_SESSION[ 'userid' ] );
-            header( 'Location: index.php?resource=dashboard&method=listing' );
+            header( 'Location: index.php?resource=dashboard&method=view' );
         }
 
         public static function createView( $error, $empty ) {

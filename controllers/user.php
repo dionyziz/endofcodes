@@ -24,7 +24,7 @@
                 $id = User::authenticateUser( $username, $password );
                 $_SESSION[ 'userid' ] = $id; 
                 $_SESSION[ 'username' ] = $username;
-                header( 'Location: index.php?resource=dashboard&method=listing' );
+                header( 'Location: index.php?resource=dashboard&method=view' );
             }
             else {
                 header( 'Location: index.php?empty=yes&resource=user&method=create' );

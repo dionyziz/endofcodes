@@ -20,7 +20,7 @@
         $method = '';
     }
     if ( !isset( $methods[ $method ] ) ) {
-        $method = 'listing';
+        $method = 'view';
     }
     switch ( $_SERVER[ 'REQUEST_METHOD' ] ) {
         case 'POST':
@@ -40,7 +40,7 @@
     $filename = 'controllers/' . $resource . '.php';
     if ( !file_exists( $filename ) ) {
         $resource = 'dashboard';
-        $method = 'listing';
+        $method = 'view';
         $filename = 'controllers/' . $resource . '.php';
     }
     include $filename;
