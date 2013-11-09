@@ -2,7 +2,7 @@
     include 'db.php';
     include 'encrypt.php';
     class User {
-        function userExists( $username ) {
+        function Exists( $username ) {
             $res = db(
                 'SELECT
                     username
