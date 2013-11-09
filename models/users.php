@@ -41,7 +41,9 @@
                     username = :username,
                     password = :password,
                     email = :email,
-                    salt = :salt;', array( "username" => $username, "password" => $array[ 'hash' ], "email" => $email, "salt" => $array[ 'salt' ] ) );
+                    salt = :salt;',
+                array( "username" => $username, "password" => $array[ 'hash' ], "email" => $email, "salt" => $array[ 'salt' ] ) 
+            );
         }
 
         function authenticateUser( $username, $password ) {
