@@ -3,7 +3,7 @@
         public static function create( $username = '', $password = '', $email = '' ) {
             include 'models/users.php';
             if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
-                if ( strlen( $password ) < 6 ) {
+                if ( strlen( $password ) <= 6 ) {
                     header( 'Location: index.php?resource=user&method=create&small_pass=yes' );
                     die();
                 }
