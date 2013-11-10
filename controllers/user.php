@@ -31,7 +31,7 @@
             }
         }
 
-        public static function view( $username ) {
+        public static function view( $username, $notvalid ) {
             if ( $username === NULL ) {
                 header( 'Location: index.php?resource=dashboard&method=view' );
             }
