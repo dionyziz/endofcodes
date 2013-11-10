@@ -31,6 +31,15 @@
             }
         }
 
+        public static function view( $username ) {
+            include 'models/users.php';
+            $credentials = User::getCredentials( $username );
+            if ( $credentials === NULL ) {
+                die( 'There was an error on function view at controllers/user.php' );
+            }
+            include 'views/profile.php';
+        }
+
         public static function createView( $empty, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
             include 'views/register.php';
         }

@@ -2,7 +2,7 @@
     include 'db.php';
     include 'encrypt.php';
     class User {
-        function Exists( $username ) {
+        public function Exists( $username ) {
             $res = db(
                 'SELECT
                     username
@@ -17,7 +17,7 @@
             return false;
         }
 
-        function mailExists( $mail ) {
+        public function mailExists( $mail ) {
             $res = db(
                 'SELECT
                     username
@@ -32,7 +32,7 @@
             return false;
         }
 
-        function validMail( $mail ) {
+        public function validMail( $mail ) {
             $posat = strrpos( $mail, "@" );
             $posdot = strrpos( $mail, "." );
             if ( $posat < 1 || $posat === false || $posdot === strlen( $mail ) || $posdot === false ) {
@@ -41,7 +41,7 @@
             return true;
         }
 
-        function createUser( $username, $password, $email ) {
+        public function createUser( $username, $password, $email ) {
             $array = encrypt( $password );
             db(
                 'INSERT INTO
@@ -55,7 +55,7 @@
             );
         }
 
-        function authenticateUser( $username, $password ) {
+        public function authenticateUser( $username, $password ) {
             $res = db(
                 'SELECT
                     userid, password, salt
@@ -71,6 +71,25 @@
                 }
             }
             return false;
+        }
+
+        public function getCredentials( $username ) {
+            $res = db(
+                'SELECT
+                    username, userid, password, salt, email
+                FROM
+                    users
+                WHERE
+                    username = :username
+                LIMIT 1;', array( "username" => $username )
+            );
+            if ( mysql_num_rows( $res ) == 1 ) {
+                $row = mysql_fetch_array( $res );
+                return $row;
+            }
+            else {
+                return NULL;
+            }
         }
     }
 ?>

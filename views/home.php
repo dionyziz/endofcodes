@@ -1,9 +1,10 @@
 <?php
     if ( isset( $username ) ) {
-        ?><p>Hello, 
-        <?php 
+        ?><p>Hello,<a href="index.php?resource=user&method=view&username=<?php
+            echo $username;
+        ?>"><?php 
             echo htmlspecialchars( $username );
-        ?>.</p>
+        ?></a>.</p>
         <?php
             include 'logoutform.php';
     }
