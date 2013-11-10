@@ -18,7 +18,7 @@
         }
 
         public static function delete() {
-            unset( $_SESSION[ 'user' ][ 'userid' ] );
+            unset( $_SESSION[ 'user' ] );
             header( 'Location: index.php?resource=dashboard&method=view' );
         }
 
