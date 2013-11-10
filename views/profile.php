@@ -3,11 +3,11 @@
 ?>
 
 <h1><?php
-        echo $credentials[ 'username' ];
+        echo htmlspecialchars( $credentials[ 'username' ] );
 ?></h1>
 
 <p>Contact: <?php
-    echo $credentials[ 'email' ];
+    echo htmlspecialchars( $credentials[ 'email' ] );
 ?></p>
 
 <?php
