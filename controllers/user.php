@@ -44,6 +44,10 @@
         }
 
         public static function update( $password ) {
+            if ( strlen( $password ) <= 6 ) {
+                header( 'Location: index.php?resource=user&method=update&small_pass=yes' );
+                die();
+            }
             include 'models/users.php';
             $username = $_SESSION[ 'user' ][ 'username' ];
             User::updatePassword( $username, $password );
@@ -62,7 +66,7 @@
             include 'views/register.php';
         }
 
-        public static function updateView() {
+        public static function updateView( $small_pass ) {
             include 'views/passreset.php';
         }
     }
