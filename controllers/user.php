@@ -32,6 +32,9 @@
         }
 
         public static function view( $username ) {
+            if ( $username === NULL ) {
+                header( 'Location: index.php?resource=dashboard&method=view' );
+            }
             include 'models/users.php';
             $credentials = User::getCredentials( $username );
             if ( $credentials === NULL ) {
@@ -40,8 +43,19 @@
             include 'views/profile.php';
         }
 
+        public static function update( $password ) {
+            include 'models/users.php';
+            $username = $_SESSION[ 'user' ][ 'username' ];
+            User::updatePassword( $username, $password );
+            header( 'Location: index.php?resource=dashboard&method=view' );
+        }
+
         public static function createView( $empty, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
             include 'views/register.php';
+        }
+
+        public static function updateView() {
+            include 'views/passreset.php';
         }
     }
 ?>

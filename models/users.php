@@ -55,6 +55,20 @@
             );
         }
 
+        public function updatePassword( $username, $password ) {
+            $array = encrypt( $password );
+            db(
+                'UPDATE
+                    users
+                SET
+                    password = :password,
+                    salt = :salt
+                WHERE
+                    username = :username',
+                array( "username" => $username, "password" => $array[ 'hash' ], "salt" => $array[ 'salt' ] )
+            );
+        }
+
         public function authenticateUser( $username, $password ) {
             $res = db(
                 'SELECT
