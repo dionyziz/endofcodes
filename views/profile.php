@@ -12,7 +12,10 @@
 
 <?php
     if ( $_SESSION[ 'user' ][ 'userid' ] === $credentials[ 'userid' ] ) {
-        ?><p>Want to <a href="index.php?resource=user&method=update">change password</a>?</p><?php
+        ?><p>Want to <a href="index.php?resource=user&method=update">change password</a>?</p>
+        <form action="index.php?resource=user&method=delete" method="POST">
+            <input type="submit" value="Delete your account" />
+        </form><?php
     }
 ?>
 

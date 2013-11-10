@@ -50,6 +50,14 @@
             header( 'Location: index.php?resource=dashboard&method=view' );
         }
 
+        public static function delete() {
+            include 'models/users.php';
+            $username = $_SESSION[ 'user' ][ 'username' ];
+            unset( $_SESSION[ 'user' ] );
+            User::deleteUser( $username );
+            header( 'Location: index.php?resource=dashboard&method=view' );
+        }
+
         public static function createView( $empty, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
             include 'views/register.php';
         }

@@ -55,6 +55,15 @@
             );
         }
 
+        public function deleteUser( $username ) {
+            db(
+                'DELETE FROM
+                    users
+                WHERE
+                    username = :username;', array( "username" => $username )
+            );
+        }
+
         public function updatePassword( $username, $password ) {
             $array = encrypt( $password );
             db(
