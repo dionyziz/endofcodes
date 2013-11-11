@@ -104,7 +104,7 @@
             return false;
         }
 
-        public function getCredentials( $username ) {
+        public function get( $username ) {
             $res = db(
                 'SELECT
                     username, userid, password, salt, email

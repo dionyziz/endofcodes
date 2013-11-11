@@ -36,7 +36,7 @@
                 header( 'Location: index.php?resource=dashboard&method=view' );
             }
             include 'models/users.php';
-            $credentials = User::getCredentials( $username );
+            $credentials = User::get( $username );
             if ( $credentials === NULL ) {
                 die( 'There was an error on function view at controllers/user.php' );
             }
