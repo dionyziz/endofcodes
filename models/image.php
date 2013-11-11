@@ -7,7 +7,7 @@
                 SET
                     userid = :userid,
                     imagename = :imagename;',
-                array( "userid" => $userid, "imagename" => $imagename )
+                compact( "userid", "imagename" )
             );
         }
 
@@ -17,7 +17,7 @@
                     images
                 WHERE
                     imagename = :imagename;',
-                array( "imagename" => $imagename )
+                compact( "imagename" )
             );
         }
     }
