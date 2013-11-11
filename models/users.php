@@ -59,7 +59,7 @@
             );
         }
 
-        public function deleteUser( $username ) {
+        public function delete( $username ) {
             db(
                 'DELETE FROM
                     users

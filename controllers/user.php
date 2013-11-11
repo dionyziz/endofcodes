@@ -58,7 +58,7 @@
             include 'models/users.php';
             $username = $_SESSION[ 'user' ][ 'username' ];
             unset( $_SESSION[ 'user' ] );
-            User::deleteUser( $username );
+            User::delete( $username );
             header( 'Location: index.php?resource=dashboard&method=view' );
         }
 
