@@ -2,15 +2,20 @@
     class ImageController {
         public static function create() {
             include 'models/image.php';
+            include 'models/imgextentions.php';
             $imagename = basename( $_FILES[ 'image' ][ 'name' ] );
             $username = $_SESSION[ 'user' ][ 'username' ];
             $ext = substr( $imagename, strrpos( $imagename, "." ), strlen( $imagename ) - 1 );
+            for ( $i = 0; $i < count( $extentions ); ++$i ) {
+                if ( $ext === $extentions[ $i ] ) {
+                    break;
+                }
+            }
             $ext = str_replace( ".", "", $ext );
-            if ( $ext != 'jpg' && $ext != 'png' && $ext != 'jpeg' ) {
+            if ( $i == count( $extentions ) ) {
                 header( 'Location: index.php?resource=user&method=view&notvalid=yes&username=' . $username );
                 die();
             }
-            $extentions = array( '.jpg', '.png', '.jpeg' );
             $target_path = 'Avatars/';
             for ( $i = 0; $i < count( $extentions ); ++$i ) {
                 if ( file_exists( $target_path . $username . $extentions[ $i ] ) ) {
