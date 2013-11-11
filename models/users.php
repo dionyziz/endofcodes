@@ -50,7 +50,12 @@
                     password = :password,
                     email = :email,
                     salt = :salt;',
-                array( "username" => $username, "password" => $array[ 'hash' ], "email" => $email, "salt" => $array[ 'salt' ] ) 
+                array( 
+                    "username" => $username, 
+                    "password" => $array[ 'hash' ], 
+                    "email" => $email, 
+                    "salt" => $array[ 'salt' ] 
+                ) 
             );
         }
 
