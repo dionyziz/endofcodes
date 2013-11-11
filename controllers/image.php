@@ -20,11 +20,11 @@
             for ( $i = 0; $i < count( $extentions ); ++$i ) {
                 if ( file_exists( $target_path . $username . $extentions[ $i ] ) ) {
                     unlink( $target_path . $username . $extentions[ $i ] );
-                    Image::deleteImage( $username . $extentions[ $i ] );
+                    Image::delete( $username . $extentions[ $i ] );
                 }
             }
             $imagename = $username . "." . $ext;
-            Image::createImage( $_SESSION[ 'user' ][ 'userid' ], $imagename );
+            Image::create( $_SESSION[ 'user' ][ 'userid' ], $imagename );
             $target_path = $target_path . $imagename;
             move_uploaded_file( $_FILES[ 'image' ][ 'tmp_name' ], $target_path );
             header( 'Location: index.php?resource=user&method=view&username=' . $username );

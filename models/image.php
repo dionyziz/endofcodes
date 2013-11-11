@@ -1,6 +1,6 @@
 <?php
     class Image {
-        public static function createImage( $userid, $imagename ) {
+        public static function create( $userid, $imagename ) {
             db(
                 'INSERT INTO
                     images
@@ -11,7 +11,7 @@
             );
         }
 
-        public static function deleteImage( $imagename ) {
+        public static function delete( $imagename ) {
             db(
                 'DELETE FROM
                     images
