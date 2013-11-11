@@ -12,7 +12,7 @@
             }
             $extentions = array( '.jpg', '.png', '.jpeg' );
             $target_path = 'Avatars/';
-            for ( $i = 0; $i < 3; ++$i ) {
+            for ( $i = 0; $i < count( $extentions ); ++$i ) {
                 if ( file_exists( $target_path . $username . $extentions[ $i ] ) ) {
                     unlink( $target_path . $username . $extentions[ $i ] );
                     Image::deleteImage( $username . $extentions[ $i ] );
