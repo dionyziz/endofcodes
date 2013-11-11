@@ -43,15 +43,27 @@
             include 'views/profile.php';
         }
 
-        public static function update( $password ) {
-            if ( strlen( $password ) <= 6 ) {
-                header( 'Location: index.php?resource=user&method=update&small_pass=yes' );
-                die();
-            }
+        public static function update( $password1, $password2, $password3 ) {
             include 'models/users.php';
             $username = $_SESSION[ 'user' ][ 'username' ];
-            User::update( $username, $password );
-            header( 'Location: index.php?resource=dashboard&method=view' );
+            if ( User::authenticateUser( $username, $password1 ) {
+                if ( $password2 === $password3 ) {
+                    if ( strlen( $password ) <= 6 ) {
+                        header( 'Location: index.php?resource=user&method=update&small_pass=yes' );
+                        die();
+                    }
+                    User::update( $username, $password );
+                    header( 'Location: index.php?resource=dashboard&method=view' );
+                }
+                else {
+                    header( 'Location: index.php?resource=user&method=update&not_matched=yes' );
+                    die();
+                }
+            }
+            else {
+                header( 'Location: index.php?resource=user&method=update&old_pass=yes' );
+                    die();
+            }
         }
 
         public static function delete() {
@@ -66,7 +78,7 @@
             include 'views/register.php';
         }
 
-        public static function updateView( $small_pass ) {
+        public static function updateView( $small_pass, $not_matched, $old_pass ) {
             include 'views/passreset.php';
         }
     }
