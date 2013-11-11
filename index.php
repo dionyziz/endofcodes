@@ -1,5 +1,6 @@
 <?php
     include 'header.php';
+    include 'models/dependencies.php';
     $methods = array(
         'create' => 1,
         'listing' => 0,

@@ -1,5 +1,4 @@
 <?php
-    include 'db.php';
     class Image {
         public static function createImage( $userid, $imagename ) {
             db(

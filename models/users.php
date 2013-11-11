@@ -1,5 +1,4 @@
 <?php
-    include 'db.php';
     include 'encrypt.php';
     class User {
         public function Exists( $username ) {
