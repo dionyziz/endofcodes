@@ -2,6 +2,8 @@
     class UserController {
         public static function create( $username = '', $password = '', $email = '' ) {
             include 'models/users.php';
+            $_SESSION[ 'create_post' ][ 'username' ] = $username;
+            $_SESSION[ 'create_post' ][ 'email' ] = $email;
             if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
                 if ( strlen( $password ) <= 6 ) {
                     header( 'Location: index.php?resource=user&method=create&small_pass=yes' );
@@ -28,6 +30,7 @@
             }
             else {
                 header( 'Location: index.php?empty=yes&resource=user&method=create' );
+                die();
             }
         }
 
@@ -62,7 +65,7 @@
             }
             else {
                 header( 'Location: index.php?resource=user&method=update&old_pass=yes' );
-                    die();
+                die();
             }
         }
 

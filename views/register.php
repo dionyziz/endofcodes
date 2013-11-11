@@ -10,9 +10,19 @@
     <?php
         if ( isset( $user_used ) ) {
             ?><p>Username already exists</p><?php
+            $val = "";
+        }
+        else if ( isset( $_SESSION[ 'create_post' ][ 'username' ] ) ) {
+            $val = $_SESSION[ 'create_post' ][ 'username' ];
+            unset( $_SESSION[ 'create_post' ][ 'username' ] );
+        }
+        else {
+            $val = "";
         }
     ?>
-    <p><input type="text" id="username" name="username" /></p>
+    <p><input type="text" id="username" name="username" value="<?php
+        echo $val;
+    ?>"/></p>
     <label for="password">Password</label>
     <?php
         if ( isset( $small_pass ) ) {
@@ -24,12 +34,23 @@
     <?php
         if ( isset( $mail_used ) ) {
             ?><p>Mail is already used</p><?php
+            $val = "";
         }
         else if ( isset( $mail_notvalid ) ) {
             ?><p>This is not a valid email</p><?php
+            $val = "";
+        }
+        else if ( isset( $_SESSION[ 'create_post' ][ 'email' ] ) ) {
+            $val = $_SESSION[ 'create_post' ][ 'email' ];
+            unset( $_SESSION[ 'create_post' ][ 'email' ];
+        }
+        else {
+            $val = "";
         }
     ?>
-    <p><input type="text" id="email" name="email" /></p>
+    <p><input type="text" id="email" name="email" value="<?php
+        echo $val;
+    ?>"/></p>
     <p><input type="submit" value="Register" /></p>
 </form>
 
