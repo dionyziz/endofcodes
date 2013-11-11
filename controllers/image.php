@@ -5,7 +5,7 @@
             include 'models/imgextentions.php';
             $imagename = basename( $_FILES[ 'image' ][ 'name' ] );
             $username = $_SESSION[ 'user' ][ 'username' ];
-            $ext = substr( $imagename, strrpos( $imagename, "." ), strlen( $imagename ) - 1 );
+            $ext = substr( $imagename, strrpos( $imagename, "." ) );
             for ( $i = 0; $i < count( $extentions ); ++$i ) {
                 if ( $ext === $extentions[ $i ] ) {
                     break;
