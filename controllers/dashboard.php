@@ -1,7 +1,7 @@
 <?php
     class DashboardController {
         public static function view() {
-            if ( isset( $_SESSION[ 'user' ][ 'userid' ] ) ) {
+            if ( isset( $_SESSION[ 'user' ] ) ) {
                 $username = $_SESSION[ 'user' ][ 'username' ];
             }
             include 'views/header.php';
