@@ -42,7 +42,7 @@
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'email' ] ) ) {
             $val = $_SESSION[ 'create_post' ][ 'email' ];
-            unset( $_SESSION[ 'create_post' ][ 'email' ];
+            unset( $_SESSION[ 'create_post' ][ 'email' ] );
         }
         else {
             $val = "";

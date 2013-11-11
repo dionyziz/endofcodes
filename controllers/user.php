@@ -49,13 +49,13 @@
         public static function update( $password1, $password2, $password3 ) {
             include 'models/users.php';
             $username = $_SESSION[ 'user' ][ 'username' ];
-            if ( User::authenticateUser( $username, $password1 ) {
+            if ( User::authenticateUser( $username, $password1 ) ) {
                 if ( $password2 === $password3 ) {
-                    if ( strlen( $password ) <= 6 ) {
+                    if ( strlen( $password2 ) <= 6 ) {
                         header( 'Location: index.php?resource=user&method=update&small_pass=yes' );
                         die();
                     }
-                    User::update( $username, $password );
+                    User::update( $username, $password2 );
                     header( 'Location: index.php?resource=dashboard&method=view' );
                 }
                 else {
