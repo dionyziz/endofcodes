@@ -9,7 +9,9 @@
                     users
                 WHERE
                     username = :username
-                LIMIT 1;', array( "username" => $username ) );
+                LIMIT 1;', 
+                compact( "username" ) 
+            );
             if ( mysql_num_rows( $res ) == 1 ) {
                 return true;
             }
@@ -24,7 +26,9 @@
                     users
                 WHERE
                     email = :mail
-                LIMIT 1;', array( "mail" => $mail ) );
+                LIMIT 1;', 
+                compact( "mail" ) 
+            );
             if ( mysql_num_rows( $res ) == 1 ) {
                 return true;
             }
@@ -42,6 +46,8 @@
 
         public function createUser( $username, $password, $email ) {
             $array = encrypt( $password );
+            $password = $array[ 'hash' ];
+            $salt = $array[ 'salt' ];
             db(
                 'INSERT INTO
                     users
@@ -50,12 +56,7 @@
                     password = :password,
                     email = :email,
                     salt = :salt;',
-                array( 
-                    "username" => $username, 
-                    "password" => $array[ 'hash' ], 
-                    "email" => $email, 
-                    "salt" => $array[ 'salt' ] 
-                ) 
+                compact( "username", "password", "email", "salt" )
             );
         }
 
@@ -64,12 +65,15 @@
                 'DELETE FROM
                     users
                 WHERE
-                    username = :username;', array( "username" => $username )
+                    username = :username;', 
+                compact( "username" )
             );
         }
 
         public function update( $username, $password ) {
             $array = encrypt( $password );
+            $password = $array[ 'hash' ];
+            $salt = $array[ 'salt' ];
             db(
                 'UPDATE
                     users
@@ -78,11 +82,7 @@
                     salt = :salt
                 WHERE
                     username = :username',
-                array( 
-                    "username" => $username, 
-                    "password" => $array[ 'hash' ], 
-                    "salt" => $array[ 'salt' ] 
-                )
+                compact( "username", "password", "salt" )
             );
         }
 
@@ -94,7 +94,9 @@
                     users
                 WHERE
                     username = :username
-                LIMIT 1;', array( "username" => $username ) );
+                LIMIT 1;', 
+                compact( "username" ) 
+            );
             if ( mysql_num_rows( $res ) == 1 ) {
                 $row = mysql_fetch_array( $res );
                 if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
@@ -112,7 +114,8 @@
                     users
                 WHERE
                     username = :username
-                LIMIT 1;', array( "username" => $username )
+                LIMIT 1;', 
+                compact( "username" )
             );
             if ( mysql_num_rows( $res ) == 1 ) {
                 $row = mysql_fetch_array( $res );
