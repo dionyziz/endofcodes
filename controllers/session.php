@@ -25,9 +25,5 @@
         public static function createView( $error, $empty ) {
             include 'views/login.php';
         }
-
-        public static function deleteView() {
-            SessionController::delete();
-        }
     }
 ?>
