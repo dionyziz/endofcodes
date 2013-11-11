@@ -50,7 +50,7 @@
             }
             include 'models/users.php';
             $username = $_SESSION[ 'user' ][ 'username' ];
-            User::updatePassword( $username, $password );
+            User::update( $username, $password );
             header( 'Location: index.php?resource=dashboard&method=view' );
         }
 

@@ -68,7 +68,7 @@
             );
         }
 
-        public function updatePassword( $username, $password ) {
+        public function update( $username, $password ) {
             $array = encrypt( $password );
             db(
                 'UPDATE
