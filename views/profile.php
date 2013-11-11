@@ -29,7 +29,7 @@
 
 <?php
     if ( $_SESSION[ 'user' ][ 'userid' ] === $credentials[ 'userid' ] ) {
-        ?><form action="index.php?resource=image&method=create" method="POST" enctype="multipart/form-data">
+        ?><form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data">
             <label for="image">Upload an avatar</label>
             <?php
                 if ( isset( $notvalid ) ) {
@@ -39,8 +39,8 @@
             <p><input type="file" name="image" id="image" /></p>
             <input type="submit" value="Upload" />
         </form>
-        <p>Want to <a href="index.php?resource=user&method=update">change password</a>?</p>
-        <form action="index.php?resource=user&method=delete" method="POST">
+        <p>Want to <a href="index.php?resource=user&amp;method=update">change password</a>?</p>
+        <form action="index.php?resource=user&amp;method=delete" method="POST">
             <input type="submit" value="Delete your account" />
         </form><?php
     }
