@@ -78,7 +78,11 @@
                     salt = :salt
                 WHERE
                     username = :username',
-                array( "username" => $username, "password" => $array[ 'hash' ], "salt" => $array[ 'salt' ] )
+                array( 
+                    "username" => $username, 
+                    "password" => $array[ 'hash' ], 
+                    "salt" => $array[ 'salt' ] 
+                )
             );
         }
 
