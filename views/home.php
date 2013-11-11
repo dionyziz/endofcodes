@@ -1,7 +1,7 @@
 <?php
     if ( isset( $username ) ) {
-        ?><p>Hello,<a href="index.php?resource=user&method=view&username=<?php
-            echo $username;
+        ?><p>Hello,<a href="index.php?resource=user&amp;method=view&amp;username=<?php
+            echo htmlspecialchars( $username );
         ?>"><?php 
             echo htmlspecialchars( $username );
         ?></a>.</p>
