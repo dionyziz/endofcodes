@@ -11,9 +11,9 @@
 ?></p>
 
 <?php
+    include 'models/imgextentions.php';
     $target_path = 'Avatars/' . $credentials[ 'username' ];
-    $extentions = array( '.jpg', '.jpeg', '.png' );
-    for ( $i = 0; $i < 3; ++$i ) {
+    for ( $i = 0; $i < count( $extentions ); ++$i ) {
         if ( file_exists( $target_path . $extentions[ $i ] ) ) {
             $found = true;
             $target_path = $target_path . $extentions[ $i ];
