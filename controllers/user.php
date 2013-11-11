@@ -12,7 +12,7 @@
                     header( 'Location: index.php?mail_notvalid=yes&resource=user&method=create' );
                     die();
                 }
-                if ( User::Exists( $username ) ) {
+                if ( User::exists( $username ) ) {
                     header( 'Location: index.php?user_used=yes&resource=user&method=create' );
                     die();
                 }

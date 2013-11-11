@@ -1,7 +1,7 @@
 <?php
     include 'encrypt.php';
     class User {
-        public function Exists( $username ) {
+        public function exists( $username ) {
             $res = db(
                 'SELECT
                     username
