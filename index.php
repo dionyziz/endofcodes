@@ -34,7 +34,7 @@
             $http_vars = array(); 
             break;
     }
-    if ( $methods[ $method ] == 1 && $http_vars != $_POST ) {
+    if ( $methods[ $method ] == 1 && $_SERVER[ 'REQUEST_METHOD' ] != 'POST' ) {
         $method .= 'View';
     }
     $resource = basename( $resource );
