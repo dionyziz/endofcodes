@@ -4,7 +4,12 @@
             include 'models/image.php';
             include 'models/imgextentions.php';
             $imagename = basename( $_FILES[ 'image' ][ 'name' ] );
-            $username = $_SESSION[ 'user' ][ 'username' ];
+            if ( isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
+                $username = $_SESSION[ 'user' ][ 'username' ];
+            }
+            else {
+                throw new Exception( 'username isn\'t set' );
+            }
             $ext = substr( $imagename, strrpos( $imagename, "." ) );
             for ( $i = 0; $i < count( $extentions ); ++$i ) {
                 if ( $ext === $extentions[ $i ] ) {
