@@ -4,8 +4,10 @@
             include 'models/users.php';
             if ( !empty( $username ) && !empty( $password ) ) {
                 if ( $id = User::authenticateUser( $username, $password ) ) {
-                    $_SESSION[ 'user' ][ 'userid' ] = $id;
-                    $_SESSION[ 'user' ][ 'username' ] = $username;
+                    $_SESSION[ 'user' ] = array(
+                        'userid' => $id,
+                        'username' => $username
+                    );
                     header( 'Location: index.php?resource=dashboard&method=view' );
                 }
                 else {
