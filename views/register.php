@@ -21,7 +21,7 @@
         }
     ?>
     <p><input type="text" id="username" name="username" value="<?php
-        echo $val;
+        echo htmlspecialchars( $val );
     ?>"/></p>
     <label for="password">Password</label>
     <?php
@@ -49,7 +49,7 @@
         }
     ?>
     <p><input type="text" id="email" name="email" value="<?php
-        echo $val;
+        echo htmlspecialchars( $val );
     ?>"/></p>
     <p><input type="submit" value="Register" /></p>
 </form>
