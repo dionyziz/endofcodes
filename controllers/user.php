@@ -41,7 +41,7 @@
             include 'models/users.php';
             $credentials = User::get( $username );
             if ( !$credentials ) {
-                die( 'There was an error on function view at controllers/user.php' );
+                throw new Exception( 'can\'t get credentials' );
             }
             include 'views/profile.php';
         }
