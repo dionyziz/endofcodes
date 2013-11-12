@@ -122,7 +122,7 @@
                 return $row;
             }
             else {
-                return NULL;
+                return false;
             }
         }
     }
