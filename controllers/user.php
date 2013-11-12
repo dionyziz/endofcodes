@@ -50,16 +50,17 @@
             include 'models/users.php';
             $username = $_SESSION[ 'user' ][ 'username' ];
             if ( User::authenticateUser( $username, $password_old ) ) {
-                if ( $password_new === $password_repeat ) {
+                if ( $password_new != $password_repeat ) {
+                    header( 'Location: index.php?resource=user&method=update&not_matched=yes' );
+                    die();
+                }
+                else {
                     if ( strlen( $password_new ) <= 6 ) {
                         header( 'Location: index.php?resource=user&method=update&small_pass=yes' );
                         die();
                     }
                     User::update( $username, $password_new );
                     header( 'Location: index.php?resource=dashboard&method=view' );
-                }
-                else {
-                    header( 'Location: index.php?resource=user&method=update&not_matched=yes' );
                     die();
                 }
             }
