@@ -6,5 +6,9 @@
         public function getURL() {
             return $this->url;
         }
+
+        public function __construct( $url ) {
+            $this->url = $url;
+        }
     }
 ?>

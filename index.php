@@ -69,8 +69,7 @@
         die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() );
     }
     catch ( RedirectException $e ) {
-        global $setings;
-        $url = $settings[ 'url' ] . $e->getURL();
+        $url = $e->getURL();
         header( 'Location: ' . $url );
     }
     catch ( Exception $e ) {
