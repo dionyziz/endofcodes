@@ -6,7 +6,7 @@
     <label for="password1">Old password</label>
     <?php
         if ( isset( $old_pass ) ) {
-            ?><p>Old password is wrong</p><?php
+            ?><p>Old password is incorrect</p><?php
         }
     ?>
     <p><input type="password" name="password1" id="password1" /></p>
