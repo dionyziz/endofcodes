@@ -3,13 +3,13 @@
 ?>
 
 <form action="index.php?resource=user&amp;method=update" method="POST">
-    <label for="password1">Old password</label>
+    <label for="password_old">Old password</label>
     <?php
         if ( isset( $old_pass ) ) {
             ?><p>Old password is incorrect</p><?php
         }
     ?>
-    <p><input type="password" name="password1" id="password1" /></p>
+    <p><input type="password" name="password_old" id="password_old" /></p>
     <?php
         if ( isset( $not_matched ) ) {
             ?><p>Passwords do not match</p><?php
@@ -18,10 +18,10 @@
             ?><p>Your password should be at least 7 characters long</p><?php
         }
     ?>
-    <label for="password2">New password</label>
-    <p><input type="password" name="password2" id="password2" /></p>
-    <label for="password3">Repeat</label>
-    <p><input type="password" name="password3" id="password3" /></p>
+    <label for="password_new">New password</label>
+    <p><input type="password" name="password_new" id="password_new" /></p>
+    <label for="password_repeat">Repeat</label>
+    <p><input type="password" name="password_repeat" id="password_repeat" /></p>
     <input type="submit" value="Change password" />
 </form>
 

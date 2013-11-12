@@ -46,16 +46,16 @@
             include 'views/profile.php';
         }
 
-        public static function update( $password1, $password2, $password3 ) {
+        public static function update( $password_old, $password_new, $password_repeat ) {
             include 'models/users.php';
             $username = $_SESSION[ 'user' ][ 'username' ];
-            if ( User::authenticateUser( $username, $password1 ) ) {
-                if ( $password2 === $password3 ) {
-                    if ( strlen( $password2 ) <= 6 ) {
+            if ( User::authenticateUser( $username, $password_old ) ) {
+                if ( $password_new === $password_repeat ) {
+                    if ( strlen( $password_new ) <= 6 ) {
                         header( 'Location: index.php?resource=user&method=update&small_pass=yes' );
                         die();
                     }
-                    User::update( $username, $password2 );
+                    User::update( $username, $password_new );
                     header( 'Location: index.php?resource=dashboard&method=view' );
                 }
                 else {
