@@ -11,12 +11,13 @@
 ?></p>
 
 <?php
-    include 'models/imgextentions.php';
+    include 'models/extentions.php';
+    $extentions = Extention::getValid();
     $target_path = 'Avatars/' . $credentials[ 'username' ];
     for ( $i = 0; $i < count( $extentions ); ++$i ) {
-        if ( file_exists( $target_path . $extentions[ $i ] ) ) {
+        if ( file_exists( $target_path . '.' . $extentions[ $i ] ) ) {
             $found = true;
-            $target_path = $target_path . $extentions[ $i ];
+            $target_path = $target_path . '.' . $extentions[ $i ];
             break;
         }
     }

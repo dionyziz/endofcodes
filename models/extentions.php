@@ -1,5 +1,5 @@
 <?php
-    class Mime {
+    class Extention {
         public function get( $name ) {
             return substr( $name, strrpos( $name, "." ) + 1 );
         }

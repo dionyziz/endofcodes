@@ -6,37 +6,32 @@
             $_SESSION[ 'create_post' ][ 'email' ] = $email;
             if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
                 if ( strlen( $password ) <= 6 ) {
-                    header( 'Location: index.php?resource=user&method=create&small_pass=yes' );
-                    die();
+                    throw new RedirectException( 'index.php?resource=user&method=create&small_pass=yes' );
                 }
                 $valid = User::validMail( $email );
                 if ( !$valid ) {
-                    header( 'Location: index.php?mail_notvalid=yes&resource=user&method=create' );
-                    die();
+                    throw new RedirectException( 'index.php?mail_notvalid=yes&resource=user&method=create' );
                 }
                 if ( User::exists( $username ) ) {
-                    header( 'Location: index.php?user_used=yes&resource=user&method=create' );
-                    die();
+                    throw new RedirectException( 'index.php?user_used=yes&resource=user&method=create' );
                 }
                 else if ( User::mailExists( $email ) ) {
-                    header( 'Location: index.php?mail_used=yes&resource=user&method=create' );
-                    die();
+                    throw new RedirectException( 'index.php?mail_used=yes&resource=user&method=create' );
                 }
                 User::createUser( $username, $password, $email );
                 $id = User::authenticateUser( $username, $password );
                 $_SESSION[ 'user' ][ 'userid' ] = $id; 
                 $_SESSION[ 'user' ][ 'username' ] = $username;
-                header( 'Location: index.php?resource=dashboard&method=view' );
+                throw new RedirectException( 'index.php?resource=dashboard&method=view' );
             }
             else {
-                header( 'Location: index.php?empty=yes&resource=user&method=create' );
-                die();
+                throw new RedirectException( 'index.php?empty=yes&resource=user&method=create' );
             }
         }
 
         public static function view( $username, $notvalid ) {
             if ( $username === NULL ) {
-                header( 'Location: index.php?resource=dashboard&method=view' );
+                throw new RedirectException( 'index.php?resource=dashboard&method=view' );
             }
             include 'models/users.php';
             $credentials = User::get( $username );
@@ -51,22 +46,18 @@
             $username = $_SESSION[ 'user' ][ 'username' ];
             if ( User::authenticateUser( $username, $password_old ) ) {
                 if ( $password_new != $password_repeat ) {
-                    header( 'Location: index.php?resource=user&method=update&not_matched=yes' );
-                    die();
+                    throw new RedirectException( 'index.php?resource=user&method=update&not_matched=yes' );
                 }
                 else {
                     if ( strlen( $password_new ) <= 6 ) {
-                        header( 'Location: index.php?resource=user&method=update&small_pass=yes' );
-                        die();
+                        throw new RedirectException( 'index.php?resource=user&method=update&small_pass=yes' );
                     }
                     User::update( $username, $password_new );
-                    header( 'Location: index.php?resource=dashboard&method=view' );
-                    die();
+                    throw new RedirectException( 'index.php?resource=dashboard&method=view');
                 }
             }
             else {
-                header( 'Location: index.php?resource=user&method=update&old_pass=yes' );
-                die();
+                throw new RedirectException( 'index.php?resource=user&method=update&old_pass=yes' );
             }
         }
 
@@ -75,7 +66,7 @@
             $username = $_SESSION[ 'user' ][ 'username' ];
             unset( $_SESSION[ 'user' ] );
             User::delete( $username );
-            header( 'Location: index.php?resource=dashboard&method=view' );
+            throw new RedirectException( 'index.php?resource=dashboard&method=view' );
         }
 
         public static function createView( $empty, $user_used, $small_pass, $mail_used, $mail_notvalid ) {

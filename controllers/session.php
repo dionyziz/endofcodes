@@ -8,20 +8,20 @@
                         'userid' => $id,
                         'username' => $username
                     );
-                    header( 'Location: index.php?resource=dashboard&method=view' );
+                    throw new RedirectException( 'index.php?resource=dashboard&method=view' );
                 }
                 else {
-                    header( 'Location: index.php?resource=session&method=create&error=yes' );
+                    throw new RedirectException( 'index.php?resource=session&method=create&error=yes' );
                 }
             }
             else {
-                header( 'Location: index.php?empty=yes&resource=session&method=create' );
+                throw new RedirectException( 'index.php?empty=yes&resource=session&method=create' );
             }
         }
 
         public static function delete() {
             unset( $_SESSION[ 'user' ] );
-            header( 'Location: index.php?resource=dashboard&method=view' );
+            throw new RedirectException( 'index.php?resource=dashboard&method=view' );
         }
 
         public static function createView( $error, $empty ) {

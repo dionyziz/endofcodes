@@ -13,8 +13,7 @@
             $ext = Extention::get( $imagename ); 
             $valid = Extention::valid( $ext );
             if ( !$valid ) {
-                header( 'Location: index.php?resource=user&method=view&notvalid=yes&username=' . $username );
-                die();
+                throw new RedirectException( 'index.php?resource=user&method=view&notvalid=yes&username=' . $username );
             }
             $target_path = 'Avatars/';
             Image::deleteCurrent( $target_path, $username );
@@ -22,7 +21,7 @@
             Image::create( $_SESSION[ 'user' ][ 'userid' ], $imagename );
             $target_path = $target_path . $imagename;
             Image::upload( $_FILES[ 'image' ][ 'tmp_name' ], $target_path );
-            header( 'Location: index.php?resource=user&method=view&username=' . $username );
+            throw new RedirectException( 'index.php?resource=user&method=view&username=' . $username );
         }
     }
 ?>
