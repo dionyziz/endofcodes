@@ -2,5 +2,6 @@
     include 'config/configdb.php';
     $cred = getCred();
     mysql_connect( $cred[ 'host' ], $cred[ 'user' ], $cred[ 'password' ] );
-    mysql_select_db( "endofcodes" );
+    $db_name = getDbName();
+    mysql_select_db( $db_name );
 ?>

@@ -6,4 +6,8 @@
             'password' => 'sample_password'
         );
     }
+
+    function getDbName() {
+        return 'sample_db';
+    }
 ?>
