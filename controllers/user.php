@@ -18,9 +18,7 @@
                 );
                 throw new RedirectException( 'index.php?resource=dashboard&method=view' );
             }
-            else {
-                throw new RedirectException( 'index.php?empty=yes&resource=user&method=create' );
-            }
+            throw new RedirectException( 'index.php?empty=yes&resource=user&method=create' );
         }
 
         public static function view( $username, $notvalid ) {
