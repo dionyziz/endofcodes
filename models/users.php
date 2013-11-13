@@ -45,6 +45,12 @@
         }
 
         public function createUser( $username, $password, $email ) {
+            if ( strlen( $password ) <= 6 ) {
+                throw new RedirectException( 'index.php?resource=user&method=create&small_pass=yes' );
+            }
+            if ( !User::validMail( $email ) ) {
+                throw new RedirectException( 'index.php?mail_notvalid=yes&resource=user&method=create' );
+            }
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];

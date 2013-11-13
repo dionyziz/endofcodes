@@ -5,13 +5,6 @@
             $_SESSION[ 'create_post' ][ 'username' ] = $username;
             $_SESSION[ 'create_post' ][ 'email' ] = $email;
             if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
-                if ( strlen( $password ) <= 6 ) {
-                    throw new RedirectException( 'index.php?resource=user&method=create&small_pass=yes' );
-                }
-                $valid = User::validMail( $email );
-                if ( !$valid ) {
-                    throw new RedirectException( 'index.php?mail_notvalid=yes&resource=user&method=create' );
-                }
                 if ( User::exists( $username ) ) {
                     throw new RedirectException( 'index.php?user_used=yes&resource=user&method=create' );
                 }
