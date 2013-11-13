@@ -131,9 +131,7 @@
                 $row = mysql_fetch_array( $res );
                 return $row;
             }
-            else {
-                return false;
-            }
+            return false;
         }
     }
 ?>
