@@ -10,13 +10,9 @@
                     );
                     throw new RedirectException( 'index.php?resource=dashboard&method=view' );
                 }
-                else {
-                    throw new RedirectException( 'index.php?resource=session&method=create&error=yes' );
-                }
+                throw new RedirectException( 'index.php?resource=session&method=create&error=yes' );
             }
-            else {
-                throw new RedirectException( 'index.php?empty=yes&resource=session&method=create' );
-            }
+            throw new RedirectException( 'index.php?empty=yes&resource=session&method=create' );
         }
 
         public static function delete() {
