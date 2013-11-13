@@ -64,6 +64,7 @@
                     salt = :salt;',
                 compact( "username", "password", "email", "salt" )
             );
+            return mysql_insert_id();
         }
 
         public function delete( $username ) {
