@@ -15,7 +15,7 @@
             $valid = Extention::getValid();
             foreach ( $valid as $current ) {
                 if ( $current === $ext ) {
-                    return $current;
+                    return true;
                 }
             }
             return false;
