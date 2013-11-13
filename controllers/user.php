@@ -57,7 +57,9 @@
 
         public static function delete() {
             include 'models/users.php';
-            $username = $_SESSION[ 'user' ][ 'username' ];
+            if ( isset( $_SESSION[ 'user' ] ) ) {
+                $username = $_SESSION[ 'user' ][ 'username' ];
+            }
             unset( $_SESSION[ 'user' ] );
             User::delete( $username );
             throw new RedirectException( 'index.php?resource=dashboard&method=view' );
