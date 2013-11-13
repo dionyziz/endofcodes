@@ -46,9 +46,6 @@
                     throw new RedirectException( 'index.php?resource=user&method=update&not_matched=yes' );
                 }
                 else {
-                    if ( strlen( $password_new ) <= 6 ) {
-                        throw new RedirectException( 'index.php?resource=user&method=update&small_pass=yes' );
-                    }
                     User::update( $username, $password_new );
                     throw new RedirectException( 'index.php?resource=dashboard&method=view');
                 }

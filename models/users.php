@@ -78,6 +78,9 @@
         }
 
         public function update( $username, $password ) {
+            if ( strlen( $password ) <= 6 ) {
+                throw new RedirectException( 'index.php?resource=user&method=update&small_pass=yes' );
+            }
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
