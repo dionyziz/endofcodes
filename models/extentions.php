@@ -1,6 +1,9 @@
 <?php
     class Extention {
         public function get( $name ) {
+            if ( strrpos( $name, "." ) === false ) {
+                return "";
+            }
             return substr( $name, strrpos( $name, "." ) + 1 );
         }
 
