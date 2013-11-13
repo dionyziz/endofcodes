@@ -2,7 +2,7 @@
     include 'views/header.php';
 ?>
 
-<form action="index.php?resource=user&amp;method=update" method="POST">
+<form action="index.php?resource=user&amp;method=update" method="post">
     <label for="password_old">Old password</label>
     <?php
         if ( isset( $old_pass ) ) {
