@@ -3,8 +3,11 @@
     if ( isset( $error ) ) {
         ?><p>Invalid username or password!</p><?php
     }
-    else if ( isset( $empty ) ) {
-        ?><p>Please fill all the forms.</p><?php
+    else if ( isset( $empty_user ) ) {
+        ?><p>Please fill the username form.</p><?php
+    }
+    else if ( isset( $empty_pass ) ) {
+        ?><p>Please fill the password form.</p><?php
     }
 ?>
 
