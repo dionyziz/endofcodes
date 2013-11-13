@@ -35,7 +35,7 @@
             }
             $avatarname = Image::getCurrentImage( $username );
             $target_path = getUploadPath() . $avatarname;
-            include 'views/profile.php';
+            include 'views/user/view.php';
         }
 
         public static function update( $password_old, $password_new, $password_repeat ) {
@@ -66,11 +66,11 @@
         }
 
         public static function createView( $empty, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
-            include 'views/register.php';
+            include 'views/user/create.php';
         }
 
         public static function updateView( $small_pass, $not_matched, $old_pass ) {
-            include 'views/passreset.php';
+            include 'views/user/update.php';
         }
     }
 ?>

@@ -21,7 +21,7 @@
         }
 
         public static function createView( $error, $empty ) {
-            include 'views/login.php';
+            include 'views/session/create.php';
         }
     }
 ?>
