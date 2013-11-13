@@ -72,7 +72,8 @@
                 'DELETE FROM
                     users
                 WHERE
-                    username = :username;', 
+                    username = :username
+                LIMIT 1;', 
                 compact( "username" )
             );
         }
@@ -91,7 +92,8 @@
                     password = :password,
                     salt = :salt
                 WHERE
-                    username = :username',
+                    username = :username
+                LIMIT 1;',
                 compact( "username", "password", "salt" )
             );
         }
