@@ -44,7 +44,7 @@
             return true;
         }
 
-        public function createUser( $username, $password, $email ) {
+        public function create( $username, $password, $email ) {
             if ( strlen( $password ) <= 6 ) {
                 throw new RedirectException( 'index.php?resource=user&method=create&small_pass=yes' );
             }

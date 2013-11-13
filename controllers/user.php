@@ -11,7 +11,7 @@
                 else if ( User::mailExists( $email ) ) {
                     throw new RedirectException( 'index.php?mail_used=yes&resource=user&method=create' );
                 }
-                $id = User::createUser( $username, $password, $email );
+                $id = User::create( $username, $password, $email );
                 $_SESSION[ 'user' ] = array(
                     'userid' => $id,
                     'username' => $username
