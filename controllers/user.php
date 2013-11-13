@@ -18,7 +18,13 @@
                 );
                 throw new RedirectException( 'index.php?resource=dashboard&method=view' );
             }
-            throw new RedirectException( 'index.php?empty=yes&resource=user&method=create' );
+            if ( empty( $username ) ) {
+                throw new RedirectException( 'index.php?empty_user=yes&resource=user&method=create' );
+            }
+            if ( empty( $password ) ) {
+                throw new RedirectException( 'index.php?empty_pass=yes&resource=user&method=create' );
+            }
+            throw new RedirectException( 'index.php?empty_mail=yes&resource=user&method=create' );
         }
 
         public static function view( $username, $notvalid ) {
@@ -65,7 +71,7 @@
             throw new RedirectException( 'index.php?resource=dashboard&method=view' );
         }
 
-        public static function createView( $empty, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
+        public static function createView( $empty_user, $empty_mail, $empty_pass, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
             include 'views/user/create.php';
         }
 

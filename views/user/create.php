@@ -1,7 +1,13 @@
 <?php
     include 'views/header.php';
-    if ( isset( $empty ) ) {
-        ?><p>Please fill all the forms.</p><?php
+    if ( isset( $empty_user ) ) {
+        ?><p>Please fill the username form.</p><?php
+    }
+    else if ( isset( $empty_pass ) ) {
+        ?><p>Please fill the password form.</p><?php
+    }
+    else if ( isset( $empty_mail ) ) {
+        ?><p>Please fill the email form.</p><?php
     }
 ?>
 
