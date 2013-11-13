@@ -9,34 +9,44 @@
                     imagename = :imagename;',
                 compact( "userid", "imagename" )
             );
+            return mysql_insert_id();
         }
 
-        public static function delete( $imagename ) {
-            db(
-                'DELETE FROM
-                    images
+        public static function getCurrentImage( $username ) {
+            $res = db(
+                'SELECT
+                    users.avatarid AS avatarid,
+                    images.imagename AS imagename
+                FROM
+                    users CROSS JOIN images ON
+                    users.avatarid = images.imageid
                 WHERE
-                    imagename = :imagename;',
-                compact( "imagename" )
+                    username = :username
+                LIMIT 1;', 
+                compact( "username" )
             );
-        }
-
-        public static function deleteCurrent( $target_path, $username ) {
-            $extentions = Extention::getValid();
-            foreach ( $extentions as $key => $value ) {
-                $extentions[ $key ] = '.' . $value;
-            }
-
-            foreach ( $extentions as $extention ) {
-                if ( file_exists( $target_path . $username . $extention ) ) {
-                    unlink( $target_path . $username . $extention );
-                    Image::delete( $username . $extention );
-                }
+            if ( mysql_num_rows( $res ) == 1 ) {
+                $row = mysql_fetch_array( $res );
+                $ext = Extention::get( $row[ 'imagename' ] );
+                $id = $row[ 'avatarid' ];
+                return "$id" . "." . $ext;
             }
         }
 
         public static function upload( $tmp_name, $target_path ) {
-            move_uploaded_file( $tmp_name, $target_path );
+            return move_uploaded_file( $tmp_name, $target_path );
+        }
+
+        public static function update( $username, $avatarid ) {
+            db(
+                'UPDATE
+                    users
+                SET
+                    avatarid = :avatarid
+                WHERE
+                    username = :username;',
+                compact( "username", "avatarid" )
+            );
         }
     }
 ?>

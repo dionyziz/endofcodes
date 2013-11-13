@@ -10,23 +10,9 @@
     echo htmlspecialchars( $credentials[ 'email' ] );
 ?></p>
 
-<?php
-    include 'models/extentions.php';
-    $extentions = Extention::getValid();
-    $target_path = 'Avatars/' . $credentials[ 'username' ];
-    for ( $i = 0; $i < count( $extentions ); ++$i ) {
-        if ( file_exists( $target_path . '.' . $extentions[ $i ] ) ) {
-            $found = true;
-            $target_path = $target_path . '.' . $extentions[ $i ];
-            break;
-        }
-    }
-    if ( isset( $found ) ) {
-        ?><p><img src="<?php
+<p><img src="<?php
             echo $target_path;
-        ?>" alt="Profile Picture" width="100" height="100" /></p><?php
-    }
-?>
+        ?>" alt="Profile Picture" width="100" height="100" /></p>
 
 <?php
     if ( $_SESSION[ 'user' ][ 'userid' ] === $credentials[ 'userid' ] ) {

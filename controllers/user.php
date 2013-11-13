@@ -34,10 +34,15 @@
                 throw new RedirectException( 'index.php?resource=dashboard&method=view' );
             }
             include 'models/users.php';
+            include 'models/extentions.php';
+            include 'models/image.php';
+            include 'config/paths.php';
             $credentials = User::get( $username );
             if ( !$credentials ) {
                 throw new Exception( 'can\'t get credentials' );
             }
+            $avatarname = Image::getCurrentImage( $username );
+            $target_path = getUploadPath() . $avatarname;
             include 'views/profile.php';
         }
 

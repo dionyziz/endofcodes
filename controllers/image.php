@@ -3,24 +3,25 @@
         public static function create() {
             include 'models/image.php';
             include 'models/extentions.php';
-            $imagename = basename( $_FILES[ 'image' ][ 'name' ] );
+            include 'config/paths.php';
+            $avatarname = basename( $_FILES[ 'image' ][ 'name' ] );
+            $tmp_name = $_FILES[ 'image' ][ 'tmp_name' ];
             if ( isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 $username = $_SESSION[ 'user' ][ 'username' ];
             }
             else {
                 throw new Exception( 'username isn\'t set' );
             }
-            $ext = Extention::get( $imagename ); 
-            $valid = Extention::valid( $ext );
-            if ( !$valid ) {
+            $ext = Extention::get( $avatarname ); 
+            if ( !Extention::valid( $ext ) ) {
                 throw new RedirectException( 'index.php?resource=user&method=view&notvalid=yes&username=' . $username );
             }
-            $target_path = 'Avatars/';
-            Image::deleteCurrent( $target_path, $username );
-            $imagename = $username . "." . $ext;
-            Image::create( $_SESSION[ 'user' ][ 'userid' ], $imagename );
-            $target_path = $target_path . $imagename;
-            Image::upload( $_FILES[ 'image' ][ 'tmp_name' ], $target_path );
+            $target_path = getUploadPath();
+            $id = Image::create( $_SESSION[ 'user' ][ 'userid' ], $avatarname );
+            $avatarname = "$id" . "." . $ext;
+            $target_path = $target_path . $avatarname;
+            Image::upload( $tmp_name, $target_path );
+            Image::update( $username, $id );
             throw new RedirectException( 'index.php?resource=user&method=view&username=' . $username );
         }
     }
