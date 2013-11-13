@@ -27,7 +27,7 @@
             <input type="submit" value="Upload" />
         </form>
         <p>Want to <a href="index.php?resource=user&amp;method=update">change password</a>?</p>
-        <form action="index.php?resource=user&amp;method=delete" method="POST">
+        <form action="index.php?resource=user&amp;method=delete" method="post">
             <input type="submit" value="Delete your account" />
         </form><?php
     }
