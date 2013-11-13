@@ -13,8 +13,10 @@
                 }
                 User::createUser( $username, $password, $email );
                 $id = User::authenticateUser( $username, $password );
-                $_SESSION[ 'user' ][ 'userid' ] = $id; 
-                $_SESSION[ 'user' ][ 'username' ] = $username;
+                $_SESSION[ 'user' ] = array(
+                    'userid' => $id,
+                    'username' => $username
+                );
                 throw new RedirectException( 'index.php?resource=dashboard&method=view' );
             }
             else {
