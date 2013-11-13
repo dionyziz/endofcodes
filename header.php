@@ -1,5 +1,4 @@
 <?php
-    include 'models/database.php';
     class RedirectException extends Exception {
         private $url;
 
