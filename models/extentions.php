@@ -15,10 +15,7 @@
         public function valid( $ext ) {
             $valid = Extention::getValid();
             $valid = array_flip( $valid );
-            if ( isset( $valid[ $ext ] ) ) {
-                return true;
-            }
-            return false;
+            return isset( $valid[ $ext ] );
         }
     }
 ?>
