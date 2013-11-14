@@ -1,7 +1,5 @@
 <?php
-    include 'config/configdb.php';
-    $cred = getCred();
-    mysql_connect( $cred[ 'host' ], $cred[ 'user' ], $cred[ 'password' ] );
-    $db_name = getDbName();
-    mysql_select_db( $db_name );
+    $config = getConfig();
+    mysql_connect( $config[ 'db' ][ 'host' ], $config[ 'db' ][ 'user' ], $config[ 'db' ][ 'pass' ] );
+    mysql_select_db( $config[ 'db' ][ 'dbname' ] );
 ?>

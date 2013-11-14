@@ -34,13 +34,13 @@
             include 'models/users.php';
             include 'models/extentions.php';
             include 'models/image.php';
-            include 'config/paths.php';
             $credentials = User::get( $username );
+            $config = getConfig();
             if ( !$credentials ) {
                 throw new Exception( 'can\'t get credentials' );
             }
             $avatarname = Image::getCurrentImage( $username );
-            $target_path = getUploadPath() . $avatarname;
+            $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
             include 'views/user/view.php';
         }
 

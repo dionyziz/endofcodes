@@ -8,7 +8,8 @@
         }
 
         public function getValid() {
-            return array( 'jpg', 'png', 'jpeg' );
+            $config = getConfig();
+            return $config[ 'files' ][ 'avatar_extentions' ];
         }
 
         public function valid( $ext ) {
