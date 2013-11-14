@@ -75,4 +75,7 @@
     catch ( Exception $e ) {
         die( $controllername . '::' . $method . ' call rejected: ' . $e->getMessage() );
     }
+    catch ( HTTPErrorException $e ) {
+        header( $e->header );
+    }
 ?>
