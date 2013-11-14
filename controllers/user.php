@@ -52,7 +52,12 @@
 
         public static function update( $password_old, $password_new, $password_repeat ) {
             include 'models/users.php';
-            $username = $_SESSION[ 'user' ][ 'username' ];
+            if ( isset( $_SESSION[ 'user' ] ) ) {
+                $username = $_SESSION[ 'user' ][ 'username' ];
+            }
+            else {
+                throw new HTTPUnauthorizedEXception();
+            }
             if ( User::authenticateUser( $username, $password_old ) ) {
                 if ( $password_new != $password_repeat ) {
                     throw new RedirectException( 'index.php?resource=user&method=update&not_matched=yes' );
@@ -71,6 +76,9 @@
             include 'models/users.php';
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $username = $_SESSION[ 'user' ][ 'username' ];
+            }
+            else {
+                throw new HTTPUnauthorizedException();
             }
             unset( $_SESSION[ 'user' ] );
             User::delete( $username );
