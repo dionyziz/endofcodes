@@ -46,10 +46,10 @@
 
         public function create( $username, $password, $email ) {
             if ( strlen( $password ) <= 6 ) {
-                throw new RedirectException( 'index.php?resource=user&method=create&small_pass=yes' );
+                throw new ModelValidationException( 'small_pass' );
             }
             if ( !User::validMail( $email ) ) {
-                throw new RedirectException( 'index.php?mail_notvalid=yes&resource=user&method=create' );
+                throw new ModelValidationException( 'mail_notvalid' );
             }
             $array = encrypt( $password );
             $password = $array[ 'hash' ];

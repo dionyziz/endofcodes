@@ -37,4 +37,11 @@
             parent::__construct( '401' );
         }
     }
+
+    class ModelValidationException extends Exception {
+        public $error;
+        public function __construct( $error = "" ) {
+            $this->error = $error;
+        }
+    }
 ?>

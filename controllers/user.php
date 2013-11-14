@@ -11,7 +11,12 @@
                 else if ( User::mailExists( $email ) ) {
                     throw new RedirectException( 'index.php?mail_used=yes&resource=user&method=create' );
                 }
-                $id = User::create( $username, $password, $email );
+                try {
+                    $id = User::create( $username, $password, $email );
+                }
+                catch( ModelValidationException $e ) {
+                    throw new RedirectException( 'index.php?resource=user&method=create&' . $e->error . '=yes' );
+                }
                 $_SESSION[ 'user' ] = array(
                     'userid' => $id,
                     'username' => $username
