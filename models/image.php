@@ -31,6 +31,7 @@
                 $id = $row[ 'avatarid' ];
                 return "$id" . "." . $ext;
             }
+            return false;
         }
 
         public static function upload( $tmp_name, $target_path ) {
