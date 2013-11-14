@@ -18,37 +18,11 @@
             return false;
         }
 
-        public function mailExists( $mail ) {
-            $res = db(
-                'SELECT
-                    username
-                FROM
-                    users
-                WHERE
-                    email = :mail
-                LIMIT 1;', 
-                compact( "mail" ) 
-            );
-            if ( mysql_num_rows( $res ) == 1 ) {
-                return true;
-            }
-            return false;
-        }
-
-        public function validMail( $mail ) {
-            $posat = strrpos( $mail, "@" );
-            $posdot = strrpos( $mail, "." );
-            if ( $posat < 1 || $posat === false || $posdot === strlen( $mail ) || $posdot === false ) {
-                return false;
-            }
-            return true;
-        }
-
         public function create( $username, $password, $email ) {
             if ( strlen( $password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
-            if ( !User::validMail( $email ) ) {
+            if ( !Mail::validMail( $email ) ) {
                 throw new ModelValidationException( 'mail_notvalid' );
             }
             $array = encrypt( $password );

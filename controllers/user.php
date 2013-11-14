@@ -2,13 +2,14 @@
     class UserController {
         public static function create( $username = '', $password = '', $email = '' ) {
             include 'models/users.php';
+            include 'models/mail.php';
             $_SESSION[ 'create_post' ][ 'username' ] = $username;
             $_SESSION[ 'create_post' ][ 'email' ] = $email;
             if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
                 if ( User::exists( $username ) ) {
                     throw new RedirectException( 'index.php?user_used=yes&resource=user&method=create' );
                 }
-                else if ( User::mailExists( $email ) ) {
+                else if ( Mail::mailExists( $email ) ) {
                     throw new RedirectException( 'index.php?mail_used=yes&resource=user&method=create' );
                 }
                 try {
