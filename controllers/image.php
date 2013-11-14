@@ -10,7 +10,7 @@
                 $username = $_SESSION[ 'user' ][ 'username' ];
             }
             else {
-                throw new HTTPUnauthorizedException( '401' );
+                throw new HTTPUnauthorizedException();
             }
             $ext = Extention::get( $avatarname ); 
             if ( !Extention::valid( $ext ) ) {

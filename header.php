@@ -16,10 +16,11 @@
 
         public function __construct( $error, $description= "" ) {
             if ( !empty( $description ) ) {
+                $this->header = "HTTP/1.1 $error $description";
                 parent::__construct( "HTTP/1.1 $error $description" );
             }
             else {
-                $this->header = "HTTP/1.1 $error"
+                $this->header = "HTTP/1.1 $error";
                 parent::__construct( "HTTP/1.1 $error" );
             }
         }
