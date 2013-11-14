@@ -34,6 +34,11 @@
             $http_vars = array(); 
             break;
     }
+    if ( $_SERVER[ 'REQUEST_METHOD' ] === 'POST' ) {
+        foreach ( $_FILES as $key => $file ) {
+            $http_vars[ $key ] = $file;
+        }
+    }
     if ( $methods[ $method ] == 1 && $_SERVER[ 'REQUEST_METHOD' ] != 'POST' ) {
         $method .= 'View';
     }

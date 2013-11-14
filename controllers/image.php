@@ -1,11 +1,11 @@
 <?php
     class ImageController {
-        public static function create() {
+        public static function create( $image ) {
             include 'models/image.php';
             include 'models/extentions.php';
             $config = getConfig();
-            $avatarname = basename( $_FILES[ 'image' ][ 'name' ] );
-            $tmp_name = $_FILES[ 'image' ][ 'tmp_name' ];
+            $avatarname = basename( $image[ 'name' ] );
+            $tmp_name = $image[ 'tmp_name' ];
             if ( isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 $username = $_SESSION[ 'user' ][ 'username' ];
             }
