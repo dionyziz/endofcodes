@@ -14,7 +14,7 @@
     class HTTPErrorException extends Exception {
         public $header;
 
-        public function __construct( $error, $description= "" ) {
+        public function __construct( $error, $description = "" ) {
             if ( !empty( $description ) ) {
                 $this->header = "HTTP/1.1 $error $description";
                 parent::__construct( "HTTP/1.1 $error $description" );
