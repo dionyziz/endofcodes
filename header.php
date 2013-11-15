@@ -34,7 +34,7 @@
 
     class HTTPUnauthorizedException extends HTTPErrorException {
         public function __construct() {
-            parent::__construct( '401' );
+            parent::__construct( '401', 'Unauthorized' );
         }
     }
 
