@@ -25,7 +25,7 @@
     }
     switch ( $_SERVER[ 'REQUEST_METHOD' ] ) {
         case 'POST':
-            $http_vars = $_POST; 
+            $http_vars = array_merge( $_POST, $_FILES );
             break;
         case 'GET':
             $http_vars = $_GET;
@@ -33,11 +33,6 @@
         default:
             $http_vars = array(); 
             break;
-    }
-    if ( $_SERVER[ 'REQUEST_METHOD' ] === 'POST' ) {
-        foreach ( $_FILES as $key => $file ) {
-            $http_vars[ $key ] = $file;
-        }
     }
     if ( $methods[ $method ] == 1 && $_SERVER[ 'REQUEST_METHOD' ] != 'POST' ) {
         $method .= 'View';
