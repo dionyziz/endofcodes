@@ -45,4 +45,75 @@
         }*/
         return $res;
     }
+
+    function db_insert( $table, $set ) {
+        $fields = array();
+        foreach ( $set as $field => $value ) {
+            $fields[] = "$field = :$field";
+        }
+        db(
+            'INSERT INTO '
+            . $table
+            . ' SET '
+            . implode( ",", $fields ),
+            $set
+        );
+        return mysql_insert_id();
+    }
+
+    function db_delete( $table, $where ) {
+        $fields = array();
+        foreach ( $where as $field => $value ) {
+            $fields[] = "$field = :$field";
+        }
+        db(
+            'INSERT FROM '
+            . $table
+            . ' WHERE '
+            . implode( " AND ", $fields ),
+            $where
+        );
+        return mysql_affected_rows();
+    }
+
+    function db_select( $table, $select = array( "*" ), $where ) {
+        $fields = array();
+        foreach ( $where as $field => $value ) {
+            $fields[] = "$field = :$field";
+        }
+        return db(
+            'SELECT '
+            . implode( ",", $select )
+            . ' FROM '
+            . $table
+            . ' WHERE '
+            . implode( " AND ", $fields ),
+            $where
+        );
+    }
+
+    function db_update( $table, $set, $where ) {
+        $wfields = array();
+        $wreplace = array();
+        foreach ( $where as $field => $value ) {
+            $wfields[] = "$field = :where_$field";
+            $wreplace[ 'where_' . $field ] = $value;
+        }
+        $sfields = array();
+        $sreplace = array();
+        foreach ( $set as $field => $value ) {
+            $sfields[] = "$field = :set_$field";
+            $sreplace[ 'set_' . $field ] = $value;
+        }
+        db(
+            'UPDATE '
+            . $table
+            . ' SET '
+            . implode( ",", $sfields )
+            . ' WHERE '
+            . implode( " AND ", $wfields ),
+            array_merge( $wreplace, $sreplace )
+        );
+        return mysql_affected_rows();
+    }
 ?>

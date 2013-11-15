@@ -2,14 +2,9 @@
     include 'encrypt.php';
     class User {
         public function exists( $username ) {
-            $res = db(
-                'SELECT
-                    username
-                FROM
-                    users
-                WHERE
-                    username = :username
-                LIMIT 1;', 
+            $res = db_select( 
+                'users', 
+                array( 'username' ), 
                 compact( "username" ) 
             );
             if ( mysql_num_rows( $res ) == 1 ) {
@@ -28,14 +23,8 @@
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
-            $res = db(
-                'INSERT INTO
-                    users
-                SET
-                    username = :username,
-                    password = :password,
-                    email = :email,
-                    salt = :salt;',
+            $res = db_insert( 
+                'users', 
                 compact( "username", "password", "email", "salt" )
             );
             if ( $res === false ) {
@@ -45,12 +34,8 @@
         }
 
         public function delete( $username ) {
-            db(
-                'DELETE FROM
-                    users
-                WHERE
-                    username = :username
-                LIMIT 1;', 
+            db_delete(
+                'users',
                 compact( "username" )
             );
         }
@@ -62,29 +47,18 @@
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
-            db(
-                'UPDATE
-                    users
-                SET
-                    password = :password,
-                    salt = :salt
-                WHERE
-                    username = :username
-                LIMIT 1;',
-                compact( "username", "password", "salt" )
+            db_update(
+                'users',
+                compact( "password", "salt" ),
+                compact( "username" )
             );
         }
 
         public function authenticateUser( $username, $password ) {
-            $res = db(
-                'SELECT
-                    userid, password, salt
-                FROM
-                    users
-                WHERE
-                    username = :username
-                LIMIT 1;', 
-                compact( "username" ) 
+            $res = db_select(
+                'users',
+                array( 'userid', 'password', 'salt' ),
+                compact( "username" )
             );
             if ( mysql_num_rows( $res ) == 1 ) {
                 $row = mysql_fetch_array( $res );
@@ -96,14 +70,9 @@
         }
 
         public function get( $username ) {
-            $res = db(
-                'SELECT
-                    username, userid, password, salt, email
-                FROM
-                    users
-                WHERE
-                    username = :username
-                LIMIT 1;', 
+            $res = db_select(
+                'users',
+                array( 'username', 'userid', 'password', 'salt', 'email' ),
                 compact( "username" )
             );
             if ( mysql_num_rows( $res ) == 1 ) {

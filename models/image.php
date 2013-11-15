@@ -7,15 +7,10 @@
                 throw new RedirectException( 'index.php?resource=user&method=view&notvalid=yes&username=' . $username );
             }
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
-            db(
-                'INSERT INTO
-                    images
-                SET
-                    userid = :userid,
-                    imagename = :imagename;',
-                compact( "userid", "imagename" )
+            $id = db_insert( 
+                'images', 
+                compact( "userid", "imagename" ) 
             );
-            $id = mysql_insert_id();
             $imagename = "$id" . "." . $ext;
             $target_path = $target_path . $imagename;
             Image::upload( $tmp_name, $target_path );
@@ -49,14 +44,10 @@
         }
 
         public static function update( $username, $avatarid ) {
-            db(
-                'UPDATE
-                    users
-                SET
-                    avatarid = :avatarid
-                WHERE
-                    username = :username;',
-                compact( "username", "avatarid" )
+            db_update( 
+                'users', 
+                compact( "avatarid" ), 
+                compact( "username" )
             );
         }
     }
