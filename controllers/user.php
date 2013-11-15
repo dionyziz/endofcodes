@@ -42,7 +42,7 @@
             $credentials = User::get( $username );
             $config = getConfig();
             if ( !$credentials ) {
-                throw new Exception( 'can\'t get credentials' );
+                throw new HTTPNotFoundException();
             }
             $avatarname = Image::getCurrentImage( $username );
             $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
@@ -51,34 +51,26 @@
 
         public static function update( $password_old, $password_new, $password_repeat ) {
             include 'models/users.php';
-            if ( isset( $_SESSION[ 'user' ] ) ) {
-                $username = $_SESSION[ 'user' ][ 'username' ];
-            }
-            else {
+            if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
+            $username = $_SESSION[ 'user' ][ 'username' ];
             if ( User::authenticateUser( $username, $password_old ) ) {
                 if ( $password_new != $password_repeat ) {
                     throw new RedirectException( 'index.php?resource=user&method=update&not_matched=yes' );
                 }
-                else {
-                    User::update( $username, $password_new );
-                    throw new RedirectException( 'index.php?resource=dashboard&method=view');
-                }
+                User::update( $username, $password_new );
+                throw new RedirectException( 'index.php?resource=dashboard&method=view');
             }
-            else {
-                throw new RedirectException( 'index.php?resource=user&method=update&old_pass=yes' );
-            }
+            throw new RedirectException( 'index.php?resource=user&method=update&old_pass=yes' );
         }
 
         public static function delete() {
             include 'models/users.php';
-            if ( isset( $_SESSION[ 'user' ] ) ) {
-                $username = $_SESSION[ 'user' ][ 'username' ];
-            }
-            else {
+            if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
+            $username = $_SESSION[ 'user' ][ 'username' ];
             unset( $_SESSION[ 'user' ] );
             User::delete( $username );
             throw new RedirectException( 'index.php?resource=dashboard&method=view' );
