@@ -15,7 +15,7 @@
         ?>" alt="Profile Picture" width="100" height="100" /></p>
 
 <?php
-    if ( $_SESSION[ 'user' ][ 'userid' ] === $credentials[ 'userid' ] ) {
+    if ( $_SESSION[ 'user' ][ 'userid' ] == $credentials[ 'userid' ] ) {
         ?><form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data">
             <label for="image">Upload an avatar</label>
             <?php
