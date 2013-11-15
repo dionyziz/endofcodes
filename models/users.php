@@ -28,7 +28,7 @@
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
-            db(
+            $res = db(
                 'INSERT INTO
                     users
                 SET
@@ -38,6 +38,9 @@
                     salt = :salt;',
                 compact( "username", "password", "email", "salt" )
             );
+            if ( $res === false ) {
+                throw new ModelValidationException( 'mail_used' );
+            }
             return mysql_insert_id();
         }
 

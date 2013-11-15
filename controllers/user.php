@@ -11,9 +11,6 @@
                 if ( User::exists( $username ) ) {
                     throw new RedirectException( 'index.php?user_used=yes&resource=user&method=create' );
                 }
-                else if ( Mail::mailExists( $email ) ) {
-                    throw new RedirectException( 'index.php?mail_used=yes&resource=user&method=create' );
-                }
                 try {
                     $id = User::create( $username, $password, $email );
                 }
@@ -58,7 +55,7 @@
                 $username = $_SESSION[ 'user' ][ 'username' ];
             }
             else {
-                throw new HTTPUnauthorizedEXception();
+                throw new HTTPUnauthorizedException();
             }
             if ( User::authenticateUser( $username, $password_old ) ) {
                 if ( $password_new != $password_repeat ) {

@@ -33,7 +33,7 @@
         }
         $finalsql = strtr( $sql, $bind );
         $res = mysql_query( $finalsql );
-        if ( $res === false ) {
+        /*if ( $res === false ) {
             die( "SQL query died with the following error\n\""
             . mysql_error()
             . "\"\n\nThe query given was:\n"
@@ -42,7 +42,7 @@
             . print_r( $bind, true )
             . "The query executed was:\n"
             . $finalsql );
-        }
+        }*/
         return $res;
     }
 ?>
