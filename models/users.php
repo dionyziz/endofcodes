@@ -22,7 +22,7 @@
             if ( strlen( $password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
-            if ( !Mail::validMail( $email ) ) {
+            if ( !Mail::valid( $email ) ) {
                 throw new ModelValidationException( 'mail_notvalid' );
             }
             $array = encrypt( $password );

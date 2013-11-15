@@ -1,6 +1,6 @@
 <?php
     class Mail {
-        public function validMail( $mail ) {
+        public function valid( $mail ) {
             $posat = strrpos( $mail, "@" );
             $posdot = strrpos( $mail, "." );
             if ( $posat < 1 || $posat === false || $posdot === strlen( $mail ) || $posdot === false ) {
