@@ -77,10 +77,10 @@
         $url = $e->getURL();
         header( 'Location: ' . $url );
     }
-    catch ( Exception $e ) {
-        die( $controllername . '::' . $method . ' call rejected: ' . $e->getMessage() );
-    }
     catch ( HTTPErrorException $e ) {
         header( $e->header );
+    }
+    catch ( Exception $e ) {
+        die( $controllername . '::' . $method . ' call rejected: ' . $e->getMessage() );
     }
 ?>
