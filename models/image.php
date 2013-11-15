@@ -1,6 +1,12 @@
 <?php
     class Image {
-        public static function create( $userid, $imagename ) {
+        public static function create( $username, $tmp_name, $imagename, $userid ) {
+            global $config;
+            $ext = Extention::get( $imagename ); 
+            if ( !Extention::valid( $ext ) ) {
+                throw new RedirectException( 'index.php?resource=user&method=view&notvalid=yes&username=' . $username );
+            }
+            $target_path = $config[ 'paths' ][ 'avatar_path' ];
             db(
                 'INSERT INTO
                     images
@@ -9,7 +15,11 @@
                     imagename = :imagename;',
                 compact( "userid", "imagename" )
             );
-            return mysql_insert_id();
+            $id = mysql_insert_id();
+            $imagename = "$id" . "." . $ext;
+            $target_path = $target_path . $imagename;
+            Image::upload( $tmp_name, $target_path );
+            Image::update( $username, $id );
         }
 
         public static function getCurrentImage( $username ) {
