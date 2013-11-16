@@ -70,7 +70,7 @@
             $fields[] = "$field = :$field";
         }
         db(
-            'INSERT FROM '
+            'DELETE FROM '
             . $table
             . ' WHERE '
             . implode( " AND ", $fields ),

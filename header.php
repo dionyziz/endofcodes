@@ -19,13 +19,13 @@
 
         public function __construct( $resource_or_url = false, $method = false, $args = array() ) {
             if ( $resource_or_url === false ) {
-                __construct( 'dashboard', 'view' );
+                $this->__construct( 'dashboard', 'view' );
             }
             else if ( $method === false ) {
                 $this->url = $resource_or_url;
             }
             else {
-                $args[ 'resouce' ] = $resource_or_url;
+                $args[ 'resource' ] = $resource_or_url;
                 $args[ 'method' ] = $method;
                 foreach ( $args as $key => $arg ) {
                     if ( $arg === true ) {

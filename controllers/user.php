@@ -2,7 +2,7 @@
     class UserController {
         public static function create( $username = '', $password = '', $email = '' ) {
             if ( empty( $username ) ) {
-                go( 'user', 'create', array( 'empty_user' => true );
+                go( 'user', 'create', array( 'empty_user' => true ) );
             }
             if ( empty( $password ) ) {
                 go( 'user', 'create', array( 'empty_pass' => true ) );
@@ -52,7 +52,7 @@
                 throw new HTTPUnauthorizedException();
             }
             $username = $_SESSION[ 'user' ][ 'username' ];
-            if ( User::authenticateUser( $username, $password_old ) ) {
+            if ( User::authenticate( $username, $password_old ) ) {
                 if ( $password_new != $password_repeat ) {
                     go( 'user', 'update', array( 'not_matched' => true ) );
                 }
