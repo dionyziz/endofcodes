@@ -28,6 +28,9 @@
                 compact( "username", "password", "email", "salt" )
             );
             if ( $res === false ) {
+                if ( User::exists( $username ) ) {
+                    throw new ModelValidationException( 'user_used' );
+                }
                 throw new ModelValidationException( 'mail_used' );
             }
             return mysql_insert_id();

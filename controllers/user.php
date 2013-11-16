@@ -8,9 +8,6 @@
                 'email' => $email
             );
             if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
-                if ( User::exists( $username ) ) {
-                    throw new RedirectException( 'index.php?user_used=yes&resource=user&method=create' );
-                }
                 try {
                     $id = User::create( $username, $password, $email );
                 }
