@@ -4,7 +4,7 @@
             global $config;
             $ext = Extention::get( $imagename ); 
             if ( !Extention::valid( $ext ) ) {
-                throw new RedirectException( 'index.php?resource=user&method=view&notvalid=yes&username=' . $username );
+                throw new ModelValidationException( 'notvalid' );
             }
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
             $id = db_insert( 
