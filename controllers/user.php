@@ -31,7 +31,7 @@
 
         public static function view( $username, $notvalid ) {
             if ( $username === NULL ) {
-                throw new RedirectException( 'index.php?resource=dashboard&method=view' );
+                throw new HTTPNotFoundException();
             }
             include 'models/users.php';
             include 'models/extentions.php';
