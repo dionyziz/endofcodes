@@ -8,7 +8,7 @@
             if ( empty( $password ) ) {
                 throw new RedirectException( 'index.php?empty_pass=yes&resource=session&method=create' );
             }
-            $id = User::authenticateUser( $username, $password );
+            $id = User::authenticate( $username, $password );
             if ( $id == false ) {
                 throw new RedirectException( 'index.php?resource=session&method=create&error=yes' );
             }

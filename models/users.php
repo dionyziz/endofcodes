@@ -60,7 +60,7 @@
             );
         }
 
-        public function authenticateUser( $username, $password ) {
+        public function authenticate( $username, $password ) {
             $res = db_select(
                 'users',
                 array( 'userid', 'password', 'salt' ),
