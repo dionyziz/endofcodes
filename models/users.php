@@ -28,6 +28,9 @@
                 compact( "username", "password", "email", "salt" )
             );
             if ( $res === false ) {
+                // if this query caused an error, then we must have a duplicate username or email
+                // check if we have a duplicate username
+                // if not, we have a duplicate email
                 if ( User::exists( $username ) ) {
                     throw new ModelValidationException( 'user_used' );
                 }
