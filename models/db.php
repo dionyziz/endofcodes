@@ -51,13 +51,16 @@
         foreach ( $set as $field => $value ) {
             $fields[] = "$field = :$field";
         }
-        db(
+        $res = db(
             'INSERT INTO '
             . $table
             . ' SET '
             . implode( ",", $fields ),
             $set
         );
+        if ( $res == false ) {
+            return $res;
+        }
         return mysql_insert_id();
     }
 
