@@ -15,9 +15,9 @@
                 Image::create( $username, $tmp_name, $avatarname, $id );
             }
             catch ( ModelValidationException $e ) {
-                header( 'index.php?resource=user&method=view&username=' . $username . '&' . $e->errror . '=yes' );
+                go( 'user', 'view', array( 'username' => $username, $e->error => true ) );
             }
-            throw new RedirectException( 'index.php?resource=user&method=view&username=' . $username );
+            go( 'user', 'view', compact( 'username' ) );
         }
     }
 ?>
