@@ -1,7 +1,7 @@
 <?php
     include 'encrypt.php';
     class User {
-        public function exists( $username ) {
+        public static function exists( $username ) {
             $res = db_select( 
                 'users', 
                 array( 'username' ), 
@@ -13,7 +13,7 @@
             return false;
         }
 
-        public function create( $username, $password, $email ) {
+        public static function create( $username, $password, $email ) {
             if ( strlen( $password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
@@ -39,14 +39,14 @@
             return mysql_insert_id();
         }
 
-        public function delete( $username ) {
+        public static function delete( $username ) {
             db_delete(
                 'users',
                 compact( "username" )
             );
         }
 
-        public function update( $username, $password ) {
+        public static function update( $username, $password ) {
             if ( strlen( $password ) <= 6 ) {
                 throw new RedirectException( 'index.php?resource=user&method=update&small_pass=yes' );
             }
@@ -60,7 +60,7 @@
             );
         }
 
-        public function authenticate( $username, $password ) {
+        public static function authenticate( $username, $password ) {
             $res = db_select(
                 'users',
                 array( 'userid', 'password', 'salt' ),
@@ -75,7 +75,7 @@
             return false;
         }
 
-        public function get( $username ) {
+        public static function get( $username ) {
             $res = db_select(
                 'users',
                 array( 'username', 'userid', 'password', 'salt', 'email' ),
