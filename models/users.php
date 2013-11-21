@@ -45,7 +45,7 @@
                 // if this query caused an error, then we must have a duplicate username or email
                 // check if we have a duplicate username
                 // if not, we have a duplicate email
-                if ( User::exists( $username ) ) {
+                if ( $this->exists() ) {
                     throw new ModelValidationException( 'user_used' );
                 }
                 throw new ModelValidationException( 'mail_used' );
