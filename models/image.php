@@ -1,6 +1,22 @@
 <?php
     class Image {
-        public static function create( $username, $tmp_name, $imagename, $userid ) {
+        public $username;
+        public $userid;
+        public $tmp_name;
+        public $imagename;
+
+        public function __construct( $username = '', $userid = '', $tmp_name = '', $imagename = '' ) {
+            $this->username = $username;
+            $this->userid = $userid;
+            $this->tmp_name = $tmp_name;
+            $this->imagename = $imagename;
+        }
+
+        public function create() {
+            $username = $this->username;
+            $tmp_name = $this->tmp_name;
+            $imagename = $this->imagename;
+            $userid = $this->userid;
             global $config;
             $ext = Extention::get( $imagename ); 
             if ( !Extention::valid( $ext ) ) {
@@ -17,7 +33,8 @@
             Image::update( $username, $id );
         }
 
-        public static function getCurrentImage( $username ) {
+        public function getCurrentImage() {
+            $username = $this->username;
             $res = db(
                 'SELECT
                     users.avatarid AS avatarid,

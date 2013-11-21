@@ -8,7 +8,8 @@
             if ( empty( $password ) ) {
                 go( 'session', 'create', array( 'empty_pass' => true ) );
             }
-            $id = User::authenticate( $username, $password );
+            $user = new User( $username, $password );
+            $id = $user->authenticate();
             if ( $id == false ) {
                 go( 'session', 'create', array( 'error' => true ) );
             }

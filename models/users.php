@@ -1,7 +1,18 @@
 <?php
     include 'encrypt.php';
     class User {
-        public static function exists( $username ) {
+        public $username;
+        public $password;
+        public $email;
+
+        public function __construct( $username = '', $password = '', $email = '' ) {
+            $this->username = $username;
+            $this->password = $password;
+            $this->email = $email;
+        }
+
+        public function exists() {
+            $username = $this->username;
             $res = db_select( 
                 'users', 
                 array( 'username' ), 
@@ -13,7 +24,10 @@
             return false;
         }
 
-        public static function create( $username, $password, $email ) {
+        public function create() {
+            $username = $this->username;
+            $password = $this->password;
+            $email = $this->email;
             if ( strlen( $password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
@@ -39,14 +53,17 @@
             return mysql_insert_id();
         }
 
-        public static function delete( $username ) {
+        public function delete() {
+            $username = $this->username;
             db_delete(
                 'users',
                 compact( "username" )
             );
         }
 
-        public static function update( $username, $password ) {
+        public function update() {
+            $username = $this->username;
+            $password = $this->password;
             if ( strlen( $password ) <= 6 ) {
                 throw new RedirectException( 'index.php?resource=user&method=update&small_pass=yes' );
             }
@@ -60,7 +77,9 @@
             );
         }
 
-        public static function authenticate( $username, $password ) {
+        public function authenticate() {
+            $username = $this->username;
+            $password = $this->password;
             $res = db_select(
                 'users',
                 array( 'userid', 'password', 'salt' ),
@@ -75,7 +94,8 @@
             return false;
         }
 
-        public static function get( $username ) {
+        public function get() {
+            $username = $this->username;
             $res = db_select(
                 'users',
                 array( 'username', 'userid', 'password', 'salt', 'email' ),

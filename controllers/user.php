@@ -16,8 +16,9 @@
                 'username' => $username,
                 'email' => $email
             );
+            $user = new User( $username, $password, $email );
             try {
-                $id = User::create( $username, $password, $email );
+                $id = $user->create();
             }
             catch( ModelValidationException $e ) {
                 go( 'user', 'create', array( $e->error => true ) );
@@ -36,12 +37,14 @@
             include 'models/users.php';
             include 'models/extentions.php';
             include 'models/image.php';
-            $credentials = User::get( $username );
+            $user = new User( $username );
+            $credentials = $user->get();
             $config = getConfig();
             if ( !$credentials ) {
                 throw new HTTPNotFoundException();
             }
-            $avatarname = Image::getCurrentImage( $username );
+            $image = new Image( $username );
+            $avatarname = $image->getCurrentImage();
             $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
             include 'views/user/view.php';
         }
@@ -52,11 +55,13 @@
                 throw new HTTPUnauthorizedException();
             }
             $username = $_SESSION[ 'user' ][ 'username' ];
-            if ( User::authenticate( $username, $password_old ) ) {
+            $user = new User( $username, $password_old );
+            if ( $user->authenticate() ) {
                 if ( $password_new != $password_repeat ) {
                     go( 'user', 'update', array( 'not_matched' => true ) );
                 }
-                User::update( $username, $password_new );
+                $user->password = $password_new;
+                $user->update();
                 go();
             }
             go( 'user', 'update', array( 'old_pass' => true ) );
@@ -69,7 +74,8 @@
             }
             $username = $_SESSION[ 'user' ][ 'username' ];
             unset( $_SESSION[ 'user' ] );
-            User::delete( $username );
+            $user = new User( $username );
+            $user->delete();
             go();
         }
 

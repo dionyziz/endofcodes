@@ -11,8 +11,9 @@
                 throw new HTTPUnauthorizedException();
             }
             $username = $_SESSION[ 'user' ][ 'username' ];
+            $image = new Image( $username, $id, $tmp_name, $avatarname );
             try {
-                Image::create( $username, $tmp_name, $avatarname, $id );
+                $image->create();
             }
             catch ( ModelValidationException $e ) {
                 go( 'user', 'view', array( 'username' => $username, $e->error => true ) );
