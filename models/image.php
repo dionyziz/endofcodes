@@ -4,6 +4,8 @@
         public $userid;
         public $tmp_name;
         public $imagename;
+        public $avatarid;
+        public $target_path;
 
         public function __construct( $username = '', $userid = '', $tmp_name = '', $imagename = '' ) {
             $this->username = $username;
@@ -28,9 +30,10 @@
                 compact( "userid", "imagename" ) 
             );
             $imagename = "$id" . "." . $ext;
-            $target_path = $target_path . $imagename;
-            Image::upload( $tmp_name, $target_path );
-            Image::update( $username, $id );
+            $this->target_path = $target_path . $imagename;
+            $this->avatarid = $id;
+            $this->upload();
+            $this->update();
         }
 
         public function getCurrentImage() {
@@ -56,11 +59,15 @@
             return false;
         }
 
-        public static function upload( $tmp_name, $target_path ) {
+        public function upload() {
+            $tmp_name = $this->tmp_name;
+            $target_path = $this->target_path;
             return move_uploaded_file( $tmp_name, $target_path );
         }
 
-        public static function update( $username, $avatarid ) {
+        public function update() {
+            $username = $this->username;
+            $avatarid = $this->avatarid;
             db_update( 
                 'users', 
                 compact( "avatarid" ), 
