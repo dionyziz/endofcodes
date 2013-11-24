@@ -84,7 +84,7 @@
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
-        return db(
+        return db_array(
             'SELECT '
             . implode( ",", $select )
             . ' FROM '
@@ -118,5 +118,21 @@
             array_merge( $wreplace, $sreplace )
         );
         return mysql_affected_rows();
+    }
+
+    function db_array( $sql, $bind = false, $id_column = false ) {
+        $res = db( $sql, $bind );
+        $rows = array();
+        if ( $id_column !== false ) {
+            while ( $row = mysql_fetch_array( $res ) ) {
+                $rows[ $row[ $id_column ] ] = $row;
+            }
+        }
+        else {
+            while ( $row = mysql_fetch_array( $res ) ) {
+                $rows[] = $row;
+            }
+        }
+        return $rows;
     }
 ?>

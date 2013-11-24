@@ -6,7 +6,7 @@
             $config = getConfig();
             $avatarname = basename( $image[ 'name' ] );
             $tmp_name = $image[ 'tmp_name' ];
-            $id = $_SESSION[ 'user' ][ 'userid' ];
+            $id = $_SESSION[ 'user' ][ 'id' ];
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }

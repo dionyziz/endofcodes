@@ -16,15 +16,19 @@
                 'username' => $username,
                 'email' => $email
             );
-            $user = new User( $username, $password, $email );
+            $user = new User();
+            $user->username = $username;
+            $user->password = $password;
+            $user->email = $email;
             try {
-                $id = $user->create();
+                $user->save();
+                $id = $user->id;
             }
             catch( ModelValidationException $e ) {
                 go( 'user', 'create', array( $e->error => true ) );
             }
             $_SESSION[ 'user' ] = array(
-                'userid' => $id,
+                'id' => $id,
                 'username' => $username
             );
             go();
@@ -37,12 +41,13 @@
             include 'models/users.php';
             include 'models/extentions.php';
             include 'models/image.php';
-            $user = new User( $username );
-            $credentials = $user->get();
-            $config = getConfig();
-            if ( !$credentials ) {
+            try { 
+                $user = User::find_by_username( $username );
+            }
+            catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
+            $config = getConfig();
             $image = new Image( $username );
             $avatarname = $image->getCurrentImage();
             $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
@@ -54,14 +59,13 @@
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $username = $_SESSION[ 'user' ][ 'username' ];
-            $user = new User( $username, $password_old );
-            if ( $user->authenticate() ) {
+            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
+            if ( $user->authenticatesWithPassword( $password_old ) ) {
                 if ( $password_new != $password_repeat ) {
                     go( 'user', 'update', array( 'not_matched' => true ) );
                 }
                 $user->password = $password_new;
-                $user->update();
+                $user->save();
                 go();
             }
             go( 'user', 'update', array( 'old_pass' => true ) );
@@ -72,10 +76,9 @@
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $username = $_SESSION[ 'user' ][ 'username' ];
-            unset( $_SESSION[ 'user' ] );
-            $user = new User( $username );
+            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
             $user->delete();
+            unset( $_SESSION[ 'user' ] );
             go();
         }
 

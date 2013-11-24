@@ -1,39 +1,63 @@
 <?php
     include 'encrypt.php';
+    include 'models/base.php';
+
     class User {
+        public $id;
         public $username;
         public $password;
         public $email;
+        protected $exists;
 
-        public function __construct( $username = '', $password = '', $email = '' ) {
-            $this->username = $username;
-            $this->password = $password;
-            $this->email = $email;
-        }
-
-        public function exists() {
-            $username = $this->username;
-            $res = db_select( 
-                'users', 
-                array( 'username' ), 
-                compact( "username" ) 
-            );
-            if ( mysql_num_rows( $res ) == 1 ) {
-                return true;
+        public static function find_by_username( $username ) {
+            $users = db_select( 'users', array( 'id' ), compact( "username" ) );
+            if ( empty( $users ) ) {
+                throw new ModelNotFoundException();
             }
-            return false;
+            return new User( $users[ 0 ][ 'id' ] );
         }
 
-        public function create() {
+        public function __construct( $id = false ) {
+            if ( $id === false ) {
+                // new active record object
+                $this->exists = false;
+            }
+            else {
+                // existing active record object
+                $user_info = db_select( 'users', array( 'username', 'email', 'password' ), compact( "id" ) );
+                $this->username = $user_info[ 0 ][ 'username' ];
+                $this->email = $user_info[ 0 ][ 'email' ];
+                $this->password = $user_info[ 0 ][ 'password' ];
+                $this->id = $id;
+
+                $this->exists = true;
+            }
+        }
+
+        public function save() {
+            $this->validate();
+            if ( $this->exists ) {
+                $this->update();
+            }
+            else {
+                $this->create();
+            }
+        }
+
+        protected function validate() {
+            include 'models/mail.php';
+            if ( strlen( $this->password ) <= 6 ) {
+                throw new ModelValidationException( 'small_pass' );
+            }
+            if ( !Mail::valid( $this->email ) ) {
+                throw new ModelValidationException( 'mail_notvalid' );
+            }
+        }
+
+        protected function create() {
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
-            if ( strlen( $password ) <= 6 ) {
-                throw new ModelValidationException( 'small_pass' );
-            }
-            if ( !Mail::valid( $email ) ) {
-                throw new ModelValidationException( 'mail_notvalid' );
-            }
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
@@ -41,69 +65,53 @@
                 'users', 
                 compact( "username", "password", "email", "salt" )
             );
-            if ( $res === false ) {
-                // if this query caused an error, then we must have a duplicate username or email
-                // check if we have a duplicate username
-                // if not, we have a duplicate email
-                if ( $this->exists() ) {
+            if ( $res === false ) { 
+                try {
+                    $other_user = User::find_by_username( $username );
                     throw new ModelValidationException( 'user_used' );
                 }
-                throw new ModelValidationException( 'mail_used' );
+                catch ( ModelNotFoundException $e ) {
+                    throw new ModelValidationException( 'mail_used' );
+                }
             }
-            return mysql_insert_id();
+            $this->exists = true;
+            $this->id = mysql_insert_id();
         }
 
         public function delete() {
-            $username = $this->username;
+            $id = $this->id;
             db_delete(
                 'users',
-                compact( "username" )
+                compact( "id" )
             );
         }
 
-        public function update() {
-            $username = $this->username;
+        protected function update() {
+            $id = $this->id;
             $password = $this->password;
-            if ( strlen( $password ) <= 6 ) {
-                throw new RedirectException( 'index.php?resource=user&method=update&small_pass=yes' );
-            }
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
+            $email = $this->email;
+            $username = $this->username;
             db_update(
                 'users',
-                compact( "password", "salt" ),
-                compact( "username" )
+                compact( "email", "username", "password", "salt" ),
+                compact( "id" )
             );
         }
 
-        public function authenticate() {
+        public function authenticatesWithPassword( $password ) {
             $username = $this->username;
-            $password = $this->password;
-            $res = db_select(
+            $row = db_select(
                 'users',
-                array( 'userid', 'password', 'salt' ),
+                array( 'id', 'password', 'salt' ),
                 compact( "username" )
             );
-            if ( mysql_num_rows( $res ) == 1 ) {
-                $row = mysql_fetch_array( $res );
-                if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
-                    return $row[ 'userid' ];
+            if ( !empty( $row ) ) {
+                if ( $row[ 0 ][ 'password' ] == hashing( $password, $row[ 0 ][ 'salt' ] ) ) {
+                    return true;
                 }
-            }
-            return false;
-        }
-
-        public function get() {
-            $username = $this->username;
-            $res = db_select(
-                'users',
-                array( 'username', 'userid', 'password', 'salt', 'email' ),
-                compact( "username" )
-            );
-            if ( mysql_num_rows( $res ) == 1 ) {
-                $row = mysql_fetch_array( $res );
-                return $row;
             }
             return false;
         }

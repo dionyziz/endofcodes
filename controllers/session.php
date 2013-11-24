@@ -8,13 +8,18 @@
             if ( empty( $password ) ) {
                 go( 'session', 'create', array( 'empty_pass' => true ) );
             }
-            $user = new User( $username, $password );
-            $id = $user->authenticate();
-            if ( $id == false ) {
-                go( 'session', 'create', array( 'error' => true ) );
+            try {
+                $user = User::find_by_username( $username );
             }
+            catch ( ModelNotFoundException $e ) {
+                go( 'session', 'create', array( 'wrong_user' => true ) );
+            }
+            if ( !$user->authenticatesWithPassword( $password ) ) {
+                go( 'session', 'create', array( 'wrong_pass' => true ) );
+            }
+            $id = $user->id;
             $_SESSION[ 'user' ] = array(
-                'userid' => $id,
+                'id' => $id,
                 'username' => $username
             );
             go();
@@ -25,7 +30,7 @@
             go();
         }
 
-        public static function createView( $error, $empty_user, $empty_pass ) {
+        public static function createView( $wrong_pass, $empty_user, $empty_pass, $wrong_user ) {
             include 'views/session/create.php';
         }
     }

@@ -3,11 +3,11 @@
 ?>
 
 <h1><?php
-    echo htmlspecialchars( $credentials[ 'username' ] );
+    echo htmlspecialchars( $user->username );
 ?></h1>
 
 <p>Contact: <?php
-    echo htmlspecialchars( $credentials[ 'email' ] );
+    echo htmlspecialchars( $user->email );
 ?></p>
 
 <p><img src="<?php
@@ -15,7 +15,7 @@
         ?>" alt="Profile Picture" width="100" height="100" /></p>
 
 <?php
-    if ( $_SESSION[ 'user' ][ 'userid' ] == $credentials[ 'userid' ] ) {
+    if ( $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
         ?><form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data">
             <label for="image">Upload an avatar</label>
             <?php

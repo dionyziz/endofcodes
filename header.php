@@ -55,7 +55,6 @@
             }
         }
     }
-
     class HTTPNotFoundException extends HTTPErrorException {
         public function __construct() {
             parent::__construct( '404', 'Not Found' );
@@ -65,14 +64,6 @@
     class HTTPUnauthorizedException extends HTTPErrorException {
         public function __construct() {
             parent::__construct( '401', 'Unauthorized' );
-        }
-    }
-
-    class ModelValidationException extends Exception {
-        public $error;
-        public function __construct( $error = "" ) {
-            parent::__construct( "Model validation error: " . $error );
-            $this->error = $error;
         }
     }
 ?>
