@@ -45,7 +45,6 @@
         }
 
         protected function validate() {
-            include 'models/mail.php';
             if ( strlen( $this->password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
