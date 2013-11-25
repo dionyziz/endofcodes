@@ -1,7 +1,7 @@
 <?php
     class SessionController {
         public static function create( $username = '', $password = '' ) {
-            include 'models/users.php';
+            include 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', array( 'empty_user' => true ) );
             }

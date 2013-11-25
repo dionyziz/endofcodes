@@ -10,7 +10,7 @@
             if ( empty( $email ) ) {
                 go( 'user', 'create', array( 'empty_mail' => true ) );
             }
-            include 'models/users.php';
+            include 'models/user.php';
             include 'models/mail.php';
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
@@ -38,7 +38,7 @@
             if ( $username === NULL ) {
                 throw new HTTPNotFoundException();
             }
-            include 'models/users.php';
+            include 'models/user.php';
             include 'models/extentions.php';
             include 'models/image.php';
             try { 
@@ -55,7 +55,7 @@
         }
 
         public static function update( $password_old, $password_new, $password_repeat ) {
-            include 'models/users.php';
+            include 'models/user.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
@@ -72,7 +72,7 @@
         }
 
         public static function delete() {
-            include 'models/users.php';
+            include 'models/user.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }

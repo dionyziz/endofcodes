@@ -2,12 +2,13 @@
     include 'encrypt.php';
     include 'models/base.php';
 
-    class User {
+    class User extends ActiveRecordBase {
         public $id;
         public $username;
         public $password;
         public $email;
         protected $exists;
+        protected $tableName = 'users';
 
         public static function find_by_username( $username ) {
             $users = db_select( 'users', array( 'id' ), compact( "username" ) );
@@ -31,16 +32,6 @@
                 $this->id = $id;
 
                 $this->exists = true;
-            }
-        }
-
-        public function save() {
-            $this->validate();
-            if ( $this->exists ) {
-                $this->update();
-            }
-            else {
-                $this->create();
             }
         }
 
@@ -75,14 +66,6 @@
             }
             $this->exists = true;
             $this->id = mysql_insert_id();
-        }
-
-        public function delete() {
-            $id = $this->id;
-            db_delete(
-                'users',
-                compact( "id" )
-            );
         }
 
         protected function update() {
