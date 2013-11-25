@@ -3,15 +3,19 @@
         public static function create( $image ) {
             include 'models/image.php';
             include 'models/extentions.php';
-            $config = getConfig();
-            $avatarname = basename( $image[ 'name' ] );
-            $tmp_name = $image[ 'tmp_name' ];
-            $id = $_SESSION[ 'user' ][ 'id' ];
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
+            $config = getConfig();
+            $imagename = basename( $image[ 'name' ] );
+            $tmp_name = $image[ 'tmp_name' ];
+            $id = $_SESSION[ 'user' ][ 'id' ];
             $username = $_SESSION[ 'user' ][ 'username' ];
-            $image = new Image( $username, $id, $tmp_name, $avatarname );
+            $image = new Image();
+            $image->username = $username;
+            $image->tmp_name = $tmp_name;
+            $image->imagename = $imagename;
+            $image->id = $id;
             try {
                 $image->create();
             }

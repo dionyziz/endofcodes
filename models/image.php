@@ -1,62 +1,49 @@
 <?php
-    class Image {
+    class Image extends ActiveRecordBase {
         public $username;
-        public $userid;
+        public $id;
         public $tmp_name;
         public $imagename;
         public $avatarid;
         public $target_path;
+        protected $tableName = 'images';
+        protected $exists;
 
-        public function __construct( $username = '', $userid = '', $tmp_name = '', $imagename = '' ) {
-            $this->username = $username;
-            $this->userid = $userid;
-            $this->tmp_name = $tmp_name;
-            $this->imagename = $imagename;
+        public function __construct( $id = false ) {
+            if ( $id ) {
+                $this->exists = false;
+            }
+            else {
+                $user_info = db_select( 'users', array( 'username' ), compact( "id" ) );
+                $this->username = $user_info[ 0 ][ 'username' ];
+                $this->id = $id;
+            }
         }
 
-        public function create() {
-            $username = $this->username;
-            $tmp_name = $this->tmp_name;
+        protected function validate() {
             $imagename = $this->imagename;
-            $userid = $this->userid;
-            global $config;
             $ext = Extention::get( $imagename ); 
             if ( !Extention::valid( $ext ) ) {
                 throw new ModelValidationException( 'notvalid' );
             }
-            $target_path = $config[ 'paths' ][ 'avatar_path' ];
-            $id = db_insert( 
-                'images', 
-                compact( "userid", "imagename" ) 
-            );
-            $imagename = "$id" . "." . $ext;
-            $this->target_path = $target_path . $imagename;
-            $this->avatarid = $id;
-            $this->upload();
-            $this->update();
         }
 
-        public function getCurrentImage() {
+        protected function create() {
+            global $config;
             $username = $this->username;
-            $res = db(
-                'SELECT
-                    users.avatarid AS avatarid,
-                    images.imagename AS imagename
-                FROM
-                    users CROSS JOIN images ON
-                    users.avatarid = images.imageid
-                WHERE
-                    username = :username
-                LIMIT 1;', 
-                compact( "username" )
+            $tmp_name = $this->tmp_name;
+            $imagename = $this->imagename;
+            $id = $this->id;
+            $target_path = $config[ 'paths' ][ 'avatar_path' ];
+            $avatarid = db_insert( 
+                'images', 
+                compact( "id", "imagename" ) 
             );
-            if ( mysql_num_rows( $res ) == 1 ) {
-                $row = mysql_fetch_array( $res );
-                $ext = Extention::get( $row[ 'imagename' ] );
-                $id = $row[ 'avatarid' ];
-                return "$id" . "." . $ext;
-            }
-            return false;
+            $imagename = "$avatarid" . "." . $ext;
+            $this->target_path = $target_path . $imagename;
+            $this->avatarid = $avatarid;
+            $this->upload();
+            $this->update();
         }
 
         public function upload() {
@@ -73,6 +60,29 @@
                 compact( "avatarid" ), 
                 compact( "username" )
             );
+        }
+
+        public function getCurrentImage() {
+            $id = $this->id;
+            $res = db(
+                'SELECT
+                    users.avatarid AS avatarid,
+                    images.imagename AS imagename
+                FROM
+                    users CROSS JOIN images ON
+                    users.avatarid = images.imageid
+                WHERE
+                    id = :id
+                LIMIT 1;', 
+                compact( "id" )
+            );
+            if ( mysql_num_rows( $res ) == 1 ) {
+                $row = mysql_fetch_array( $res );
+                $ext = Extention::get( $row[ 'imagename' ] );
+                $avatarid = $row[ 'avatarid' ];
+                return "$avatarid" . "." . $ext;
+            }
+            return false;
         }
     }
 ?>

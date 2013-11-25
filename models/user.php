@@ -1,7 +1,5 @@
 <?php
     include 'encrypt.php';
-    include 'models/base.php';
-
     class User extends ActiveRecordBase {
         public $id;
         public $username;

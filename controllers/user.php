@@ -48,7 +48,7 @@
                 throw new HTTPNotFoundException();
             }
             $config = getConfig();
-            $image = new Image( $username );
+            $image = new Image( $username, $user->id );
             $avatarname = $image->getCurrentImage();
             $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
             include 'views/user/view.php';
