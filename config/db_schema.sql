@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 24, 2013 at 04:15 PM
+-- Generation Time: Nov 25, 2013 at 04:24 PM
 -- Server version: 5.5.34
 -- PHP Version: 5.3.10-1ubuntu3.8
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   `userid` int(11) NOT NULL,
   `imagename` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`imageid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=76 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=74 ;
 
 -- --------------------------------------------------------
 
@@ -40,16 +40,16 @@ CREATE TABLE IF NOT EXISTS `images` (
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `userid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `salt` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `avatarid` int(11) NOT NULL,
-  PRIMARY KEY (`userid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=72 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=77 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
