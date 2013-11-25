@@ -1,30 +1,36 @@
 <?php
     class SessionController {
         public static function create( $username = '', $password = '' ) {
-            include 'models/users.php';
+            include 'models/user.php';
             if ( empty( $username ) ) {
-                throw new RedirectException( 'index.php?empty_user=yes&resource=session&method=create' );
+                go( 'session', 'create', array( 'empty_user' => true ) );
             }
             if ( empty( $password ) ) {
-                throw new RedirectException( 'index.php?empty_pass=yes&resource=session&method=create' );
+                go( 'session', 'create', array( 'empty_pass' => true ) );
             }
-            $id = User::authenticate( $username, $password );
-            if ( $id == false ) {
-                throw new RedirectException( 'index.php?resource=session&method=create&error=yes' );
+            try {
+                $user = User::find_by_username( $username );
             }
+            catch ( ModelNotFoundException $e ) {
+                go( 'session', 'create', array( 'wrong_user' => true ) );
+            }
+            if ( !$user->authenticatesWithPassword( $password ) ) {
+                go( 'session', 'create', array( 'wrong_pass' => true ) );
+            }
+            $id = $user->id;
             $_SESSION[ 'user' ] = array(
-                'userid' => $id,
+                'id' => $id,
                 'username' => $username
             );
-            throw new RedirectException( 'index.php?resource=dashboard&method=view' );
+            go();
         }
 
         public static function delete() {
             unset( $_SESSION[ 'user' ] );
-            throw new RedirectException( 'index.php?resource=dashboard&method=view' );
+            go();
         }
 
-        public static function createView( $error, $empty_user, $empty_pass ) {
+        public static function createView( $wrong_pass, $empty_user, $empty_pass, $wrong_user ) {
             include 'views/session/create.php';
         }
     }
