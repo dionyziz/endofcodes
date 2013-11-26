@@ -19,15 +19,11 @@
             `countryid` int(4) unsigned NOT NULL;"
     );
     
-    if ( $res1 === false ) {
+    if ( $res1 === false || $res2 === false ) {
         die( "SQL query died with the following error\n\""
         . mysql_error() );
     }
 
-    if ( $res2 === false ) {
-        die( "SQL query died with the following error\n\""
-        . mysql_error() );
-    }
 ?>
 
 
