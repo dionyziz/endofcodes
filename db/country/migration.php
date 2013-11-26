@@ -1,7 +1,7 @@
 <?php
-    
-    mysql_connect( localhost, akelas, akelas );
-    mysql_select_db( endofcodes );
+   
+    include '../../config/config.php';
+    include '../../models/database.php';
     
     $res1 = mysql_query( "CREATE TABLE IF NOT EXISTS 
         `countries` (
