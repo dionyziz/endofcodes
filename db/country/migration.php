@@ -1,19 +1,33 @@
 <?php
     
-    include 'models/database.php';
-
-    $res1 = mysql_query( "CREATE TABLE 
-        'countries' (
-            'id' INT PRIMARY KEY,
-            'country' TEXT,
-            'shortname' TEXT
-        )"
+    mysql_connect( localhost, akelas, akelas );
+    mysql_select_db( endofcodes );
+    
+    $res1 = mysql_query( "CREATE TABLE IF NOT EXISTS 
+        `countries` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `country` text COLLATE utf8mb4_unicode_ci NOT NULL,
+            `shortname` text COLLATE utf8mb4_unicode_ci NOT NULL,
+            PRIMARY KEY (`id`)
+        ) 
+        ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1"
     );
 
     $res2 = mysql_query( "ALTER TABLE
-            'users'
-        ADD
-            'countryid' INT"
+            `users` 
+        ADD COLUMN
+            `countryid` int(4) unsigned NOT NULL;"
     );
+    
+    if ( $res1 === false ) {
+        die( "SQL query died with the following error\n\""
+        . mysql_error() );
+    }
 
+    if ( $res2 === false ) {
+        die( "SQL query died with the following error\n\""
+        . mysql_error() );
+    }
 ?>
+
+
