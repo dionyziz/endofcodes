@@ -22,6 +22,9 @@
     if ( $res1 === false || $res2 === false ) {
         die( "SQL query died with the following error\n\"". mysql_error() );
     }
+    else {
+        echo 'good';
+    }
 
 ?>
 
