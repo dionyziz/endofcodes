@@ -52,7 +52,7 @@
         'CG'=>'Congo',
         'CK'=>'Cook Islands',
         'CR'=>'Costa Rica',
-        'CI'=>'Cote D\'Ivorie (Ivory Coast)',
+        'CI'=>'Ivory Coast',
         'HR'=>'Croatia (Hrvatska)',
         'CU'=>'Cuba',
         'CY'=>'Cyprus',
@@ -241,5 +241,5 @@
         'ZM'=>'Zambia',
         'ZW'=>'Zimbabwe'
     );
-
+        
 ?>

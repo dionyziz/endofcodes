@@ -20,10 +20,8 @@
     );
     
     if ( $res1 === false || $res2 === false ) {
-        die( "SQL query died with the following error\n\""
-        . mysql_error() );
+        die( "SQL query died with the following error\n\"". mysql_error() );
     }
 
 ?>
-
 
