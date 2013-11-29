@@ -36,6 +36,8 @@
         }
     ?>
     <p><input type="password" id="password" name="password" /></p>
+    <label for="password2">Repeat</label>
+    <p><input type="password" id="password2" name="password2" /></p>
     <label for="email">Email</label>
     <?php
         if ( isset( $mail_used ) ) {
@@ -58,6 +60,10 @@
         echo htmlspecialchars( $val );
     ?>"/></p>
     <p><input type="submit" value="Register" /></p>
+    <select>
+        <?php
+        ?>
+    </select> 
 </form>
 
 <?php
