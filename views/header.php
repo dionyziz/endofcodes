@@ -17,3 +17,10 @@
             ?>
             <li><a href="http://blog.endofcodes.com">Blog</a></li>
         </ul>
+        <p><?php
+            echo htmlspecialchars( $_SESSION[ 'user' ][ 'username' ] );
+        ?></p>
+        <select>
+            <option></option>
+            <option value="logout">Logout</option>
+        </select>
