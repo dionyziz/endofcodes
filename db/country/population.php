@@ -1,6 +1,5 @@
 <?php
-
-    include '../../config/config.php';
+    include '../../config/config-local.php';
     include '../../models/database.php';
     include 'countries_array.php';
     

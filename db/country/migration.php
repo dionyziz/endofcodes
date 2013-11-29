@@ -1,8 +1,7 @@
 <?php
-   
-    include '../../config/config.php';
+    include '../../config/config-local.php';
     include '../../models/database.php';
-    
+
     $res1 = mysql_query( "CREATE TABLE IF NOT EXISTS 
         `countries` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
