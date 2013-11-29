@@ -17,10 +17,17 @@
             ?>
             <li><a href="http://blog.endofcodes.com">Blog</a></li>
         </ul>
-        <p><?php
-            echo htmlspecialchars( $_SESSION[ 'user' ][ 'username' ] );
-        ?></p>
-        <select>
-            <option></option>
-            <option value="logout">Logout</option>
-        </select>
+        <?php
+            if ( isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
+                ?><p><?php
+                    echo htmlspecialchars( $_SESSION[ 'user' ][ 'username' ] );
+                ?></p>
+                <select>
+                    <option></option>
+                    <option value="logout">Logout</option>
+                </select><?php
+            }
+            else {
+                ?><p><a href="index.php?resource=session&amp;method=create">Login</a></p><?php
+            }
+        ?>
