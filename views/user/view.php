@@ -46,10 +46,5 @@
         </form>
         <p><a href="">Edit Settings</a></p><?php
     }
-?>
-
-<p><a href="index.php">Home</a></p>
-
-<?php
     include 'views/footer.php';
 ?>
