@@ -39,7 +39,7 @@
             if ( strlen( $this->password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
-            if ( !Mail::valid( $this->email ) ) {
+            if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
                 throw new ModelValidationException( 'mail_notvalid' );
             }
         }
