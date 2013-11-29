@@ -1,5 +1,15 @@
 <?php
     include 'views/header.php';
+?>
+<p>Step 1</p>
+<p><a href="">Download the libraries</a></p>
+<p>Step 2</p>
+<p>Read the basic <a href="">rules</a></p>
+<p>Step 3</p>
+<p>Code your bot</p>
+<p>Step 4</p>
+<p>Register to try it out</p>
+<?php
     if ( isset( $empty_user ) ) {
         ?><p>Please fill the username form.</p><?php
     }
@@ -8,6 +18,9 @@
     }
     else if ( isset( $empty_mail ) ) {
         ?><p>Please fill the email form.</p><?php
+    }
+    else if ( isset( $empty_pass_repeat ) ) {
+        ?><p>Please fill the Password Repeat form</p><?php
     }
 ?>
 
@@ -34,10 +47,13 @@
         if ( isset( $small_pass ) ) {
             ?><p>Password should be at least 7 characters long</p><?php
         }
+        if ( isset( $not_matched ) ) {
+            ?><p>Passwords do not match</p><?php
+        }
     ?>
     <p><input type="password" id="password" name="password" /></p>
-    <label for="password2">Repeat</label>
-    <p><input type="password" id="password2" name="password2" /></p>
+    <label for="password_repeat">Repeat</label>
+    <p><input type="password" id="password_repeat" name="password_repeat" /></p>
     <label for="email">Email</label>
     <?php
         if ( isset( $mail_used ) ) {
@@ -59,11 +75,22 @@
     <p><input type="text" id="email" name="email" value="<?php
         echo htmlspecialchars( $val );
     ?>"/></p>
-    <p><input type="submit" value="Register" /></p>
     <select>
+        <option value="select">Select Country</option>
         <?php
+            include 'db/country/countries_array.php';
+            $countries = getCountries();
+            foreach ( $countries as $country ) {
+                ?><option value="<?php
+                    echo $country;
+                ?>"><?php
+                    echo $country;
+                ?></option><?php
+            }
         ?>
     </select> 
+    <p><input type="checkbox" /> I agree on the <a href="">Terms of Usage</a></p>
+    <p><input type="submit" value="Register" /></p>
 </form>
 
 <?php

@@ -1,6 +1,6 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $email = '' ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '' ) {
             if ( empty( $username ) ) {
                 go( 'user', 'create', array( 'empty_user' => true ) );
             }
@@ -9,6 +9,12 @@
             }
             if ( empty( $email ) ) {
                 go( 'user', 'create', array( 'empty_mail' => true ) );
+            }
+            if ( empty( $password_repeat ) ) {
+                go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
+            }
+            if ( $password !== $password_repeat ) {
+                go( 'user', 'create', array( 'not_matched' => true ) );
             }
             include 'models/user.php';
             include 'models/mail.php';
@@ -82,7 +88,7 @@
             go();
         }
 
-        public static function createView( $empty_user, $empty_mail, $empty_pass, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
+        public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
             include 'views/user/create.php';
         }
 
