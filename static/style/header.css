@@ -1,0 +1,12 @@
+#header {
+    margin-bottom: 50px;
+}
+#header ul {
+    list-style-type: none;
+    display: inline;
+    padding-left: 0px;
+}
+
+#header li {
+    display: inline;
+}
