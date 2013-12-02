@@ -1,7 +1,11 @@
 .username {
-    color: red;
+    color: black;
 }
 
 .importantnum {
+    color: blue;
+}
+
+.error {
     color: red;
 }
