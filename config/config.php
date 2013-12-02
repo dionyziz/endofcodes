@@ -2,10 +2,10 @@
     function getConfig() {
         $config = array(
             'db' => array(
-                'host' => 'sample_host',
-                'user' => 'sample_user',
-                'pass' => 'sample_pass',
-                'dbname' => 'sample_dbname'
+                'host' => 'localhost',
+                'user' => 'akelas',
+                'pass' => 'akelas',
+                'dbname' => 'endofcodes'
             ),
             'files' => array(
                 'avatar_extentions' => array( 'jpg', 'png', 'jpeg' )
