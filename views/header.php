@@ -20,6 +20,11 @@
             rel="stylesheet" 
             type="text/css" 
             href="static/style/header.css" />
+        <link 
+            rel="stylesheet" 
+            type="text/css" 
+            href="static/style/register.css" />
+
         <meta 
             http-equiv="Content-type" 
             content="text/html; charset=utf-8" />

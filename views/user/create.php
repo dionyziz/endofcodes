@@ -1,14 +1,24 @@
 <?php
     include 'views/header.php';
 ?>
-<p>Step 1</p>
-<p><a href="">Download the libraries</a></p>
-<p>Step 2</p>
-<p>Read the basic <a href="">rules</a></p>
-<p>Step 3</p>
-<p>Code your bot</p>
-<p>Step 4</p>
-<p>Register to try it out</p>
+<div id="steps">
+    <div div="step1" class="steps">
+        <p>Step 1</p>
+        <p><a href="">Download the libraries</a></p>
+    </div>
+     <div id="step2" class="steps">
+        <p>Step 2</p>
+        <p>Read the basic <a href="">rules</a></p>
+    </div>
+    <div id="step3" class="steps">
+        <p>Step 3</p>
+        <p>Code your bot</p>
+    </div>
+    <div id="step4" class="steps">
+        <p>Step 4</p>
+        <p>Register to try it out</p>
+    </div>
+</div>
 <?php
     if ( isset( $empty_user ) ) {
         ?><p>Please fill the username form.</p><?php
@@ -24,7 +34,7 @@
     }
 ?>
 
-<form action="index.php?resource=user&amp;method=create" method="post">
+<form id="register-form" action="index.php?resource=user&amp;method=create" method="post">
     <label for="username">Username</label>
     <?php
         if ( isset( $user_used ) ) {
