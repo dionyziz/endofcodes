@@ -1,6 +1,7 @@
-<div id="login">
-    <?php
-        include 'views/header.php';
+<?php
+    include 'views/header.php';
+?>
+<div id="login"><?php
         if ( isset( $empty_user ) ) {
             ?><p class="error">Please fill the username form.</p><?php
         }
@@ -9,7 +10,7 @@
         }
     ?>
 
-    <form action="index.php?resource=session&amp;method=create" method="POST">
+    <form id="login-form" action="index.php?resource=session&amp;method=create" method="POST">
         <label for="username">Username</label>
         <?php
             if ( isset( $wrong_user ) ) {
