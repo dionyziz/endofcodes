@@ -1,11 +1,11 @@
-<?php
+ <?php
     function getConfig() {
         $config = array(
             'db' => array(
-                'host' => 'localhost',
-                'user' => 'akelas',
-                'pass' => 'akelas',
-                'dbname' => 'endofcodes'
+                'host' => 'sample_host',
+                'user' => 'sample_user',
+                'pass' => 'sample_pass',
+                'dbname' => 'sample_dbname'
             ),
             'files' => array(
                 'avatar_extentions' => array( 'jpg', 'png', 'jpeg' )
@@ -16,4 +16,4 @@
         );
         return $config;
     }
-?>
+?>                                                                                                          ?>
