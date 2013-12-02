@@ -12,7 +12,9 @@
                         echo "static/style/" . $path . ".css";
                     ?>" /><?php
             }
+            includeStyle( "general" );
             includeStyle( "header" );
+            includeStyle( "home" );
         ?>
         <link 
             rel="stylesheet" 
@@ -37,7 +39,7 @@
                 <li><a href="http://blog.endofcodes.com">Blog</a></li>
                 <?php
                     if ( isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
-                        ?><li id="login"><?php
+                        ?><li id="login" class="username"><?php
                             echo htmlspecialchars( $_SESSION[ 'user' ][ 'username' ] );
                         ?><select>
                             <option> </option>

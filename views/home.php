@@ -1,31 +1,34 @@
-<?php
-    ?><p>Last match ratings(global)</p>
-    <ol>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-        <li>... : 10</li>
-    </ol>
-    <select>
-        <option value="select">Select ratings</option>
-        <option value="global">Global</option>
-        <option value="friends">Friends</option>
-        <option value="country">By country</option>
-        <option value="date">By date</option>
-    </select>
-    <p>Your position: 4</p>
-    <p>Score: 10</p>
-    <p>Congratulations! you got up by 5 positions and 8 points since your last match</p>
-    <p>Check your progress <a href="">here</a></p>
-    <p>Check your programs process <a href="">here</a></p>
-    <?php
-    if ( isset( $username ) ) {
-        include 'views/session/logoutform.php';
-    }
-?>
+    <div id="home">
+        <p>Last match ratings(global)</p>
+        <ol id="toplist">
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+            <li><a href="">...........</a> : 10</li>
+        </ol>
+        <select id="selectbox">
+            <option value="select">Select ratings</option>
+            <option value="global">Global</option>
+            <option value="friends">Friends</option>
+            <option value="country">By country</option>
+            <option value="date">By date</option>
+        </select>
+        <div id="persinfo">
+            <p>Your position: <span class="importantnum">4</span></p>
+            <p>Score: <span class="importantnum">10</span></p>
+            <p>Congratulations! you got up by <span class="importantnum">5 </span>positions and <span class="importantnum">8</span> points since your last match</p>
+            <p>Check your progress <a href="">here</a></p>
+            <p>Check your program's process <a href="">here</a></p>
+            <?php
+                if ( isset( $username ) ) {
+                    include 'views/session/logoutform.php';
+                }
+            ?>
+        </div>
+    </div>
