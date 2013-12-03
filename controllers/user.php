@@ -23,6 +23,7 @@
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
             include 'models/user.php';
+            include 'models/country.php';
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
                 'email' => $email
@@ -31,6 +32,7 @@
             $user->username = $username;
             $user->password = $password;
             $user->email = $email;
+            $user->countryid = Country::getCountryId( $country );
             try {
                 $user->save();
                 $id = $user->id;
@@ -52,12 +54,14 @@
             include 'models/user.php';
             include 'models/extentions.php';
             include 'models/image.php';
+            include 'models/country.php';
             try { 
                 $user = User::find_by_username( $username );
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
+            $country = Country::getCountryName( $user->countryid );
             $config = getConfig();
             $image = new Image( $username );
             $avatarname = $image->getCurrentImage();

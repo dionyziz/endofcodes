@@ -7,6 +7,7 @@
         public $username;
         public $password;
         public $email;
+        public $countryid;
         protected $exists;
         protected $tableName = 'users';
 
@@ -25,10 +26,11 @@
             }
             else {
                 // existing active record object
-                $user_info = db_select( 'users', array( 'username', 'email', 'password' ), compact( "id" ) );
+                $user_info = db_select( 'users', array( 'username', 'email', 'password', 'countryid' ), compact( "id" ) );
                 $this->username = $user_info[ 0 ][ 'username' ];
                 $this->email = $user_info[ 0 ][ 'email' ];
                 $this->password = $user_info[ 0 ][ 'password' ];
+                $this->countryid = $user_info[ 0 ][ 'countryid' ];
                 $this->id = $id;
 
                 $this->exists = true;
@@ -48,12 +50,13 @@
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
+            $countryid = $this->countryid;
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             $res = db_insert( 
                 'users', 
-                compact( "username", "password", "email", "salt" )
+                compact( "username", "password", "email", "salt", "countryid" )
             );
             if ( $res === false ) { 
                 try {

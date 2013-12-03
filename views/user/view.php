@@ -27,7 +27,9 @@
     echo htmlspecialchars( $user->email );
 ?></p>
 
-<p>Region, Country</p>
+<p>Region, Country: <?php
+    echo $country;
+?></p>
 <p>Score: *score*</p>
 <p><a href="">Global</a> position: *pos*</p>
 <p><a href="">Country</a> position: *pos*</p>
