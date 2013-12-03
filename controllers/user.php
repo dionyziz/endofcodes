@@ -1,6 +1,9 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '' ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false ) {
+            if ( $accept === false ) {
+                go( 'user', 'create', array( 'not_accepted' => true ) );
+            }
             if ( empty( $username ) ) {
                 go( 'user', 'create', array( 'empty_user' => true ) );
             }
@@ -13,11 +16,13 @@
             if ( empty( $password_repeat ) ) {
                 go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
             }
+            if ( $country === 'Select Country' ) {
+                go( 'user', 'create', array( 'empty_country' => true ) );
+            }
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
             include 'models/user.php';
-            include 'models/mail.php';
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
                 'email' => $email
@@ -88,7 +93,8 @@
             go();
         }
 
-        public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
+        public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, 
+                $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted ) {
             include 'views/user/create.php';
         }
 

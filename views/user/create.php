@@ -19,22 +19,22 @@
         <p>Register to try it out</p>
     </div>
 </div>
-<?php
-    if ( isset( $empty_user ) ) {
-        ?><p class="error">Please fill the username form.</p><?php
-    }
-    else if ( isset( $empty_pass ) ) {
-        ?><p class="error">Please fill the password form.</p><?php
-    }
-    else if ( isset( $empty_mail ) ) {
-        ?><p class="error">Please fill the email form.</p><?php
-    }
-    else if ( isset( $empty_pass_repeat ) ) {
-        ?><p class="error">Please fill the Password Repeat form</p><?php
-    }
-?>
 
 <form id="register-form" action="index.php?resource=user&amp;method=create" method="post">
+    <?php
+        if ( isset( $empty_user ) ) { 
+            ?><p class="error">Please fill the username form.</p><?php
+        }
+        else if ( isset( $empty_pass ) ) {
+            ?><p class="error">Please fill the password form.</p><?php
+        }
+        else if ( isset( $empty_mail ) ) {
+            ?><p class="error">Please fill the email form.</p><?php
+        }
+        else if ( isset( $empty_pass_repeat ) ) {
+            ?><p class="error">Please fill the Password Repeat form</p><?php
+        }
+    ?>
     <label for="username">Username</label>
     <?php
         if ( isset( $user_used ) ) {
@@ -85,8 +85,13 @@
     <p><input type="text" id="email" name="email" value="<?php
         echo htmlspecialchars( $val );
     ?>"/></p>
-    <select>
-        <option value="select">Select Country</option>
+    <?php
+        if ( isset( $empty_country ) ) {
+            ?><p class="error">Please select a country</p><?php
+        }
+    ?>
+    <select name="country">
+        <option>Select Country</option>
         <?php
             include 'db/country/countries_array.php';
             $countries = getCountries();
@@ -99,7 +104,12 @@
             }
         ?>
     </select> 
-    <p><input type="checkbox" /> I agree on the <a href="">Terms of Usage</a></p>
+    <?php
+        if ( isset( $not_accepted ) ) {
+            ?><p class="error">Please accept the terms of usage</p><?php
+        }
+    ?>
+    <p><input type="checkbox" name="accept" /> I agree on the <a href="">Terms of Usage</a></p>
     <p><input type="submit" value="Register" /></p>
 </form>
 
