@@ -69,21 +69,38 @@
             include 'views/user/view.php';
         }
 
-        public static function update( $password_old, $password_new, $password_repeat ) {
+        public static function update( $password, $password_new, $password_repeat, $country, $email ) {
             include 'models/user.php';
+            include 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
-            if ( $user->authenticatesWithPassword( $password_old ) ) {
-                if ( $password_new != $password_repeat ) {
-                    go( 'user', 'update', array( 'not_matched' => true ) );
+            if ( $user->authenticatesWithPassword( $password ) ) {
+                if ( !empty( $password_new ) ) {
+                    if ( $password_new !== $password_repeat ) {
+                        go( 'user', 'update', array( 'not_matched' => true ) );
+                    }
+                    $user->password = $password_new;
                 }
-                $user->password = $password_new;
-                $user->save();
+                else {
+                    $user->password = $password;
+                }
+                if ( !empty( $email ) ) {
+                    $user->email = $email;
+                }
+                if ( $country !== 'Select Country' ) {
+                    $user->countryid = Country::getCountryId( $country );
+                }
+                try { 
+                    $user->save();
+                }
+                catch ( ModelValidationException $e ) {
+                    go( 'user', 'update', array( $e->error => true ) );
+                }
                 go();
             }
-            go( 'user', 'update', array( 'old_pass' => true ) );
+            go( 'user', 'update', array( 'wrong_pass' => true ) );
         }
 
         public static function delete() {
@@ -102,7 +119,7 @@
             include 'views/user/create.php';
         }
 
-        public static function updateView( $small_pass, $not_matched, $old_pass ) {
+        public static function updateView( $small_pass, $not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
             include 'views/user/update.php';
         }
     }

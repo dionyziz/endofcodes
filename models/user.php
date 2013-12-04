@@ -78,12 +78,15 @@
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             $email = $this->email;
-            $username = $this->username;
-            db_update(
+            $countryid = $this->countryid;
+            $res = db_update(
                 'users',
-                compact( "email", "username", "password", "salt" ),
+                compact( "email", "password", "salt", "countryid" ),
                 compact( "id" )
             );
+            if ( $res === -1 ) {
+                throw new ModelValidationException( 'mail_used' );
+            }
         }
 
         public function authenticatesWithPassword( $password ) {
