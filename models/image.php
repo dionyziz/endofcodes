@@ -27,8 +27,7 @@
         }
 
         protected function validate() {
-            $imagename = $this->imagename;
-            $ext = Extention::get( $imagename ); 
+            $ext = $this->ext; 
             if ( !Extention::valid( $ext ) ) {
                 throw new ModelValidationException( 'notvalid' );
             }
