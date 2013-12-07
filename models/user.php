@@ -1,5 +1,5 @@
 <?php
-    include 'encrypt.php';
+    include_once 'encrypt.php';
     class User extends ActiveRecordBase {
         public $id;
         public $username;

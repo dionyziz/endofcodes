@@ -1,7 +1,7 @@
 <?php
-    include '../../config/config-local.php';
-    include '../../models/database.php';
-    include 'countries_array.php';
+    include_once '../../config/config-local.php';
+    include_once '../../models/database.php';
+    include_once 'countries_array.php';
     
     $array = array();
     $count = 0;

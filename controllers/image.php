@@ -1,8 +1,8 @@
 <?php
     class ImageController {
         public static function create( $image ) {
-            include 'models/image.php';
-            include 'models/extentions.php';
+            include_once 'models/image.php';
+            include_once 'models/extentions.php';
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }

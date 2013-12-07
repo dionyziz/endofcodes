@@ -1,5 +1,5 @@
 <?php
-    include 'migrate.php';
+    include_once 'migrate.php';
 
     migrate(
         'ALTER TABLE

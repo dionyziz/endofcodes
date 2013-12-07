@@ -1,7 +1,7 @@
 <?php
     function migrate( $sql ) {
-        include '../../config/config-local.php'; 
-        include '../../models/database.php';
+        include_once '../../config/config-local.php'; 
+        include_once '../../models/database.php';
 
         $res = mysql_query( $sql );
             

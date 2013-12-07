@@ -1,6 +1,6 @@
 <?php
-    include 'header.php';
-    include 'models/dependencies.php';
+    include_once 'header.php';
+    include_once 'models/dependencies.php';
 
     $methods = array(
         'create' => 1,
@@ -45,7 +45,7 @@
         $method = 'view';
         $filename = 'controllers/' . $resource . '.php';
     }
-    include $filename;
+    include_once $filename;
     $controllername = ucfirst( $resource ) . 'Controller';
     $reflection = new ReflectionMethod( $controllername, $method );
     $parameters = $reflection->getParameters();

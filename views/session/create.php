@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    include_once 'views/header.php';
 ?>
 <div id="login"><?php
         if ( isset( $empty_user ) ) {
@@ -30,6 +30,6 @@
     </form>
     <p><a href="index.php?resource=user&method=create">Don't have an account?</a></p>
     <?php
-        include 'views/footer.php';
+        include_once 'views/footer.php';
     ?>
 </div>

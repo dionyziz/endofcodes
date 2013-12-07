@@ -1,7 +1,7 @@
 <?php
     class SessionController {
         public static function create( $username = '', $password = '' ) {
-            include 'models/user.php';
+            include_once 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', array( 'empty_user' => true ) );
             }
@@ -31,7 +31,7 @@
         }
 
         public static function createView( $wrong_pass, $empty_user, $empty_pass, $wrong_user ) {
-            include 'views/session/create.php';
+            include_once 'views/session/create.php';
         }
     }
 ?>
