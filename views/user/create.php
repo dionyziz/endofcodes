@@ -93,7 +93,7 @@
     <select name="country">
         <option>Select Country</option>
         <?php
-            include_once 'db/country/countries_array.php';
+            include_once 'database/population/countries_array.php';
             $countries = getCountries();
             foreach ( $countries as $country ) {
                 ?><option value="<?php
