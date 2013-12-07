@@ -1,5 +1,6 @@
 *~
 *.swp
 *.swo
+*.swn
 config-local.php
 avatars
