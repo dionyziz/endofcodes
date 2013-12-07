@@ -1,4 +1,4 @@
- <?php
+<?php
     function getConfig() {
         $config = array(
             'db' => array(
@@ -16,4 +16,4 @@
         );
         return $config;
     }
-?>                                                                                                          ?>
+?>
