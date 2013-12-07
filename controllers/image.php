@@ -19,9 +19,9 @@
                 $image->save();
             }
             catch ( ModelValidationException $e ) {
-                go( 'user', 'view', array( 'username' => $username, $e->error => true ) );
+                go( 'user', 'view', array( 'username' => $user->username, $e->error => true ) );
             }
-            go( 'user', 'view', compact( 'username' ) );
+            go( 'user', 'view', array( 'username' => $user->username ) );
         }
     }
 ?>
