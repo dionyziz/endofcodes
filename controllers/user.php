@@ -63,9 +63,8 @@
             }
             $country = Country::getCountryName( $user->countryid );
             $config = getConfig();
-            $image = new Image( $username, $user->id );
-            $avatarname = $image->getCurrentImage();
-            $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
+            $image = Image::find_by_user( $user );
+            $target_path = $config[ 'paths' ][ 'avatar_path' ] . $image->id . $image->ext;
             include 'views/user/view.php';
         }
 

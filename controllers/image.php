@@ -9,15 +9,14 @@
             $config = getConfig();
             $imagename = basename( $image[ 'name' ] );
             $tmp_name = $image[ 'tmp_name' ];
-            $id = $_SESSION[ 'user' ][ 'id' ];
-            $username = $_SESSION[ 'user' ][ 'username' ];
+            $user = User::find_by_username( $_SESSION[ 'user' ][ 'username' ] );
             $image = new Image();
-            $image->username = $username;
             $image->tmp_name = $tmp_name;
             $image->imagename = $imagename;
-            $image->id = $id;
+            $image->user = $user;
+            $image->ext = Extention::get( $imagename );
             try {
-                $image->create();
+                $image->save();
             }
             catch ( ModelValidationException $e ) {
                 go( 'user', 'view', array( 'username' => $username, $e->error => true ) );
