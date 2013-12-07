@@ -79,7 +79,7 @@
         return mysql_affected_rows();
     }
 
-    function db_select( $table, $select = array( "*" ), $where ) {
+    function db_select( $table, $select = array( "*" ), $where = array() ) {
         $fields = array();
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -93,6 +93,10 @@
             . implode( " AND ", $fields ),
             $where
         );
+    }
+
+    function db_select_one( $table, $select = array( "*" ), $where = array() ) {
+        return array_pop( db_select( $table, $select, $where ) );
     }
 
     function db_update( $table, $set, $where ) {

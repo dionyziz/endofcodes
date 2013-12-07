@@ -1,6 +1,6 @@
 <?php
-    include '../../config/config-local.php';
-    include '../../models/database.php';
+    include_once '../../config/config-local.php';
+    include_once '../../models/database.php';
 
     $res1 = mysql_query( "CREATE TABLE IF NOT EXISTS 
         `countries` (

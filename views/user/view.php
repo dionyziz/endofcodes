@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    include_once 'views/header.php';
 ?>
 <p><img src="<?php
             echo $target_path;
@@ -47,5 +47,5 @@
         </form>
         <p><a href="index.php?resource=user&method=update">Edit Settings</a></p><?php
     }
-    include 'views/footer.php';
+    include_once 'views/footer.php';
 ?>

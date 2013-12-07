@@ -1,13 +1,12 @@
 <?php
-    include 'encrypt.php';
-    include 'models/base.php';
-
+    include_once 'encrypt.php';
     class User extends ActiveRecordBase {
         public $id;
         public $username;
         public $password;
         public $email;
         public $countryid;
+        public $avatarid;
         protected $exists;
         protected $tableName = 'users';
 
@@ -26,11 +25,12 @@
             }
             else {
                 // existing active record object
-                $user_info = db_select( 'users', array( 'username', 'email', 'password', 'countryid' ), compact( "id" ) );
-                $this->username = $user_info[ 0 ][ 'username' ];
-                $this->email = $user_info[ 0 ][ 'email' ];
-                $this->password = $user_info[ 0 ][ 'password' ];
-                $this->countryid = $user_info[ 0 ][ 'countryid' ];
+                $user_info = db_select_one( 'users', array( 'username', 'email', 'password', 'countryid', 'avatarid' ), compact( "id" ) );
+                $this->username = $user_info[ 'username' ];
+                $this->email = $user_info[ 'email' ];
+                $this->password = $user_info[ 'password' ];
+                $this->countryid = $user_info[ 'countryid' ];
+                $this->avatarid = $user_info[ 'avatarid' ];
                 $this->id = $id;
 
                 $this->exists = true;
@@ -47,6 +47,7 @@
         }
 
         protected function create() {
+            // when a user is created he doesn't have an image, so avatarid is by default 0 
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
@@ -79,9 +80,10 @@
             $salt = $array[ 'salt' ];
             $email = $this->email;
             $countryid = $this->countryid;
+            $avatarid = $this->avatarid;
             $res = db_update(
                 'users',
-                compact( "email", "password", "salt", "countryid" ),
+                compact( "email", "password", "salt", "countryid", "avatarid" ),
                 compact( "id" )
             );
             if ( $res === -1 ) {

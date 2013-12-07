@@ -22,8 +22,8 @@
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
-            include 'models/user.php';
-            include 'models/country.php';
+            include_once 'models/user.php';
+            include_once 'models/country.php';
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
                 'email' => $email
@@ -51,10 +51,10 @@
             if ( $username === NULL ) {
                 throw new HTTPNotFoundException();
             }
-            include 'models/user.php';
-            include 'models/extentions.php';
-            include 'models/image.php';
-            include 'models/country.php';
+            include_once 'models/user.php';
+            include_once 'models/extentions.php';
+            include_once 'models/image.php';
+            include_once 'models/country.php';
             try { 
                 $user = User::find_by_username( $username );
             }
@@ -63,15 +63,14 @@
             }
             $country = Country::getCountryName( $user->countryid );
             $config = getConfig();
-            $image = new Image( $username );
-            $avatarname = $image->getCurrentImage();
-            $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
-            include 'views/user/view.php';
+            $image = Image::find_by_user( $user );
+            $target_path = $config[ 'paths' ][ 'avatar_path' ] . $image->id . $image->ext;
+            include_once 'views/user/view.php';
         }
 
         public static function update( $password, $password_new, $password_repeat, $country, $email ) {
-            include 'models/user.php';
-            include 'models/country.php';
+            include_once 'models/user.php';
+            include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
@@ -104,7 +103,7 @@
         }
 
         public static function delete() {
-            include 'models/user.php';
+            include_once 'models/user.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
@@ -116,11 +115,11 @@
 
         public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, 
                 $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted ) {
-            include 'views/user/create.php';
+            include_once 'views/user/create.php';
         }
 
         public static function updateView( $small_pass, $not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
-            include 'views/user/update.php';
+            include_once 'views/user/update.php';
         }
     }
 ?>

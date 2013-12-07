@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    include_once 'views/header.php';
 ?>
 
 <form action="index.php?resource=user&amp;method=update" method="post">
@@ -35,7 +35,7 @@
     <p><select name="country">
         <option>Select Country</option>
         <?php
-            include 'db/country/countries_array.php';
+            include_once 'db/country/countries_array.php';
             $countries = getCountries();
             foreach ( $countries as $country ) {
                 ?><option value="<?php
@@ -50,5 +50,5 @@
 </form>
 
 <?php
-    include 'views/footer.php';
+    include_once 'views/footer.php';
 ?>

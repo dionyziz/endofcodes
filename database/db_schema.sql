@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `countries` (
 --
 
 CREATE TABLE IF NOT EXISTS `images` (
-  `imageid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `imagename` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`imageid`)
