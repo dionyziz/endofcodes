@@ -7,6 +7,8 @@
         public $email;
         public $countryid;
         public $avatarid;
+        public $salt;
+        public $changedPass;
         protected $exists;
         protected $tableName = 'users';
 
@@ -25,12 +27,13 @@
             }
             else {
                 // existing active record object
-                $user_info = db_select_one( 'users', array( 'username', 'email', 'password', 'countryid', 'avatarid' ), compact( "id" ) );
+                $user_info = db_select_one( 'users', array( 'salt', 'username', 'email', 'password', 'countryid', 'avatarid' ), compact( "id" ) );
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->password = $user_info[ 'password' ];
                 $this->countryid = $user_info[ 'countryid' ];
                 $this->avatarid = $user_info[ 'avatarid' ];
+                $this->salt = $user_info[ 'salt' ];
                 $this->id = $id;
 
                 $this->exists = true;
@@ -74,10 +77,13 @@
 
         protected function update() {
             $id = $this->id;
+            if ( $this->changedPass ) {
+                $array = encrypt( $this->password );
+                $this->password = $array[ 'hash' ];
+                $this->salt = $array[ 'salt' ];
+            }
+            $salt = $this->salt;
             $password = $this->password;
-            $array = encrypt( $password );
-            $password = $array[ 'hash' ];
-            $salt = $array[ 'salt' ];
             $email = $this->email;
             $countryid = $this->countryid;
             $avatarid = $this->avatarid;

@@ -81,9 +81,10 @@
                         go( 'user', 'update', array( 'not_matched' => true ) );
                     }
                     $user->password = $password_new;
+                    $user->changedPass = true;
                 }
                 else {
-                    $user->password = $password;
+                    $user->changedPass = false;
                 }
                 if ( !empty( $email ) ) {
                     $user->email = $email;
