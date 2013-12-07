@@ -1,0 +1,18 @@
+#home #toplist {
+    float: left;
+    border: 2px solid black;
+    padding: 2% 3% 2% 3%;
+}
+
+#home #toplist li {
+    line-height: 30px;
+}
+
+#home #selectbox {
+    margin: 0% 0% 10% 5%;
+    float: left;
+}
+
+#home #persinfo {
+    margin-left: 30%;
+}

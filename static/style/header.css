@@ -1,0 +1,17 @@
+#header {
+    margin: 0%;
+}
+
+#header ul {
+    list-style-type: none;
+    display: inline;
+    padding: 0%;
+}
+
+#header li {
+    display: inline;
+}
+
+#header li#login {
+    margin-left: 75%;
+}

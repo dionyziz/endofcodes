@@ -1,21 +1,44 @@
 <?php
     include 'views/header.php';
-    if ( isset( $empty_user ) ) {
-        ?><p>Please fill the username form.</p><?php
-    }
-    else if ( isset( $empty_pass ) ) {
-        ?><p>Please fill the password form.</p><?php
-    }
-    else if ( isset( $empty_mail ) ) {
-        ?><p>Please fill the email form.</p><?php
-    }
 ?>
+<div id="steps">
+    <div div="step1" class="steps">
+        <p>Step 1</p>
+        <p><a href="">Download the libraries</a></p>
+    </div>
+     <div id="step2" class="steps">
+        <p>Step 2</p>
+        <p>Read the basic <a href="">rules</a></p>
+    </div>
+    <div id="step3" class="steps">
+        <p>Step 3</p>
+        <p>Code your bot</p>
+    </div>
+    <div id="step4" class="steps">
+        <p>Step 4</p>
+        <p>Register to try it out</p>
+    </div>
+</div>
 
-<form action="index.php?resource=user&amp;method=create" method="post">
+<form id="register-form" action="index.php?resource=user&amp;method=create" method="post">
+    <?php
+        if ( isset( $empty_user ) ) { 
+            ?><p class="error">Please fill the username form.</p><?php
+        }
+        else if ( isset( $empty_pass ) ) {
+            ?><p class="error">Please fill the password form.</p><?php
+        }
+        else if ( isset( $empty_mail ) ) {
+            ?><p class="error">Please fill the email form.</p><?php
+        }
+        else if ( isset( $empty_pass_repeat ) ) {
+            ?><p class="error">Please fill the Password Repeat form</p><?php
+        }
+    ?>
     <label for="username">Username</label>
     <?php
         if ( isset( $user_used ) ) {
-            ?><p>Username already exists</p><?php
+            ?><p class="error">Username already exists</p><?php
             $val = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'username' ] ) ) {
@@ -32,18 +55,23 @@
     <label for="password">Password</label>
     <?php
         if ( isset( $small_pass ) ) {
-            ?><p>Password should be at least 7 characters long</p><?php
+            ?><p class="error">Password should be at least 7 characters long</p><?php
+        }
+        if ( isset( $not_matched ) ) {
+            ?><p class="error">Passwords do not match</p><?php
         }
     ?>
     <p><input type="password" id="password" name="password" /></p>
+    <label for="password_repeat">Repeat</label>
+    <p><input type="password" id="password_repeat" name="password_repeat" /></p>
     <label for="email">Email</label>
     <?php
         if ( isset( $mail_used ) ) {
-            ?><p>Mail is already used</p><?php
+            ?><p class="error">Mail is already used</p><?php
             $val = "";
         }
         else if ( isset( $mail_notvalid ) ) {
-            ?><p>This is not a valid email</p><?php
+            ?><p class="error">This is not a valid email</p><?php
             $val = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'email' ] ) ) {
@@ -57,6 +85,31 @@
     <p><input type="text" id="email" name="email" value="<?php
         echo htmlspecialchars( $val );
     ?>"/></p>
+    <?php
+        if ( isset( $empty_country ) ) {
+            ?><p class="error">Please select a country</p><?php
+        }
+    ?>
+    <select name="country">
+        <option>Select Country</option>
+        <?php
+            include 'db/country/countries_array.php';
+            $countries = getCountries();
+            foreach ( $countries as $country ) {
+                ?><option value="<?php
+                    echo $country;
+                ?>"><?php
+                    echo $country;
+                ?></option><?php
+            }
+        ?>
+    </select> 
+    <?php
+        if ( isset( $not_accepted ) ) {
+            ?><p class="error">Please accept the terms of usage</p><?php
+        }
+    ?>
+    <p><input type="checkbox" name="accept" /> I agree on the <a href="">Terms of Usage</a></p>
     <p><input type="submit" value="Register" /></p>
 </form>
 

@@ -5,6 +5,7 @@
         public $username;
         public $password;
         public $email;
+        public $countryid;
         protected $exists;
         protected $tableName = 'users';
 
@@ -23,10 +24,11 @@
             }
             else {
                 // existing active record object
-                $user_info = db_select( 'users', array( 'username', 'email', 'password' ), compact( "id" ) );
+                $user_info = db_select( 'users', array( 'username', 'email', 'password', 'countryid' ), compact( "id" ) );
                 $this->username = $user_info[ 0 ][ 'username' ];
                 $this->email = $user_info[ 0 ][ 'email' ];
                 $this->password = $user_info[ 0 ][ 'password' ];
+                $this->countryid = $user_info[ 0 ][ 'countryid' ];
                 $this->id = $id;
 
                 $this->exists = true;
@@ -37,7 +39,7 @@
             if ( strlen( $this->password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
-            if ( !Mail::valid( $this->email ) ) {
+            if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
                 throw new ModelValidationException( 'mail_notvalid' );
             }
         }
@@ -46,12 +48,13 @@
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
+            $countryid = $this->countryid;
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             $res = db_insert( 
                 'users', 
-                compact( "username", "password", "email", "salt" )
+                compact( "username", "password", "email", "salt", "countryid" )
             );
             if ( $res === false ) { 
                 try {
@@ -73,12 +76,15 @@
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             $email = $this->email;
-            $username = $this->username;
-            db_update(
+            $countryid = $this->countryid;
+            $res = db_update(
                 'users',
-                compact( "email", "username", "password", "salt" ),
+                compact( "email", "password", "salt", "countryid" ),
                 compact( "id" )
             );
+            if ( $res === -1 ) {
+                throw new ModelValidationException( 'mail_used' );
+            }
         }
 
         public function authenticatesWithPassword( $password ) {
