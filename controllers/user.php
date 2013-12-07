@@ -1,6 +1,6 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false, $day = '', $month = '', $year = '' ) {
             if ( $accept === false ) {
                 go( 'user', 'create', array( 'not_accepted' => true ) );
             }
@@ -21,6 +21,15 @@
             }
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
+            }
+            if ( $day === 'Select Day' ) {
+                go( 'user', 'create', array( 'empty_day' => true ) );
+            }
+            if ( $month === 'Select Month' ) {
+                go( 'user', 'create', array( 'empty_month' => true ) );
+            }
+            if ( $month === 'Select Year' ) {
+                go( 'user', 'create', array( 'empty_year' => true ) );
             }
             include_once 'models/user.php';
             include_once 'models/country.php';
