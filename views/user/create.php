@@ -25,6 +25,9 @@
         if ( isset( $empty_user ) ) { 
             ?><p class="error">Please fill the username form.</p><?php
         }
+        if ( isset( $invalid_username ) ) { 
+            ?><p class="error">Please insert a valid username</p><?php
+        }
         else if ( isset( $empty_pass ) ) {
             ?><p class="error">Please fill the password form.</p><?php
         }

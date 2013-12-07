@@ -7,6 +7,9 @@
             if ( empty( $username ) ) {
                 go( 'user', 'create', array( 'empty_user' => true ) );
             }
+            if ( strpos( $username, ' ' ) || preg_match('#[^a-zA-Z0-9]#', $username)) {
+                go( 'user', 'create', array( 'invalid_username' => true ) );
+            }
             if ( empty( $password ) ) {
                 go( 'user', 'create', array( 'empty_pass' => true ) );
             }
@@ -128,8 +131,7 @@
             go();
         }
 
-        public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, 
-                $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year ) {
+        public static function createView( $empty_user, $invalid_username, $empty_mail, $empty_pass, $empty_pass_repeat, $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year ) {
             include_once 'views/user/create.php';
         }
 
