@@ -41,6 +41,11 @@
             $user->username = $username;
             $user->password = $password;
             $user->email = $email;
+            $user->dob = array(
+                'day' => $day,
+                'month' => $month,
+                'year' => $year 
+            );
             $user->countryid = Country::getCountryId( $country );
             try {
                 $user->save();
