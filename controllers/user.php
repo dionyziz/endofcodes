@@ -1,6 +1,6 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false, $day = '', $month = '', $year = '' ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false, $day, $month, $year ) {
             if ( $accept === false ) {
                 go( 'user', 'create', array( 'not_accepted' => true ) );
             }
@@ -28,7 +28,7 @@
             if ( $month === 'Select Month' ) {
                 go( 'user', 'create', array( 'empty_month' => true ) );
             }
-            if ( $month === 'Select Year' ) {
+            if ( $year === 'Select Year' ) {
                 go( 'user', 'create', array( 'empty_year' => true ) );
             }
             include_once 'models/user.php';
@@ -124,7 +124,7 @@
         }
 
         public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, 
-                $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted ) {
+                $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year ) {
             include_once 'views/user/create.php';
         }
 

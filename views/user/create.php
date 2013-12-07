@@ -124,6 +124,15 @@
         ?>
     </select> 
     <?php
+        if ( isset( $empty_day ) ) {
+            ?><p class="error">Please select a day</p><?php
+        }
+        if ( isset( $empty_month ) ) {
+            ?><p class="error">Please select a month</p><?php
+        }
+        if ( isset( $empty_year ) ) {
+            ?><p class="error">Please select a year</p><?php
+        }
         if ( isset( $empty_country ) ) {
             ?><p class="error">Please select a country</p><?php
         }
