@@ -4,7 +4,7 @@
         public $user;
         public $tmp_name;
         public $imagename;
-        public $avatarid;
+        public $id;
         public $target_path;
         public $ext;
         protected $tableName = 'images';
@@ -41,13 +41,13 @@
             $ext = $this->ext;
             $userid = $this->user->id;
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
-            $avatarid = db_insert( 
+            $id = db_insert( 
                 'images', 
                 compact( "userid", "imagename" )
             );
-            $imagename = "$avatarid" . "." . $ext;
+            $imagename = "$id" . "." . $ext;
             $this->target_path = $target_path . $imagename;
-            $this->avatarid = $avatarid;
+            $this->id = $id;
             $this->upload();
             $this->update();
         }
@@ -59,7 +59,8 @@
         }
 
         public function update() {
-            $this->user->avatarid = $this->avatarid;
+            $this->user->avatarid = $this->id;
+            $this->user->changedPass = false;
             $this->user->save();
         }
     }
