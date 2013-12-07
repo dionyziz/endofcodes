@@ -1,5 +1,5 @@
 <?php
-    class ActiveRecordBase {
+    abstract class ActiveRecordBase {
         public function delete() {
             $id = $this->id;
             db_delete(
