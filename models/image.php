@@ -59,13 +59,8 @@
         }
 
         public function update() {
-            $username = $this->user->username;
-            $avatarid = $this->avatarid;
-            db_update( 
-                'users', 
-                compact( "avatarid" ), 
-                compact( "username" )
-            );
+            $this->user->avatarid = $this->avatarid;
+            $this->user->save();
         }
     }
 ?>
