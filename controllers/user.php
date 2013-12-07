@@ -33,6 +33,10 @@
             }
             include_once 'models/user.php';
             include_once 'models/country.php';
+            include_once 'database/population/months_array.php';
+            $months = getMonths();
+            $month = array_search ($month, $months);
+            $dob = $birthday = $year . '-' . $month . '-' . $day; 
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
                 'email' => $email
@@ -41,11 +45,7 @@
             $user->username = $username;
             $user->password = $password;
             $user->email = $email;
-            $user->dob = array(
-                'day' => $day,
-                'month' => $month,
-                'year' => $year 
-            );
+            $user->dob = $dob;
             $user->countryid = Country::getCountryId( $country );
             try {
                 $user->save();

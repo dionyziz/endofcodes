@@ -36,9 +36,7 @@
                 $this->avatarid = $user_info[ 'avatarid' ];
                 $this->salt = $user_info[ 'salt' ];
                 $this->id = $id;
-                $this->dob[ 'day' ] = $user_info[ 'day' ];
-                $this->dob[ 'month' ] = $user_info[ 'month' ];
-                $this->dob[ 'year'] = $user_info[ 'year' ];
+                $this->dob = $user_info[ 'dob' ];
                 $this->exists = true;
             }
         }
@@ -57,16 +55,14 @@
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
-            $day = $this->dob[ 'day' ];
-            $month = $this->dob[ 'month' ];
-            $year = $this->dob[ 'year' ];
+            $dob = $this->dob;
             $countryid = $this->countryid;
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             $res = db_insert( 
                 'users', 
-                compact( "username", "password", "email", "salt", "countryid", "day", "month", "year" )
+                compact( "username", "password", "email", "salt", "countryid", "dob" )
             );
             if ( $res === false ) { 
                 try {
@@ -91,14 +87,12 @@
             $salt = $this->salt;
             $password = $this->password;
             $email = $this->email;
-            $day = $this->dob[ 'day' ];
-            $month = $this->dob[ 'month' ];
-            $year = $this->dob[ 'year' ];
+            $dob = $this->dob;
             $countryid = $this->countryid;
             $avatarid = $this->avatarid;
             $res = db_update(
                 'users',
-                compact( "email", "password", "salt", "countryid", "avatarid", "day", "month", "year" ),
+                compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
                 compact( "id" )
             );
             if ( $res === -1 ) {
