@@ -1,15 +1,10 @@
 <?php
-    include '../../config/config-local.php';
-    include '../../models/database.php';
+    include 'migrate.php';
 
-    $res = mysql_query(
+    migrate(
         'ALTER TABLE
             users
         ADD COLUMN
             age int(3) unsigned NOT NULL;'
     );
-    if ( $res === false ) {
-        die( 'SQL query died with the following error: ' . mysql_error() );
-    }
-    echo 'good';
 ?>
