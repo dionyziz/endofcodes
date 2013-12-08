@@ -3,13 +3,7 @@
 ?>
 
 <form action="index.php?resource=user&amp;method=update" method="post">
-    <label for="password">Old password</label>
-    <?php
-        if ( isset( $wrong_pass ) ) {
-            ?><p class="error">Old password is incorrect</p><?php
-        }
-    ?>
-    <p><input type="password" name="password" id="password" /></p>
+    <p>Change email</p>
     <label for="email">Email</label>
     <?php
         if ( isset( $mail_notvalid ) ) {
@@ -20,6 +14,14 @@
         }
     ?>
     <p><input type="text" name="email" id="email" /></p>
+    <p>Change password</p>
+    <label for="password">Old password</label>
+    <?php
+        if ( isset( $wrong_pass ) ) {
+            ?><p class="error">Old password is incorrect</p><?php
+        }
+    ?>
+    <p><input type="password" name="password" id="password" /></p>
     <label for="password_new">New password</label>
     <?php
         if ( isset( $not_matched ) ) {
@@ -32,6 +34,7 @@
     <p><input type="password" name="password_new" id="password_new" /></p>
     <label for="password_repeat">Repeat</label>
     <p><input type="password" name="password_repeat" id="password_repeat" /></p>
+    <p>Change country</p>
     <p><select name="country">
         <option>Select Country</option>
         <?php
