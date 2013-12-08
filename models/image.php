@@ -60,7 +60,6 @@
 
         public function update() {
             $this->user->avatarid = $this->id;
-            $this->user->changedPass = false;
             $this->user->save();
         }
     }

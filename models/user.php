@@ -8,7 +8,7 @@
         public $countryid;
         public $avatarid;
         public $salt;
-        public $changedPass;
+        public $changedPass = false;
         protected $exists;
         protected $tableName = 'users';
 

@@ -83,9 +83,6 @@
                     $user->password = $password_new;
                     $user->changedPass = true;
                 }
-                else {
-                    $user->changedPass = false;
-                }
                 if ( !empty( $email ) ) {
                     $user->email = $email;
                 }
