@@ -30,10 +30,7 @@
                     if ( isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                         ?><li id="login" class="username"><?php
                             echo htmlspecialchars( $_SESSION[ 'user' ][ 'username' ] );
-                        ?><select>
-                            <option> </option>
-                            <option value="logout">Logout</option>
-                        </select></li><?php
+                        ?></li><?php
                     }
                     else {
                         ?><li id="login"><a href="index.php?resource=session&amp;method=create">Login</a></li><?php
