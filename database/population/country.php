@@ -8,7 +8,7 @@
     $keys = array_keys( $countries );
   
     foreach ( $keys as $key ) {
-        $value = $countries[$key];
+        $value = $countries[ $key ];
         $array[] = "INSERT INTO 
                         `countries` (`id`, `country`, `shortname`) 
                     VALUES 
@@ -24,6 +24,5 @@
     }
     
     echo "You imported $count raws in the table 'countries'.";
-
 ?>
 
