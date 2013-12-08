@@ -11,9 +11,7 @@
             includeStyle( "register" );
             includeStyle( "login" );
         ?>
-        <meta 
-            http-equiv="Content-type" 
-            content="text/html; charset=utf-8" />
+        <meta charset="utf-8"> 
     </head>
     <body>
         <div id="header">
