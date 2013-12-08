@@ -4,14 +4,7 @@
     <head>
         <title>EndofCodes Demo</title>
         <?php
-            function includeStyle( $path ) {
-                ?><link
-                    rel="stylesheet"
-                    type="text/css"
-                    href="<?php
-                        echo "static/style/" . $path . ".css";
-                    ?>" /><?php
-            }
+            include 'helpers/html.php';
             includeStyle( "general" );
             includeStyle( "header" );
             includeStyle( "home" );
