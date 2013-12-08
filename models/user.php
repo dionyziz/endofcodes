@@ -9,7 +9,6 @@
         public $countryid;
         public $avatarid;
         public $salt;
-        public $changedPass = false;
         protected $exists;
         protected $tableName = 'users';
 
@@ -28,13 +27,11 @@
             }
             else {
                 // existing active record object
-                $user_info = db_select_one( 'users', array( 'salt', 'username', 'email', 'password', 'countryid', 'avatarid' ), compact( "id" ) );
+                $user_info = db_select_one( 'users', array( 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
-                $this->password = $user_info[ 'password' ];
                 $this->countryid = $user_info[ 'countryid' ];
                 $this->avatarid = $user_info[ 'avatarid' ];
-                $this->salt = $user_info[ 'salt' ];
                 $this->id = $id;
 
                 $this->exists = true;
@@ -42,7 +39,7 @@
         }
 
         protected function validate() {
-            if ( strlen( $this->password ) <= 6 ) {
+            if ( isset( $this->password ) && strlen( $this->password ) <= 6 ) {
                 throw new ModelValidationException( 'small_pass' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
@@ -78,13 +75,11 @@
 
         protected function update() {
             $id = $this->id;
-            if ( $this->changedPass ) {
+            if ( isset( $this->password ) ) {
                 $array = encrypt( $this->password );
                 $this->password = $array[ 'hash' ];
                 $this->salt = $array[ 'salt' ];
             }
-            $salt = $this->salt;
-            $password = $this->password;
             $email = $this->email;
             $countryid = $this->countryid;
             $avatarid = $this->avatarid;

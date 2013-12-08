@@ -84,13 +84,12 @@
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
+        $sql =  'SELECT ' . implode( ",", $select ) . ' FROM ' . $table;
+        if ( !empty( $where ) ) {
+            $sql = $sql . ' WHERE ' . implode( " AND ", $fields );
+        }
         return db_array(
-            'SELECT '
-            . implode( ",", $select )
-            . ' FROM '
-            . $table
-            . ' WHERE '
-            . implode( " AND ", $fields ),
+            $sql,
             $where
         );
     }

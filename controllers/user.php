@@ -68,7 +68,7 @@
             include_once 'views/user/view.php';
         }
 
-        public static function update( $password, $password_new, $password_repeat, $country, $email ) {
+        public static function update( $password = '', $password_new = '', $password_repeat = '', $country = '', $email = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
@@ -76,12 +76,11 @@
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
             if ( $user->authenticatesWithPassword( $password ) ) {
-                if ( !empty( $password_new ) ) {
+                if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                     if ( $password_new !== $password_repeat ) {
                         go( 'user', 'update', array( 'not_matched' => true ) );
                     }
                     $user->password = $password_new;
-                    $user->changedPass = true;
                 }
                 if ( !empty( $email ) ) {
                     $user->email = $email;
