@@ -7,7 +7,7 @@
                 throw new HTTPUnauthorizedException();
             }
             $config = getConfig();
-            $name = basename( $image[ 'name' ] );
+            $name = $image[ 'name' ];
             $tmp_name = $image[ 'tmp_name' ];
             $user = User::find_by_username( $_SESSION[ 'user' ][ 'username' ] );
             $image = new Image();
