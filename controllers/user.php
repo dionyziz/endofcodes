@@ -118,6 +118,8 @@
         }
 
         public static function updateView( $notvalid, $small_pass, $not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
+            include_once 'models/country.php';
+            $countries = Country::getAll();
             include_once 'views/user/update.php';
         }
     }
