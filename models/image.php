@@ -32,8 +32,8 @@
         }
 
         protected function validate() {
-            $ext = $this->ext; 
-            if ( !Extention::valid( $ext ) ) {
+            $this->ext = Extention::get( $this->name );
+            if ( !Extention::valid( $this->ext ) ) {
                 throw new ModelValidationException( 'notvalid' );
             }
         }

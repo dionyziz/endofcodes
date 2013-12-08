@@ -14,7 +14,6 @@
             $image->tmp_name = $tmp_name;
             $image->name = $name;
             $image->user = $user;
-            $image->ext = Extention::get( $name );
             try {
                 $image->save();
             }
