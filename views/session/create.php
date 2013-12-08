@@ -3,10 +3,10 @@
 ?>
 <div id="login"><?php
         if ( isset( $empty_user ) ) {
-            ?><p class="error">Please fill the username form.</p><?php
+            ?><p class="error">Please type a username.</p><?php
         }
         else if ( isset( $empty_pass ) ) {
-            ?><p class="error">Please fill the password form.</p><?php
+            ?><p class="error">Please type a password.</p><?php
         }
     ?>
 

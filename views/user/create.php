@@ -23,16 +23,16 @@
 <form id="register-form" action="index.php?resource=user&amp;method=create" method="post">
     <?php
         if ( isset( $empty_user ) ) { 
-            ?><p class="error">Please fill the username form.</p><?php
+            ?><p class="error">Please type a username.</p><?php
         }
         else if ( isset( $empty_pass ) ) {
-            ?><p class="error">Please fill the password form.</p><?php
+            ?><p class="error">Please type a password.</p><?php
         }
         else if ( isset( $empty_mail ) ) {
-            ?><p class="error">Please fill the email form.</p><?php
+            ?><p class="error">Please type an email.</p><?php
         }
         else if ( isset( $empty_pass_repeat ) ) {
-            ?><p class="error">Please fill the Password Repeat form</p><?php
+            ?><p class="error">Please repeat your password.</p><?php
         }
     ?>
     <label for="username">Username</label>
