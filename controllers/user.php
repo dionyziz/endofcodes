@@ -79,9 +79,8 @@
                 throw new HTTPNotFoundException();
             }
             $country = Country::getCountryName( $user->countryid );
-            $config = getConfig();
             $image = Image::find_by_user( $user );
-            $target_path = $config[ 'paths' ][ 'avatar_path' ] . $image->id . $image->ext;
+            $target_path = $image->target_path;
             include_once 'views/user/view.php';
         }
 

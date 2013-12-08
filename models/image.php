@@ -1,5 +1,6 @@
 <?php
     include_once 'models/user.php';
+    include_once 'models/extentions.php';
 
     class Image extends ActiveRecordBase {
         public $user;
@@ -23,6 +24,9 @@
                 $image_info = db_select_one( 'images', array( '*' ), compact( "id" ) );
                 $this->id = $id;
                 $this->name = $image_info[ 'name' ];
+                $this->ext = Extention::get( $this->name );
+                $config = getConfig();
+                $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
                 $this->user = new User( $image_info[ 'userid' ] );
             }
         }
