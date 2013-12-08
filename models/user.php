@@ -14,11 +14,11 @@
         protected $tableName = 'users';
 
         public static function find_by_username( $username ) {
-            $users = db_select( 'users', array( 'id' ), compact( "username" ) );
-            if ( empty( $users ) ) {
+            $user = db_select_one( 'users', array( 'id' ), compact( "username" ) );
+            if ( empty( $user ) ) {
                 throw new ModelNotFoundException();
             }
-            return new User( $users[ 0 ][ 'id' ] );
+            return new User( $user[ 'id' ] );
         }
 
         public function __construct( $id = false ) {
