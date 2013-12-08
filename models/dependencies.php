@@ -8,7 +8,4 @@
     }
     include_once 'models/database.php';
     include_once 'models/base.php';
-    session_start();
-    error_reporting( E_ALL );
-    ini_set( 'display_errors', '1' );
 ?>
