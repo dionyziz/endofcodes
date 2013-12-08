@@ -6,7 +6,7 @@
         <p>Step 1</p>
         <p><a href="">Download the libraries</a></p>
     </div>
-     <div id="step2" class="steps">
+    <div id="step2" class="steps">
         <p>Step 2</p>
         <p><a href="">Read the basic rules</a></p>
     </div>
