@@ -13,10 +13,10 @@
     <label for="email">Email</label>
     <?php
         if ( isset( $mail_notvalid ) ) {
-            ?><p class="error">Mail is not valid</p><?php
+            ?><p class="error">Email is not valid</p><?php
         }
         if ( isset( $mail_used ) ) {
-            ?><p class="error">Mail is used</p><?php
+            ?><p class="error">Email is used</p><?php
         }
     ?>
     <p><input type="text" name="email" id="email" /></p>
