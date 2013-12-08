@@ -19,7 +19,7 @@
                 $image->save();
             }
             catch ( ModelValidationException $e ) {
-                go( 'user', 'view', array( 'username' => $user->username, $e->error => true ) );
+                go( 'user', 'update', array( 'username' => $user->username, $e->error => true ) );
             }
             go( 'user', 'view', array( 'username' => $user->username ) );
         }

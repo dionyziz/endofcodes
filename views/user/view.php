@@ -1,23 +1,10 @@
 <?php
     include_once 'views/header.php';
 ?>
+
 <p><img src="<?php
             echo $target_path;
         ?>" alt="Profile Picture" width="100" height="100" /></p>
-<?php 
-    if ( $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
-        ?><form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data">
-            <label for="image">Upload an avatar</label>
-            <?php
-                if ( isset( $notvalid ) ) {
-                    ?><p>This isn't an image</p><?php
-                }
-            ?>
-            <p><input type="file" name="image" id="image" /></p>
-            <input type="submit" value="Upload" />
-        </form><?php
-    }
-?>
 
 <p><?php
     echo htmlspecialchars( $user->username );
@@ -30,6 +17,7 @@
 <p>Region, Country: <?php
     echo $country;
 ?></p>
+
 <p>Score: *score*</p>
 <p><a href="">Global</a> position: *pos*</p>
 <p><a href="">Country</a> position: *pos*</p>

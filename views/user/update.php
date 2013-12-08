@@ -49,6 +49,17 @@
     <p><input type="submit" value="Save settings" /></p>
 </form>
 
+<form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data"> 
+    <label for="image">Upload an avatar</label>
+    <?php
+        if ( isset( $notvalid ) ) {
+            ?><p class="error">This isn't an image</p><?php
+        }
+    ?>
+    <p><input type="file" name="image" id="image" /></p>
+    <input type="submit" value="Upload" />
+</form>
+
 <form action="index.php?resource=user&amp;method=delete" method="post">
     <input type="submit" value="Delete your account" />
 </form>

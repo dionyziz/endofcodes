@@ -47,7 +47,7 @@
             go();
         }
 
-        public static function view( $username, $notvalid ) {
+        public static function view( $username ) {
             if ( $username === NULL ) {
                 throw new HTTPNotFoundException();
             }
@@ -117,7 +117,7 @@
             include_once 'views/user/create.php';
         }
 
-        public static function updateView( $small_pass, $not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
+        public static function updateView( $notvalid, $small_pass, $not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
             include_once 'views/user/update.php';
         }
     }
