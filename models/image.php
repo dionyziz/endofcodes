@@ -1,5 +1,6 @@
 <?php
     include_once 'models/user.php';
+
     class Image extends ActiveRecordBase {
         public $user;
         public $tmp_name;
