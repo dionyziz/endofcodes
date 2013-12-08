@@ -127,7 +127,7 @@
         ?>
     </select> 
     <?php
-        if ( isset( $empty_day ) ) {
+        /*if ( isset( $empty_day ) ) {
             ?><p class="error">Please select a day</p><?php
         }
         if ( isset( $empty_month ) ) {
@@ -138,7 +138,7 @@
         }
         if ( isset( $empty_country ) ) {
             ?><p class="error">Please select a country</p><?php
-        }
+        }*/
     ?>
     <select name="country">
         <option>Select Country</option>
@@ -153,11 +153,12 @@
         ?>
     </select> 
     <?php
-        if ( isset( $not_accepted ) ) {
+        /*if ( isset( $not_accepted ) ) {
             ?><p class="error">Please accept the terms of usage</p><?php
         }
+        */
     ?>
-    <p><input type="checkbox" name="accept" /> I agree on the <a href="">Terms of Usage</a></p>
+    <!--<p><input type="checkbox" name="accept" />I agree on the <a href="">Terms of Usage</a></p>-->
     <p><input type="submit" value="Register" /></p>
 </form>
 

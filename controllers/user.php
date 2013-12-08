@@ -1,12 +1,12 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country = '', $accept = false, $day = '', $month = '', $year = '' ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'database/population/months_array.php';
-            if ( $accept === false ) {
+            /*if ( $accept === false ) {
                 go( 'user', 'create', array( 'not_accepted' => true ) );
-            }
+            }*/
             if ( empty( $username ) ) {
                 go( 'user', 'create', array( 'empty_user' => true ) );
             }
@@ -22,21 +22,24 @@
             if ( empty( $password_repeat ) ) {
                 go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
             }
-            if ( Country::onList( $country ) ) {
-                go( 'user', 'create', array( 'empty_country' => true ) );
+            if ( !Country::onList( $country ) ) {
+                $country = '';
+                //go( 'user', 'create', array( 'empty_country' => true ) );
             }
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
             if ( !is_int( $day ) ) {
-                go( 'user', 'create', array( 'empty_day' => true ) );
+                $day = 0;
+                //go( 'user', 'create', array( 'empty_day' => true ) );
             }
             $months = getMonths();
-            if ( !array_search( $month, $months ) ) {
+            /*if ( !array_search( $month, $months ) ) {
                 go( 'user', 'create', array( 'empty_month' => true ) );
-            }
+            }*/
             if ( !is_int( $year ) ) {
-                go( 'user', 'create', array( 'empty_year' => true ) );
+                $year = 0;
+                //go( 'user', 'create', array( 'empty_year' => true ) );
             }
             $month = array_search ($month, $months);
             $dob = $year . '-' . $month . '-' . $day; 
@@ -134,7 +137,7 @@
         }
 
         public static function createView( $empty_user, $invalid_username, $empty_mail, $empty_pass, $empty_pass_repeat, $not_matched,
-                $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year ) {
+                $user_used, $small_pass, $mail_used, $mail_notvalid/*, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year*/ ) {
             include_once 'models/country.php'; 
             $countries = Country::getAll();
             include_once 'views/user/create.php';
