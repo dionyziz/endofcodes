@@ -40,7 +40,8 @@
         }
 
         protected function validate() {
-            if ( isset( $this->password ) && strlen( $this->password ) <= 6 ) {
+            $password_length = 6;
+            if ( isset( $this->password ) && strlen( $this->password ) <= $password_length ) {
                 throw new ModelValidationException( 'small_pass' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
