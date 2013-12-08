@@ -42,10 +42,7 @@
 
 <?php 
     if ( $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
-        ?><form action="index.php?resource=user&amp;method=delete" method="post">
-            <input type="submit" value="Delete your account" />
-        </form>
-        <p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
+        ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
     }
     include_once 'views/footer.php';
 ?>

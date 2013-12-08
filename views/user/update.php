@@ -49,6 +49,10 @@
     <p><input type="submit" value="Save settings" /></p>
 </form>
 
+<form action="index.php?resource=user&amp;method=delete" method="post">
+    <input type="submit" value="Delete your account" />
+</form>
+
 <?php
     include_once 'views/footer.php';
 ?>
