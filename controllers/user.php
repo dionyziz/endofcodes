@@ -1,6 +1,9 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false, $day, $month, $year ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country = '', $accept = false, $day = '', $month = '', $year = '' ) {
+            include_once 'models/user.php';
+            include_once 'models/country.php';
+            include_once 'database/population/months_array.php';
             if ( $accept === false ) {
                 go( 'user', 'create', array( 'not_accepted' => true ) );
             }
@@ -19,27 +22,24 @@
             if ( empty( $password_repeat ) ) {
                 go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
             }
-            if ( $country === 'Select Country' ) {
+            if ( Country::onList( $country ) ) {
                 go( 'user', 'create', array( 'empty_country' => true ) );
             }
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
-            if ( $day === 'Select Day' ) {
+            if ( !is_int( $day ) ) {
                 go( 'user', 'create', array( 'empty_day' => true ) );
             }
-            if ( $month === 'Select Month' ) {
+            $months = getMonths();
+            if ( !array_search( $month, $months ) ) {
                 go( 'user', 'create', array( 'empty_month' => true ) );
             }
-            if ( $year === 'Select Year' ) {
+            if ( !is_int( $year ) ) {
                 go( 'user', 'create', array( 'empty_year' => true ) );
             }
-            include_once 'models/user.php';
-            include_once 'models/country.php';
-            include_once 'database/population/months_array.php';
-            $months = getMonths();
             $month = array_search ($month, $months);
-            $dob = $birthday = $year . '-' . $month . '-' . $day; 
+            $dob = $year . '-' . $month . '-' . $day; 
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
                 'email' => $email
@@ -129,7 +129,7 @@
 
         public static function createView( $empty_user, $invalid_username, $empty_mail, $empty_pass, $empty_pass_repeat, $not_matched,
                 $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year ) {
-            include_once 'models/country.php';
+            include_once 'models/country.php'; 
             $countries = Country::getAll();
             include_once 'views/user/create.php';
         }

@@ -16,5 +16,15 @@
         public static function getAll() {
             return db_select( 'countries' );
         }
+
+        public static function onList( $country ) { 
+            $countries = Country::getAll();
+            foreach ( $countries as $valid ) {
+                if ( $valid[ 'country' ] === $country ) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 ?>
