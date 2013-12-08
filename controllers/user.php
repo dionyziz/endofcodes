@@ -113,6 +113,8 @@
 
         public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, 
                 $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted ) {
+            include_once 'models/country.php';
+            $countries = Country::getAll();
             include_once 'views/user/create.php';
         }
 

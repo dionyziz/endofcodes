@@ -93,13 +93,11 @@
     <select name="country">
         <option>Select Country</option>
         <?php
-            include_once 'database/population/countries_array.php';
-            $countries = getCountries();
             foreach ( $countries as $country ) {
                 ?><option value="<?php
-                    echo $country;
+                    echo $country[ 'country' ];
                 ?>"><?php
-                    echo $country;
+                    echo $country[ 'country' ];
                 ?></option><?php
             }
         ?>

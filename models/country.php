@@ -1,16 +1,20 @@
 <?php
     class Country {
         public static function getCountryId( $country ) {
-            $res = db_select( "countries", array( 'id' ), compact( "country" ) );
-            return $res[ 0 ][ 'id' ];
+            $res = db_select_one( "countries", array( 'id' ), compact( "country" ) );
+            return $res[ 'id' ];
         }
 
         public static function getCountryName( $id ) {
-            $res = db_select( "countries", array( 'country' ), compact( "id" ) );
-            if ( isset( $res[ 0 ][ 'country' ] ) ) {
-                return $res[ 0 ][ 'country' ];
+            $res = db_select_one( "countries", array( 'country' ), compact( "id" ) );
+            if ( isset( $res[ 'country' ] ) ) {
+                return $res[ 'country' ];
             }
             return '';
+        }
+
+        public static function getAll() {
+            return db_select( 'countries' );
         }
     }
 ?>
