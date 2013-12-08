@@ -17,4 +17,3 @@
             `countryid` int(4) unsigned NOT NULL;"
     );
 ?>
-

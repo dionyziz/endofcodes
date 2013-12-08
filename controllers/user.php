@@ -1,11 +1,14 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country, $accept = false, $day, $month, $year ) {
             if ( $accept === false ) {
                 go( 'user', 'create', array( 'not_accepted' => true ) );
             }
             if ( empty( $username ) ) {
                 go( 'user', 'create', array( 'empty_user' => true ) );
+            }
+            if ( strpos( $username, ' ' ) || preg_match('#[^a-zA-Z0-9]#', $username)) {
+                go( 'user', 'create', array( 'invalid_username' => true ) );
             }
             if ( empty( $password ) ) {
                 go( 'user', 'create', array( 'empty_pass' => true ) );
@@ -22,8 +25,21 @@
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
+            if ( $day === 'Select Day' ) {
+                go( 'user', 'create', array( 'empty_day' => true ) );
+            }
+            if ( $month === 'Select Month' ) {
+                go( 'user', 'create', array( 'empty_month' => true ) );
+            }
+            if ( $year === 'Select Year' ) {
+                go( 'user', 'create', array( 'empty_year' => true ) );
+            }
             include_once 'models/user.php';
             include_once 'models/country.php';
+            include_once 'database/population/months_array.php';
+            $months = getMonths();
+            $month = array_search ($month, $months);
+            $dob = $birthday = $year . '-' . $month . '-' . $day; 
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
                 'email' => $email
@@ -32,6 +48,7 @@
             $user->username = $username;
             $user->password = $password;
             $user->email = $email;
+            $user->dob = $dob;
             $user->countryid = Country::getCountryId( $country );
             try {
                 $user->save();
@@ -110,8 +127,8 @@
             go();
         }
 
-        public static function createView( $empty_user, $empty_mail, $empty_pass, $empty_pass_repeat, 
-                $not_matched, $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted ) {
+        public static function createView( $empty_user, $invalid_username, $empty_mail, $empty_pass, $empty_pass_repeat, $not_matched,
+                $user_used, $small_pass, $mail_used, $mail_notvalid, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year ) {
             include_once 'models/country.php';
             $countries = Country::getAll();
             include_once 'views/user/create.php';

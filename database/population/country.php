@@ -18,6 +18,6 @@
         ++$count;
     }
     
-    echo "You imported $count raws in the table 'countries'.";
+    echo "You imported $count raws out of the 239 countries in the table 'countries'.";
 ?>
 

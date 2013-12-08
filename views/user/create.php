@@ -25,6 +25,9 @@
         if ( isset( $empty_user ) ) { 
             ?><p class="error">Please type a username.</p><?php
         }
+        if ( isset( $invalid_username ) ) { 
+            ?><p class="error">Please insert a valid username</p><?php
+        }
         else if ( isset( $empty_pass ) ) {
             ?><p class="error">Please type a password.</p><?php
         }
@@ -85,7 +88,54 @@
     <p><input type="text" id="email" name="email" value="<?php
         echo htmlspecialchars( $val );
     ?>"/></p>
+    <select name="day">                                                                                      
+        <option>Select Day</option>
+        <?php
+            for ( $i = 1; $i <= 31; $i++ ) {
+                ?><option value="<?php
+                    echo $i;
+                ?>"><?php
+                    echo $i;
+                ?></option><?php
+            }
+        ?>
+    </select> 
+    <select name="month">
+        <option>Select Month</option>
+        <?php
+            include_once 'database/population/months_array.php';
+            $months = getMonths();
+            foreach ( $months as $month ) {
+                ?><option value="<?php
+                    echo $month;
+                ?>"><?php
+                    echo $month;
+                ?></option><?php
+            }
+        ?>
+    </select>
+    <select name="year">
+        <option>Select Year</option>
+        <?php
+            for ( $i = 2007; $i >= 1910; $i-- ) {
+                ?><option value="<?php
+                    echo $i;
+                ?>"><?php
+                    echo $i;
+                ?></option><?php
+            }
+        ?>
+    </select> 
     <?php
+        if ( isset( $empty_day ) ) {
+            ?><p class="error">Please select a day</p><?php
+        }
+        if ( isset( $empty_month ) ) {
+            ?><p class="error">Please select a month</p><?php
+        }
+        if ( isset( $empty_year ) ) {
+            ?><p class="error">Please select a year</p><?php
+        }
         if ( isset( $empty_country ) ) {
             ?><p class="error">Please select a country</p><?php
         }

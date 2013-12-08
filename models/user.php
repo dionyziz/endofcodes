@@ -6,6 +6,7 @@
         public $username;
         public $password;
         public $email;
+        public $dob;
         public $countryid;
         public $avatarid;
         public $salt;
@@ -33,7 +34,7 @@
                 $this->countryid = $user_info[ 'countryid' ];
                 $this->avatarid = $user_info[ 'avatarid' ];
                 $this->id = $id;
-
+                $this->dob = $user_info[ 'dob' ];
                 $this->exists = true;
             }
         }
@@ -52,13 +53,14 @@
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
+            $dob = $this->dob;
             $countryid = $this->countryid;
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             $res = db_insert( 
                 'users', 
-                compact( "username", "password", "email", "salt", "countryid" )
+                compact( "username", "password", "email", "salt", "countryid", "dob" )
             );
             if ( $res === false ) { 
                 try {
@@ -81,11 +83,12 @@
                 $this->salt = $array[ 'salt' ];
             }
             $email = $this->email;
+            $dob = $this->dob;
             $countryid = $this->countryid;
             $avatarid = $this->avatarid;
             $res = db_update(
                 'users',
-                compact( "email", "password", "salt", "countryid", "avatarid" ),
+                compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
                 compact( "id" )
             );
             if ( $res === -1 ) {
