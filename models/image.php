@@ -37,8 +37,8 @@
         protected function create() {
             global $config;
 
-            $tmp_name = $this->tmp_name;
-            $name = $this->name;
+            $tmp_name = basename( $this->tmp_name );
+            $name = basename( $this->name );
             $ext = $this->ext;
             $userid = $this->user->id;
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
