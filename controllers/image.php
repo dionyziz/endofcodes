@@ -7,14 +7,14 @@
                 throw new HTTPUnauthorizedException();
             }
             $config = getConfig();
-            $imagename = basename( $image[ 'name' ] );
+            $name = basename( $image[ 'name' ] );
             $tmp_name = $image[ 'tmp_name' ];
             $user = User::find_by_username( $_SESSION[ 'user' ][ 'username' ] );
             $image = new Image();
             $image->tmp_name = $tmp_name;
-            $image->imagename = $imagename;
+            $image->name = $name;
             $image->user = $user;
-            $image->ext = Extention::get( $imagename );
+            $image->ext = Extention::get( $name );
             try {
                 $image->save();
             }

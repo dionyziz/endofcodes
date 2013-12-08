@@ -4,7 +4,7 @@
     class Image extends ActiveRecordBase {
         public $user;
         public $tmp_name;
-        public $imagename;
+        public $name;
         public $id;
         public $target_path;
         public $ext;
@@ -22,7 +22,7 @@
             else {
                 $image_info = db_select_one( 'images', array( '*' ), compact( "id" ) );
                 $this->id = $id;
-                $this->imagename = $image_info[ 'imagename' ];
+                $this->name = $image_info[ 'name' ];
                 $this->user = new User( $image_info[ 'userid' ] );
             }
         }
@@ -38,16 +38,16 @@
             global $config;
 
             $tmp_name = $this->tmp_name;
-            $imagename = $this->imagename;
+            $name = $this->name;
             $ext = $this->ext;
             $userid = $this->user->id;
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
             $id = db_insert( 
                 'images', 
-                compact( "userid", "imagename" )
+                compact( "userid", "name" )
             );
-            $imagename = "$id" . "." . $ext;
-            $this->target_path = $target_path . $imagename;
+            $name = "$id" . "." . $ext;
+            $this->target_path = $target_path . $name;
             $this->id = $id;
             $this->upload();
             $this->update();
