@@ -1,17 +1,14 @@
 <?php
     include 'migrate.php';
 
-    migrate(
-        'ALTER TABLE
+    $sql1 = 'ALTER TABLE
             images
         DROP COLUMN
-            imagename'
-    );
+            imagename';
 
-    migrate(
-        "ALTER TABLE
+    $sql2 = "ALTER TABLE
             images
         ADD COLUMN
-            `name` text COLLATE utf8mb4_unicode_ci NOT NULL"
-    );
+            `name` text COLLATE utf8mb4_unicode_ci NOT NULL";
+    migrate( array( $sql1, $sql2 ) );
 ?>

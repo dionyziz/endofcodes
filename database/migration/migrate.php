@@ -1,12 +1,13 @@
 <?php
-    function migrate( $sql ) {
+    function migrate( $sql_array = array() ) {
         include_once '../../config/config-local.php'; 
         include_once '../../models/database.php';
 
-        $res = mysql_query( $sql );
-            
-        if ( $res === false ) {
-            die( 'Migration failed. SQL query died with the following error: ' . mysql_error() );
+        foreach ( $sql_array as $sql ) {
+            $res = mysql_query( $sql );
+            if ( $res === false ) {
+                die( 'Migration failed. SQL query died with the following error: ' . mysql_error() );
+            }
         }
         echo 'Migration successful.';
     }

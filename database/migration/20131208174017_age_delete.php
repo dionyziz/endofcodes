@@ -1,10 +1,9 @@
 <?php
     include 'migrate.php';
 
-    migrate( 
-        'ALTER TABLE
+    $sql = 'ALTER TABLE
             users
         DROP COLUMN
-            age'
-    );
+            age';
+    migrate( array( $sql ) );
 ?>

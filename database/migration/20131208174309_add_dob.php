@@ -1,10 +1,9 @@
 <?php
     include 'migrate.php';
 
-    migrate(
-        'ALTER TABLE
+    $sql = 'ALTER TABLE
             users
         ADD
-            dob date NOT NULL'
-    );
+            dob date NOT NULL';
+    migrate( array( $sql ) );
 ?>
