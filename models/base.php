@@ -21,7 +21,7 @@
 
     class ModelNotFoundException extends Exception {
         public function __construct() {
-            parent::__construct( 'NotFound' );
+            parent::__construct( 'Model not found' );
         }
     }
 
