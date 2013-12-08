@@ -8,7 +8,7 @@
     </div>
      <div id="step2" class="steps">
         <p>Step 2</p>
-        <p>Read the basic <a href="">rules</a></p>
+        <p><a href="">Read the basic rules</a></p>
     </div>
     <div id="step3" class="steps">
         <p>Step 3</p>
