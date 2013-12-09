@@ -140,7 +140,7 @@
             ?><p class="error">Please select a country</p><?php
         }*/
     ?>
-    <select name="country">
+    <select name="countryname">
         <option>Select Country</option>
         <?php
             foreach ( $countries as $country ) {
