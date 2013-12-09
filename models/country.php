@@ -1,16 +1,21 @@
 <?php
-    class Country {
-        public static function getCountryId( $country ) {
+    class Country extends ActiveRecordBase {
+        public $name;
+        public $id;
+        public $shortname;
+
+        public static function getByName( $country ) {
             $res = db_select_one( "countries", array( 'id' ), compact( "country" ) );
-            return $res[ 'id' ];
+            return new Country( $res[ 'id' ] );
         }
 
-        public static function getCountryName( $id ) {
-            $res = db_select_one( "countries", array( 'country' ), compact( "id" ) );
-            if ( isset( $res[ 'country' ] ) ) {
-                return $res[ 'country' ];
+        public function __construct( $id = false ) {
+            if ( $id ) {
+                $row = db_select_one( "countries", array( 'country', 'shortname' ), compact( "id" ) );
+                $this->name = $row[ 'country' ];
+                $this->id = $id;
+                $this->shortname = $row[ 'shortname' ];
             }
-            return '';
         }
 
         public static function getAll() {
