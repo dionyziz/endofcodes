@@ -86,10 +86,6 @@
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
-            $country = new Country( $user->countryid );
-            $countryname = $country->name;
-            $image = Image::find_by_user( $user );
-            $target_path = $image->target_path;
             include_once 'views/user/view.php';
         }
 
@@ -120,8 +116,7 @@
                 $user->email = $email;
             }
             if ( Country::onList( $countryname ) ) {
-                $country = Country::getByName( $countryname );
-                $user->countryid = $country->id;
+                $user->country = Country::getByName( $countryname );
             }
             try { 
                 $user->save();

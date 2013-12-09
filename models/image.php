@@ -43,7 +43,7 @@
             $tmp_name = basename( $this->tmp_name );
             $name = basename( $this->name );
             $ext = $this->ext;
-            $userid = $this->user->id;
+            $userid = $this->userid;
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
             $id = db_insert( 
                 'images', 
@@ -53,17 +53,12 @@
             $this->target_path = $target_path . $name;
             $this->id = $id;
             $this->upload();
-            $this->update();
         }
 
         public function upload() {
             $tmp_name = $this->tmp_name;
             $target_path = $this->target_path;
             return move_uploaded_file( $tmp_name, $target_path );
-        }
-
-        public function update() {
-            parent::save();
         }
     }
 ?>

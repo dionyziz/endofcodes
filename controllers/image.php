@@ -9,12 +9,13 @@
             $name = $image[ 'name' ];
             $tmp_name = $image[ 'tmp_name' ];
             $user = User::find_by_username( $_SESSION[ 'user' ][ 'username' ] );
-            $image = new Image();
-            $image->tmp_name = $tmp_name;
-            $image->name = $name;
-            $image->userid = $user->id;
+            $user->image = new Image();
+            $user->image->tmp_name = $tmp_name;
+            $user->image->name = $name;
+            $user->image->userid = $user->id;
             try {
-                $image->save();
+                $user->image->save();
+                $user->save();
             }
             catch ( ModelValidationException $e ) {
                 go( 'user', 'update', array( 'username' => $user->username, $e->error => true ) );
