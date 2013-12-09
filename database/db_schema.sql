@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 08, 2013 at 07:41 PM
+-- Generation Time: Dec 05, 2013 at 05:37 PM
 -- Server version: 5.5.34
 -- PHP Version: 5.3.10-1ubuntu3.8
 
@@ -40,11 +40,11 @@ CREATE TABLE IF NOT EXISTS `countries` (
 --
 
 CREATE TABLE IF NOT EXISTS `images` (
-  `imageid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `imagename` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`imageid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=90 ;
 
 -- --------------------------------------------------------
 
@@ -60,11 +60,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `salt` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `avatarid` int(11) NOT NULL,
   `countryid` int(4) unsigned NOT NULL,
-  `dob` date NOT NULL,
+  `age` int(3) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=83 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=97 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

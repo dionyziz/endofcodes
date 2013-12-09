@@ -3,7 +3,7 @@
 ?>
 
 <p><img src="<?php
-            echo $image->target_path;
+            echo $target_path;
         ?>" alt="Profile Picture" width="100" height="100" /></p>
 
 <p><?php
@@ -15,7 +15,7 @@
 ?></p>
 
 <p>Region, Country: <?php
-    echo $country->name;
+    echo $country;
 ?></p>
 
 <p>Score: *score*</p>

@@ -12,8 +12,8 @@
         protected $tableName = 'images';
         protected $exists;
 
-        public static function findByUser( $user ) {
-            return new Image( $user->image->id );
+        public static function find_by_user( $user ) {
+            return new Image( $user->avatarid );
         }
 
         public function __construct( $id = false ) {
@@ -64,7 +64,7 @@
         }
 
         public function update() {
-            $this->user->image->id = $this->id;
+            $this->user->avatarid = $this->id;
             $this->user->save();
         }
     }

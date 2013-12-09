@@ -35,7 +35,7 @@
     <label for="password_repeat">Repeat</label>
     <p><input type="password" name="password_repeat" id="password_repeat" /></p>
     <p>Change country</p>
-    <p><select name="countryname">
+    <p><select name="country">
         <option>Select Country</option>
         <?php
             foreach ( $countries as $country ) {
