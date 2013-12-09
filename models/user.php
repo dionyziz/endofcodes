@@ -1,5 +1,7 @@
 <?php
-    include_once 'encrypt.php';
+    include_once 'models/encrypt.php';
+    include_once 'models/country.php';
+    include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
         public $id;
@@ -7,9 +9,9 @@
         public $password;
         public $email;
         public $dob;
-        public $countryid;
-        public $avatarid;
         public $salt;
+        public $country;
+        public $image;
         protected $exists;
         protected $tableName = 'users';
 
@@ -31,8 +33,8 @@
                 $user_info = db_select_one( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
-                $this->countryid = $user_info[ 'countryid' ];
-                $this->avatarid = $user_info[ 'avatarid' ];
+                $this->country = new Country( $user_info[ 'countryid' ] );
+                $this->image = new Image( $user_info[ 'avatarid' ] );
                 $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
                 $this->exists = true;
@@ -55,7 +57,7 @@
             $password = $this->password;
             $email = $this->email;
             $dob = $this->dob;
-            $countryid = $this->countryid;
+            $countryid = $this->country->id;
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
@@ -85,8 +87,8 @@
             }
             $email = $this->email;
             $dob = $this->dob;
-            $countryid = $this->countryid;
-            $avatarid = $this->avatarid;
+            $countryid = $this->country->id;
+            $avatarid = $this->image->id;
             $res = db_update(
                 'users',
                 compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
