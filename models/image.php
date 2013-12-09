@@ -3,12 +3,12 @@
     include_once 'models/extentions.php';
 
     class Image extends ActiveRecordBase {
-        public $user;
         public $tmp_name;
         public $name;
         public $id;
         public $target_path;
         public $ext;
+        public $userid;
         protected $tableName = 'images';
         protected $exists;
 
@@ -27,7 +27,6 @@
                 $this->ext = Extention::get( $this->name );
                 $config = getConfig();
                 $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
-                $this->user = new User( $image_info[ 'userid' ] );
             }
         }
 
@@ -64,8 +63,7 @@
         }
 
         public function update() {
-            $this->user->avatarid = $this->id;
-            $this->user->save();
+            parent::save();
         }
     }
 ?>

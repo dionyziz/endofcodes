@@ -12,7 +12,7 @@
             $image = new Image();
             $image->tmp_name = $tmp_name;
             $image->name = $name;
-            $image->user = $user;
+            $image->userid = $user->id;
             try {
                 $image->save();
             }
