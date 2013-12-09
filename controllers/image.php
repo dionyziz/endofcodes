@@ -6,6 +6,8 @@
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
+            $config = getConfig();
+            global $config;
             $name = $image[ 'name' ];
             $tmp_name = $image[ 'tmp_name' ];
             $user = User::find_by_username( $_SESSION[ 'user' ][ 'username' ] );
