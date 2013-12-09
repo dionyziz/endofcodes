@@ -15,7 +15,7 @@
 ?></p>
 
 <p>Region, Country: <?php
-    echo $country;
+    echo $countryname;
 ?></p>
 
 <p>Score: *score*</p>

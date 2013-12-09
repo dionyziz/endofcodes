@@ -1,9 +1,10 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $country = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $countryname = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'database/population/months_array.php';
+            $country = new Country();
             /*if ( $accept === false ) {
                 go( 'user', 'create', array( 'not_accepted' => true ) );
             }*/
@@ -22,9 +23,13 @@
             if ( empty( $password_repeat ) ) {
                 go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
             }
-            if ( !Country::onList( $country ) ) {
-                $country = '';
+            if ( !Country::onList( $countryname ) ) {
+                $country->name = '';
+                $country->id = 0;
                 //go( 'user', 'create', array( 'empty_country' => true ) );
+            }
+            else {
+                $country = Country::getByName( $countryname );
             }
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
@@ -52,7 +57,7 @@
             $user->password = $password;
             $user->email = $email;
             $user->dob = $dob;
-            $user->countryid = Country::getCountryId( $country );
+            $user->countryid = $country->id;
             try {
                 $user->save();
                 $id = $user->id;
@@ -81,13 +86,14 @@
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
-            $country = Country::getCountryName( $user->countryid );
+            $country = new Country( $user->countryid );
+            $countryname = $country->name;
             $image = Image::find_by_user( $user );
             $target_path = $image->target_path;
             include_once 'views/user/view.php';
         }
 
-        public static function update( $password = '', $password_new = '', $password_repeat = '', $country = '', $email = '' ) {
+        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryname = '', $email = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
@@ -107,14 +113,15 @@
                     go( 'user', 'update', array( 'wrong_pass' => true ) );
                 }
             }
-            else {
+            else if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 go( 'user', 'update', array( 'wrong_pass' => true ) );
             }
             if ( !empty( $email ) ) {
                 $user->email = $email;
             }
-            if ( $country !== 'Select Country' ) {
-                $user->countryid = Country::getCountryId( $country );
+            if ( Country::onList( $countryname ) ) {
+                $country = Country::getByName( $countryname );
+                $user->countryid = $country->id;
             }
             try { 
                 $user->save();
