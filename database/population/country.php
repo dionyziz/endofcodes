@@ -9,7 +9,7 @@
     $count = 0;
   
     foreach ( $countries as $key => $value ) {
-        $res = db_insert( 'countries', array( 'id' => NULL, 'country' => $value, 'shortname' => $key ) );
+        $res = db_insert( 'countries', array( 'country' => $value, 'shortname' => $key ) );
         if ( $res === false ) { 
             die( "sql query died with the following error\n\"" . mysql_error() );
         }
