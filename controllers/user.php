@@ -5,25 +5,17 @@
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'database/population/months_array.php';
+
+            if ( empty( $password_repeat ) ) {
+                go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
+            }
+            if ( $password !== $password_repeat ) {
+                go( 'user', 'create', array( 'not_matched' => true ) );
+            }
             $country = new Country();
             /*if ( $accept === false ) {
                 go( 'user', 'create', array( 'not_accepted' => true ) );
             }*/
-            if ( empty( $username ) ) {
-                go( 'user', 'create', array( 'empty_user' => true ) );
-            }
-            if ( strpos( $username, ' ' ) || preg_match('#[^a-zA-Z0-9]#', $username)) {
-                go( 'user', 'create', array( 'invalid_username' => true ) );
-            }
-            if ( empty( $password ) ) {
-                go( 'user', 'create', array( 'empty_pass' => true ) );
-            }
-            if ( empty( $email ) ) {
-                go( 'user', 'create', array( 'empty_mail' => true ) );
-            }
-            if ( empty( $password_repeat ) ) {
-                go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
-            }
             if ( !Country::onList( $countryname ) ) {
                 $country->name = '';
                 $country->id = 0;
@@ -31,9 +23,6 @@
             }
             else {
                 $country = Country::getByName( $countryname );
-            }
-            if ( $password !== $password_repeat ) {
-                go( 'user', 'create', array( 'not_matched' => true ) );
             }
             if ( !is_int( $day ) ) {
                 $day = 0;

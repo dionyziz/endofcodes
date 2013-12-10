@@ -43,7 +43,19 @@
 
         protected function validate() {
             $password_length = 6;
-            if ( isset( $this->password ) && strlen( $this->password ) <= $password_length ) {
+            if ( empty( $this->username ) ) {
+                throw new ModelValidationException( 'empty_user' );
+            }
+            if ( strpos( $this->username, ' ' ) || preg_match('#[^a-zA-Z0-9]#', $this->username ) ) {
+                throw new ModelValidationException( 'invalid_username' );
+            }
+            if ( empty( $this->password ) ) {
+                throw new ModelValidationException( 'empty_pass' );
+            }
+            if ( empty( $this->email ) ) {
+                throw new ModelValidationException( 'empty_mail' );
+            }
+            if ( strlen( $this->password ) <= $password_length ) {
                 throw new ModelValidationException( 'small_pass' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
