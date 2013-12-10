@@ -125,7 +125,7 @@
 
         public static function updateView( $image_notvalid, $small_pass, $pass_not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
             include_once 'models/country.php';
-            $countries = Country::getAll();
+            $countries = Country::findAll();
             include 'views/user/update.php';
         }
     }
