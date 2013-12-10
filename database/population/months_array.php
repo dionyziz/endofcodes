@@ -1,5 +1,4 @@
 <?php
-
     function getMonths() {
         return array(
             '01' => 'January',
@@ -16,5 +15,4 @@
             '12' => 'December'
         );
     }
-
-     
+?>
