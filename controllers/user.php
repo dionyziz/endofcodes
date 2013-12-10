@@ -2,6 +2,12 @@
     class UserController {
         public static function create( $username = '', $password = '', $password_repeat = '', $email = '', 
                 $countryname = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
+            /*if ( $accept === false ) {
+                go( 'user', 'create', array( 'not_accepted' => true ) );
+            }
+            if ( !array_search( $month, $months ) ) {
+                go( 'user', 'create', array( 'empty_month' => true ) );
+            }*/
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'database/population/months_array.php';
@@ -9,32 +15,23 @@
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
-            $country = new Country();
-            /*if ( $accept === false ) {
-                go( 'user', 'create', array( 'not_accepted' => true ) );
-            }*/
-            if ( !Country::onList( $countryname ) ) {
-                $country->name = '';
-                $country->id = 0;
-                //go( 'user', 'create', array( 'empty_country' => true ) );
-            }
-            else {
-                $country = Country::getByName( $countryname );
-            }
             if ( !is_int( $day ) ) {
                 $day = 0;
-                //go( 'user', 'create', array( 'empty_day' => true ) );
             }
             $months = getMonths();
-            /*if ( !array_search( $month, $months ) ) {
-                go( 'user', 'create', array( 'empty_month' => true ) );
-            }*/
             if ( !is_int( $year ) ) {
                 $year = 0;
-                //go( 'user', 'create', array( 'empty_year' => true ) );
             }
             $month = array_search ($month, $months);
             $dob = $year . '-' . $month . '-' . $day; 
+            $country = new Country();
+            try {
+                $country = Country::getByName( $countryname );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $country->name = '';
+                $country->id = 0;
+            }
             $_SESSION[ 'create_post' ] = array(
                 'username' => $username,
                 'email' => $email
