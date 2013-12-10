@@ -93,7 +93,7 @@
         <select name="day" id="dob">
         <option>Select Day</option>
             <?php
-                for ( $i = 1; $i <= 31; $i++ ) {
+                for ( $i = 1; $i <= 31; ++$i ) {
                     ?><option value="<?php
                         echo $i;
                     ?>"><?php
@@ -119,7 +119,7 @@
         <select name="year">
             <option>Select Year</option>
             <?php
-                for ( $i = 2007; $i >= 1910; $i-- ) {
+                for ( $i = 2007; $i >= 1910; --$i ) {
                     ?><option value="<?php
                         echo $i;
                     ?>"><?php
