@@ -1,6 +1,7 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', $countryname = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', 
+                $countryname = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'database/population/months_array.php';
