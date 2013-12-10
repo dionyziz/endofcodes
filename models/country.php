@@ -12,6 +12,10 @@
             return new Country( $res[ 'id' ] );
         }
 
+        public static function findAll() {
+            return db_select( 'countries' );
+        }
+
         public function __construct( $id = false ) {
             if ( $id ) {
                 $row = db_select_one( "countries", array( 'name', 'shortname' ), compact( "id" ) );
@@ -20,19 +24,4 @@
                 $this->shortname = $row[ 'shortname' ];
             }
         }
-
-        public static function findAll() {
-            return db_select( 'countries' );
-        }
-
-        public static function onList( $country ) { 
-            $countries = Country::findAll();
-            foreach ( $countries as $valid ) {
-                if ( $valid[ 'name' ] === $country ) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 ?>
