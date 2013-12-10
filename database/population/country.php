@@ -7,10 +7,8 @@
     $countries = getCountries();
     $array = array();
     $count = 0;
-    $keys = array_keys( $countries );
   
-    foreach ( $keys as $key ) {
-        $value = $countries[ $key ];
+    foreach ( $countries as $key => $value ) {
         $res = db_insert( 'countries', array( 'id' => NULL, 'country' => $value, 'shortname' => $key ) );
         if ( $res === false ) { 
             die( "sql query died with the following error\n\"" . mysql_error() );
