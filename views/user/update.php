@@ -1,5 +1,5 @@
 <?php
-    include_once 'views/header.php';
+    include 'views/header.php';
 ?>
 
 <form action="index.php?resource=user&amp;method=update" method="post">
@@ -66,5 +66,5 @@
 </form>
 
 <?php
-    include_once 'views/footer.php';
+    include 'views/footer.php';
 ?>

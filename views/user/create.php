@@ -1,5 +1,5 @@
 <?php
-    include_once 'views/header.php';
+    include 'views/header.php';
 ?>
 <div id="steps">
     <div div="step1" class="steps">
@@ -163,5 +163,5 @@
 </form>
 
 <?php
-    include_once 'views/footer.php';
+    include 'views/footer.php';
 ?>

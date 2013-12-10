@@ -28,7 +28,7 @@
         }
 
         public static function createView( $wrong_pass, $empty_user, $empty_pass, $wrong_user ) {
-            include_once 'views/session/create.php';
+            include 'views/session/create.php';
         }
     }
 ?>

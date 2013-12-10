@@ -142,13 +142,13 @@
                 $user_used, $small_pass, $mail_used, $mail_notvalid/*, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year*/ ) {
             include_once 'models/country.php'; 
             $countries = Country::getAll();
-            include_once 'views/user/create.php';
+            include 'views/user/create.php';
         }
 
         public static function updateView( $notvalid, $small_pass, $not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
             include_once 'models/country.php';
             $countries = Country::getAll();
-            include_once 'views/user/update.php';
+            include 'views/user/update.php';
         }
     }
 ?>

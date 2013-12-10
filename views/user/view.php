@@ -1,5 +1,5 @@
 <?php
-    include_once 'views/header.php';
+    include 'views/header.php';
 ?>
 
 <p><img src="<?php
@@ -32,5 +32,5 @@
     if ( $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
         ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
     }
-    include_once 'views/footer.php';
+    include 'views/footer.php';
 ?>
