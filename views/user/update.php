@@ -24,7 +24,7 @@
     <p><input type="password" name="password" id="password" /></p>
     <label for="password_new">New password</label>
     <?php
-        if ( isset( $not_matched ) ) {
+        if ( isset( $pass_not_matched ) ) {
             ?><p class="error">Passwords do not match</p><?php
         }
         else if ( isset( $small_pass ) ) {
@@ -53,7 +53,7 @@
 <form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data"> 
     <label for="image">Upload an avatar</label>
     <?php
-        if ( isset( $notvalid ) ) {
+        if ( isset( $image_notvalid ) ) {
             ?><p class="error">This isn't an image</p><?php
         }
     ?>

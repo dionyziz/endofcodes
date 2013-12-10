@@ -79,7 +79,7 @@
                 if ( $user->authenticatesWithPassword( $password ) ) {
                     if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                         if ( $password_new !== $password_repeat ) {
-                            go( 'user', 'update', array( 'not_matched' => true ) );
+                            go( 'user', 'update', array( 'pass_not_matched' => true ) );
                         }
                         $user->password = $password_new;
                     }
@@ -123,7 +123,7 @@
             include 'views/user/create.php';
         }
 
-        public static function updateView( $notvalid, $small_pass, $not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
+        public static function updateView( $image_notvalid, $small_pass, $pass_not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
             include_once 'models/country.php';
             $countries = Country::getAll();
             include 'views/user/update.php';
