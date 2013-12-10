@@ -4,7 +4,7 @@
         public $id;
         public $shortname;
 
-        public static function getByName( $country ) {
+        public static function findByName( $country ) {
             $res = db_select_one( "countries", array( 'id' ), compact( "country" ) );
             if ( $res == false ) {
                 throw new ModelNotFoundException();

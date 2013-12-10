@@ -24,7 +24,7 @@
             $dob = $year . '-' . $month . '-' . $day; 
             $country = new Country();
             try {
-                $country = Country::getByName( $countryname );
+                $country = Country::findByName( $countryname );
             }
             catch ( ModelNotFoundException $e ) {
                 $country->name = '';
@@ -92,7 +92,7 @@
                 $user->email = $email;
             }
             try {
-                $user->country = Country::getByName( $countryname );
+                $user->country = Country::findByName( $countryname );
             }
             catch ( ModelNotFoundException $e ) {
             }
