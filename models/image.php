@@ -16,10 +16,7 @@
         }
 
         public function __construct( $id = false ) {
-            if ( !$id ) {
-                $this->exists = false;
-            }
-            else {
+            if ( $id ) {
                 $image_info = db_select_one( 'images', array( '*' ), compact( "id" ) );
                 $this->id = $id;
                 $this->name = $image_info[ 'name' ];
