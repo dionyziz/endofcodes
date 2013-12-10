@@ -18,10 +18,7 @@
                 go( 'session', 'create', array( 'wrong_pass' => true ) );
             }
             $id = $user->id;
-            $_SESSION[ 'user' ] = array(
-                'id' => $id,
-                'username' => $username
-            );
+            $_SESSION[ 'user' ] = compact( 'id', 'username' );
             go();
         }
 
