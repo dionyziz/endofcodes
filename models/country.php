@@ -24,4 +24,5 @@
                 $this->shortname = $row[ 'shortname' ];
             }
         }
+    }
 ?>
