@@ -82,7 +82,7 @@
                 }
             }
             $this->exists = true;
-            $this->id = mysql_insert_id();
+            $this->id = $res;
         }
 
         protected function update() {
