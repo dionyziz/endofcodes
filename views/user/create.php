@@ -70,7 +70,7 @@
     <label for="email">Email</label>
     <?php
         if ( isset( $mail_used ) ) {
-            ?><p class="error">Mail is already used</p><?php
+            ?><p class="error">Email is already used</p><?php
             $val = "";
         }
         else if ( isset( $mail_notvalid ) ) {
