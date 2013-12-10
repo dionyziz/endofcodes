@@ -15,7 +15,7 @@
 ?></p>
 
 <p>Region, Country: <?php
-    echo $user->country->name;
+    echo htmlspecialchars( $user->country->name );
 ?></p>
 
 <p>Score: *score*</p>
