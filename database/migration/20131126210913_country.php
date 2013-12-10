@@ -5,7 +5,7 @@
         array( 
             "CREATE TABLE IF NOT EXISTS 
                 `countries` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                    `id` int(4) NOT NULL AUTO_INCREMENT,
                     `country` text COLLATE utf8mb4_unicode_ci NOT NULL,
                     `shortname` text COLLATE utf8mb4_unicode_ci NOT NULL,
                     PRIMARY KEY (`id`)
