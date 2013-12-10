@@ -10,7 +10,6 @@
         public $ext;
         public $userid;
         protected $tableName = 'images';
-        protected $exists;
 
         public static function find_by_user( $user ) {
             return new Image( $user->avatarid );

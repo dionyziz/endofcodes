@@ -1,5 +1,7 @@
 <?php
     abstract class ActiveRecordBase {
+        protected $exists;
+
         public function delete() {
             $id = $this->id;
             db_delete(

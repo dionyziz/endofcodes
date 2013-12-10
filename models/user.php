@@ -12,7 +12,6 @@
         public $country;
         public $image;
         public $salt;
-        protected $exists;
         protected $tableName = 'users';
 
         public static function find_by_username( $username ) {
