@@ -145,9 +145,9 @@
         <?php
             foreach ( $countries as $country ) {
                 ?><option value="<?php
-                    echo $country[ 'country' ];
+                    echo $country[ 'name' ];
                 ?>"><?php
-                    echo $country[ 'country' ];
+                    echo $country[ 'name' ];
                 ?></option><?php
             }
         ?>
