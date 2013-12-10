@@ -105,8 +105,6 @@
         <select name="month">
             <option>Select Month</option>
             <?php
-                include_once 'database/population/months_array.php';
-                $months = getMonths();
                 foreach ( $months as $month ) {
                     ?><option value="<?php
                         echo $month;
