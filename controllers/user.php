@@ -15,11 +15,10 @@
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
-            if ( !checkdate( $day, $month, $year ) ) {
+            $months = getMonths();
+            $month = array_search( $month, $months );
+            if ( is_string( $day ) || is_string( $month ) || is_string( $year ) ) {
                 $day = $month = $year = 0;
-                $month = 0;
-                $year = 0;
-                //go( 'user', 'create', array( 'dob_notvalid' => true ) );
             }
             $dob = $year . '-' . $month . '-' . $day; 
             $country = new Country();

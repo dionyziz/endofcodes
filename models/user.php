@@ -37,7 +37,7 @@
         }
 
         protected function validate() {
-            $password_length = 6;
+            $config = getConfig();
             if ( empty( $this->username ) ) {
                 throw new ModelValidationException( 'empty_user' );
             }
@@ -50,7 +50,7 @@
             if ( empty( $this->email ) ) {
                 throw new ModelValidationException( 'empty_mail' );
             }
-            if ( isset( $this->password ) && strlen( $this->password ) <= $password_length ) {
+            if ( isset( $this->password ) && strlen( $this->password ) <= $config[ 'pass_len' ] ) {
                 throw new ModelValidationException( 'small_pass' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
