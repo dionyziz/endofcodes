@@ -47,7 +47,7 @@
                 'images', 
                 compact( "userid", "name" )
             );
-            $name = "$id" . "." . $ext;
+            $name = $id . "." . $ext;
             $this->target_path = $target_path . $name;
             $this->id = $id;
             $this->upload();
