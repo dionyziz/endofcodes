@@ -68,11 +68,13 @@
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
-            $res = db_insert( 
-                'users', 
-                compact( "username", "password", "email", "salt", "countryid", "dob" )
-            );
-            if ( $res === false ) { 
+            try {
+                $res = db_insert( 
+                    'users', 
+                    compact( "username", "password", "email", "salt", "countryid", "dob" )
+                );
+            }
+            catch ( DBException $e ) {
                 try {
                     $other_user = User::find_by_username( $username );
                     throw new ModelValidationException( 'user_used' );
@@ -96,12 +98,14 @@
             $dob = $this->dob;
             $countryid = $this->country->id;
             $avatarid = $this->image->id;
-            $res = db_update(
-                'users',
-                compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
-                compact( "id" )
-            );
-            if ( $res === -1 ) {
+            try {
+                $res = db_update(
+                    'users',
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
+                    compact( "id" )
+                );
+            }
+            catch ( DBException $e ) {
                 throw new ModelValidationException( 'mail_used' );
             }
         }

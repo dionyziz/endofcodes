@@ -5,8 +5,10 @@
         public $shortname;
 
         public static function findByName( $name ) {
-            $res = db_select_one( "countries", array( 'id' ), compact( "name" ) );
-            if ( $res == false ) {
+            try {
+                $res = db_select_one( "countries", array( 'id' ), compact( "name" ) );
+            }
+            catch ( DBException $e ) {
                 throw new ModelNotFoundException();
             }
             return new Country( $res[ 'id' ] );

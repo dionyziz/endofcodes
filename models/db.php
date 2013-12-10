@@ -33,16 +33,9 @@
         }
         $finalsql = strtr( $sql, $bind );
         $res = mysql_query( $finalsql );
-        /*if ( $res === false ) {
-            die( "SQL query died with the following error\n\""
-            . mysql_error()
-            . "\"\n\nThe query given was:\n"
-            . $sql
-            . "\n\nThe SQL bindings were:\n"
-            . print_r( $bind, true )
-            . "The query executed was:\n"
-            . $finalsql );
-        }*/
+        if ( $res === false ) {
+            throw new DBException();
+        }
         return $res;
     }
 
