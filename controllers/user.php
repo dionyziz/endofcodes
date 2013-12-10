@@ -44,7 +44,7 @@
             $user->password = $password;
             $user->email = $email;
             $user->dob = $dob;
-            $user->countryid = $country->id;
+            $user->country = $country;
             try {
                 $user->save();
                 $id = $user->id;
