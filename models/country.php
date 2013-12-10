@@ -21,12 +21,12 @@
             }
         }
 
-        public static function getAll() {
+        public static function findAll() {
             return db_select( 'countries' );
         }
 
         public static function onList( $country ) { 
-            $countries = Country::getAll();
+            $countries = Country::findAll();
             foreach ( $countries as $valid ) {
                 if ( $valid[ 'country' ] === $country ) {
                     return true;
