@@ -6,12 +6,10 @@
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $name = $image[ 'name' ];
-            $tmp_name = $image[ 'tmp_name' ];
             $user = User::find_by_username( $_SESSION[ 'user' ][ 'username' ] );
             $user->image = new Image();
-            $user->image->tmp_name = $tmp_name;
-            $user->image->name = $name;
+            $user->image->tmp_name = $image[ 'tmp_name' ];
+            $user->image->name = $image[ 'name' ];
             $user->image->userid = $user->id;
             try {
                 $user->image->save();
