@@ -91,8 +91,10 @@
             if ( !empty( $email ) ) {
                 $user->email = $email;
             }
-            if ( Country::onList( $countryname ) ) {
+            try {
                 $user->country = Country::getByName( $countryname );
+            }
+            catch ( ModelNotFoundException $e ) {
             }
             try { 
                 $user->save();

@@ -6,7 +6,7 @@
 
         public static function getByName( $country ) {
             $res = db_select_one( "countries", array( 'id' ), compact( "country" ) );
-            if ( $res === false ) {
+            if ( $res == false ) {
                 throw new ModelNotFoundException();
             }
             return new Country( $res[ 'id' ] );
