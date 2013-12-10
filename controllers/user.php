@@ -6,9 +6,6 @@
             include_once 'models/country.php';
             include_once 'database/population/months_array.php';
 
-            if ( empty( $password_repeat ) ) {
-                go( 'user', 'create', array( 'empty_pass_repeat' => true ) );
-            }
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'not_matched' => true ) );
             }
