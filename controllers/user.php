@@ -47,10 +47,7 @@
             catch( ModelValidationException $e ) {
                 go( 'user', 'create', array( $e->error => true ) );
             }
-            $_SESSION[ 'user' ] = array(
-                'id' => $id,
-                'username' => $username
-            );
+            $_SESSION[ 'user' ] = compact( 'id', 'username' );
             go();
         }
 
