@@ -75,7 +75,7 @@
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
-            if ( !empty( $password ) ) {
+            if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
                     if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                         if ( $password_new !== $password_repeat ) {
@@ -87,9 +87,6 @@
                 else {
                     go( 'user', 'update', array( 'wrong_pass' => true ) );
                 }
-            }
-            else if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
-                go( 'user', 'update', array( 'wrong_pass' => true ) );
             }
             if ( !empty( $email ) ) {
                 $user->email = $email;
