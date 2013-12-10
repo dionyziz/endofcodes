@@ -23,11 +23,7 @@
         }
 
         public function __construct( $id = false ) {
-            if ( $id === false ) {
-                // new active record object
-                $this->exists = false;
-            }
-            else {
+            if ( $id ) {
                 // existing active record object
                 $user_info = db_select_one( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
                 $this->username = $user_info[ 'username' ];
