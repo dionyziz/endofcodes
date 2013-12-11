@@ -13,7 +13,7 @@
             ),
             'paths' => array(
                 'avatar_path' => 'sample_path',
-                'flag_path' => 'sample_path'
+                'flag_path' => 'static/images/flags/'
             ),
             'pass_len' => '6'
         );
