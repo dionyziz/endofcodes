@@ -30,7 +30,7 @@
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
                 $this->image = new Image( $user_info[ 'avatarid' ] );
-                $this->id = $this->image->id = $id;
+                $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
                 $this->exists = true;
             }
