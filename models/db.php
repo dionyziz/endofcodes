@@ -1,7 +1,7 @@
 <?php
     class DBException extends Exception {
         public function __construct() {
-            parent::__construct( 'Database error' );
+            parent::__construct( 'Database error: ' . mysql_error() );
         }
     }
 
