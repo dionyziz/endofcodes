@@ -10,12 +10,13 @@
             }*/
             include_once 'models/user.php';
             include_once 'models/country.php';
-            include_once 'database/population/months_array.php';
 
             if ( $password !== $password_repeat ) {
-                go( 'user', 'create', array( 'not_matched' => true ) );
+                go( 'user', 'create', array( 'pass_not_matched' => true ) );
             }
-            $months = getMonths();
+            for ( $i = 1; $i <= 12; ++$i ) {
+                $months[ $i ] = jdmonthname( $i, 0 );
+            }
             $month = array_search( $month, $months );
             if ( is_string( $day ) || is_string( $month ) || is_string( $year ) ) {
                 $day = $month = $year = 0;
@@ -29,10 +30,7 @@
                 $country->name = '';
                 $country->id = 0;
             }
-            $_SESSION[ 'create_post' ] = array(
-                'username' => $username,
-                'email' => $email
-            );
+            $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
             $user = new User();
             $user->username = $username;
             $user->password = $password;
@@ -59,7 +57,7 @@
             include_once 'models/image.php';
             include_once 'models/country.php';
             try { 
-                $user = User::find_by_username( $username );
+                $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
@@ -76,15 +74,13 @@
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
-                    if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
-                        if ( $password_new !== $password_repeat ) {
-                            go( 'user', 'update', array( 'pass_not_matched' => true ) );
-                        }
-                        $user->password = $password_new;
+                    if ( $password_new !== $password_repeat ) {
+                        go( 'user', 'update', array( 'new_pass_not_matched' => true ) );
                     }
+                    $user->password = $password_new;
                 }
                 else {
-                    go( 'user', 'update', array( 'wrong_pass' => true ) );
+                    go( 'user', 'update', array( 'old_pass_wrong' => true ) );
                 }
             }
             if ( !empty( $email ) ) {
@@ -115,16 +111,14 @@
             go();
         }
 
-        public static function createView( $empty_user, $invalid_username, $empty_mail, $empty_pass, $empty_pass_repeat, $not_matched,
-                $user_used, $small_pass, $mail_used, $mail_notvalid/*, $empty_country, $not_accepted, $empty_day, $empty_month, $empty_year*/ ) {
+        public static function createView( $username_empty, $username_invalid, $mail_empty, $pass_empty, $pass_not_matched,
+                $user_used, $pass_small, $mail_used, $mail_invalid/*, $country_empty, $terms_not_accepted, $day_empty, $month_empty, $year_empty*/ ) {
             include_once 'models/country.php'; 
-            include_once 'database/population/months_array.php';
-            $months = getMonths();
             $countries = Country::findAll();
             include 'views/user/create.php';
         }
 
-        public static function updateView( $image_notvalid, $small_pass, $pass_not_matched, $wrong_pass, $mail_notvalid, $mail_used, $empty_country  ) {
+        public static function updateView( $image_invalid, $pass_small, $new_pass_not_matched, $old_pass_wrong, $mail_invalid, $mail_used, $country_empty ) {
             include_once 'models/country.php';
             $countries = Country::findAll();
             include 'views/user/update.php';

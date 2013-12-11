@@ -9,7 +9,7 @@
                 go( 'session', 'create', array( 'empty_pass' => true ) );
             }
             try {
-                $user = User::find_by_username( $username );
+                $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
                 go( 'session', 'create', array( 'wrong_user' => true ) );

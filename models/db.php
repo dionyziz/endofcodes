@@ -1,18 +1,10 @@
 <?php
-    /*function prep_query( $code, $data = array() ) {
-        $parts = explode( '?', $code );
-        $sql = '';
-        foreach( $data as $value ) {
-            $sql .= array_shift( $parts );
-            $sql .= '"' . mysql_real_escape_string( $value ) . '"';
+    class DBException extends Exception {
+        public function __construct() {
+            parent::__construct( 'Database error: ' . mysql_error() );
         }
-        $sql .= array_shift( $parts );
-        $res = mysql_query( $sql );
-        if ( $res !== false ) {
-            return $res;
-        }
-        die( 'MySQL error: ' . mysql_error() );
-    }*/
+    }
+
     function db( $sql, $bind = array() ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
@@ -39,7 +31,7 @@
         return $res;
     }
 
-    function db_insert( $table, $set ) {
+    function dbInsert( $table, $set ) {
         $fields = array();
         foreach ( $set as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -57,7 +49,7 @@
         return mysql_insert_id();
     }
 
-    function db_delete( $table, $where ) {
+    function dbDelete( $table, $where ) {
         $fields = array();
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -72,7 +64,7 @@
         return mysql_affected_rows();
     }
 
-    function db_select( $table, $select = array( "*" ), $where = array() ) {
+    function dbSelect( $table, $select = array( "*" ), $where = array() ) {
         $fields = array();
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -81,17 +73,21 @@
         if ( !empty( $where ) ) {
             $sql = $sql . ' WHERE ' . implode( " AND ", $fields );
         }
-        return db_array(
+        return dbArray(
             $sql,
             $where
         );
     }
 
-    function db_select_one( $table, $select = array( "*" ), $where = array() ) {
-        return array_pop( db_select( $table, $select, $where ) );
+    function dbSelectOne( $table, $select = array( "*" ), $where = array() ) {
+        $array = dbSelect( $table, $select, $where );
+        if ( count( $array ) !== 1 ) {
+            throw new DBException();
+        }
+        return $array[ 0 ];
     }
 
-    function db_update( $table, $set, $where ) {
+    function dbUpdate( $table, $set, $where ) {
         $wfields = array();
         $wreplace = array();
         foreach ( $where as $field => $value ) {
@@ -116,7 +112,7 @@
         return mysql_affected_rows();
     }
 
-    function db_array( $sql, $bind = false, $id_column = false ) {
+    function dbArray( $sql, $bind = false, $id_column = false ) {
         $res = db( $sql, $bind );
         $rows = array();
         if ( $id_column !== false ) {

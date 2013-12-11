@@ -6,7 +6,7 @@
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $user = User::find_by_username( $_SESSION[ 'user' ][ 'username' ] );
+            $user = User::findByUsername( $_SESSION[ 'user' ][ 'username' ] );
             $user->image = new Image();
             $user->image->tmp_name = $image[ 'tmp_name' ];
             $user->image->name = $image[ 'name' ];

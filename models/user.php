@@ -14,8 +14,8 @@
         public $salt;
         protected $tableName = 'users';
 
-        public static function find_by_username( $username ) {
-            $user = db_select_one( 'users', array( 'id' ), compact( "username" ) );
+        public static function findByUsername( $username ) {
+            $user = dbSelectOne( 'users', array( 'id' ), compact( "username" ) );
             if ( empty( $user ) ) {
                 throw new ModelNotFoundException();
             }
@@ -25,36 +25,36 @@
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
-                $user_info = db_select_one( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
                 $this->image = new Image( $user_info[ 'avatarid' ] );
-                $this->id = $this->image->id = $id;
+                $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
                 $this->exists = true;
             }
         }
 
         protected function validate() {
-            $config = getConfig();
+            global $config;
             if ( empty( $this->username ) ) {
-                throw new ModelValidationException( 'empty_user' );
+                throw new ModelValidationException( 'username_empty' );
             }
             if ( strpos( $this->username, ' ' ) || preg_match('#[^a-zA-Z0-9]#', $this->username ) ) {
-                throw new ModelValidationException( 'invalid_username' );
+                throw new ModelValidationException( 'username_invalid' );
             }
             if ( empty( $this->password ) && !$this->exists ) {
-                throw new ModelValidationException( 'empty_pass' );
+                throw new ModelValidationException( 'pass_empty' );
             }
             if ( empty( $this->email ) ) {
-                throw new ModelValidationException( 'empty_mail' );
+                throw new ModelValidationException( 'mail_empty' );
             }
             if ( isset( $this->password ) && strlen( $this->password ) <= $config[ 'pass_len' ] ) {
-                throw new ModelValidationException( 'small_pass' );
+                throw new ModelValidationException( 'pass_small' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
-                throw new ModelValidationException( 'mail_notvalid' );
+                throw new ModelValidationException( 'mail_invalid' );
             }
         }
 
@@ -69,14 +69,14 @@
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             try {
-                $res = db_insert( 
+                $res = dbInsert( 
                     'users', 
                     compact( "username", "password", "email", "salt", "countryid", "dob" )
                 );
             }
             catch ( DBException $e ) {
                 try {
-                    $other_user = User::find_by_username( $username );
+                    $other_user = User::findByUsername( $username );
                     throw new ModelValidationException( 'user_used' );
                 }
                 catch ( ModelNotFoundException $e ) {
@@ -99,7 +99,7 @@
             $countryid = $this->country->id;
             $avatarid = $this->image->id;
             try {
-                $res = db_update(
+                $res = dbUpdate(
                     'users',
                     compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
                     compact( "id" )
@@ -112,7 +112,7 @@
 
         public function authenticatesWithPassword( $password ) {
             $username = $this->username;
-            $row = db_select(
+            $row = dbSelect(
                 'users',
                 array( 'id', 'password', 'salt' ),
                 compact( "username" )

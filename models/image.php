@@ -11,27 +11,26 @@
         public $userid;
         protected $tableName = 'images';
 
-        public static function find_by_user( $user ) {
+        public static function findByUser( $user ) {
             return new Image( $user->avatarid );
         }
 
         public function __construct( $id = false ) {
             if ( $id ) {
                 $this->exists = true;
-                $image_info = db_select_one( 'images', array( '*' ), compact( "id" ) );
+                $image_info = dbSelectOne( 'images', array( '*' ), compact( "id" ) );
                 $this->id = $id;
                 $this->name = $image_info[ 'name' ];
                 $this->ext = Extention::get( $this->name );
-                $config = getConfig();
-                $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
                 global $config;
+                $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
             }
         }
 
         protected function validate() {
             $this->ext = Extention::get( $this->name );
             if ( !Extention::valid( $this->ext ) ) {
-                throw new ModelValidationException( 'image_notvalid' );
+                throw new ModelValidationException( 'image_invalid' );
             }
         }
 
@@ -43,7 +42,7 @@
             $ext = $this->ext;
             $userid = $this->userid;
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
-            $id = db_insert( 
+            $id = dbInsert( 
                 'images', 
                 compact( "userid", "name" )
             );
