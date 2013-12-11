@@ -39,22 +39,22 @@
         protected function validate() {
             $config = getConfig();
             if ( empty( $this->username ) ) {
-                throw new ModelValidationException( 'empty_user' );
+                throw new ModelValidationException( 'username_empty' );
             }
             if ( strpos( $this->username, ' ' ) || preg_match('#[^a-zA-Z0-9]#', $this->username ) ) {
-                throw new ModelValidationException( 'invalid_username' );
+                throw new ModelValidationException( 'username_invalid' );
             }
             if ( empty( $this->password ) && !$this->exists ) {
-                throw new ModelValidationException( 'empty_pass' );
+                throw new ModelValidationException( 'pass_empty' );
             }
             if ( empty( $this->email ) ) {
-                throw new ModelValidationException( 'empty_mail' );
+                throw new ModelValidationException( 'mail_empty' );
             }
             if ( isset( $this->password ) && strlen( $this->password ) <= $config[ 'pass_len' ] ) {
-                throw new ModelValidationException( 'small_pass' );
+                throw new ModelValidationException( 'pass_small' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
-                throw new ModelValidationException( 'mail_notvalid' );
+                throw new ModelValidationException( 'mail_invalid' );
             }
         }
 

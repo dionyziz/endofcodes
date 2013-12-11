@@ -22,20 +22,17 @@
 
 <form id="register-form" action="index.php?resource=user&amp;method=create" method="post">
     <?php
-        if ( isset( $empty_user ) ) { 
+        if ( isset( $username_empty ) ) { 
             ?><p class="error">Please type a username.</p><?php
         }
-        if ( isset( $invalid_username ) ) { 
+        if ( isset( $username_invalid ) ) { 
             ?><p class="error">Please insert a valid username</p><?php
         }
-        else if ( isset( $empty_pass ) ) {
+        else if ( isset( $pass_empty ) ) {
             ?><p class="error">Please type a password.</p><?php
         }
-        else if ( isset( $empty_mail ) ) {
+        else if ( isset( $mail_empty ) ) {
             ?><p class="error">Please type an email.</p><?php
-        }
-        else if ( isset( $empty_pass_repeat ) ) {
-            ?><p class="error">Please repeat your password.</p><?php
         }
     ?>
     <label for="username">Username</label>
@@ -57,10 +54,10 @@
     ?>"/></p>
     <label for="password">Password</label>
     <?php
-        if ( isset( $small_pass ) ) {
+        if ( isset( $pass_small ) ) {
             ?><p class="error">Password should be at least 7 characters long</p><?php
         }
-        if ( isset( $not_matched ) ) {
+        if ( isset( $pass_not_matched ) ) {
             ?><p class="error">Passwords do not match</p><?php
         }
     ?>
@@ -73,7 +70,7 @@
             ?><p class="error">Email is already used</p><?php
             $val = "";
         }
-        else if ( isset( $mail_notvalid ) ) {
+        else if ( isset( $mail_invalid ) ) {
             ?><p class="error">This is not a valid email</p><?php
             $val = "";
         }
@@ -128,16 +125,16 @@
         </select> 
     </p> 
     <?php
-        /*if ( isset( $empty_day ) ) {
+        /*if ( isset( $day_empty ) ) {
             ?><p class="error">Please select a day</p><?php
         }
-        if ( isset( $empty_month ) ) {
+        if ( isset( $month_empty ) ) {
             ?><p class="error">Please select a month</p><?php
         }
-        if ( isset( $empty_year ) ) {
+        if ( isset( $year_empty) ) {
             ?><p class="error">Please select a year</p><?php
         }
-        if ( isset( $empty_country ) ) {
+        if ( isset( $country_empty ) ) {
             ?><p class="error">Please select a country</p><?php
         }*/
     ?>
@@ -156,7 +153,7 @@
         </select> 
     </p>
     <?php
-        /*if ( isset( $not_accepted ) ) {
+        /*if ( isset( $terms_not_accepted ) ) {
             ?><p class="error">Please accept the terms of usage</p><?php
         }
         */

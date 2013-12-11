@@ -17,17 +17,17 @@
     <p>Change password</p>
     <label for="password">Old password</label>
     <?php
-        if ( isset( $wrong_pass ) ) {
+        if ( isset( $old_pass_wrong ) ) {
             ?><p class="error">Old password is incorrect</p><?php
         }
     ?>
     <p><input type="password" name="password" id="password" /></p>
     <label for="password_new">New password</label>
     <?php
-        if ( isset( $pass_not_matched ) ) {
+        if ( isset( $new_pass_not_matched ) ) {
             ?><p class="error">Passwords do not match</p><?php
         }
-        else if ( isset( $small_pass ) ) {
+        else if ( isset( $pass_small ) ) {
             ?><p class="error">Your password should be at least 7 characters long</p><?php
         }
     ?>
@@ -53,7 +53,7 @@
 <form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data"> 
     <label for="image">Upload an avatar</label>
     <?php
-        if ( isset( $image_notvalid ) ) {
+        if ( isset( $image_invalid ) ) {
             ?><p class="error">This isn't an image</p><?php
         }
     ?>
