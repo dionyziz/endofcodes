@@ -29,10 +29,7 @@
                 $country->name = '';
                 $country->id = 0;
             }
-            $_SESSION[ 'create_post' ] = array(
-                'username' => $username,
-                'email' => $email
-            );
+            $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
             $user = new User();
             $user->username = $username;
             $user->password = $password;
