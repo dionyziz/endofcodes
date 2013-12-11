@@ -26,7 +26,7 @@
             ?><p class="error">Please type a username.</p><?php
         }
         if ( isset( $username_invalid ) ) { 
-            ?><p class="error">Please insert a valid username</p><?php
+            ?><p class="error">Usernames can only have numbers, letters and "."</p><?php
         }
         else if ( isset( $pass_empty ) ) {
             ?><p class="error">Please type a password.</p><?php
