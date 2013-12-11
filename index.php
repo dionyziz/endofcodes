@@ -1,6 +1,6 @@
 <?php
-    include_once 'header.php';
     include_once 'models/dependencies.php';
+    include_once 'header.php';
 
     $methods = array(
         'create' => 1,

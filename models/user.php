@@ -37,7 +37,7 @@
         }
 
         protected function validate() {
-            $config = getConfig();
+            global $config;
             if ( empty( $this->username ) ) {
                 throw new ModelValidationException( 'username_empty' );
             }
