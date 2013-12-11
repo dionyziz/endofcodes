@@ -10,12 +10,13 @@
             }*/
             include_once 'models/user.php';
             include_once 'models/country.php';
-            include_once 'database/population/months_array.php';
 
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'pass_not_matched' => true ) );
             }
-            $months = getMonths();
+            for ( $i = 1; $i <= 12; ++$i ) {
+                $months[ $i ] = jdmonthname( $i, 0 );
+            }
             $month = array_search( $month, $months );
             if ( is_string( $day ) || is_string( $month ) || is_string( $year ) ) {
                 $day = $month = $year = 0;
@@ -113,8 +114,6 @@
         public static function createView( $username_empty, $username_invalid, $mail_empty, $pass_empty, $pass_not_matched,
                 $user_used, $pass_small, $mail_used, $mail_invalid/*, $country_empty, $terms_not_accepted, $day_empty, $month_empty, $year_empty*/ ) {
             include_once 'models/country.php'; 
-            include_once 'database/population/months_array.php';
-            $months = getMonths();
             $countries = Country::findAll();
             include 'views/user/create.php';
         }
