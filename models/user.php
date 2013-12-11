@@ -15,8 +15,10 @@
         protected $tableName = 'users';
 
         public static function findByUsername( $username ) {
-            $user = dbSelectOne( 'users', array( 'id' ), compact( "username" ) );
-            if ( empty( $user ) ) {
+            try {
+                $user = dbSelectOne( 'users', array( 'id' ), compact( "username" ) );
+            }
+            catch ( DBException $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );

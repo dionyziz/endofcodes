@@ -102,8 +102,8 @@
         <select name="month">
             <option>Select Month</option>
             <?php
-                for ( $i = 1; $i <= 12; ++$i ) {
-                    $month = jdmonthname( $i, 0 );
+                for ( $i = 30; $i <= 360; $i += 30 ) {
+                    $month = jdmonthname( $i + 30, 0 );
                     ?><option value="<?php
                         echo $month;
                     ?>"><?php
