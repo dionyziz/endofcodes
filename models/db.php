@@ -80,7 +80,11 @@
     }
 
     function dbSelectOne( $table, $select = array( "*" ), $where = array() ) {
-        return array_pop( dbSelect( $table, $select, $where ) );
+        $array = array_pop( dbSelect( $table, $select, $where ) );
+        if ( count( $array ) !== 1 ) {
+            throw new DBException();
+        }
+        return $array;
     }
 
     function dbUpdate( $table, $set, $where ) {
