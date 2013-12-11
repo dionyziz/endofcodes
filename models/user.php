@@ -14,8 +14,8 @@
         public $salt;
         protected $tableName = 'users';
 
-        public static function find_by_username( $username ) {
-            $user = db_select_one( 'users', array( 'id' ), compact( "username" ) );
+        public static function findByUsername( $username ) {
+            $user = dbSelectOne( 'users', array( 'id' ), compact( "username" ) );
             if ( empty( $user ) ) {
                 throw new ModelNotFoundException();
             }
@@ -25,7 +25,7 @@
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
-                $user_info = db_select_one( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
@@ -69,14 +69,14 @@
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];
             try {
-                $res = db_insert( 
+                $res = dbInsert( 
                     'users', 
                     compact( "username", "password", "email", "salt", "countryid", "dob" )
                 );
             }
             catch ( DBException $e ) {
                 try {
-                    $other_user = User::find_by_username( $username );
+                    $other_user = User::findByUsername( $username );
                     throw new ModelValidationException( 'user_used' );
                 }
                 catch ( ModelNotFoundException $e ) {
@@ -99,7 +99,7 @@
             $countryid = $this->country->id;
             $avatarid = $this->image->id;
             try {
-                $res = db_update(
+                $res = dbUpdate(
                     'users',
                     compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
                     compact( "id" )
@@ -112,7 +112,7 @@
 
         public function authenticatesWithPassword( $password ) {
             $username = $this->username;
-            $row = db_select(
+            $row = dbSelect(
                 'users',
                 array( 'id', 'password', 'salt' ),
                 compact( "username" )

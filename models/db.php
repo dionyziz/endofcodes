@@ -39,7 +39,7 @@
         return $res;
     }
 
-    function db_insert( $table, $set ) {
+    function dbInsert( $table, $set ) {
         $fields = array();
         foreach ( $set as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -57,7 +57,7 @@
         return mysql_insert_id();
     }
 
-    function db_delete( $table, $where ) {
+    function dbDelete( $table, $where ) {
         $fields = array();
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -72,7 +72,7 @@
         return mysql_affected_rows();
     }
 
-    function db_select( $table, $select = array( "*" ), $where = array() ) {
+    function dbSelect( $table, $select = array( "*" ), $where = array() ) {
         $fields = array();
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -81,17 +81,17 @@
         if ( !empty( $where ) ) {
             $sql = $sql . ' WHERE ' . implode( " AND ", $fields );
         }
-        return db_array(
+        return dbArray(
             $sql,
             $where
         );
     }
 
-    function db_select_one( $table, $select = array( "*" ), $where = array() ) {
-        return array_pop( db_select( $table, $select, $where ) );
+    function dbSelectOne( $table, $select = array( "*" ), $where = array() ) {
+        return array_pop( dbSelect( $table, $select, $where ) );
     }
 
-    function db_update( $table, $set, $where ) {
+    function dbUpdate( $table, $set, $where ) {
         $wfields = array();
         $wreplace = array();
         foreach ( $where as $field => $value ) {
@@ -116,7 +116,7 @@
         return mysql_affected_rows();
     }
 
-    function db_array( $sql, $bind = false, $id_column = false ) {
+    function dbArray( $sql, $bind = false, $id_column = false ) {
         $res = db( $sql, $bind );
         $rows = array();
         if ( $id_column !== false ) {

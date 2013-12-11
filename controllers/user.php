@@ -56,7 +56,7 @@
             include_once 'models/image.php';
             include_once 'models/country.php';
             try { 
-                $user = User::find_by_username( $username );
+                $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();

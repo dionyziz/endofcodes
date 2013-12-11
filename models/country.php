@@ -6,7 +6,7 @@
 
         public static function findByName( $name ) {
             try {
-                $res = db_select_one( "countries", array( 'id' ), compact( "name" ) );
+                $res = dbSelectOne( "countries", array( 'id' ), compact( "name" ) );
             }
             catch ( DBException $e ) {
                 throw new ModelNotFoundException();
@@ -15,12 +15,12 @@
         }
 
         public static function findAll() {
-            return db_select( 'countries' );
+            return dbSelect( 'countries' );
         }
 
         public function __construct( $id = false ) {
             if ( $id ) {
-                $row = db_select_one( "countries", array( 'name', 'shortname' ), compact( "id" ) );
+                $row = dbSelectOne( "countries", array( 'name', 'shortname' ), compact( "id" ) );
                 $this->name = $row[ 'name' ];
                 $this->id = $id;
                 $this->shortname = $row[ 'shortname' ];
