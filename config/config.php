@@ -13,7 +13,7 @@
             'paths' => array(
                 'avatar_path' => 'sample_path'
             ),
-            'pass_len' => 'sample_pass_len'
+            'pass_len' => '6'
         );
         return $config;
     }
