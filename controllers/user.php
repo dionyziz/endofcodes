@@ -73,12 +73,10 @@
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
-                    if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
-                        if ( $password_new !== $password_repeat ) {
-                            go( 'user', 'update', array( 'pass_not_matched' => true ) );
-                        }
-                        $user->password = $password_new;
+                    if ( $password_new !== $password_repeat ) {
+                        go( 'user', 'update', array( 'pass_not_matched' => true ) );
                     }
+                    $user->password = $password_new;
                 }
                 else {
                     go( 'user', 'update', array( 'wrong_pass' => true ) );
