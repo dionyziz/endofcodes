@@ -10,7 +10,7 @@
             ?><p class="error">Email is not valid</p><?php
         }
         if ( isset( $mail_used ) ) {
-            ?><p class="error">Email is used</p><?php
+            ?><p class="error">Email is already in use.</p><?php
         }
     ?>
     <p><input type="text" name="email" id="email" /></p>
