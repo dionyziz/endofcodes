@@ -8,10 +8,12 @@
                 'dbname' => 'sample_dbname'
             ),
             'files' => array(
-                'avatar_extentions' => array( 'jpg', 'png', 'jpeg' )
+                'avatar_extentions' => array( 'jpg', 'png', 'jpeg' ),
+                'flag_extention' => 'png' 
             ),
             'paths' => array(
-                'avatar_path' => 'sample_path'
+                'avatar_path' => 'sample_path',
+                'flag_path' => 'sample_path'
             ),
             'pass_len' => '6'
         );
