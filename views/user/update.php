@@ -50,7 +50,7 @@
     <p><input type="submit" value="Save settings" /></p>
 </form>
 
-<form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data"> 
+<form action="index.php?resource=image&amp;method=create" method="post" enctype="multipart/form-data"> 
     <label for="image">Upload an avatar</label>
     <?php
         if ( isset( $image_invalid ) ) {
