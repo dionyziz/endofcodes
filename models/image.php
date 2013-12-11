@@ -11,7 +11,7 @@
         public $userid;
         protected $tableName = 'images';
 
-        public static function find_by_user( $user ) {
+        public static function findByUser( $user ) {
             return new Image( $user->avatarid );
         }
 
