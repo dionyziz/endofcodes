@@ -35,10 +35,4 @@
             $this->error = $error;
         }
     }
-
-    class DBException extends Exception {
-        public function __construct() {
-            parent::__construct( 'Database error' );
-        }
-    }
 ?>

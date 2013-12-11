@@ -1,18 +1,10 @@
 <?php
-    /*function prep_query( $code, $data = array() ) {
-        $parts = explode( '?', $code );
-        $sql = '';
-        foreach( $data as $value ) {
-            $sql .= array_shift( $parts );
-            $sql .= '"' . mysql_real_escape_string( $value ) . '"';
+    class DBException extends Exception {
+        public function __construct() {
+            parent::__construct( 'Database error' );
         }
-        $sql .= array_shift( $parts );
-        $res = mysql_query( $sql );
-        if ( $res !== false ) {
-            return $res;
-        }
-        die( 'MySQL error: ' . mysql_error() );
-    }*/
+    }
+
     function db( $sql, $bind = array() ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
