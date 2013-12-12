@@ -52,7 +52,7 @@
             if ( empty( $this->email ) ) {
                 throw new ModelValidationException( 'mail_empty' );
             }
-            if ( isset( $this->password ) && strlen( $this->password ) <= $config[ 'pass_len' ] ) {
+            if ( isset( $this->password ) && strlen( $this->password ) < $config[ 'pass_min_len' ] ) {
                 throw new ModelValidationException( 'pass_small' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
