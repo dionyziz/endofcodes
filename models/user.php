@@ -47,16 +47,19 @@
                 throw new ModelValidationException( 'username_invalid' );
             }
             if ( empty( $this->password ) && !$this->exists ) {
-                throw new ModelValidationException( 'pass_empty' );
+                throw new ModelValidationException( 'password_empty' );
             }
             if ( empty( $this->email ) ) {
-                throw new ModelValidationException( 'mail_empty' );
+                throw new ModelValidationException( 'email_empty' );
             }
             if ( isset( $this->password ) && strlen( $this->password ) < $config[ 'pass_min_len' ] ) {
-                throw new ModelValidationException( 'pass_small' );
+                if ( $this->exists ) {
+                    throw new ModelValidationException( 'password_new_small' );
+                }
+                throw new ModelValidationException( 'password_small' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
-                throw new ModelValidationException( 'mail_invalid' );
+                throw new ModelValidationException( 'email_invalid' );
             }
         }
 
@@ -79,10 +82,10 @@
             catch ( DBException $e ) {
                 try {
                     $other_user = User::findByUsername( $username );
-                    throw new ModelValidationException( 'user_used' );
+                    throw new ModelValidationException( 'username_used' );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    throw new ModelValidationException( 'mail_used' );
+                    throw new ModelValidationException( 'email_used' );
                 }
             }
             $this->exists = true;
@@ -108,7 +111,7 @@
                 );
             }
             catch ( DBException $e ) {
-                throw new ModelValidationException( 'mail_used' );
+                throw new ModelValidationException( 'email_used' );
             }
         }
 

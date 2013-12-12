@@ -28,16 +28,16 @@
         if ( isset( $username_invalid ) ) { 
             ?><p class="error">Usernames can only have numbers, letters and "."</p><?php
         }
-        else if ( isset( $pass_empty ) ) {
+        else if ( isset( $password_empty ) ) {
             ?><p class="error">Please type a password.</p><?php
         }
-        else if ( isset( $mail_empty ) ) {
+        else if ( isset( $email_empty ) ) {
             ?><p class="error">Please type an email.</p><?php
         }
     ?>
     <label for="username">Username</label>
     <?php
-        if ( isset( $user_used ) ) {
+        if ( isset( $username_used ) ) {
             ?><p class="error">Username already exists</p><?php
             $val = "";
         }
@@ -54,10 +54,10 @@
     ?>"/></p>
     <label for="password">Password</label>
     <?php
-        if ( isset( $pass_small ) ) {
+        if ( isset( $password_small ) ) {
             ?><p class="error">Password should be at least 7 characters long</p><?php
         }
-        if ( isset( $pass_not_matched ) ) {
+        if ( isset( $password_not_matched ) ) {
             ?><p class="error">Passwords do not match</p><?php
         }
     ?>
@@ -66,11 +66,11 @@
     <p><input type="password" id="password_repeat" name="password_repeat" /></p>
     <label for="email">Email</label>
     <?php
-        if ( isset( $mail_used ) ) {
+        if ( isset( $email_used ) ) {
             ?><p class="error">Email is already used</p><?php
             $val = "";
         }
-        else if ( isset( $mail_invalid ) ) {
+        else if ( isset( $email_invalid ) ) {
             ?><p class="error">This is not a valid email</p><?php
             $val = "";
         }
@@ -139,13 +139,6 @@
             ?>
         </select> 
     </p>
-    <?php
-        /*if ( isset( $terms_not_accepted ) ) {
-            ?><p class="error">Please accept the terms of usage</p><?php
-        }
-        */
-    ?>
-    <!--<p><input type="checkbox" name="accept" />I agree on the <a href="">Terms of Usage</a></p>-->
     <p><input type="submit" value="Register" /></p>
 </form>
 

@@ -6,7 +6,7 @@
             include_once 'models/country.php';
 
             if ( $password !== $password_repeat ) {
-                go( 'user', 'create', array( 'pass_not_matched' => true ) );
+                go( 'user', 'create', array( 'password_not_matched' => true ) );
             }
             $day = intval( $day );
             $month = intval( $month );
@@ -66,12 +66,12 @@
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
                     if ( $password_new !== $password_repeat ) {
-                        go( 'user', 'update', array( 'new_pass_not_matched' => true ) );
+                        go( 'user', 'update', array( 'password_new_not_matched' => true ) );
                     }
                     $user->password = $password_new;
                 }
                 else {
-                    go( 'user', 'update', array( 'old_pass_wrong' => true ) );
+                    go( 'user', 'update', array( 'password_wrong' => true ) );
                 }
             }
             if ( !empty( $email ) ) {
@@ -102,14 +102,14 @@
             go();
         }
 
-        public static function createView( $username_empty, $username_invalid, $mail_empty, $pass_empty, $pass_not_matched,
-                $user_used, $pass_small, $mail_used, $mail_invalid/*, $country_empty, $terms_not_accepted, $day_empty, $month_empty, $year_empty*/ ) {
+        public static function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid, 
+                $password_empty, $password_not_matched, $password_small ) {
             include_once 'models/country.php'; 
             $countries = Country::findAll();
             include 'views/user/create.php';
         }
 
-        public static function updateView( $image_invalid, $pass_small, $new_pass_not_matched, $old_pass_wrong, $mail_invalid, $mail_used, $country_empty ) {
+        public static function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong, $email_invalid, $email_used ) {
             include_once 'models/country.php';
             $countries = Country::findAll();
             include 'views/user/update.php';

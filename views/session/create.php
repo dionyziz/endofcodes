@@ -3,10 +3,10 @@
 ?>
 
 <div id="login"><?php
-        if ( isset( $user_empty ) ) {
+        if ( isset( $username_empty ) ) {
             ?><p class="error">Please type a username.</p><?php
         }
-        else if ( isset( $pass_empty ) ) {
+        else if ( isset( $password_empty ) ) {
             ?><p class="error">Please type a password.</p><?php
         }
     ?>
@@ -14,14 +14,14 @@
     <form id="login-form" action="index.php?resource=session&amp;method=create" method="POST">
         <label for="username">Username</label>
         <?php
-            if ( isset( $user_wrong ) ) {
+            if ( isset( $username_wrong ) ) {
                 ?><p class="error">Username doesn't exist</p><?php
             }
         ?>
         <p><input type="text" name="username" id="username" /></p>
         <label for="password">Password</label>
         <?php
-            if ( isset( $pass_wrong ) ) {
+            if ( isset( $password_wrong ) ) {
                 ?><p class="error">Password is incorrect</p><?php
             }
         ?>
