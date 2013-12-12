@@ -3,7 +3,7 @@
         public $name;
         public $id;
         public $shortname;
-        public $tableName = 'countries';
+        protected $tableName = 'countries';
 
         public static function findAll() { 
             return dbSelect( 'countries' );

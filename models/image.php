@@ -51,6 +51,7 @@
             $this->target_path = $target_path . $name;
             $this->id = $id;
             $this->upload();
+            $this->exists = true;
         }
 
         public function upload() {
