@@ -17,12 +17,13 @@
 
         public function __construct( $id = false ) {
             if ( $id ) {
+                global $config;
+
                 $this->exists = true;
                 $image_info = dbSelectOne( 'images', array( '*' ), compact( "id" ) );
                 $this->id = $id;
                 $this->name = $image_info[ 'name' ];
                 $this->ext = Extention::get( $this->name );
-                global $config;
                 $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
             }
         }
