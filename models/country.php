@@ -4,16 +4,6 @@
         public $id;
         public $shortname;
 
-        public static function findByName( $name ) {
-            try {
-                $res = dbSelectOne( "countries", array( 'id' ), compact( "name" ) );
-            }
-            catch ( DBException $e ) {
-                throw new ModelNotFoundException();
-            }
-            return new Country( $res[ 'id' ] );
-        }
-
         public static function findAll() {
             return dbSelect( 'countries' );
         }
