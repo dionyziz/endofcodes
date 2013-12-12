@@ -74,9 +74,6 @@
                     go( 'user', 'update', array( 'password_wrong' => true ) );
                 }
             }
-            /*if ( !empty( $email ) ) {
-                $user->email = $email;
-            }*/
             $user->email = $email;
             try {
                 $user->country = new Country( $countryid );
