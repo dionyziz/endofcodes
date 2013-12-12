@@ -112,7 +112,7 @@
             include_once 'models/country.php';
             include_once 'models/user.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthrizedException();
+                throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
             $countries = Country::findAll();

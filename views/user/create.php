@@ -102,10 +102,10 @@
         <select name="month">
             <option>Select Month</option>
             <?php
-                for ( $i = 30; $i <= 360; $i += 30 ) {
-                    $month = jdmonthname( $i + 30, 0 );
+                for ( $i = 1; $i <= 12; ++$i ) {
+                    $month = date( "M", mktime( 0, 0, 0, $i, 1, 2000 ) );
                     ?><option value="<?php
-                        echo $i / 30;
+                        echo $i;
                     ?>"><?php
                         echo $month;
                     ?></option><?php
