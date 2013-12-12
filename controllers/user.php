@@ -1,13 +1,7 @@
 <?php
     class UserController {
         public static function create( $username = '', $password = '', $password_repeat = '', $email = '', 
-                $countryname = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
-            /*if ( $accept === false ) {
-                go( 'user', 'create', array( 'not_accepted' => true ) );
-            }
-            if ( !array_search( $month, $months ) ) {
-                go( 'user', 'create', array( 'empty_month' => true ) );
-            }*/
+                $countryid = '', $day = '', $month = '', $year = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
 
@@ -21,13 +15,11 @@
                 $day = $month = $year = 0;
             }
             $dob = $year . '-' . $month . '-' . $day; 
-            $country = new Country();
             try {
-                $country = Country::findByName( $countryname );
+                $country = new Country( $countryid );
             }
             catch ( ModelNotFoundException $e ) {
-                $country->name = '';
-                $country->id = 0;
+                $country = new Country();
             }
             $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
             $user = new User();
@@ -64,7 +56,7 @@
             include_once 'views/user/view.php';
         }
 
-        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryname = '', $email = '' ) {
+        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryid = '', $email = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
@@ -86,7 +78,7 @@
                 $user->email = $email;
             }
             try {
-                $user->country = Country::findByName( $countryname );
+                $user->country = new Country( $countryid );
             }
             catch ( ModelNotFoundException $e ) {
             }

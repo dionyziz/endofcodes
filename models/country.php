@@ -20,7 +20,12 @@
 
         public function __construct( $id = false ) {
             if ( $id ) {
-                $row = dbSelectOne( "countries", array( 'name', 'shortname' ), compact( "id" ) );
+                try {
+                    $row = dbSelectOne( "countries", array( 'name', 'shortname' ), compact( "id" ) );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 $this->name = $row[ 'name' ];
                 $this->id = $id;
                 $this->shortname = $row[ 'shortname' ];

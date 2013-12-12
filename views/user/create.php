@@ -105,7 +105,7 @@
                 for ( $i = 30; $i <= 360; $i += 30 ) {
                     $month = jdmonthname( $i + 30, 0 );
                     ?><option value="<?php
-                        echo $month;
+                        echo $i / 30;
                     ?>"><?php
                         echo $month;
                     ?></option><?php
@@ -125,27 +125,13 @@
             ?>
         </select> 
     </p> 
-    <?php
-        /*if ( isset( $day_empty ) ) {
-            ?><p class="error">Please select a day</p><?php
-        }
-        if ( isset( $month_empty ) ) {
-            ?><p class="error">Please select a month</p><?php
-        }
-        if ( isset( $year_empty) ) {
-            ?><p class="error">Please select a year</p><?php
-        }
-        if ( isset( $country_empty ) ) {
-            ?><p class="error">Please select a country</p><?php
-        }*/
-    ?>
     <p>
-        <select name="countryname">
+        <select name="countryid">
             <option>Select Country</option>
             <?php
-                foreach ( $countries as $country ) {
+                foreach ( $countries as $key => $country ) {
                     ?><option value="<?php
-                        echo $country[ 'name' ];
+                        echo $key + 1;
                     ?>"><?php
                         echo $country[ 'name' ];
                     ?></option><?php
