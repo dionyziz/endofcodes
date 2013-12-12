@@ -14,11 +14,10 @@
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'pass_not_matched' => true ) );
             }
-            for ( $i = 1; $i <= 12; ++$i ) {
-                $months[ $i ] = jdmonthname( $i, 0 );
-            }
-            $month = array_search( $month, $months );
-            if ( is_string( $day ) || is_string( $month ) || is_string( $year ) ) {
+            $day = intval( $day );
+            $month = intval( $month );
+            $year = intval( $year );
+            if ( !checkdate( $day, $month, $year ) ) {
                 $day = $month = $year = 0;
             }
             $dob = $year . '-' . $month . '-' . $day; 
