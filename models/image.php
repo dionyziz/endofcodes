@@ -38,7 +38,7 @@
         protected function create() {
             global $config;
 
-            $tmp_name = basename( $this->tmp_name );
+            $tmp_name = $this->tmp_name;
             $name = basename( $this->name );
             $ext = $this->ext;
             $userid = $this->userid;
