@@ -49,7 +49,7 @@
             if ( empty( $this->password ) && !$this->exists ) {
                 throw new ModelValidationException( 'password_empty' );
             }
-            if ( empty( $this->email ) ) {
+            if ( !$this->exists && empty( $this->email ) ) {
                 throw new ModelValidationException( 'email_empty' );
             }
             if ( isset( $this->password ) && strlen( $this->password ) < $config[ 'pass_min_len' ] ) {

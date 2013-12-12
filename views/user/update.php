@@ -13,7 +13,9 @@
             ?><p class="error">Email is already in use.</p><?php
         }
     ?>
-    <p><input type="text" name="email" id="email" /></p>
+    <p><input type="text" name="email" id="email" value="<?php
+        echo $user->email;
+    ?>"/></p>
     <p>Change password</p>
     <label for="password">Old password</label>
     <?php
