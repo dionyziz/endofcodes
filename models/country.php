@@ -3,8 +3,9 @@
         public $name;
         public $id;
         public $shortname;
+        public $tableName = 'countries';
 
-        public static function findAll() {
+        public static function findAll() { 
             return dbSelect( 'countries' );
         }
 
