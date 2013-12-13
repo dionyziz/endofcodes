@@ -1,18 +1,10 @@
 <?php
-    /*function prep_query( $code, $data = array() ) {
-        $parts = explode( '?', $code );
-        $sql = '';
-        foreach( $data as $value ) {
-            $sql .= array_shift( $parts );
-            $sql .= '"' . mysql_real_escape_string( $value ) . '"';
+    class DBException extends Exception {
+        public function __construct( $error ) {
+            parent::__construct( 'Database error: ' . $error );
         }
-        $sql .= array_shift( $parts );
-        $res = mysql_query( $sql );
-        if ( $res !== false ) {
-            return $res;
-        }
-        die( 'MySQL error: ' . mysql_error() );
-    }*/
+    }
+
     function db( $sql, $bind = array() ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
@@ -33,20 +25,13 @@
         }
         $finalsql = strtr( $sql, $bind );
         $res = mysql_query( $finalsql );
-        /*if ( $res === false ) {
-            die( "SQL query died with the following error\n\""
-            . mysql_error()
-            . "\"\n\nThe query given was:\n"
-            . $sql
-            . "\n\nThe SQL bindings were:\n"
-            . print_r( $bind, true )
-            . "The query executed was:\n"
-            . $finalsql );
-        }*/
+        if ( $res === false ) {
+            throw new DBException( mysql_error() );
+        }
         return $res;
     }
 
-    function db_insert( $table, $set ) {
+    function dbInsert( $table, $set ) {
         $fields = array();
         foreach ( $set as $field => $value ) {
             $fields[] = "$field = :$field";
@@ -64,13 +49,13 @@
         return mysql_insert_id();
     }
 
-    function db_delete( $table, $where ) {
+    function dbDelete( $table, $where ) {
         $fields = array();
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
         db(
-            'INSERT FROM '
+            'DELETE FROM '
             . $table
             . ' WHERE '
             . implode( " AND ", $fields ),
@@ -79,23 +64,30 @@
         return mysql_affected_rows();
     }
 
-    function db_select( $table, $select = array( "*" ), $where ) {
+    function dbSelect( $table, $select = array( "*" ), $where = array() ) {
         $fields = array();
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
-        return db(
-            'SELECT '
-            . implode( ",", $select )
-            . ' FROM '
-            . $table
-            . ' WHERE '
-            . implode( " AND ", $fields ),
+        $sql =  'SELECT ' . implode( ",", $select ) . ' FROM ' . $table;
+        if ( !empty( $where ) ) {
+            $sql = $sql . ' WHERE ' . implode( " AND ", $fields );
+        }
+        return dbArray(
+            $sql,
             $where
         );
     }
 
-    function db_update( $table, $set, $where ) {
+    function dbSelectOne( $table, $select = array( "*" ), $where = array() ) {
+        $array = dbSelect( $table, $select, $where );
+        if ( count( $array ) !== 1 ) {
+            throw new DBException( mysql_error() );
+        }
+        return $array[ 0 ];
+    }
+
+    function dbUpdate( $table, $set, $where ) {
         $wfields = array();
         $wreplace = array();
         foreach ( $where as $field => $value ) {
@@ -118,5 +110,21 @@
             array_merge( $wreplace, $sreplace )
         );
         return mysql_affected_rows();
+    }
+
+    function dbArray( $sql, $bind = false, $id_column = false ) {
+        $res = db( $sql, $bind );
+        $rows = array();
+        if ( $id_column !== false ) {
+            while ( $row = mysql_fetch_array( $res ) ) {
+                $rows[ $row[ $id_column ] ] = $row;
+            }
+        }
+        else {
+            while ( $row = mysql_fetch_array( $res ) ) {
+                $rows[] = $row;
+            }
+        }
+        return $rows;
     }
 ?>

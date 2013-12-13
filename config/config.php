@@ -12,7 +12,8 @@
             ),
             'paths' => array(
                 'avatar_path' => 'sample_path'
-            )
+            ),
+            'pass_min_len' => 7
         );
         return $config;
     }

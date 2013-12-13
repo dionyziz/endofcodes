@@ -1,54 +1,63 @@
 <?php
-    class Image {
-        public static function create( $username, $tmp_name, $imagename, $userid ) {
+    include_once 'models/user.php';
+    include_once 'models/extentions.php';
+
+    class Image extends ActiveRecordBase {
+        public $tmp_name;
+        public $name;
+        public $id;
+        public $target_path;
+        public $ext;
+        public $userid;
+        protected $tableName = 'images';
+
+        public static function findByUser( $user ) {
+            return new Image( $user->avatarid );
+        }
+
+        public function __construct( $id = false ) {
+            if ( $id ) {
+                global $config;
+
+                $this->exists = true;
+                $image_info = dbSelectOne( 'images', array( '*' ), compact( "id" ) );
+                $this->id = $id;
+                $this->name = $image_info[ 'name' ];
+                $this->ext = Extention::get( $this->name );
+                $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
+            }
+        }
+
+        protected function validate() {
+            $this->ext = Extention::get( $this->name );
+            if ( !Extention::valid( $this->ext ) ) {
+                throw new ModelValidationException( 'image_invalid' );
+            }
+        }
+
+        protected function create() {
             global $config;
-            $ext = Extention::get( $imagename ); 
-            if ( !Extention::valid( $ext ) ) {
-                throw new ModelValidationException( 'notvalid' );
-            }
+
+            $tmp_name = $this->tmp_name;
+            $name = basename( $this->name );
+            $ext = $this->ext;
+            $userid = $this->userid;
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
-            $id = db_insert( 
+            $id = dbInsert( 
                 'images', 
-                compact( "userid", "imagename" ) 
+                compact( "userid", "name" )
             );
-            $imagename = "$id" . "." . $ext;
-            $target_path = $target_path . $imagename;
-            Image::upload( $tmp_name, $target_path );
-            Image::update( $username, $id );
+            $name = $id . "." . $ext;
+            $this->target_path = $target_path . $name;
+            $this->id = $id;
+            $this->upload();
+            $this->exists = true;
         }
 
-        public static function getCurrentImage( $username ) {
-            $res = db(
-                'SELECT
-                    users.avatarid AS avatarid,
-                    images.imagename AS imagename
-                FROM
-                    users CROSS JOIN images ON
-                    users.avatarid = images.imageid
-                WHERE
-                    username = :username
-                LIMIT 1;', 
-                compact( "username" )
-            );
-            if ( mysql_num_rows( $res ) == 1 ) {
-                $row = mysql_fetch_array( $res );
-                $ext = Extention::get( $row[ 'imagename' ] );
-                $id = $row[ 'avatarid' ];
-                return "$id" . "." . $ext;
-            }
-            return false;
-        }
-
-        public static function upload( $tmp_name, $target_path ) {
+        public function upload() {
+            $tmp_name = $this->tmp_name;
+            $target_path = $this->target_path;
             return move_uploaded_file( $tmp_name, $target_path );
-        }
-
-        public static function update( $username, $avatarid ) {
-            db_update( 
-                'users', 
-                compact( "avatarid" ), 
-                compact( "username" )
-            );
         }
     }
 ?>

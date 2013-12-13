@@ -1,83 +1,121 @@
 <?php
     class UserController {
-        public static function create( $username = '', $password = '', $email = '' ) {
-            include 'models/users.php';
-            include 'models/mail.php';
-            $_SESSION[ 'create_post' ] = array(
-                'username' => $username,
-                'email' => $email
-            );
-            if ( !empty( $username ) && !empty( $password ) && !empty( $email ) ) {
-                try {
-                    $id = User::create( $username, $password, $email );
-                }
-                catch( ModelValidationException $e ) {
-                    throw new RedirectException( 'index.php?resource=user&method=create&' . $e->error . '=yes' );
-                }
-                $_SESSION[ 'user' ] = array(
-                    'userid' => $id,
-                    'username' => $username
-                );
-                throw new RedirectException( 'index.php?resource=dashboard&method=view' );
+        public static function create( $username = '', $password = '', $password_repeat = '', $email = '', 
+                $countryid = '', $day = '', $month = '', $year = '' ) {
+            include_once 'models/user.php';
+            include_once 'models/country.php';
+
+            if ( $password !== $password_repeat ) {
+                go( 'user', 'create', array( 'password_not_matched' => true ) );
             }
-            if ( empty( $username ) ) {
-                throw new RedirectException( 'index.php?empty_user=yes&resource=user&method=create' );
+            $day = intval( $day );
+            $month = intval( $month );
+            $year = intval( $year );
+            if ( !checkdate( $day, $month, $year ) ) {
+                $day = $month = $year = 0;
             }
-            if ( empty( $password ) ) {
-                throw new RedirectException( 'index.php?empty_pass=yes&resource=user&method=create' );
+            $dob = $year . '-' . $month . '-' . $day; 
+            try {
+                $country = new Country( $countryid );
             }
-            throw new RedirectException( 'index.php?empty_mail=yes&resource=user&method=create' );
+            catch ( ModelNotFoundException $e ) {
+                $country = new Country();
+            }
+            $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
+            $user = new User();
+            $user->username = $username;
+            $user->password = $password;
+            $user->email = $email;
+            $user->dob = $dob;
+            $user->country = $country;
+            try {
+                $user->save();
+                $id = $user->id;
+            }
+            catch( ModelValidationException $e ) {
+                go( 'user', 'create', array( $e->error => true ) );
+            }
+            $_SESSION[ 'user' ] = compact( 'id', 'username' );
+            go();
         }
 
-        public static function view( $username, $notvalid ) {
+        public static function view( $username ) {
             if ( $username === NULL ) {
                 throw new HTTPNotFoundException();
             }
-            include 'models/users.php';
-            include 'models/extentions.php';
-            include 'models/image.php';
-            $credentials = User::get( $username );
-            $config = getConfig();
-            if ( !$credentials ) {
+            include_once 'models/user.php';
+            include_once 'models/extentions.php';
+            include_once 'models/image.php';
+            include_once 'models/country.php';
+            try { 
+                $user = User::findByUsername( $username );
+            }
+            catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
-            $avatarname = Image::getCurrentImage( $username );
-            $target_path = $config[ 'paths' ][ 'avatar_path' ] . $avatarname;
-            include 'views/user/view.php';
+            include_once 'views/user/view.php';
         }
 
-        public static function update( $password_old, $password_new, $password_repeat ) {
-            include 'models/users.php';
+        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryid = '', $email = '' ) {
+            include_once 'models/user.php';
+            include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $username = $_SESSION[ 'user' ][ 'username' ];
-            if ( User::authenticateUser( $username, $password_old ) ) {
-                if ( $password_new != $password_repeat ) {
-                    throw new RedirectException( 'index.php?resource=user&method=update&not_matched=yes' );
+            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
+            if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
+                if ( $user->authenticatesWithPassword( $password ) ) {
+                    if ( $password_new !== $password_repeat ) {
+                        go( 'user', 'update', array( 'password_new_not_matched' => true ) );
+                    }
+                    $user->password = $password_new;
                 }
-                User::update( $username, $password_new );
-                throw new RedirectException( 'index.php?resource=dashboard&method=view');
+                else {
+                    go( 'user', 'update', array( 'password_wrong' => true ) );
+                }
             }
-            throw new RedirectException( 'index.php?resource=user&method=update&old_pass=yes' );
+            $user->email = $email;
+            try {
+                $user->country = new Country( $countryid );
+            }
+            catch ( ModelNotFoundException $e ) {
+            }
+            try { 
+                $user->save();
+            }
+            catch ( ModelValidationException $e ) {
+                go( 'user', 'update', array( $e->error => true ) );
+            }
+            go();
         }
 
         public static function delete() {
-            include 'models/users.php';
+            include_once 'models/user.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $username = $_SESSION[ 'user' ][ 'username' ];
+            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
+            $user->delete();
             unset( $_SESSION[ 'user' ] );
-            User::delete( $username );
-            throw new RedirectException( 'index.php?resource=dashboard&method=view' );
+            go();
         }
 
-        public static function createView( $empty_user, $empty_mail, $empty_pass, $user_used, $small_pass, $mail_used, $mail_notvalid ) {
+        public static function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid, 
+                $password_empty, $password_not_matched, $password_small ) {
+            include_once 'models/country.php'; 
+            $countries = Country::findAll();
             include 'views/user/create.php';
         }
 
-        public static function updateView( $small_pass, $not_matched, $old_pass ) {
+        public static function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong, 
+                $email_invalid, $email_used ) {
+            include_once 'models/country.php';
+            include_once 'models/user.php';
+            if ( !isset( $_SESSION[ 'user' ] ) ) {
+                throw new HTTPUnauthorizedException();
+            }
+            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
+            $countries = Country::findAll();
             include 'views/user/update.php';
         }
     }

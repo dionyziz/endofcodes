@@ -1,6 +1,11 @@
 <?php
-    include 'models/db.php';
-    include 'config/config.php';
-    include 'models/database.php';
-    session_start();
+    include_once 'models/db.php';
+    if ( file_exists( 'config/config-local.php' ) ) {
+        include_once 'config/config-local.php';
+    }
+    else {
+        include_once 'config/config.php';
+    }
+    include_once 'models/database.php';
+    include_once 'models/base.php';
 ?>

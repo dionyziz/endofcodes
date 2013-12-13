@@ -1,30 +1,33 @@
 <?php
     class SessionController {
         public static function create( $username = '', $password = '' ) {
-            include 'models/users.php';
+            include_once 'models/user.php';
             if ( empty( $username ) ) {
-                throw new RedirectException( 'index.php?empty_user=yes&resource=session&method=create' );
+                go( 'session', 'create', array( 'username_empty' => true ) );
             }
             if ( empty( $password ) ) {
-                throw new RedirectException( 'index.php?empty_pass=yes&resource=session&method=create' );
+                go( 'session', 'create', array( 'password_empty' => true ) );
             }
-            $id = User::authenticate( $username, $password );
-            if ( $id == false ) {
-                throw new RedirectException( 'index.php?resource=session&method=create&error=yes' );
+            try {
+                $user = User::findByUsername( $username );
             }
-            $_SESSION[ 'user' ] = array(
-                'userid' => $id,
-                'username' => $username
-            );
-            throw new RedirectException( 'index.php?resource=dashboard&method=view' );
+            catch ( ModelNotFoundException $e ) {
+                go( 'session', 'create', array( 'username_wrong' => true ) );
+            }
+            if ( !$user->authenticatesWithPassword( $password ) ) {
+                go( 'session', 'create', array( 'password_wrong' => true ) );
+            }
+            $id = $user->id;
+            $_SESSION[ 'user' ] = compact( 'id', 'username' );
+            go();
         }
 
         public static function delete() {
             unset( $_SESSION[ 'user' ] );
-            throw new RedirectException( 'index.php?resource=dashboard&method=view' );
+            go();
         }
 
-        public static function createView( $error, $empty_user, $empty_pass ) {
+        public static function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
             include 'views/session/create.php';
         }
     }

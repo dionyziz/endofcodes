@@ -8,7 +8,7 @@
         }
 
         public function getValid() {
-            $config = getConfig();
+            global $config;
             return $config[ 'files' ][ 'avatar_extentions' ];
         }
 

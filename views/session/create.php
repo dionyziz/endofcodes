@@ -1,23 +1,37 @@
 <?php
     include 'views/header.php';
-    if ( isset( $error ) ) {
-        ?><p>Invalid username or password!</p><?php
-    }
-    else if ( isset( $empty_user ) ) {
-        ?><p>Please fill the username form.</p><?php
-    }
-    else if ( isset( $empty_pass ) ) {
-        ?><p>Please fill the password form.</p><?php
-    }
 ?>
 
-<form action="index.php?resource=session&amp;method=create" method="POST">
-    <label for="username">Username</label>
-    <p><input type="text" name="username" id="username" /></p>
-    <label for="password">Password</label>
-    <p><input type="password" name="password" id="password" /></p>
-    <p><input type="submit" value="Login" /></p>
-</form>
+<div id="login"><?php
+        if ( isset( $username_empty ) ) {
+            ?><p class="error">Please type a username.</p><?php
+        }
+        else if ( isset( $password_empty ) ) {
+            ?><p class="error">Please type a password.</p><?php
+        }
+    ?>
+
+    <form id="login-form" action="index.php?resource=session&amp;method=create" method="POST">
+        <label for="username">Username</label>
+        <?php
+            if ( isset( $username_wrong ) ) {
+                ?><p class="error">Username doesn't exist</p><?php
+            }
+        ?>
+        <p><input type="text" name="username" id="username" /></p>
+        <label for="password">Password</label>
+        <?php
+            if ( isset( $password_wrong ) ) {
+                ?><p class="error">Password is incorrect</p><?php
+            }
+        ?>
+        <p><input type="password" name="password" id="password" /></p>
+        <p><a href="">Forgot password?</a></p>
+        <p><input type="submit" value="Login" /></p>
+    </form>
+    <p><a href="index.php?resource=user&amp;method=create">Don't have an account?</a></p>
+</div>
+
 <?php
     include 'views/footer.php';
 ?>

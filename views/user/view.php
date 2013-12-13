@@ -2,37 +2,35 @@
     include 'views/header.php';
 ?>
 
-<h1><?php
-    echo htmlspecialchars( $credentials[ 'username' ] );
-?></h1>
-
-<p>Contact: <?php
-    echo htmlspecialchars( $credentials[ 'email' ] );
-?></p>
-
 <p><img src="<?php
-            echo $target_path;
+            echo $user->image->target_path;
         ?>" alt="Profile Picture" width="100" height="100" /></p>
 
-<?php
-    if ( $_SESSION[ 'user' ][ 'userid' ] == $credentials[ 'userid' ] ) {
-        ?><form action="index.php?resource=image&amp;method=create" method="POST" enctype="multipart/form-data">
-            <label for="image">Upload an avatar</label>
-            <?php
-                if ( isset( $notvalid ) ) {
-                    ?><p>This isn't an image</p><?php
-                }
-            ?>
-            <p><input type="file" name="image" id="image" /></p>
-            <input type="submit" value="Upload" />
-        </form>
-        <p>Want to <a href="index.php?resource=user&amp;method=update">change password</a>?</p>
-        <form action="index.php?resource=user&amp;method=delete" method="post">
-            <input type="submit" value="Delete your account" />
-        </form><?php
-    }
-?>
+<p><?php
+    echo htmlspecialchars( $user->username );
+?></p>
 
-<?php
+<p><?php
+    echo htmlspecialchars( $user->email );
+?></p>
+
+<p>Region, Country: <?php
+    echo htmlspecialchars( $user->country->name );
+?></p>
+
+<p>Score: *score*</p>
+<p><a href="">Global</a> position: *pos*</p>
+<p><a href="">Country</a> position: *pos*</p>
+<p><a href="">Last match</a> position: *pos*</p>
+<p><img src="static/images/facebook-logo.jpeg" alt="facebook link" width="40" height="40" /></p>
+<p><img src="static/images/twitter-logo.png" alt="twitter link" width="40" height="40" /></p>
+<p><img src="static/images/github-logo.png" alt="github link" width="40" height="40" /></p>
+<p><img src="static/images/google+-logo.jpeg" alt="google+ link" width="40" height="40" /></p>
+<p><a href="">Add friend</a></p>
+
+<?php 
+    if ( $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
+        ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
+    }
     include 'views/footer.php';
 ?>

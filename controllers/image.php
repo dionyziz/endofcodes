@@ -1,23 +1,24 @@
 <?php
     class ImageController {
         public static function create( $image ) {
-            include 'models/image.php';
-            include 'models/extentions.php';
-            $config = getConfig();
-            $avatarname = basename( $image[ 'name' ] );
-            $tmp_name = $image[ 'tmp_name' ];
-            $id = $_SESSION[ 'user' ][ 'userid' ];
+            include_once 'models/image.php';
+            include_once 'models/extentions.php';
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $username = $_SESSION[ 'user' ][ 'username' ];
+            $user = User::findByUsername( $_SESSION[ 'user' ][ 'username' ] );
+            $user->image = new Image();
+            $user->image->tmp_name = $image[ 'tmp_name' ];
+            $user->image->name = $image[ 'name' ];
+            $user->image->userid = $user->id;
             try {
-                Image::create( $username, $tmp_name, $avatarname, $id );
+                $user->image->save();
+                $user->save();
             }
             catch ( ModelValidationException $e ) {
-                header( 'index.php?resource=user&method=view&username=' . $username . '&' . $e->errror . '=yes' );
+                go( 'user', 'update', array( 'username' => $user->username, $e->error => true ) );
             }
-            throw new RedirectException( 'index.php?resource=user&method=view&username=' . $username );
+            go( 'user', 'view', array( 'username' => $user->username ) );
         }
     }
 ?>
