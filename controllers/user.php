@@ -8,13 +8,6 @@
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'password_not_matched' => true ) );
             }
-            $day = intval( $day );
-            $month = intval( $month );
-            $year = intval( $year );
-            if ( !checkdate( $day, $month, $year ) ) {
-                $day = $month = $year = 0;
-            }
-            $dob = $year . '-' . $month . '-' . $day; 
             try {
                 $country = new Country( $countryid );
             }
@@ -26,8 +19,8 @@
             $user->username = $username;
             $user->password = $password;
             $user->email = $email;
-            $user->dob = $dob;
             $user->country = $country;
+            $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->save();
                 $id = $user->id;
