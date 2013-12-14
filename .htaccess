@@ -1,6 +1,2 @@
-Options +FollowSymLinks
 RewriteEngine on
-RewriteCond %{HTTP_HOST} ^yoursite.com
-RewriteRule (.*) http://www.yoursite.com/$1 [R=301,L]
-RewriteRule ^index.html$ http://www.yoursite.com/ [R=301,L]
 Redirect /rules /rules.html
