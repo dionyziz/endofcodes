@@ -4,7 +4,7 @@
 
         public function delete() {
             $id = $this->id;
-            db_delete(
+            dbDelete(
                 $this->tableName,
                 compact( "id" )
             );

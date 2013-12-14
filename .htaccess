@@ -1,0 +1,2 @@
+RewriteEngine on
+Redirect /rules /rules.html

@@ -17,12 +17,13 @@
 
         public function __construct( $id = false ) {
             if ( $id ) {
+                global $config;
+
                 $this->exists = true;
                 $image_info = dbSelectOne( 'images', array( '*' ), compact( "id" ) );
                 $this->id = $id;
                 $this->name = $image_info[ 'name' ];
                 $this->ext = Extention::get( $this->name );
-                global $config;
                 $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
             }
         }
@@ -37,7 +38,7 @@
         protected function create() {
             global $config;
 
-            $tmp_name = basename( $this->tmp_name );
+            $tmp_name = $this->tmp_name;
             $name = basename( $this->name );
             $ext = $this->ext;
             $userid = $this->userid;
@@ -50,6 +51,7 @@
             $this->target_path = $target_path . $name;
             $this->id = $id;
             $this->upload();
+            $this->exists = true;
         }
 
         public function upload() {

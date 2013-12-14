@@ -1,7 +1,7 @@
 <?php
     class DBException extends Exception {
-        public function __construct() {
-            parent::__construct( 'Database error: ' . mysql_error() );
+        public function __construct( $error ) {
+            parent::__construct( 'Database error: ' . $error );
         }
     }
 
@@ -26,7 +26,7 @@
         $finalsql = strtr( $sql, $bind );
         $res = mysql_query( $finalsql );
         if ( $res === false ) {
-            throw new DBException();
+            throw new DBException( mysql_error() );
         }
         return $res;
     }
@@ -82,7 +82,7 @@
     function dbSelectOne( $table, $select = array( "*" ), $where = array() ) {
         $array = dbSelect( $table, $select, $where );
         if ( count( $array ) !== 1 ) {
-            throw new DBException();
+            throw new DBException( mysql_error() );
         }
         return $array[ 0 ];
     }

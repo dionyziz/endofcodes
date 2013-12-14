@@ -10,7 +10,7 @@
             "ALTER TABLE
                 images
             ADD COLUMN
-                `name` text COLLATE utf8mb4_unicode_ci NOT NULL"
+                `name` text COLLATE utf8_unicode_ci NOT NULL"
         ) 
     );
 ?>

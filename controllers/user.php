@@ -1,42 +1,26 @@
 <?php
     class UserController {
         public static function create( $username = '', $password = '', $password_repeat = '', $email = '', 
-                $countryname = '', /*$accept = false, */$day = '', $month = '', $year = '' ) {
-            /*if ( $accept === false ) {
-                go( 'user', 'create', array( 'not_accepted' => true ) );
-            }
-            if ( !array_search( $month, $months ) ) {
-                go( 'user', 'create', array( 'empty_month' => true ) );
-            }*/
+                $countryid = '', $day = '', $month = '', $year = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
 
             if ( $password !== $password_repeat ) {
-                go( 'user', 'create', array( 'pass_not_matched' => true ) );
+                go( 'user', 'create', array( 'password_not_matched' => true ) );
             }
-            for ( $i = 1; $i <= 12; ++$i ) {
-                $months[ $i ] = jdmonthname( $i, 0 );
-            }
-            $month = array_search( $month, $months );
-            if ( is_string( $day ) || is_string( $month ) || is_string( $year ) ) {
-                $day = $month = $year = 0;
-            }
-            $dob = $year . '-' . $month . '-' . $day; 
-            $country = new Country();
             try {
-                $country = Country::findByName( $countryname );
+                $country = new Country( $countryid );
             }
             catch ( ModelNotFoundException $e ) {
-                $country->name = '';
-                $country->id = 0;
+                $country = new Country();
             }
             $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
             $user = new User();
             $user->username = $username;
             $user->password = $password;
             $user->email = $email;
-            $user->dob = $dob;
             $user->country = $country;
+            $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->save();
                 $id = $user->id;
@@ -65,7 +49,7 @@
             include_once 'views/user/view.php';
         }
 
-        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryname = '', $email = '' ) {
+        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryid = '', $email = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
@@ -75,19 +59,17 @@
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
                     if ( $password_new !== $password_repeat ) {
-                        go( 'user', 'update', array( 'new_pass_not_matched' => true ) );
+                        go( 'user', 'update', array( 'password_new_not_matched' => true ) );
                     }
                     $user->password = $password_new;
                 }
                 else {
-                    go( 'user', 'update', array( 'old_pass_wrong' => true ) );
+                    go( 'user', 'update', array( 'password_wrong' => true ) );
                 }
             }
-            if ( !empty( $email ) ) {
-                $user->email = $email;
-            }
+            $user->email = $email;
             try {
-                $user->country = Country::findByName( $countryname );
+                $user->country = new Country( $countryid );
             }
             catch ( ModelNotFoundException $e ) {
             }
@@ -111,15 +93,21 @@
             go();
         }
 
-        public static function createView( $username_empty, $username_invalid, $mail_empty, $pass_empty, $pass_not_matched,
-                $user_used, $pass_small, $mail_used, $mail_invalid/*, $country_empty, $terms_not_accepted, $day_empty, $month_empty, $year_empty*/ ) {
+        public static function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid, 
+                $password_empty, $password_not_matched, $password_small ) {
             include_once 'models/country.php'; 
             $countries = Country::findAll();
             include 'views/user/create.php';
         }
 
-        public static function updateView( $image_invalid, $pass_small, $new_pass_not_matched, $old_pass_wrong, $mail_invalid, $mail_used, $country_empty ) {
+        public static function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong, 
+                $email_invalid, $email_used ) {
             include_once 'models/country.php';
+            include_once 'models/user.php';
+            if ( !isset( $_SESSION[ 'user' ] ) ) {
+                throw new HTTPUnauthorizedException();
+            }
+            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
             $countries = Country::findAll();
             include 'views/user/update.php';
         }

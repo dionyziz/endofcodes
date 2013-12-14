@@ -8,10 +8,11 @@
         public $username;
         public $password;
         public $email;
-        public $dob;
         public $country;
         public $image;
         public $salt;
+        public $dateOfBirth;
+        protected $dob;
         protected $tableName = 'users';
 
         public static function findByUsername( $username ) {
@@ -40,6 +41,7 @@
 
         protected function validate() {
             global $config;
+
             if ( empty( $this->username ) ) {
                 throw new ModelValidationException( 'username_empty' );
             }
@@ -47,25 +49,34 @@
                 throw new ModelValidationException( 'username_invalid' );
             }
             if ( empty( $this->password ) && !$this->exists ) {
-                throw new ModelValidationException( 'pass_empty' );
+                throw new ModelValidationException( 'password_empty' );
             }
-            if ( empty( $this->email ) ) {
-                throw new ModelValidationException( 'mail_empty' );
+            if ( !$this->exists && empty( $this->email ) ) {
+                throw new ModelValidationException( 'email_empty' );
             }
-            if ( isset( $this->password ) && strlen( $this->password ) <= $config[ 'pass_len' ] ) {
-                throw new ModelValidationException( 'pass_small' );
+            if ( isset( $this->password ) && strlen( $this->password ) < $config[ 'pass_min_len' ] ) {
+                if ( $this->exists ) {
+                    throw new ModelValidationException( 'password_new_small' );
+                }
+                throw new ModelValidationException( 'password_small' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
-                throw new ModelValidationException( 'mail_invalid' );
+                throw new ModelValidationException( 'email_invalid' );
             }
         }
 
         protected function create() {
             // when a user is created he doesn't have an image, so avatarid is by default 0 
+            $day = intval( $this->dateOfBirth[ 'day' ] ); 
+            $month = intval( $this->dateOfBirth[ 'month' ] );
+            $year = intval( $this->dateOfBirth[ 'year' ] );
+            if ( !checkdate( $day, $month, $year ) ) {
+                $day = $month = $year = 0;
+            }
+            $dob = $this->dob = $year . '-' . $month . '-' . $day; 
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
-            $dob = $this->dob;
             $countryid = $this->country->id;
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
@@ -79,10 +90,10 @@
             catch ( DBException $e ) {
                 try {
                     $other_user = User::findByUsername( $username );
-                    throw new ModelValidationException( 'user_used' );
+                    throw new ModelValidationException( 'username_used' );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    throw new ModelValidationException( 'mail_used' );
+                    throw new ModelValidationException( 'email_used' );
                 }
             }
             $this->exists = true;
@@ -108,7 +119,7 @@
                 );
             }
             catch ( DBException $e ) {
-                throw new ModelValidationException( 'mail_used' );
+                throw new ModelValidationException( 'email_used' );
             }
         }
 
