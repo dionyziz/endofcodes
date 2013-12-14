@@ -6,7 +6,7 @@
             'ALTER TABLE
                 countries
             CHANGE
-                `country` `name` text COLLATE utf8mb4_unicode_ci NOT NULL'
+                `country` `name` text COLLATE utf8_unicode_ci NOT NULL'
         )
     );
 ?>
