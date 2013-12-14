@@ -7,9 +7,9 @@
         foreach ( $sql_array as $sql ) {
             $res = db( $sql );
             if ( $res === false ) {
-                die( 'Migration failed. SQL query died with the following error: ' . mysql_error() );
+                die( "Migration failed. SQL query died with the following error: " . mysql_error() . "\n" );
             }
         }
-        echo 'Migration successful.';
+        echo "Migration successful.\n";
     }
 ?>
