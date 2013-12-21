@@ -9,7 +9,7 @@
                 uc_roundcreatures',
             'ALTER TABLE
                 roundcreatures
-            ADD CONSTRAINT pk_roundcreatures PRIMARY KEY (gameid,roundid,creatureid)'
+            ADD CONSTRAINT pk_roundcreature PRIMARY KEY (gameid,roundid,creatureid)'
         )
     );
 ?>
