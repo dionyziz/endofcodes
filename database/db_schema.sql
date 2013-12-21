@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `countries` (
 --
 
 CREATE TABLE IF NOT EXISTS `creatures` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `gameid` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
