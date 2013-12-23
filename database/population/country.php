@@ -9,8 +9,10 @@
     $count = 0;
   
     foreach ( $countries as $key => $value ) {
-        $res = dbInsert( 'countries', array( 'name' => $value, 'shortname' => $key ) );
-        if ( $res === false ) { 
+        try {
+            $res = dbInsert( 'countries', array( 'name' => $value, 'shortname' => $key ) );
+        }
+        catch ( DBException $e ) {
             die( "sql query died with the following error\n\"" . mysql_error() );
         }
         ++$count;

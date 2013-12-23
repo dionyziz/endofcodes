@@ -43,9 +43,6 @@
             . implode( ",", $fields ),
             $set
         );
-        if ( $res == false ) {
-            return $res;
-        }
         return mysql_insert_id();
     }
 
