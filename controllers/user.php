@@ -5,7 +5,6 @@
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'models/formtoken.php';
-            
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'password_not_matched' => true ) );
             }
@@ -53,10 +52,11 @@
             include_once 'views/user/view.php';
         }
 
-        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryid = '', $email = '' ) {
+        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryid = '', $email = '', $token = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
+            include_once 'models/formtoken.php';
+            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
@@ -86,9 +86,10 @@
             go();
         }
 
-        public static function delete() {
+        public static function delete( $token = '' ) {
             include_once 'models/user.php';
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
+            include_once 'models/formtoken.php';
+            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
@@ -110,6 +111,8 @@
                 $email_invalid, $email_used ) {
             include_once 'models/country.php';
             include_once 'models/user.php';
+            include_once 'models/formtoken.php';
+            $token = FormToken::create();
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }

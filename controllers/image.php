@@ -1,9 +1,10 @@
 <?php
     class ImageController {
-        public static function create( $image ) {
+        public static function create( $image, $token = '' ) {
             include_once 'models/image.php';
             include_once 'models/extentions.php';
-            if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
+            include_once 'models/formtoken.php';
+            if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) || !FormToken::validate( $token ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = User::findByUsername( $_SESSION[ 'user' ][ 'username' ] );
