@@ -48,7 +48,10 @@
                 ?></option><?php
             }
         ?>
-    </select></p> 
+    </select></p>
+    <input type="hidden" name="token" value="<?php
+        echo $token;
+    ?>">
     <p><input type="submit" value="Save settings" /></p>
 </form>
 
@@ -60,10 +63,16 @@
         }
     ?>
     <p><input type="file" name="image" id="image" /></p>
+    <input type="hidden" name="token" value="<?php
+        echo $token;
+    ?>">
     <input type="submit" value="Upload" />
 </form>
 
 <form action="index.php?resource=user&amp;method=delete" method="post">
+     <input type="hidden" name="token" value="<?php
+        echo $token;
+    ?>">
     <input type="submit" value="Delete your account" />
 </form>
 
