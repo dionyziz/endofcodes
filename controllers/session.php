@@ -1,6 +1,6 @@
 <?php
     class SessionController {
-        public static function create( $username = '', $password = '', $token='' ) {
+        public static function create( $username = '', $password = '', $token = '' ) {
             include_once 'models/formtoken.php';
             include_once 'models/user.php';
             if ( empty( $username ) ) {
@@ -9,7 +9,7 @@
             if ( empty( $password ) ) {
                 go( 'session', 'create', array( 'password_empty' => true ) );
             }
-            if ( !FormToken::validate( $token ) ) {
+            if ( !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
                  throw new HTTPUnauthorizedException();
             }
             try {
@@ -34,6 +34,7 @@
         public static function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
             include_once 'models/formtoken.php';
             $token = FormToken::create();
+            $_SESSION[ 'form' ][ 'token' ] = $token;  
             include 'views/session/create.php';
         }
     }

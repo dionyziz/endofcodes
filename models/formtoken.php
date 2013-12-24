@@ -1,15 +1,13 @@
 <?php
     Class FormToken {
-        public static function validate( $token ) {
-            if ( $_SESSION[ 'form' ][ 'token' ] == $token ) {
+        public static function validate( $token_check, $token_valid ) {
+            if ( $token_valid === $token_check ) {
                 return true;
             } 
         }
         
-        public static function create( $num = 20 ) {
-            $token = md5( uniqid() );
-            $_SESSION[ 'form' ][ 'token'] = $token;  
-            return $token;
+        public static function create() {
+            return md5( uniqid() );
         }
     }
 ?>

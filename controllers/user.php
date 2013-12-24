@@ -14,7 +14,7 @@
             catch ( ModelNotFoundException $e ) {
                 $country = new Country();
             }
-            if ( !FormToken::validate( $token ) ) {
+            if ( !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
                  throw new HTTPUnauthorizedException();
             }
             $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
@@ -52,11 +52,12 @@
             include_once 'views/user/view.php';
         }
 
-        public static function update( $password = '', $password_new = '', $password_repeat = '', $countryid = '', $email = '', $token = '' ) {
+        public static function update( $password = '', $password_new = '', $password_repeat = '', 
+                $countryid = '', $email = '', $token = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'models/formtoken.php';
-            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token ) ) {
+            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
@@ -89,7 +90,7 @@
         public static function delete( $token = '' ) {
             include_once 'models/user.php';
             include_once 'models/formtoken.php';
-            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token ) ) {
+            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
@@ -104,6 +105,7 @@
             include_once 'models/formtoken.php';
             $countries = Country::findAll();
             $token = FormToken::create();
+            $_SESSION[ 'form' ][ 'token' ] = $token;  
             include 'views/user/create.php';
         }
 
@@ -113,6 +115,7 @@
             include_once 'models/user.php';
             include_once 'models/formtoken.php';
             $token = FormToken::create();
+            $_SESSION[ 'form' ][ 'token' ] = $token;  
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
