@@ -1,10 +1,11 @@
 <?php
     class UserController {
         public static function create( $username = '', $password = '', $password_repeat = '', $email = '', 
-                $countryid = '', $day = '', $month = '', $year = '' ) {
+                $countryid = '', $day = '', $month = '', $year = '', $token = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
-
+            include_once 'models/formtoken.php';
+            
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'password_not_matched' => true ) );
             }
@@ -13,6 +14,9 @@
             }
             catch ( ModelNotFoundException $e ) {
                 $country = new Country();
+            }
+            if ( !FormToken::validate( $token ) ) {
+                 throw new HTTPUnauthorizedException();
             }
             $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
             $user = new User();
@@ -96,7 +100,9 @@
         public static function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid, 
                 $password_empty, $password_not_matched, $password_small ) {
             include_once 'models/country.php'; 
+            include_once 'models/formtoken.php';
             $countries = Country::findAll();
+            $token = FormToken::create();
             include 'views/user/create.php';
         }
 
