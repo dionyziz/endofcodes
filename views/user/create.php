@@ -139,6 +139,9 @@
             ?>
         </select> 
     </p>
+    <input type="hidden" value="<?php
+        echo $token
+    ?>">
     <p><input type="submit" value="Register" /></p>
 </form>
 
