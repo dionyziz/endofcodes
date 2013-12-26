@@ -26,7 +26,11 @@
             go();
         }
 
-        public static function delete() {
+        public static function delete( $token = '' ) {
+            include_once 'models/formtoken.php';
+            if ( !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
+                 throw new HTTPUnauthorizedException();
+            }
             unset( $_SESSION[ 'user' ] );
             go();
         }

@@ -28,7 +28,7 @@
         <p><input type="password" name="password" id="password" /></p>
         <input type="hidden" name="token" value="<?php
             echo $token;
-        ?>">
+        ?>" />
         <p><a href="">Forgot password?</a></p>
         <p><input type="submit" value="Login" /></p>
     </form>
