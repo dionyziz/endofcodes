@@ -141,7 +141,7 @@
     </p>
     <input type="hidden" name="token" value="<?php
         echo $token;
-    ?>">
+    ?>" />
     <p><input type="submit" value="Register" /></p>
 </form>
 
