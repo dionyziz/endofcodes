@@ -7,7 +7,8 @@
         }
         
         public static function create() {
-            return md5( uniqid() );
+            $token = openssl_random_pseudo_bytes( 32 );
+            return base64_encode( $token );
         }
     }
 ?>
