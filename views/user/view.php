@@ -8,7 +8,9 @@
 
 <p><img src="<?php
             echo $user->country->flag;
-        ?>" alt="Country flag" width="100" height="100" /></p>
+        ?>" alt="<?php
+            echo $user->country->name;
+        ?>" width="100" height="100" /></p>
 
 <p><?php
     echo htmlspecialchars( $user->username );
