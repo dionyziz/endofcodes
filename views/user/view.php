@@ -35,7 +35,7 @@
 <p><a href="">Add friend</a></p>
 
 <?php 
-    if ( $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
+    if ( isset( $_SESSION[ 'user' ][ 'id' ] ) && $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
         ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
     }
     include 'views/footer.php';
