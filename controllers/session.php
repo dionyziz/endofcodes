@@ -1,5 +1,5 @@
 <?php
-    class SessionController {
+    class SessionController extends ControllerBase {
         public static function create( $username = '', $password = '', $token = '' ) {
             include_once 'models/formtoken.php';
             include_once 'models/user.php';

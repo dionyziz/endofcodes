@@ -1,5 +1,5 @@
 <?php
-    class DashboardController {
+    class DashboardController extends ControllerBase {
         public static function view() {
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $username = $_SESSION[ 'user' ][ 'username' ];

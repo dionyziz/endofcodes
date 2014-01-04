@@ -1,5 +1,5 @@
 <?php
-    class UserController {
+    class UserController extends ControllerBase {
         public static function create( $username = '', $password = '', $password_repeat = '', $email = '', 
                 $countryid = '', $day = '', $month = '', $year = '', $token = '' ) {
             include_once 'models/user.php';
@@ -115,7 +115,7 @@
             include_once 'models/user.php';
             include_once 'models/formtoken.php';
             $token = FormToken::create();
-            $_SESSION[ 'form' ][ 'token' ] = $token;  
+            $_SESSION[ 'form' ][ 'token' ] = $token;
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
