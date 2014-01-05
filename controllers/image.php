@@ -4,7 +4,7 @@
             include_once 'models/image.php';
             include_once 'models/extentions.php';
             include_once 'models/formtoken.php';
-            if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) || !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
+            if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = User::findByUsername( $_SESSION[ 'user' ][ 'username' ] );

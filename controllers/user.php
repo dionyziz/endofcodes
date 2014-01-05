@@ -14,9 +14,6 @@
             catch ( ModelNotFoundException $e ) {
                 $country = new Country();
             }
-            if ( !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
-                 throw new HTTPUnauthorizedException();
-            }
             $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
             $user = new User();
             $user->username = $username;
@@ -57,7 +54,7 @@
             include_once 'models/user.php';
             include_once 'models/country.php';
             include_once 'models/formtoken.php';
-            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
+            if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );
@@ -90,7 +87,7 @@
         public function delete( $token = '' ) {
             include_once 'models/user.php';
             include_once 'models/formtoken.php';
-            if ( !isset( $_SESSION[ 'user' ] ) || !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
+            if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = new User( $_SESSION[ 'user' ][ 'id' ] );

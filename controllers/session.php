@@ -9,9 +9,6 @@
             if ( empty( $password ) ) {
                 go( 'session', 'create', array( 'password_empty' => true ) );
             }
-            if ( !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
-                 throw new HTTPUnauthorizedException();
-            }
             try {
                 $user = User::findByUsername( $username );
             }
@@ -28,9 +25,6 @@
 
         public function delete( $token = '' ) {
             include_once 'models/formtoken.php';
-            if ( !FormToken::validate( $token, $_SESSION[ 'form' ][ 'token' ] ) ) {
-                 throw new HTTPUnauthorizedException();
-            }
             unset( $_SESSION[ 'user' ] );
             go();
         }
