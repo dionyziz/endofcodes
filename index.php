@@ -47,24 +47,9 @@
     }
     include_once $filename;
     $controllername = ucfirst( $resource ) . 'Controller';
-    $reflection = new ReflectionMethod( $controllername, $method );
-    $parameters = $reflection->getParameters();
-    $arguments = array();
-    foreach ( $parameters as $parameter ) {
-        if ( isset( $http_vars[ $parameter->name ] ) ) {
-            $arguments[] = $http_vars[ $parameter->name ];
-        }
-        else {
-            try {
-                $arguments[] = $parameter->getDefaultValue();
-            }
-            catch ( ReflectionException $e ) {
-                $arguments[] = null;
-            }
-        }
-    }
+    $controller = new $controllername();
     try {
-        call_user_func_array( array( $controllername, $method ), $arguments );
+        $controller->dispatch( $method, $http_vars );
     }
     catch ( NotImplemented $e ) {
         die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() );

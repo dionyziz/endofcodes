@@ -1,6 +1,6 @@
 <?php
     class ImageController extends ControllerBase {
-        public static function create( $image, $token = '' ) {
+        public function create( $image, $token = '' ) {
             include_once 'models/image.php';
             include_once 'models/extentions.php';
             include_once 'models/formtoken.php';
