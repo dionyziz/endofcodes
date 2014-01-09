@@ -1,81 +1,61 @@
 <?php
     include 'views/header.php';
-?>
 
-<form action="index.php?resource=user&amp;method=update" method="post">
-    <p>Change email</p>
-    <label for="email">Email</label>
-    <?php
+    $form = new Form( 'user', 'update' );
+    $form->token = $token;
+    $form->output( function() use( $email_invalid, $email_used, $password_wrong,
+            $password_new_not_matched, $password_new_small, $countries, $user ) {
+        ?><p>Change email</p><?php
+        Form::createLabel( 'email', 'Email' );
         if ( isset( $email_invalid ) ) {
-            ?><p class="error">Email is not valid</p><?php
+            Form::produceError( 'Email is not valid' );
         }
         if ( isset( $email_used ) ) {
-            ?><p class="error">Email is already in use.</p><?php
+            Form::produceError( 'Email is already in use.' );
         }
-    ?>
-    <p><input type="text" name="email" id="email" value="<?php
-        echo $user->email;
-    ?>"/></p>
-    <p>Change password</p>
-    <label for="password">Old password</label>
-    <?php
+        Form::createInput( 'text', 'email', 'email', htmlspecialchars( $user->email ) );
+        ?><p>Change password</p><?php
+        Form::createLabel( 'password', 'Old password' );
         if ( isset( $password_wrong ) ) {
-            ?><p class="error">Old password is incorrect</p><?php
+            Form::produceError( 'Old password is incorrect' );
         }
-    ?>
-    <p><input type="password" name="password" id="password" /></p>
-    <label for="password_new">New password</label>
-    <?php
+        Form::createInput( 'password', 'password', 'password' );
+        Form::createLabel( 'password_new', 'New password' );
         if ( isset( $password_new_not_matched ) ) {
-            ?><p class="error">Passwords do not match</p><?php
+            Form::produceError( 'Passwords do not match' );
         }
         else if ( isset( $password_new_small ) ) {
-            ?><p class="error">Your password should be at least 7 characters long</p><?php
+            Form::produceError( 'Your password should be at least 7 characters long' );
         }
-    ?>
-    <p><input type="password" name="password_new" id="password_new" /></p>
-    <label for="password_repeat">Repeat</label>
-    <p><input type="password" name="password_repeat" id="password_repeat" /></p>
-    <p>Change country</p>
-    <p><select name="countryid">
-        <option>Select Country</option>
-        <?php
-            foreach ( $countries as $key => $country ) {
-                ?><option value="<?php
-                    echo $key + 1;
-                ?>"><?php
-                    echo $country[ 'name' ];
-                ?></option><?php
-            }
-        ?>
-    </select></p>
-    <input type="hidden" name="token" value="<?php
-        echo $token;
-    ?>" />
-    <p><input type="submit" value="Save settings" /></p>
-</form>
+        Form::createInput( 'password', 'password_new', 'password_new' );
+        Form::createLabel( 'password_repeat', 'Repeat' );
+        Form::createInput( 'password', 'password_repeat', 'password_repeat' );
+        ?><p>Change country</p><?php
+        $countries_select_array = array();
+        $countries_select_array[] = array( 'content' => 'Select Country' );
+        foreach ( $countries as $key => $country ) {
+            $countries_select_array[] = array( 'value' => $key + 1, 'content' => $country[ 'name' ] );
+        }
+        Form::createSelect( 'countryid', '', $countries_select_array );
+        Form::createInput( 'submit', '', '', 'Save settings' );
+    } );
 
-<form action="index.php?resource=image&amp;method=create" method="post" enctype="multipart/form-data"> 
-    <label for="image">Upload an avatar</label>
-    <?php
+    $form = new Form( 'image', 'create' );
+    $form->token = $token;
+    $form->output( function() use( $image_invalid ) {
+        Form::createLabel( 'image', 'Upload an avatar' );
         if ( isset( $image_invalid ) ) {
-            ?><p class="error">This isn't an image</p><?php
+            Form::produceError( "This isn't an image" );
         }
-    ?>
-    <p><input type="file" name="image" id="image" /></p>
-    <input type="hidden" name="token" value="<?php
-        echo $token;
-    ?>" />
-    <input type="submit" value="Upload" />
-</form>
+        Form::createInput( 'file', 'image', 'image' );
+        Form::createInput( 'submit', '', '', 'Upload' );
+    } );
 
-<form action="index.php?resource=user&amp;method=delete" method="post">
-     <input type="hidden" name="token" value="<?php
-        echo $token;
-    ?>" />
-    <input type="submit" value="Delete your account" />
-</form>
+    $form = new Form( 'user', 'delete' );
+    $form->token = $token;
+    $form->output( function() {
+        Form::createInput( 'submit', '', '', 'Delete your account' );
+    } );
 
-<?php
     include 'views/footer.php';
 ?>

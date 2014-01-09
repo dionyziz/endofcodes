@@ -20,131 +20,95 @@
     </div>
 </div>
 
-<form id="register-form" action="index.php?resource=user&amp;method=create" method="post">
-    <?php
+<?php
+    $form = new Form( 'user', 'create' );
+    $form->id = 'register-form';
+    $form->token = $token;
+    $form->output( function() use( $username_empty, $username_invalid, $password_empty,
+            $email_empty, $username_used, $password_small,
+            $password_not_matched, $email_used, $email_invalid, $countries ) {
         if ( isset( $username_empty ) ) { 
-            ?><p class="error">Please type a username.</p><?php
+            Form::produceError( 'Please type a username.' );
         }
         if ( isset( $username_invalid ) ) { 
-            ?><p class="error">Usernames can only have numbers, letters, "." and "_"</p><?php
+            Form::produceError( 'Usernames can only have numbers, letters, "." and "_"' );
         }
-        else if ( isset( $password_empty ) ) {
-            ?><p class="error">Please type a password.</p><?php
+        if ( isset( $password_empty ) ) {
+            Form::produceError( 'Please type a password.' );
         }
-        else if ( isset( $email_empty ) ) {
-            ?><p class="error">Please type an email.</p><?php
+        if ( isset( $email_empty ) ) {
+            Form::produceError( 'Please type an email.' );
         }
-    ?>
-    <label for="username">Username</label>
-    <?php
+        Form::createLabel( 'username', 'Username' );
         if ( isset( $username_used ) ) {
-            ?><p class="error">Username already exists</p><?php
-            $val = "";
+            Form::produceError( 'Username already exists' );
+            $username_value = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'username' ] ) ) {
-            $val = $_SESSION[ 'create_post' ][ 'username' ];
+            $username_value = $_SESSION[ 'create_post' ][ 'username' ];
             unset( $_SESSION[ 'create_post' ][ 'username' ] );
         }
         else {
-            $val = "";
+            $username_value = "";
         }
-    ?>
-    <p><input type="text" id="username" name="username" value="<?php
-        echo htmlspecialchars( $val );
-    ?>"/></p>
-    <label for="password">Password</label>
-    <?php
+        Form::createInput( 'text', 'username', 'username', htmlspecialchars( $username_value ) );
+        Form::createLabel( 'password', 'Password' );
         if ( isset( $password_small ) ) {
-            ?><p class="error">Password should be at least 7 characters long</p><?php
+            Form::produceError( 'Password should be at least 7 characters long' );
         }
         if ( isset( $password_not_matched ) ) {
-            ?><p class="error">Passwords do not match</p><?php
+            Form::produceError( 'Passwords do not match' );
         }
-    ?>
-    <p><input type="password" id="password" name="password" /></p>
-    <label for="password_repeat">Repeat</label>
-    <p><input type="password" id="password_repeat" name="password_repeat" /></p>
-    <label for="email">Email</label>
-    <?php
-        if ( isset( $email_used ) ) {
-            ?><p class="error">Email is already used</p><?php
-            $val = "";
+        Form::createInput( 'password', 'password', 'password' );
+        Form::createLabel( 'password_repeat', 'Repeat' );
+        Form::createInput( 'password', 'password_repeat', 'password_repeat' );
+        Form::createLabel( 'email', 'Email' );
+        if ( isset( $email_invalid ) ) {
+            Form::produceError( 'This is not a valid email' );
         }
-        else if ( isset( $email_invalid ) ) {
-            ?><p class="error">This is not a valid email</p><?php
-            $val = "";
+        if ( isset( $email_used ) ) { 
+            Form::produceError( 'Email is already used' );
+            $email_value = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'email' ] ) ) {
-            $val = $_SESSION[ 'create_post' ][ 'email' ];
+            $email_value = $_SESSION[ 'create_post' ][ 'email' ];
             unset( $_SESSION[ 'create_post' ][ 'email' ] );
         }
         else {
-            $val = "";
+            $email_value = "";
         }
-    ?>
-    <p><input type="text" id="email" name="email" value="<?php
-        echo htmlspecialchars( $val );
-    ?>"/></p>
-    <label for="dob">Date of birth</label>
-    <p>
-        <select name="day" id="dob">
-        <option>Select Day</option>
-            <?php
-                for ( $i = 1; $i <= 31; ++$i ) {
-                    ?><option value="<?php
-                        echo $i;
-                    ?>"><?php
-                        echo $i;
-                    ?></option><?php
-                }
-            ?>
-        </select> 
-        <select name="month">
-            <option>Select Month</option>
-            <?php
-                for ( $i = 1; $i <= 12; ++$i ) {
-                    $month = date( "M", mktime( 0, 0, 0, $i, 1, 2000 ) );
-                    ?><option value="<?php
-                        echo $i;
-                    ?>"><?php
-                        echo $month;
-                    ?></option><?php
-                }
-            ?>
-        </select>
-        <select name="year">
-            <option>Select Year</option>
-            <?php
-                for ( $i = 2007; $i >= 1910; --$i ) {
-                    ?><option value="<?php
-                        echo $i;
-                    ?>"><?php
-                        echo $i;
-                    ?></option><?php
-                }
-            ?>
-        </select> 
-    </p> 
-    <p>
-        <select name="countryid">
-            <option>Select Country</option>
-            <?php
-                foreach ( $countries as $key => $country ) {
-                    ?><option value="<?php
-                        echo $key + 1;
-                    ?>"><?php
-                        echo $country[ 'name' ];
-                    ?></option><?php
-                }
-            ?>
-        </select> 
-    </p>
-    <input type="hidden" name="token" value="<?php
-        echo $token;
-    ?>" />
-    <p><input type="submit" value="Register" /></p>
-</form>
+        Form::createInput( 'text', 'email', 'email', htmlspecialchars( $email_value ) );
+        Form::createLabel( 'dob', 'Date of birth' );
+        $days_select_array = array();
+        $days_select_array[] = array( 'content' => 'Select Day' );
+        for ( $i = 1; $i <= 31; ++$i ) {
+            $days_select_array[] = array( 'value' => $i, 'content' => $i );
+        }
+        Form::createSelect( 'day', 'dob', $days_select_array );
+        $months_select_array = array();
+        $months_select_array[] = array( 'content' => 'Select Month' );
+        for ( $i = 1; $i <= 12; ++$i ) {
+            $months_select_array[] = array( 
+                'value' => $i, 
+                'content' => date( 'M', mktime( 0, 0, 0, $i, 1, 2000 ) ) 
+            );
+        }
+        Form::createSelect( 'month', '', $months_select_array );
+        $years_select_array = array();
+        $years_select_array[] = array( 'content' => 'Select Year' );
+        $current_year = date( 'Y' );
+        for ( $i = $current_year - 8; $i >= $current_year - 100; --$i ) {
+            $years_select_array[] = array( 'value' => $i, 'content' => $i );
+        }
+        Form::createSelect( 'year', '', $years_select_array );
+        $countries_select_array = array();
+        $countries_select_array[] = array( 'content' => 'Select Country' );
+        foreach ( $countries as $key => $country ) {
+            $countries_select_array[] = array( 'value' => $key + 1, 'content' => $country[ 'name' ] );
+        }
+        Form::createSelect( 'countryid', '', $countries_select_array );
+        Form::createInput( 'submit', '', '', 'Register' ); 
+    } );
 
-<?php
     include 'views/footer.php';
 ?>

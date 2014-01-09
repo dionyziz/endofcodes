@@ -1,6 +1,8 @@
-<form action="index.php?resource=session&amp;method=delete" method="post">
-    <input type="hidden" name="token" value="<?php
-        echo $token;
-    ?>" />
-    <input type="submit" value="Logout" />
-</form>
+<?php
+    $form = new Form( 'session', 'delete' );
+    $form->id = 'logout-form';
+    $form->token = $token;
+    $form->output( function() {
+        Form::createInput( 'submit', '', '', 'Logout' );
+    } );
+?>
