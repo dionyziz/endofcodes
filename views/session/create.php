@@ -5,6 +5,7 @@
 <div id="login"><?php 
     $form = new Form( 'session', 'create' );  
     $form->id = 'login-form';
+    $form->formMethod = 'post';
     $form->output( function() use ( $username_empty, $password_empty,
             $username_wrong, $password_wrong ) {
         if ( isset( $username_empty ) ) {

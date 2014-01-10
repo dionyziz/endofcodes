@@ -23,6 +23,7 @@
 <?php
     $form = new Form( 'user', 'create' );
     $form->id = 'register-form';
+    $form->formMethod = 'post';
     $form->output( function() use( $username_empty, $username_invalid, $password_empty,
             $email_empty, $username_used, $password_small,
             $password_not_matched, $email_used, $email_invalid, $countries ) {

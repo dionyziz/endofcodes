@@ -2,6 +2,7 @@
     include 'views/header.php';
 
     $form = new Form( 'user', 'update' );
+    $form->formMethod = 'post';
     $form->output( function() use( $email_invalid, $email_used, $password_wrong,
             $password_new_not_matched, $password_new_small, $countries, $user ) {
         ?><p>Change email</p><?php
@@ -40,6 +41,7 @@
     } );
 
     $form = new Form( 'image', 'create' );
+    $form->hasFile = true;
     $form->output( function() use( $image_invalid ) {
         Form::createLabel( 'image', 'Upload an avatar' );
         if ( isset( $image_invalid ) ) {

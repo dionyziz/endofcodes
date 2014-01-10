@@ -4,6 +4,8 @@
         private $resource;
         private $method;
         public $id;
+        public $formMethod;
+        public $hasFile = false;
         protected $token;
 
         public static function isValidType( $type ) {
@@ -69,7 +71,7 @@
                 }
                 if ( !empty( $value ) ) {
                     ?>value="<?php
-                        echo $value;
+                        echo htmlspecialchars( $value );
                     ?>" <?php
                 }
             ?> /></p><?php
@@ -92,7 +94,7 @@
                 ?><option <?php
                     if ( isset( $option[ 'value' ] ) ) {
                         ?>value="<?php
-                            echo $option[ 'value' ];
+                            echo htmlspecialchars( $option[ 'value' ] );
                         ?>"<?php
                     }
                 ?>><?php
@@ -106,12 +108,17 @@
             ?><label for="<?php
                 echo $for;
             ?>"><?php
-                echo $text;
+                echo htmlspecialchars( $text );
             ?></label><?php
         }
 
         public function output( $callable ) {
-            $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create(); 
+            if ( !isset( $_SESSION[ 'form' ][ 'token' ] ) ) {
+                $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create(); 
+            }
+            else {
+                $this->token = $_SESSION[ 'form' ][ 'token' ];
+            }
             ?><form <?php
                 if ( isset( $this->id ) ) {
                     ?>id="<?php
@@ -122,7 +129,13 @@
                     echo $this->resource;
                 ?>&amp;method=<?php
                     echo $this->method;
-                ?>" method="POST"><?php
+                ?>" method="<?php
+                    echo $this->formMethod;
+                ?>" <?php
+                    if ( $this->hasFile ) {
+                        ?>enctype="multipart/form-data"<?php
+                    }
+                ?>><?php
                 $callable();
                 Form::createInput( 'hidden', 'token', '', $this->token );
             ?></form><?php
