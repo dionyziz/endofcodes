@@ -1,7 +1,6 @@
 <?php
     class SessionController extends ControllerBase {
         public function create( $username = '', $password = '' ) {
-            include_once 'models/formtoken.php';
             include_once 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', array( 'username_empty' => true ) );
