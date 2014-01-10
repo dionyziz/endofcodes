@@ -8,19 +8,19 @@
     $form->output( function() use ( $username_empty, $password_empty,
             $username_wrong, $password_wrong ) {
         if ( isset( $username_empty ) ) {
-            Form::produceError( "Please type a username." );
+            Form::createError( "Please type a username." );
         }
         if ( isset( $password_empty ) ) {
-            Form::produceError( "Please type a password." );
+            Form::createError( "Please type a password." );
         }
         Form::createLabel( 'username', 'Username' );
         if ( isset( $username_wrong ) ) {
-            Form::produceError( "Username doesn't exist." );
+            Form::createError( "Username doesn't exist." );
         }
         Form::createInput( 'text', 'username', 'username' );
         Form::createLabel( 'password', 'Password' );
         if ( isset( $password_wrong ) ) {
-            Form::produceError( "Password is incorrect." );
+            Form::createError( "Password is incorrect." );
         }
         Form::createInput( 'password', 'password', 'password' );
         Form::createInput( 'submit', '', '', 'Login' );

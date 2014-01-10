@@ -11,7 +11,7 @@
             $this->method = $method;
         }
 
-        public static function produceError( $error_msg ) {
+        public static function createError( $error_msg ) {
             ?><p class="error"><?php
                     echo $error_msg;
             ?></p><?php

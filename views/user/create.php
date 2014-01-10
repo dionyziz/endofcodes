@@ -27,20 +27,20 @@
             $email_empty, $username_used, $password_small,
             $password_not_matched, $email_used, $email_invalid, $countries ) {
         if ( isset( $username_empty ) ) { 
-            Form::produceError( 'Please type a username.' );
+            Form::createError( 'Please type a username.' );
         }
         if ( isset( $username_invalid ) ) { 
-            Form::produceError( 'Usernames can only have numbers, letters, "." and "_"' );
+            Form::createError( 'Usernames can only have numbers, letters, "." and "_"' );
         }
         if ( isset( $password_empty ) ) {
-            Form::produceError( 'Please type a password.' );
+            Form::createError( 'Please type a password.' );
         }
         if ( isset( $email_empty ) ) {
-            Form::produceError( 'Please type an email.' );
+            Form::createError( 'Please type an email.' );
         }
         Form::createLabel( 'username', 'Username' );
         if ( isset( $username_used ) ) {
-            Form::produceError( 'Username already exists' );
+            Form::createError( 'Username already exists' );
             $username_value = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'username' ] ) ) {
@@ -53,20 +53,20 @@
         Form::createInput( 'text', 'username', 'username', htmlspecialchars( $username_value ) );
         Form::createLabel( 'password', 'Password' );
         if ( isset( $password_small ) ) {
-            Form::produceError( 'Password should be at least 7 characters long' );
+            Form::createError( 'Password should be at least 7 characters long' );
         }
         if ( isset( $password_not_matched ) ) {
-            Form::produceError( 'Passwords do not match' );
+            Form::createError( 'Passwords do not match' );
         }
         Form::createInput( 'password', 'password', 'password' );
         Form::createLabel( 'password_repeat', 'Repeat' );
         Form::createInput( 'password', 'password_repeat', 'password_repeat' );
         Form::createLabel( 'email', 'Email' );
         if ( isset( $email_invalid ) ) {
-            Form::produceError( 'This is not a valid email' );
+            Form::createError( 'This is not a valid email' );
         }
         if ( isset( $email_used ) ) { 
-            Form::produceError( 'Email is already used' );
+            Form::createError( 'Email is already used' );
             $email_value = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'email' ] ) ) {
