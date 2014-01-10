@@ -5,7 +5,7 @@
         protected $method;
         public $id;
         public $formMethod;
-        public $hasFile = false;
+        protected $hasFile = false;
         protected $token;
 
         public static function isValidType( $type ) {
@@ -46,15 +46,18 @@
             $this->method = $method;
         }
 
-        public static function createError( $error_msg ) {
+        public function createError( $error_msg ) {
             ?><p class="error"><?php
                 echo $error_msg;
             ?></p><?php
         }
 
-        public static function createInput( $type = 'text', $name = '', $id = '', $value = '' ) {
+        public function createInput( $type = 'text', $name = '', $id = '', $value = '' ) {
             if ( !Form::isValidType( $type ) ) {
                 $type = 'text';
+            }
+            if ( $type === 'file' ) {
+                $this->hasFile = true;
             }
             ?><p><input type="<?php
                 echo $type;
@@ -77,7 +80,7 @@
             ?> /></p><?php
         }
 
-        public static function createSelect( $name = '', $id = '', $option_array ) {
+        public function createSelect( $name = '', $id = '', $option_array ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -103,8 +106,24 @@
             }
             ?></select></p><?php
         }
+
+        protected function giveMethodType() {
+            $methods = array( 
+                'create' => 1,
+                'listing' => 0,
+                'delete' => 1,
+                'update' => 1,
+                'view' => 0
+            );
+            foreach ( $methods as $method => $value ) {
+                if ( $this->method === $method ) {
+                    return $value;
+                }
+            }
+            throw new HTMLException( $this->method );
+        }
        
-        public static function createLabel( $for, $text ) {
+        public function createLabel( $for, $text ) {
             ?><label for="<?php
                 echo $for;
             ?>"><?php
@@ -118,6 +137,12 @@
             }
             else {
                 $this->token = $_SESSION[ 'form' ][ 'token' ];
+            }
+            if ( $this->giveMethodType() === 1 ) {
+                $this->formMethod = 'post';
+            }
+            else {
+                $this->formMethod = 'get';
             }
             ?><form <?php
                 if ( isset( $this->id ) ) {
@@ -136,9 +161,16 @@
                         ?>enctype="multipart/form-data"<?php
                     }
                 ?>><?php
-                $callable();
+                $callable( $this );
                 Form::createInput( 'hidden', 'token', '', $this->token );
             ?></form><?php
+        }
+    }
+
+    class HTMLException extends Exception {
+        public function __construct( $method ) {
+            parent::__construct( "Not a valid REST method: " . $method . 
+                " (must be one of 'create', 'view', 'listing', 'update', 'delete')" );
         }
     }
 
