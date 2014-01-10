@@ -6,6 +6,39 @@
         public $id;
         protected $token;
 
+        public static function isValidType( $type ) {
+            $valid_types = array(
+                'button',
+                'checkbox',
+                'color',
+                'date',
+                'datetime',
+                'datetime-local',
+                'email',
+                'file',
+                'hidden',
+                'image',
+                'month',
+                'number',
+                'password',
+                'radio',
+                'reset',
+                'search',
+                'submit',
+                'tel',
+                'text',
+                'time',
+                'url',
+                'week'
+            );
+            foreach ( $valid_types as $valid_type ) {
+                if ( $valid_type === $type ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public function __construct( $resource = '', $method = '' ) {
             $this->resource = $resource;
             $this->method = $method;
@@ -18,6 +51,9 @@
         }
 
         public static function createInput( $type = 'text', $name = '', $id = '', $value = '' ) {
+            if ( !Form::isValidType( $type ) ) {
+                $type = 'text';
+            }
             ?><p><input type="<?php
                 echo $type;
             ?>" <?php
