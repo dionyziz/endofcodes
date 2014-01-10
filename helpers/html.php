@@ -13,7 +13,7 @@
 
         public static function createError( $error_msg ) {
             ?><p class="error"><?php
-                    echo $error_msg;
+                echo $error_msg;
             ?></p><?php
         }
 
