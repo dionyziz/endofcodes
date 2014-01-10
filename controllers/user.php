@@ -1,10 +1,9 @@
 <?php
     class UserController extends ControllerBase {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '', 
-                $countryid = '', $day = '', $month = '', $year = '', $token = '' ) {
+                $countryid = '', $day = '', $month = '', $year = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
-            include_once 'models/formtoken.php';
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'password_not_matched' => true ) );
             }
@@ -50,10 +49,9 @@
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '', 
-                $countryid = '', $email = '', $token = '' ) {
+                $countryid = '', $email = '' ) {
             include_once 'models/user.php';
             include_once 'models/country.php';
-            include_once 'models/formtoken.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
@@ -84,9 +82,8 @@
             go();
         }
 
-        public function delete( $token = '' ) {
+        public function delete() {
             include_once 'models/user.php';
-            include_once 'models/formtoken.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
@@ -99,10 +96,7 @@
         public function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid, 
                 $password_empty, $password_not_matched, $password_small ) {
             include_once 'models/country.php'; 
-            include_once 'models/formtoken.php';
             $countries = Country::findAll();
-            $token = FormToken::create();
-            $_SESSION[ 'form' ][ 'token' ] = $token;  
             include 'views/user/create.php';
         }
 
@@ -110,9 +104,6 @@
                 $email_invalid, $email_used ) {
             include_once 'models/country.php';
             include_once 'models/user.php';
-            include_once 'models/formtoken.php';
-            $token = FormToken::create();
-            $_SESSION[ 'form' ][ 'token' ] = $token;
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }

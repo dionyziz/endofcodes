@@ -1,9 +1,10 @@
 <?php
+    include_once 'models/formtoken.php';
     class Form {
         private $resource;
         private $method;
         public $id;
-        public $token;
+        protected $token;
 
         public function __construct( $resource = '', $method = '' ) {
             $this->resource = $resource;
@@ -74,6 +75,7 @@
         }
 
         public function output( $callable ) {
+            $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create(); 
             ?><form <?php
                 if ( isset( $this->id ) ) {
                     ?>id="<?php

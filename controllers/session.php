@@ -1,6 +1,6 @@
 <?php
     class SessionController extends ControllerBase {
-        public function create( $username = '', $password = '', $token = '' ) {
+        public function create( $username = '', $password = '' ) {
             include_once 'models/formtoken.php';
             include_once 'models/user.php';
             if ( empty( $username ) ) {
@@ -23,16 +23,12 @@
             go();
         }
 
-        public function delete( $token = '' ) {
-            include_once 'models/formtoken.php';
+        public function delete() {
             unset( $_SESSION[ 'user' ] );
             go();
         }
 
         public function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
-            include_once 'models/formtoken.php';
-            $token = FormToken::create();
-            $_SESSION[ 'form' ][ 'token' ] = $token;  
             include 'views/session/create.php';
         }
     }

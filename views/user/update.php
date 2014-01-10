@@ -2,7 +2,6 @@
     include 'views/header.php';
 
     $form = new Form( 'user', 'update' );
-    $form->token = $token;
     $form->output( function() use( $email_invalid, $email_used, $password_wrong,
             $password_new_not_matched, $password_new_small, $countries, $user ) {
         ?><p>Change email</p><?php
