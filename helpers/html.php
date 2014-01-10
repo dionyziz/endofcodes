@@ -1,8 +1,8 @@
 <?php
     include_once 'models/formtoken.php';
     class Form {
-        private $resource;
-        private $method;
+        protected $resource;
+        protected $method;
         public $id;
         public $formMethod;
         public $hasFile = false;
