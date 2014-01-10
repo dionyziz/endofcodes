@@ -27,6 +27,8 @@
     $form->output( function() use( $username_empty, $username_invalid, $password_empty,
             $email_empty, $username_used, $password_small,
             $password_not_matched, $email_used, $email_invalid, $countries ) {
+        global $config;
+
         if ( isset( $username_empty ) ) { 
             Form::createError( 'Please type a username.' );
         }
@@ -51,7 +53,7 @@
         else {
             $username_value = "";
         }
-        Form::createInput( 'text', 'username', 'username', htmlspecialchars( $username_value ) );
+        Form::createInput( 'text', 'username', 'username', $username_value );
         Form::createLabel( 'password', 'Password' );
         if ( isset( $password_small ) ) {
             Form::createError( 'Password should be at least 7 characters long' );
@@ -77,16 +79,14 @@
         else {
             $email_value = "";
         }
-        Form::createInput( 'text', 'email', 'email', htmlspecialchars( $email_value ) );
+        Form::createInput( 'text', 'email', 'email', $email_value );
         Form::createLabel( 'dob', 'Date of birth' );
-        $days_select_array = array();
-        $days_select_array[] = array( 'content' => 'Select Day' );
+        $days_select_array = array( array( 'content' => 'Select Day' ) );
         for ( $i = 1; $i <= 31; ++$i ) {
             $days_select_array[] = array( 'value' => $i, 'content' => $i );
         }
         Form::createSelect( 'day', 'dob', $days_select_array );
-        $months_select_array = array();
-        $months_select_array[] = array( 'content' => 'Select Month' );
+        $months_select_array = array( array( 'content' => 'Select Month' ) );
         for ( $i = 1; $i <= 12; ++$i ) {
             $months_select_array[] = array( 
                 'value' => $i, 
@@ -94,15 +94,13 @@
             );
         }
         Form::createSelect( 'month', '', $months_select_array );
-        $years_select_array = array();
-        $years_select_array[] = array( 'content' => 'Select Year' );
+        $years_select_array = array( array( 'content' => 'Select Year' ) );
         $current_year = date( 'Y' );
-        for ( $i = $current_year - 8; $i >= $current_year - 100; --$i ) {
+        for ( $i = $current_year - $config[ 'age' ][ 'min' ]; $i >= $current_year - $config[ 'age' ][ 'max' ]; --$i ) {
             $years_select_array[] = array( 'value' => $i, 'content' => $i );
         }
         Form::createSelect( 'year', '', $years_select_array );
-        $countries_select_array = array();
-        $countries_select_array[] = array( 'content' => 'Select Country' );
+        $countries_select_array = array( array( 'content' => 'Select Country' ) );
         foreach ( $countries as $key => $country ) {
             $countries_select_array[] = array( 'value' => $key + 1, 'content' => $country[ 'name' ] );
         }

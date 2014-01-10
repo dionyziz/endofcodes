@@ -24,9 +24,11 @@
             Form::createError( "Password is incorrect." );
         }
         Form::createInput( 'password', 'password', 'password' );
+        ?><p><a href="">Forgot password?</a></p><?php
         Form::createInput( 'submit', '', '', 'Login' );
     } );
-?></div>
+?>
+</div>
 
 <p><a href="index.php?resource=user&amp;method=create">Don't have an account?</a></p>
 

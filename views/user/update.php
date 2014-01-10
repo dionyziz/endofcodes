@@ -31,8 +31,7 @@
         Form::createLabel( 'password_repeat', 'Repeat' );
         Form::createInput( 'password', 'password_repeat', 'password_repeat' );
         ?><p>Change country</p><?php
-        $countries_select_array = array();
-        $countries_select_array[] = array( 'content' => 'Select Country' );
+        $countries_select_array = array( array( 'content' => 'Select Country' ) );
         foreach ( $countries as $key => $country ) {
             $countries_select_array[] = array( 'value' => $key + 1, 'content' => $country[ 'name' ] );
         }

@@ -15,7 +15,11 @@
                 'avatar_path' => 'sample_path',
                 'flag_path' => 'static/images/flags/'
             ),
-            'pass_min_len' => 7
+            'pass_min_len' => 7,
+            'age' => array(
+                'min' => 8,
+                'max' => 100
+            )
         );
         if ( getEnv( 'DB_USER' ) !== false ) {
             $config[ 'db' ][ 'user' ] = getEnv( 'DB_USER' );
