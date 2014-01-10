@@ -33,10 +33,9 @@
                 'url',
                 'week'
             );
-            foreach ( $valid_types as $valid_type ) {
-                if ( $valid_type === $type ) {
-                    return true;
-                }
+            $valid_types = array_flip( $valid_types );
+            if ( isset( $valid_types[ $type ] ) ) {
+                return true;
             }
             return false;
         }
