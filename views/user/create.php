@@ -23,27 +23,26 @@
 <?php
     $form = new Form( 'user', 'create' );
     $form->id = 'register-form';
-    $form->formMethod = 'post';
-    $form->output( function() use( $username_empty, $username_invalid, $password_empty,
+    $form->output( function( $self ) use( $username_empty, $username_invalid, $password_empty,
             $email_empty, $username_used, $password_small,
             $password_not_matched, $email_used, $email_invalid, $countries ) {
         global $config;
 
         if ( isset( $username_empty ) ) { 
-            Form::createError( 'Please type a username.' );
+            $self->createError( 'Please type a username.' );
         }
         if ( isset( $username_invalid ) ) { 
-            Form::createError( 'Usernames can only have numbers, letters, "." and "_"' );
+            $self->createError( 'Usernames can only have numbers, letters, "." and "_"' );
         }
         if ( isset( $password_empty ) ) {
-            Form::createError( 'Please type a password.' );
+            $self->createError( 'Please type a password.' );
         }
         if ( isset( $email_empty ) ) {
-            Form::createError( 'Please type an email.' );
+            $self->createError( 'Please type an email.' );
         }
-        Form::createLabel( 'username', 'Username' );
+        $self->createLabel( 'username', 'Username' );
         if ( isset( $username_used ) ) {
-            Form::createError( 'Username already exists' );
+            $self->createError( 'Username already exists' );
             $username_value = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'username' ] ) ) {
@@ -53,23 +52,23 @@
         else {
             $username_value = "";
         }
-        Form::createInput( 'text', 'username', 'username', $username_value );
-        Form::createLabel( 'password', 'Password' );
+        $self->createInput( 'text', 'username', 'username', $username_value );
+        $self->createLabel( 'password', 'Password' );
         if ( isset( $password_small ) ) {
-            Form::createError( 'Password should be at least 7 characters long' );
+            $self->createError( 'Password should be at least 7 characters long' );
         }
         if ( isset( $password_not_matched ) ) {
-            Form::createError( 'Passwords do not match' );
+            $self->createError( 'Passwords do not match' );
         }
-        Form::createInput( 'password', 'password', 'password' );
-        Form::createLabel( 'password_repeat', 'Repeat' );
-        Form::createInput( 'password', 'password_repeat', 'password_repeat' );
-        Form::createLabel( 'email', 'Email' );
+        $self->createInput( 'password', 'password', 'password' );
+        $self->createLabel( 'password_repeat', 'Repeat' );
+        $self->createInput( 'password', 'password_repeat', 'password_repeat' );
+        $self->createLabel( 'email', 'Email' );
         if ( isset( $email_invalid ) ) {
-            Form::createError( 'This is not a valid email' );
+            $self->createError( 'This is not a valid email' );
         }
         if ( isset( $email_used ) ) { 
-            Form::createError( 'Email is already used' );
+            $self->createError( 'Email is already used' );
             $email_value = "";
         }
         else if ( isset( $_SESSION[ 'create_post' ][ 'email' ] ) ) {
@@ -79,13 +78,13 @@
         else {
             $email_value = "";
         }
-        Form::createInput( 'text', 'email', 'email', $email_value );
-        Form::createLabel( 'dob', 'Date of birth' );
+        $self->createInput( 'text', 'email', 'email', $email_value );
+        $self->createLabel( 'dob', 'Date of birth' );
         $days_select_array = array( array( 'content' => 'Select Day' ) );
         for ( $i = 1; $i <= 31; ++$i ) {
             $days_select_array[] = array( 'value' => $i, 'content' => $i );
         }
-        Form::createSelect( 'day', 'dob', $days_select_array );
+        $self->createSelect( 'day', 'dob', $days_select_array );
         $months_select_array = array( array( 'content' => 'Select Month' ) );
         for ( $i = 1; $i <= 12; ++$i ) {
             $months_select_array[] = array( 
@@ -93,19 +92,19 @@
                 'content' => date( 'M', mktime( 0, 0, 0, $i, 1, 2000 ) ) 
             );
         }
-        Form::createSelect( 'month', '', $months_select_array );
+        $self->createSelect( 'month', '', $months_select_array );
         $years_select_array = array( array( 'content' => 'Select Year' ) );
         $current_year = date( 'Y' );
         for ( $i = $current_year - $config[ 'age' ][ 'min' ]; $i >= $current_year - $config[ 'age' ][ 'max' ]; --$i ) {
             $years_select_array[] = array( 'value' => $i, 'content' => $i );
         }
-        Form::createSelect( 'year', '', $years_select_array );
+        $self->createSelect( 'year', '', $years_select_array );
         $countries_select_array = array( array( 'content' => 'Select Country' ) );
         foreach ( $countries as $key => $country ) {
             $countries_select_array[] = array( 'value' => $key + 1, 'content' => $country[ 'name' ] );
         }
-        Form::createSelect( 'countryid', '', $countries_select_array );
-        Form::createInput( 'submit', '', '', 'Register' ); 
+        $self->createSelect( 'countryid', '', $countries_select_array );
+        $self->createInput( 'submit', '', '', 'Register' ); 
     } );
 
     include 'views/footer.php';

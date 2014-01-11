@@ -5,27 +5,26 @@
 <div id="login"><?php 
     $form = new Form( 'session', 'create' );  
     $form->id = 'login-form';
-    $form->formMethod = 'post';
-    $form->output( function() use ( $username_empty, $password_empty,
+    $form->output( function( $self ) use ( $username_empty, $password_empty,
             $username_wrong, $password_wrong ) {
         if ( isset( $username_empty ) ) {
-            Form::createError( "Please type a username." );
+            $self->createError( "Please type a username." );
         }
         if ( isset( $password_empty ) ) {
-            Form::createError( "Please type a password." );
+            $self->createError( "Please type a password." );
         }
-        Form::createLabel( 'username', 'Username' );
+        $self->createLabel( 'username', 'Username' );
         if ( isset( $username_wrong ) ) {
-            Form::createError( "Username doesn't exist." );
+            $self->createError( "Username doesn't exist." );
         }
-        Form::createInput( 'text', 'username', 'username' );
-        Form::createLabel( 'password', 'Password' );
+        $self->createInput( 'text', 'username', 'username' );
+        $self->createLabel( 'password', 'Password' );
         if ( isset( $password_wrong ) ) {
-            Form::createError( "Password is incorrect." );
+            $self->createError( "Password is incorrect." );
         }
-        Form::createInput( 'password', 'password', 'password' );
+        $self->createInput( 'password', 'password', 'password' );
         ?><p><a href="">Forgot password?</a></p><?php
-        Form::createInput( 'submit', '', '', 'Login' );
+        $self->createInput( 'submit', '', '', 'Login' );
     } );
 ?>
 </div>
