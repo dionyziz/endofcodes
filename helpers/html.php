@@ -117,7 +117,7 @@
             if ( isset( $methods[ $this->method ] ) ) {
                 return $methods[ $this->method ];
             }
-            throw new HTMLException( $this->method );
+            throw new HTMLFormInvalidException( $this->method );
         }
        
         public function createLabel( $for, $text ) {
@@ -159,12 +159,18 @@
                     }
                 ?>><?php
                 $callable( $this );
-                Form::createInput( 'hidden', 'token', '', $this->token );
+                $this->createInput( 'hidden', 'token', '', $this->token );
             ?></form><?php
         }
     }
 
     class HTMLException extends Exception {
+        public function __construct( $error ) {
+            parent::__construct( $error );
+        }
+    }
+
+    class HTMLFormInvalidException extends HTMLException {
         public function __construct( $method ) {
             parent::__construct( "Not a valid REST method: " . $method . 
                 " (must be one of 'create', 'view', 'listing', 'update', 'delete')" );
