@@ -114,10 +114,8 @@
                 'update' => 1,
                 'view' => 0
             );
-            foreach ( $methods as $method => $value ) {
-                if ( $this->method === $method ) {
-                    return $value;
-                }
+            if ( isset( $methods[ $this->method ] ) ) {
+                return $methods[ $this->method ];
             }
             throw new HTMLException( $this->method );
         }
