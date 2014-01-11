@@ -4,7 +4,6 @@
     <head>
         <title>EndofCodes Demo</title>
         <?php
-            include 'helpers/html.php';
             includeStyle( "general" );
             includeStyle( "header" );
             includeStyle( "home" );

@@ -106,7 +106,7 @@
             ?></select></p><?php
         }
 
-        protected function giveMethodType() {
+        public static function getRESTMethodIdempotence( $method ) {
             $methods = array( 
                 'create' => 1,
                 'listing' => 0,
@@ -114,8 +114,8 @@
                 'update' => 1,
                 'view' => 0
             );
-            if ( isset( $methods[ $this->method ] ) ) {
-                return $methods[ $this->method ];
+            if ( isset( $methods[ $method ] ) ) {
+                return $methods[ $method ];
             }
             throw new HTMLFormInvalidException( $this->method );
         }
@@ -135,7 +135,7 @@
             else {
                 $this->token = $_SESSION[ 'form' ][ 'token' ];
             }
-            if ( $this->giveMethodType() === 1 ) {
+            if ( Form::getRESTMethodIdempotence( $this->method ) === 1 ) {
                 $this->formMethod = 'post';
             }
             else {
