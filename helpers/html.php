@@ -117,7 +117,7 @@
             if ( isset( $methods[ $method ] ) ) {
                 return $methods[ $method ];
             }
-            throw new HTMLFormInvalidException( $this->method );
+            throw new HTMLFormInvalidException( $method );
         }
        
         public function createLabel( $for, $text ) {

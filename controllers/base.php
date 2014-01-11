@@ -10,18 +10,13 @@
         protected function getControllerMethod( $requested_method, $http_request_method ) {
             $method = $requested_method; 
 
-            $methods = array( 
-                'create' => 1,
-                'listing' => 0,
-                'delete' => 1,
-                'update' => 1,
-                'view' => 0
-            );
-            if ( !isset( $methods[ $method ] ) ) {
-                $method = 'view';
+            try {
+                if ( Form::getRESTMethodIdempotence( $method ) === 1 && $http_request_method != 'POST' ) {
+                    $method .= 'View';
+                }
             }
-            if ( $methods[ $method ] == 1 && $http_request_method != 'POST' ) {
-                $method .= 'View';
+            catch ( HTMLFormInvalidException $e ) {
+                $method = 'view';
             }
 
             return $method;
