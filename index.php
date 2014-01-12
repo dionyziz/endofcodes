@@ -31,6 +31,6 @@
         header( $e->header );
     }
     catch ( Exception $e ) {
-        die( $controllername . '::' . $method . ' call rejected: ' . $e->getMessage() );
+        die( $controllername . '->' . $method . ' call rejected: ' . $e->getMessage() );
     }
 ?>

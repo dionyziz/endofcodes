@@ -106,7 +106,7 @@
             ?></select></p><?php
         }
 
-        protected function giveMethodType() {
+        public static function getRESTMethodIdempotence( $method ) {
             $methods = array( 
                 'create' => 1,
                 'listing' => 0,
@@ -114,12 +114,10 @@
                 'update' => 1,
                 'view' => 0
             );
-            foreach ( $methods as $method => $value ) {
-                if ( $this->method === $method ) {
-                    return $value;
-                }
+            if ( isset( $methods[ $method ] ) ) {
+                return $methods[ $method ];
             }
-            throw new HTMLException( $this->method );
+            throw new HTMLFormInvalidException( $method );
         }
        
         public function createLabel( $for, $text ) {
@@ -137,7 +135,7 @@
             else {
                 $this->token = $_SESSION[ 'form' ][ 'token' ];
             }
-            if ( $this->giveMethodType() === 1 ) {
+            if ( Form::getRESTMethodIdempotence( $this->method ) === 1 ) {
                 $this->formMethod = 'post';
             }
             else {
@@ -161,12 +159,18 @@
                     }
                 ?>><?php
                 $callable( $this );
-                Form::createInput( 'hidden', 'token', '', $this->token );
+                $this->createInput( 'hidden', 'token', '', $this->token );
             ?></form><?php
         }
     }
 
     class HTMLException extends Exception {
+        public function __construct( $error ) {
+            parent::__construct( $error );
+        }
+    }
+
+    class HTMLFormInvalidException extends HTMLException {
         public function __construct( $method ) {
             parent::__construct( "Not a valid REST method: " . $method . 
                 " (must be one of 'create', 'view', 'listing', 'update', 'delete')" );
