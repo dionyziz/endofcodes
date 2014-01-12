@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 14, 2013 at 07:03 AM
+-- Generation Time: Dec 24, 2013 at 10:20 PM
 -- Server version: 5.5.34
--- PHP Version: 5.3.10-1ubuntu3.8
+-- PHP Version: 5.3.10-1ubuntu3.9
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -31,7 +31,46 @@ CREATE TABLE IF NOT EXISTS `countries` (
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `shortname` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `creatures`
+--
+
+CREATE TABLE IF NOT EXISTS `creatures` (
+  `id` int(11) NOT NULL,
+  `gameid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  PRIMARY KEY (`gameid`,`userid`,`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `games`
+--
+
+CREATE TABLE IF NOT EXISTS `games` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `height` int(11) NOT NULL,
+  `width` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gameusers`
+--
+
+CREATE TABLE IF NOT EXISTS `gameusers` (
+  `userid` int(11) NOT NULL,
+  `gameid` int(11) NOT NULL,
+  PRIMARY KEY (`gameid`,`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -42,9 +81,26 @@ CREATE TABLE IF NOT EXISTS `countries` (
 CREATE TABLE IF NOT EXISTS `images` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
-  `name` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `name` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roundcreatures`
+--
+
+CREATE TABLE IF NOT EXISTS `roundcreatures` (
+  `roundid` int(11) NOT NULL,
+  `gameid` int(11) NOT NULL,
+  `creatureid` int(11) NOT NULL,
+  `desire` enum('NONE','NORTH','EAST','SOUTH','WEST') COLLATE utf8_unicode_ci NOT NULL,
+  `locationx` int(11) DEFAULT NULL,
+  `locationy` int(11) DEFAULT NULL,
+  `hp` int(3) DEFAULT NULL,
+  PRIMARY KEY (`gameid`,`roundid`,`creatureid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -65,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

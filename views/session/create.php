@@ -2,35 +2,34 @@
     include 'views/header.php';
 ?>
 
-<div id="login"><?php
+<div id="login"><?php 
+    $form = new Form( 'session', 'create' );  
+    $form->id = 'login-form';
+    $form->output( function( $self ) use ( $username_empty, $password_empty,
+            $username_wrong, $password_wrong ) {
         if ( isset( $username_empty ) ) {
-            ?><p class="error">Please type a username.</p><?php
+            $self->createError( "Please type a username." );
         }
-        else if ( isset( $password_empty ) ) {
-            ?><p class="error">Please type a password.</p><?php
+        if ( isset( $password_empty ) ) {
+            $self->createError( "Please type a password." );
         }
-    ?>
-
-    <form id="login-form" action="index.php?resource=session&amp;method=create" method="POST">
-        <label for="username">Username</label>
-        <?php
-            if ( isset( $username_wrong ) ) {
-                ?><p class="error">Username doesn't exist</p><?php
-            }
-        ?>
-        <p><input type="text" name="username" id="username" /></p>
-        <label for="password">Password</label>
-        <?php
-            if ( isset( $password_wrong ) ) {
-                ?><p class="error">Password is incorrect</p><?php
-            }
-        ?>
-        <p><input type="password" name="password" id="password" /></p>
-        <p><a href="">Forgot password?</a></p>
-        <p><input type="submit" value="Login" /></p>
-    </form>
-    <p><a href="index.php?resource=user&amp;method=create">Don't have an account?</a></p>
+        $self->createLabel( 'username', 'Username' );
+        if ( isset( $username_wrong ) ) {
+            $self->createError( "Username doesn't exist." );
+        }
+        $self->createInput( 'text', 'username', 'username' );
+        $self->createLabel( 'password', 'Password' );
+        if ( isset( $password_wrong ) ) {
+            $self->createError( "Password is incorrect." );
+        }
+        $self->createInput( 'password', 'password', 'password' );
+        ?><p><a href="">Forgot password?</a></p><?php
+        $self->createInput( 'submit', '', '', 'Login' );
+    } );
+?>
 </div>
+
+<p><a href="index.php?resource=user&amp;method=create">Don't have an account?</a></p>
 
 <?php
     include 'views/footer.php';

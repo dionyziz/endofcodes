@@ -1,6 +1,6 @@
 <?php
-    class ImageController {
-        public static function create( $image ) {
+    class ImageController extends ControllerBase {
+        public function create( $image ) {
             include_once 'models/image.php';
             include_once 'models/extentions.php';
             if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {

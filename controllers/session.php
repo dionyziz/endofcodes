@@ -1,6 +1,6 @@
 <?php
-    class SessionController {
-        public static function create( $username = '', $password = '' ) {
+    class SessionController extends ControllerBase {
+        public function create( $username = '', $password = '' ) {
             include_once 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', array( 'username_empty' => true ) );
@@ -22,12 +22,12 @@
             go();
         }
 
-        public static function delete() {
+        public function delete() {
             unset( $_SESSION[ 'user' ] );
             go();
         }
 
-        public static function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
+        public function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
             include 'views/session/create.php';
         }
     }

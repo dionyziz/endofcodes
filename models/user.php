@@ -45,7 +45,7 @@
             if ( empty( $this->username ) ) {
                 throw new ModelValidationException( 'username_empty' );
             }
-            if ( strpos( $this->username, ' ' ) || preg_match( '#[^a-zA-Z0-9]#', $this->username ) ) {
+            if ( preg_match( '#[^a-zA-Z0-9._]#', $this->username ) ) {
                 throw new ModelValidationException( 'username_invalid' );
             }
             if ( empty( $this->password ) && !$this->exists ) {

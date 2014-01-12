@@ -6,6 +6,12 @@
             echo $user->image->target_path;
         ?>" alt="Profile Picture" width="100" height="100" /></p>
 
+<p><img src="<?php
+            echo $user->country->flag;
+        ?>" alt="<?php
+            echo $user->country->name;
+        ?>" width="100" height="100" /></p>
+
 <p><?php
     echo htmlspecialchars( $user->username );
 ?></p>
@@ -29,7 +35,7 @@
 <p><a href="">Add friend</a></p>
 
 <?php 
-    if ( $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
+    if ( isset( $_SESSION[ 'user' ][ 'id' ] ) && $_SESSION[ 'user' ][ 'id' ] == $user->id ) {
         ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
     }
     include 'views/footer.php';

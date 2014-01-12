@@ -1,18 +1,18 @@
 <?php
     class Extention {
-        public function get( $name ) {
+        public static function get( $name ) {
             if ( strrpos( $name, "." ) === false ) {
                 return "";
             }
             return substr( $name, strrpos( $name, "." ) + 1 );
         }
 
-        public function getValid() {
+        public static function getValid() {
             global $config;
             return $config[ 'files' ][ 'avatar_extentions' ];
         }
 
-        public function valid( $ext ) {
+        public static function valid( $ext ) {
             $valid = Extention::getValid();
             $valid = array_flip( $valid );
             return isset( $valid[ $ext ] );
