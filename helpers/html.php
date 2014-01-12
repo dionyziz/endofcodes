@@ -34,10 +34,7 @@
                 'week'
             );
             $valid_types = array_flip( $valid_types );
-            if ( isset( $valid_types[ $type ] ) ) {
-                return true;
-            }
-            return false;
+            return isset( $valid_types[ $type ] );
         }
 
         public function __construct( $resource = '', $method = '' ) {
