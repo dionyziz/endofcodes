@@ -8,9 +8,7 @@
         public $y;
         public $intent;
 
-        public function __construct( $id, $userid, $gameid ) {
-            $this->userid = $userid;
-            $this->gameid = $gameid;
+        public function __construct( $id ) {
             $this->id = $id;
         }
 
@@ -18,17 +16,17 @@
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
             }
-            if ( !is_int( $this->userid ) ) {
+            if ( !is_int( $this->user->id ) ) {
                 throw new ModelValidationException( 'userid_not_valid' );
             }
-            if ( !is_int( $this->gameid ) ) {
+            if ( !is_int( $this->game->id ) ) {
                 throw new ModelValidationException( 'gameid_not_valid' );
             }
         }
 
         protected function create() {
-            $gameid = $this->gameid;
-            $userid = $this->userid;
+            $gameid = $this->game->id;
+            $userid = $this->user->id;
             $id = $this->id;
             $this->exists = true;
             dbInsert( 
