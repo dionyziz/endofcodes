@@ -17,8 +17,9 @@
             if ( !$user->authenticatesWithPassword( $password ) ) {
                 go( 'session', 'create', array( 'password_wrong' => true ) );
             }
-            // if ( $persistent == 'on' ) {
-            //}
+            if ( $persistent == 'on' ) {
+                $user->createPersistentCookie();     
+            }
             $id = $user->id;
             $_SESSION[ 'user' ] = compact( 'id', 'username' );
             go();
