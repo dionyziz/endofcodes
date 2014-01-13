@@ -137,5 +137,17 @@
             }
             return false;
         }
+
+        public function createPersistentCookie () {
+            $id = $this->id;
+            $value = openssl_random_pseudo_bytes( 32 );
+            $persistent = base64_encode( $value );
+            setcookie( "persistent", $value, time() + 3600 * 24 * 365 );
+            $res = dbUpdate(
+                'users',
+                compact( "persistent"),
+                compact( "id" )
+            );
+        }
     }
 ?>
