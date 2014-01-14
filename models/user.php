@@ -138,16 +138,21 @@
             return false;
         }
 
-        public function createPersistentCookie () {
+        public function createPersistentCookie() {
             $id = $this->id;
             $value = openssl_random_pseudo_bytes( 32 );
             $cookievalue = base64_encode( $value );
-            setcookie( "cookievalue", $value, time() + 3600 * 24 * 365 );
+            setcookie( 'cookievalue', $value, time() + 3600 * 24 * 365 );
             $res = dbUpdate(
                 'users',
-                compact( "cookievalue" ),
-                compact( "id" )
+                compact( 'cookievalue' ),
+                compact( 'id' )
             );
+        }
+
+        public static function revokeSession() {
+            $row = dbSelectOne( 'users', array( 'id' ), compact( $_COOKIE[ 'cookievalue' ] ) );
+            return $row[ 'id' ];
         }
     }
 ?>

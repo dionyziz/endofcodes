@@ -73,5 +73,18 @@
 
             $this->callWithNamedArgs( $method_reflection, array( $this, $method ), $vars );
         }
+        public function sessionCheck() {
+            if ( isset( $_SESSION[ 'user' ] ) ) {
+                return;
+            }
+            else if( isset( $_COOKIE[ 'cookievalue' ] ) ) {
+                include 'models/user.php';
+                $id = User::revokeSession();
+                $user = new User($id);
+                $username = $user->username;
+                $_SESSION[ 'user' ] = compact( 'id', 'username' );
+            }
+            else return; 
+        }
     }
 ?>
