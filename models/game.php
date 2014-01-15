@@ -6,9 +6,14 @@
         public $height;
         public $rounds;
 
-        public function __construct( $width, $height ) {
-            $this->width = $width;
-            $this->height = $height;
+        public function __construct( $id = false ) {
+            if ( $id ) {
+                $game_info = dbSelectOne( 'games', array( 'created', 'width', 'height' ), compact( 'id' ) ); 
+                $this->id = $id;
+                $this->created = $game_info[ 'created' ];
+                $this->width = $game_info[ 'width' ];
+                $this->height = $game_info[ 'height' ];
+            }
         }
 
         protected function validate() {

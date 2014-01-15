@@ -3,9 +3,12 @@
     include 'models/creature.php';
     include 'models/round.php';
     include 'models/intent.php';
+    include 'models/user.php';
     include 'models/game.php';
-    $game = new Game( 10, 10 );
+    $user = new User( 1 );
+    $game = new Game();
     $game->created = date('Y-m-d H:i:s');
+    $game->width = $game->height = 10;
     $game->save();
     $game->rounds = array();
     for ( $i = 0; $i <= 2; ++$i ) {
@@ -16,7 +19,7 @@
             if ( $i === 0 ) {
                 $game->rounds[ $i ]->creatures[ $j ] = new Creature( $k ); 
                 $game->rounds[ $i ]->creatures[ $j ]->game = $game;
-                $game->rounds[ $i ]->creatures[ $j ]->userid = $k;
+                $game->rounds[ $i ]->creatures[ $j ]->user = $user;
                 $game->rounds[ $i ]->creatures[ $j ]->round = $game->rounds[ $i ]; 
                 $game->rounds[ $i ]->creatures[ $j ]->x = 1;
                 $game->rounds[ $i ]->creatures[ $j ]->y = 0;
