@@ -150,7 +150,7 @@
             );
         }
 
-        public static function revokeSession() {
+        public static function getIdFromCookieValue() {
             try {
                 $row = dbSelectOne( 
                     'users', 
@@ -158,7 +158,7 @@
                     compact( $_COOKIE[ 'cookievalue' ] ) 
                 );
             }
-            catch ( HTTPUnauthorizedEXception $e ) {
+            catch ( HTTPUnauthorizedException $e ) {
                 throw new HTTPUnauthorizedException();
             }
             return $row[ 'id' ];

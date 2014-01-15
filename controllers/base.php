@@ -79,7 +79,7 @@
             }
             else if( isset( $_COOKIE[ 'cookievalue' ] ) ) {
                 include 'models/user.php';
-                $id = User::revokeSession();
+                $id = User::getIdFromCookieValue();
                 $user = new User($id);
                 $username = $user->username;
                 $_SESSION[ 'user' ] = compact( 'id', 'username' );
