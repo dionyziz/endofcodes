@@ -18,8 +18,8 @@
                 $this->y = $creature_info[ 'locationy' ];
                 $this->hp = $creature_info[ 'hp' ];
                 $this->intent = new Intent(  
-                    'ACTION_' . $creature_info[ 'desire' ], 
-                    'DESTINATION_' . $creature_info[ 'destination' ] 
+                    'ACTION_' . $creature_info[ 'action' ], 
+                    'DIRECTION_' . $creature_info[ 'direction' ] 
                 );
             }
         }
