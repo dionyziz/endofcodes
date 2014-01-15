@@ -18,7 +18,6 @@
                 for ( $i = 0; $i <= count( $rounds ); ++$i ) {
                     $this->rounds[ $i ] = new Round( $this, $i );
                 }
-                $this->created = date('Y-m-d H:i:s');
             }
         }
 
@@ -34,7 +33,7 @@
         protected function create() {
             $width = $this->width;
             $height = $this->height;
-            $created = $this->created; 
+            $created = $this->created = date('Y-m-d H:i:s');
             $this->id = dbInsert(
                 'games',
                 compact( 'width', 'height', 'created' )
