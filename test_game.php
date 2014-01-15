@@ -17,7 +17,8 @@
         $game->rounds[ $i ]->id = $i; 
         for ( $j = 0, $k = 0; $j <= 2; ++$j, $k += 2 ) {
             if ( $i === 0 ) {
-                $game->rounds[ $i ]->creatures[ $j ] = new Creature( $k ); 
+                $game->rounds[ $i ]->creatures[ $j ] = new Creature(); 
+                $game->rounds[ $i ]->creatures[ $j ]->id = $j;
                 $game->rounds[ $i ]->creatures[ $j ]->game = $game;
                 $game->rounds[ $i ]->creatures[ $j ]->user = $user;
                 $game->rounds[ $i ]->creatures[ $j ]->round = $game->rounds[ $i ]; 

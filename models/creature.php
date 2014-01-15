@@ -10,10 +10,6 @@
         public $alive;
         public $hp;
 
-        public function __construct( $id ) {
-            $this->id = $id;
-        }
-
         public function validate() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
