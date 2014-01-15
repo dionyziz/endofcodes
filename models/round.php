@@ -2,19 +2,19 @@
     class Round extends ActiveRecordBase {
         public $creatures;
         public $id;
-        public $gameid;
+        public $game;
 
         protected function validate() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
             }
-            if ( !is_int( $this->gameid ) ) {
+            if ( !is_int( $this->game->id ) ) {
                 throw new ModelValidationException( 'gameid_not_valid' );
             }
         }
 
         protected function create() {
-            $gameid = $this->gameid;
+            $gameid = $this->game->id;
             $roundid = $this->id;
             foreach ( $this->creatures as $creature ) {
                     $locationx = $creature->x;
