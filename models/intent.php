@@ -11,38 +11,17 @@
         public $direction;
 
         public function __construct( $action, $direction ) {
-            switch( $direction ) {
-                case 'DIRECTION_NONE':
-                    $this->direction = DIRECTION_NONE;
-                    break;
-                case 'DIRECTION_NORTH':
-                    $this->direction = DIRECTION_NORTH;
-                    break;
-                case 'DIRECTION_EAST':
-                    $this->direction = DIRECTION_EAST;
-                    break;
-                case 'DIRECTION_SOUTH':
-                    $this->direction = DIRECTION_SOUTH;
-                    break;
-                case 'DIRECTION_WEST':
-                    $this->direction = DIRECTION_SOUTH;
-                    break;
-                default:
-                    $this->direction = NULL;
-                    break;
-            }
-
-            switch( $action ) {
-                case 'ACTION_ATACK':
-                    $this->action = ACTION_ATACK;
-                    break;
-                case 'ACTION_MOVE':
-                    $this->action = ACTION_MOVE;
-                    break;
-                default:
-                    $this->action = NULL;
-                    break;
-            }
+            $this->direction = array(
+                'DIRECTION_NONE' => DIRECTION_NONE,
+                'DIRECTION_NORTH' => DIRECTION_NORTH,
+                'DIRECTION_EAST' => DIRECTION_EAST,
+                'DIRECTION_SOUTH' => DIRECTION_SOUTH,
+                'DIRECTION_WEST' => DIRECTION_WEST
+            )[ $direction ];
+            $this->action = array(
+                'ACTION_ATACK' => ACTION_ATACK,
+                'ACTION_MOVE' => ACTION_MOVE
+            )[ $action ];
         }
     }
 ?>

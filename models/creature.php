@@ -7,6 +7,8 @@
         public $x; 
         public $y;
         public $intent;
+        public $alive;
+        public $hp;
 
         public function __construct( $id ) {
             $this->id = $id;
