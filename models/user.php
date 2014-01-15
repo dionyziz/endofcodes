@@ -151,7 +151,16 @@
         }
 
         public static function revokeSession() {
-            $row = dbSelectOne( 'users', array( 'id' ), compact( $_COOKIE[ 'cookievalue' ] ) );
+            try {
+                $row = dbSelectOne( 
+                    'users', 
+                    array( 'id' ), 
+                    compact( $_COOKIE[ 'cookievalue' ] ) 
+                );
+            }
+            catch ( HTTPUnauthorizedEXception $e ) {
+                throw new HTTPUnauthorizedException();
+            }
             return $row[ 'id' ];
         }
     }

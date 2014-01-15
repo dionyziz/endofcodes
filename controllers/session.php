@@ -31,14 +31,6 @@
             go();
         }
 
-       // public static function revoke() {
-       //     include 'models/user.php';
-       //     $id = User::revokeSession();
-       //    $user = new User($id);
-       //     $username = $user->username;
-       //     $_SESSION[ 'user' ] = compact( 'id', 'username' );
-       // }
-      
         public function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
             include 'views/session/create.php';
         }
