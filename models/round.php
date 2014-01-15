@@ -4,6 +4,26 @@
         public $id;
         public $game;
 
+        public function __construct( $game = false, $id = false ) {
+            if ( $id && $game ) {
+                $this->exists = true;
+                $this->id = $id;
+                $this->game = $game;
+                $gameid = $game->id;
+                $roundid = $id;
+                $creatures_info = dbSelect(
+                    'roundcreatures',
+                    array( 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ),
+                    compact( 'roundid', 'gameid' )
+                );
+                foreach ( $creatures_info as $i => $creature_info ) {
+                    $this->creatures[ $i ] = new Creature( $creature_info );
+                    $this->creatures[ $i ]->game = $game;
+                    $this->creatures[ $i ]->round = $this;
+                }
+            }
+        }
+
         protected function validate() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );

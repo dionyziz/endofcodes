@@ -5,7 +5,9 @@
     include 'models/intent.php';
     include 'models/user.php';
     include 'models/game.php';
-    $user = new User( 1 );
+    $game = new Game( 7 );
+    echo $game->rounds[ 2 ]->creatures[ 1 ]->id;
+    /*$user = new User( 1 );
     $game = new Game();
     $game->created = date('Y-m-d H:i:s');
     $game->width = $game->height = 10;
@@ -48,4 +50,5 @@
         }
         $game->rounds[ $i ]->save();
     }
+    */
 ?>

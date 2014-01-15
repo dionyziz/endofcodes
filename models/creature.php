@@ -10,6 +10,20 @@
         public $alive;
         public $hp;
 
+        public function __construct( $creature_info = array() ) {
+            if ( !empty( $creature_info ) ) {
+                $this->exists = true;
+                $this->id = $creature_info[ 'creatureid' ];
+                $this->x = $creature_info[ 'locationx' ];
+                $this->y = $creature_info[ 'locationy' ];
+                $this->hp = $creature_info[ 'hp' ];
+                $this->intent = new Intent(  
+                    'ACTION_' . $creature_info[ 'desire' ], 
+                    'DESTINATION_' . $creature_info[ 'destination' ] 
+                );
+            }
+        }
+
         public function validate() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
