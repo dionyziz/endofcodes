@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 4.0.6deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 24, 2013 at 10:20 PM
--- Server version: 5.5.34
--- PHP Version: 5.3.10-1ubuntu3.9
+-- Generation Time: Jan 16, 2014 at 08:14 PM
+-- Server version: 5.5.34-0ubuntu0.13.10.1
+-- PHP Version: 5.5.3-1ubuntu2.1
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `countries` (
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `shortname` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -54,11 +54,11 @@ CREATE TABLE IF NOT EXISTS `creatures` (
 
 CREATE TABLE IF NOT EXISTS `games` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
+  `created` date NOT NULL,
   `height` int(11) NOT NULL,
   `width` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   `userid` int(11) NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `roundcreatures` (
   `roundid` int(11) NOT NULL,
   `gameid` int(11) NOT NULL,
   `creatureid` int(11) NOT NULL,
-  `desire` enum('NONE','NORTH','EAST','SOUTH','WEST') COLLATE utf8_unicode_ci NOT NULL,
+  `desire` enum('NORTH','WEST','EAST','SOUTH','NONE') COLLATE utf8_unicode_ci NOT NULL,
   `locationx` int(11) DEFAULT NULL,
   `locationy` int(11) DEFAULT NULL,
   `hp` int(3) DEFAULT NULL,
@@ -118,10 +118,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `countryid` int(4) unsigned NOT NULL,
   `dob` date NOT NULL,
   `boturl` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `cookievalue` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
