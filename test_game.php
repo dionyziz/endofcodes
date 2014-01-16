@@ -7,6 +7,7 @@
     include 'models/game.php';
     $game = new Game( 7 );
     echo $game->rounds[ 2 ]->creatures[ 1 ]->id;
+    echo $game->rounds[ 2 ]->creatures[ 1 ]->user->id;
     /*$user = new User( 1 );
     $game = new Game();
     $game->created = date('Y-m-d H:i:s');

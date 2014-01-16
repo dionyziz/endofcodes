@@ -17,9 +17,17 @@
                     compact( 'roundid', 'gameid' )
                 );
                 foreach ( $creatures_info as $i => $creature_info ) {
+                    $id = $creature_info[ 'creatureid' ];
+                    $user_info = dbSelectOne(
+                        'creatures',
+                        array( 'userid' ),
+                        compact( 'id' )
+                    );
+                    $user = new User( $user_info[ 'userid' ] );
                     $this->creatures[ $i ] = new Creature( $creature_info );
                     $this->creatures[ $i ]->game = $game;
                     $this->creatures[ $i ]->round = $this;
+                    $this->creatures[ $i ]->user = $user;
                 }
             }
         }
