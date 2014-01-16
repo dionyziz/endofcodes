@@ -48,23 +48,9 @@
                     $locationx = $creature->x;
                     $locationy = $creature->y;
                     $hp = $creature->hp;
-                    switch ( $creature->intent->direction ) {
-                        case 0:
-                            $desire = 'NONE';
-                            break;
-                        case 1:
-                            $desire = 'NORTH';
-                            break;
-                        case 2:
-                            $desire = 'EAST';
-                            break;
-                        case 3:
-                            $desire = 'SOUTH';
-                            break;
-                        case 4:
-                            $desire = 'WEST';
-                            break;
-                    }
+                    $desire = array(
+                        'NONE', 'NORTH', 'EAST', 'SOUTH', 'WEST'
+                    )[ $creature->intent->direction ];
                     $creatureid = $creature->id;
                     dbInsert(
                         'roundcreatures',
