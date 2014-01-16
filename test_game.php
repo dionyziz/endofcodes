@@ -5,24 +5,18 @@
     include 'models/intent.php';
     include 'models/user.php';
     include 'models/game.php';
-    $game = new Game( 7 );
-    echo $game->rounds[ 2 ]->creatures[ 1 ]->id;
-    echo $game->rounds[ 2 ]->creatures[ 1 ]->user->id;
-    /*$user = new User( 1 );
+    //$game = new Game( 7 );
+    //echo $game->rounds[ 2 ]->creatures[ 1 ]->id;
+    //echo $game->rounds[ 2 ]->creatures[ 1 ]->user->id;
+    $user = new User( 1 );
     $game = new Game();
-    $game->created = date('Y-m-d H:i:s');
     $game->width = $game->height = 10;
     $game->save();
-    $game->rounds = array();
     for ( $i = 0; $i <= 2; ++$i ) {
-        $game->rounds[ $i ] = new Round();
-        $game->rounds[ $i ]->game = $game;
-        $game->rounds[ $i ]->id = $i; 
+        $game->nextRound();
         for ( $j = 0, $k = 0; $j <= 2; ++$j, $k += 2 ) {
             if ( $i === 0 ) {
-                $game->rounds[ $i ]->creatures[ $j ] = new Creature(); 
-                $game->rounds[ $i ]->creatures[ $j ]->id = $j;
-                $game->rounds[ $i ]->creatures[ $j ]->game = $game;
+                $game->rounds[ $i ]->nextCreature();
                 $game->rounds[ $i ]->creatures[ $j ]->user = $user;
                 $game->rounds[ $i ]->creatures[ $j ]->round = $game->rounds[ $i ]; 
                 $game->rounds[ $i ]->creatures[ $j ]->x = 1;
@@ -51,5 +45,4 @@
         }
         $game->rounds[ $i ]->save();
     }
-    */
 ?>

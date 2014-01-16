@@ -19,6 +19,9 @@
                     $this->rounds[ $i ] = new Round( $this, $i );
                 }
             }
+            else {
+                $this->rounds = array();
+            }
         }
 
         protected function validate() {
@@ -38,6 +41,13 @@
                 'games',
                 compact( 'width', 'height', 'created' )
             );
+        }
+
+        public function nextRound() {
+            $roundid = count( $this->rounds );
+            $this->rounds[ $roundid ] = new Round();
+            $this->rounds[ $roundid ]->id = $roundid;
+            $this->rounds[ $roundid ]->game = $this;
         }
     }
 ?>

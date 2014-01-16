@@ -22,8 +22,8 @@
             )[ $direction ];
             $this->action = array(
                 'ACTION_NONE' => ACTION_NONE,
-                'ACTION_MOVE' => ACTION_ATACK,
-                'ACTION_ATACK' => ACTION_MOVE
+                'ACTION_MOVE' => ACTION_MOVE,
+                'ACTION_ATACK' => ACTION_ATACK
             )[ $action ];
         }
     }

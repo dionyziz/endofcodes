@@ -30,6 +30,9 @@
                     $this->creatures[ $i ]->user = $user;
                 }
             }
+            else {
+                $this->creatures = array();
+            }
         }
 
         protected function validate() {
@@ -48,9 +51,12 @@
                     $locationx = $creature->x;
                     $locationy = $creature->y;
                     $hp = $creature->hp;
-                    $desire = array(
+                    $direction = array(
                         'NONE', 'NORTH', 'EAST', 'SOUTH', 'WEST'
                     )[ $creature->intent->direction ];
+                    $action = array(
+                        'NONE', 'MOVE', 'ATACK'
+                    )[ $creature->intent->action ];
                     $creatureid = $creature->id;
                     dbInsert(
                         'roundcreatures',
@@ -60,11 +66,19 @@
                             'locationx', 
                             'locationy', 
                             'hp', 
-                            'desire', 
+                            'direction', 
+                            'action',
                             'creatureid' 
                         )
                     );
             }
+        }
+
+        public function nextCreature() {
+            $creatureid = count( $this->creatures ); 
+            $this->creatures[ $creatureid ] = new Creature();
+            $this->creatures[ $creatureid ]->game = $this->game;
+            $this->creatures[ $creatureid ]->id = $creatureid;
         }
     }
 ?>
