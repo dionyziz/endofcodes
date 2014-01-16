@@ -10,6 +10,7 @@
     class Intent {
         public $action;
         public $direction;
+        public $creature;
 
         public function __construct( $action, $direction ) {
             $this->direction = array(

@@ -21,6 +21,7 @@
                     'ACTION_' . $creature_info[ 'action' ], 
                     'DIRECTION_' . $creature_info[ 'direction' ] 
                 );
+                $this->intent->creature = $this;
             }
         }
 
