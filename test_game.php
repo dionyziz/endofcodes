@@ -28,16 +28,16 @@
             else {
                 $game->rounds[ $i ]->creatures[ $j ] = $game->rounds[ $i - 1 ]->creatures[ $j ];
                 switch ( $game->rounds[ $i ]->creatures[ $j ]->intent->direction ) {
-                    case 1:
+                    case DIRECTION_NORTH:
                         $game->rounds[ $i ]->creatures[ $j ]->locationy += 1;
                         break;
-                    case 2:
+                    case DIRECTION_EAST:
                         $game->rounds[ $i ]->creatures[ $j ]->locationx += 1;
                         break;
-                    case 3:
+                    case DIRECTION_SOUTH:
                         $game->rounds[ $i ]->creatures[ $j ]->locationy -= 1;
                         break;
-                    case 4:
+                    case DIRECTION_WEST:
                         $game->rounds[ $i ]->creatures[ $j ]->locationx -= 1;
                         break;
                 }
