@@ -19,8 +19,8 @@
                 $game->rounds[ $i ]->nextCreature();
                 $game->rounds[ $i ]->creatures[ $j ]->user = $user;
                 $game->rounds[ $i ]->creatures[ $j ]->round = $game->rounds[ $i ]; 
-                $game->rounds[ $i ]->creatures[ $j ]->x = 1;
-                $game->rounds[ $i ]->creatures[ $j ]->y = 0;
+                $game->rounds[ $i ]->creatures[ $j ]->locationx = 1;
+                $game->rounds[ $i ]->creatures[ $j ]->locationy = 0;
                 $game->rounds[ $i ]->creatures[ $j ]->hp = 10;
                 $game->rounds[ $i ]->creatures[ $j ]->intent = new Intent( 'ACTION_MOVE', 'DIRECTION_NONE' );
                 $game->rounds[ $i ]->creatures[ $j ]->save();
@@ -29,16 +29,16 @@
                 $game->rounds[ $i ]->creatures[ $j ] = $game->rounds[ $i - 1 ]->creatures[ $j ];
                 switch ( $game->rounds[ $i ]->creatures[ $j ]->intent->direction ) {
                     case 1:
-                        $game->rounds[ $i ]->creatures[ $j ]->y += 1;
+                        $game->rounds[ $i ]->creatures[ $j ]->locationy += 1;
                         break;
                     case 2:
-                        $game->rounds[ $i ]->creatures[ $j ]->x += 1;
+                        $game->rounds[ $i ]->creatures[ $j ]->locationx += 1;
                         break;
                     case 3:
-                        $game->rounds[ $i ]->creatures[ $j ]->y -= 1;
+                        $game->rounds[ $i ]->creatures[ $j ]->locationy -= 1;
                         break;
                     case 4:
-                        $game->rounds[ $i ]->creatures[ $j ]->x -= 1;
+                        $game->rounds[ $i ]->creatures[ $j ]->locationx -= 1;
                         break;
                 }
             }

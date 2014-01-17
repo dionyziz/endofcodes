@@ -4,8 +4,8 @@
         public $game;
         public $user;
         public $round;
-        public $x; 
-        public $y;
+        public $locationx; 
+        public $locationy;
         public $intent;
         public $alive;
         public $hp;
@@ -14,8 +14,8 @@
             if ( !empty( $creature_info ) ) {
                 $this->exists = true;
                 $this->id = $creature_info[ 'creatureid' ];
-                $this->x = $creature_info[ 'locationx' ];
-                $this->y = $creature_info[ 'locationy' ];
+                $this->locationx = $creature_info[ 'locationx' ];
+                $this->locationy = $creature_info[ 'locationy' ];
                 $this->hp = $creature_info[ 'hp' ];
                 $this->intent = new Intent(  
                     'ACTION_' . $creature_info[ 'action' ], 

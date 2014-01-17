@@ -48,8 +48,8 @@
             $gameid = $this->game->id;
             $roundid = $this->id;
             foreach ( $this->creatures as $creature ) {
-                    $locationx = $creature->x;
-                    $locationy = $creature->y;
+                    $locationx = $creature->locationx;
+                    $locationy = $creature->locationy;
                     $hp = $creature->hp;
                     $direction = array(
                         'NONE', 'NORTH', 'EAST', 'SOUTH', 'WEST'
