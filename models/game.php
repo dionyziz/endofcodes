@@ -36,7 +36,7 @@
         protected function create() {
             $width = $this->width;
             $height = $this->height;
-            $created = $this->created = date('Y-m-d H:i:s');
+            $created = $this->created = date( 'Y-m-d H:i:s' );
             $this->id = dbInsert(
                 'games',
                 compact( 'width', 'height', 'created' )
