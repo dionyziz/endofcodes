@@ -26,11 +26,16 @@
         }
 
         public static function getIdFromCookieValue( $sessionid ) {
-            $row = dbSelectOne( 
-                'users', 
-                array( 'id' ), 
-                compact( $sessionid ) 
-            );
+            try {
+                $row = dbSelectOne( 
+                    'users', 
+                    array( 'id' ), 
+                    compact( $sessionid ) 
+                );
+            }
+            catch ( DBException $e ) {
+                throw new HTTPUnauthorizedException();
+            }
             return $row[ 'id' ];
         }
 
