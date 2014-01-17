@@ -52,10 +52,16 @@
                     $locationy = $creature->locationy;
                     $hp = $creature->hp;
                     $direction = array(
-                        'NONE', 'NORTH', 'EAST', 'SOUTH', 'WEST'
+                        DIRECTION_NONE => 'NONE',
+                        DIRECTION_NORTH => 'NORTH',
+                        DIRECTION_EAST => 'EAST',
+                        DIRECTION_SOUTH => 'SOUTH',
+                        DIRECTION_WEST => 'WEST'
                     )[ $creature->intent->direction ];
                     $action = array(
-                        'NONE', 'MOVE', 'ATACK'
+                        ACTION_NONE => 'NONE',
+                        ACTION_MOVE => 'MOVE',
+                        ACTION_ATACK => 'ATACK'
                     )[ $creature->intent->action ];
                     $creatureid = $creature->id;
                     dbInsert(
