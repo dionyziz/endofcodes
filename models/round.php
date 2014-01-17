@@ -5,7 +5,7 @@
         public $game;
 
         public function __construct( $game = false, $id = false ) {
-            if ( $id && $game ) {
+            if ( $id !== false && $game !== false ) {
                 $this->exists = true;
                 $this->id = $id;
                 $this->game = $game;
