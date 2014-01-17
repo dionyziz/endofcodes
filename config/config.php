@@ -19,6 +19,11 @@
             'age' => array(
                 'min' => 8,
                 'max' => 100
+            ),
+            'persistent_cookie' => array (
+                'name' = 'sessionid',
+                'duration' => '3600 * 24 * 365', 
+                'unset_time' =>  '3600 * 24'
             )
         );
         if ( getEnv( 'DB_USER' ) !== false ) {

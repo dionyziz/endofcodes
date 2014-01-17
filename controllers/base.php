@@ -74,17 +74,18 @@
             $this->callWithNamedArgs( $method_reflection, array( $this, $method ), $vars );
         }
         public function sessionCheck() {
+            global $config;
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 return;
             }
-            else if( isset( $_COOKIE[ 'cookievalue' ] ) ) {
+            $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
+            if ( isset( $_COOKIE[ $cookiename ] ) ) {
                 include 'models/user.php';
-                $id = User::getIdFromCookieValue();
-                $user = new User($id);
+                $id = User::getIdFromCookieValue( $_COOKIE[ $cookiename ] );
+                $user = new User( $id );
                 $username = $user->username;
                 $_SESSION[ 'user' ] = compact( 'id', 'username' );
             }
-            else return; 
         }
     }
 ?>

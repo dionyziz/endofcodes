@@ -25,6 +25,15 @@
             return new User( $user[ 'id' ] );
         }
 
+        public static function getIdFromCookieValue( $sessionid ) {
+            $row = dbSelectOne( 
+                'users', 
+                array( 'id' ), 
+                compact( $sessionid ) 
+            );
+            return $row[ 'id' ];
+        }
+
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
@@ -141,27 +150,13 @@
         public function createPersistentCookie() {
             $id = $this->id;
             $value = openssl_random_pseudo_bytes( 32 );
-            $cookievalue = base64_encode( $value );
-            setcookie( 'cookievalue', $value, time() + 3600 * 24 * 365 );
+            $sessionid = base64_encode( $value );
             $res = dbUpdate(
                 'users',
-                compact( 'cookievalue' ),
+                compact( 'sessionid' ),
                 compact( 'id' )
             );
-        }
-
-        public static function getIdFromCookieValue() {
-            try {
-                $row = dbSelectOne( 
-                    'users', 
-                    array( 'id' ), 
-                    compact( $_COOKIE[ 'cookievalue' ] ) 
-                );
-            }
-            catch ( HTTPUnauthorizedException $e ) {
-                throw new HTTPUnauthorizedException();
-            }
-            return $row[ 'id' ];
+            return $sessionid;
         }
     }
 ?>
