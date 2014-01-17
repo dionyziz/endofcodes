@@ -74,7 +74,7 @@
                     ?>" <?php
                 }
                 if ( $type == 'checkbox' && $checked == true ) {
-                    echo 'checked'; 
+                    ?>checked<?php 
                 }
             ?> /></p><?php
         }
