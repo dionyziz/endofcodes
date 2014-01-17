@@ -48,7 +48,7 @@
             ?></p><?php
         }
 
-        public function createInput( $type = 'text', $name = '', $id = '', $value = '' ) {
+        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $checked = '' ) {
             if ( !Form::isValidType( $type ) ) {
                 $type = 'text';
             }
@@ -72,6 +72,9 @@
                     ?>value="<?php
                         echo htmlspecialchars( $value );
                     ?>" <?php
+                }
+                if ( $type == 'checkbox' && $checked == true ) {
+                    echo 'checked'; 
                 }
             ?> /></p><?php
         }
