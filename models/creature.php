@@ -23,6 +23,7 @@
                 );
                 $this->intent->creature = $this;
             }
+            $this->alive = true;
         }
 
         public function validate() {

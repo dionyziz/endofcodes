@@ -5,6 +5,7 @@
     include 'models/intent.php';
     include 'models/user.php';
     include 'models/game.php';
+    include 'models/resolution.php';
     //$game = new Game( 7 );
     //echo $game->rounds[ 2 ]->creatures[ 1 ]->id;
     //echo $game->rounds[ 2 ]->creatures[ 1 ]->user->id;
@@ -26,21 +27,7 @@
                 $game->rounds[ $i ]->creatures[ $j ]->save();
             }
             else {
-                $game->rounds[ $i ]->creatures[ $j ] = $game->rounds[ $i - 1 ]->creatures[ $j ];
-                switch ( $game->rounds[ $i ]->creatures[ $j ]->intent->direction ) {
-                    case DIRECTION_NORTH:
-                        $game->rounds[ $i ]->creatures[ $j ]->locationy += 1;
-                        break;
-                    case DIRECTION_EAST:
-                        $game->rounds[ $i ]->creatures[ $j ]->locationx += 1;
-                        break;
-                    case DIRECTION_SOUTH:
-                        $game->rounds[ $i ]->creatures[ $j ]->locationy -= 1;
-                        break;
-                    case DIRECTION_WEST:
-                        $game->rounds[ $i ]->creatures[ $j ]->locationx -= 1;
-                        break;
-                }
+                $game->rounds[ $i ]->creatures[ $j ] = creatureMove( $game->rounds[ $i - 1 ]->creatures[ $j ] );
             }
         }
         $game->rounds[ $i ]->save();
