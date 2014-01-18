@@ -28,6 +28,7 @@
             }
             else {
                 $game->rounds[ $i ]->creatures[ $j ] = creatureMove( $game->rounds[ $i - 1 ]->creatures[ $j ] );
+            }
         }
         $game->rounds[ $i ]->save();
     }
