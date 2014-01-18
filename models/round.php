@@ -51,18 +51,8 @@
                     $locationx = $creature->locationx;
                     $locationy = $creature->locationy;
                     $hp = $creature->hp;
-                    $direction = array(
-                        DIRECTION_NONE => 'NONE',
-                        DIRECTION_NORTH => 'NORTH',
-                        DIRECTION_EAST => 'EAST',
-                        DIRECTION_SOUTH => 'SOUTH',
-                        DIRECTION_WEST => 'WEST'
-                    )[ $creature->intent->direction ];
-                    $action = array(
-                        ACTION_NONE => 'NONE',
-                        ACTION_MOVE => 'MOVE',
-                        ACTION_ATACK => 'ATACK'
-                    )[ $creature->intent->action ];
+                    $direction = convertDirection( $creature->intent->direction );
+                    $action = convertAction( $creature->intent->action );
                     $creatureid = $creature->id;
                     dbInsert(
                         'roundcreatures',
