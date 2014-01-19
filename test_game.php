@@ -16,8 +16,7 @@
         $game->nextRound();
         for ( $j = 0, $k = 0; $j <= 2; ++$j, $k += 2 ) {
             if ( $i === 0 ) {
-                $game->rounds[ $i ]->nextCreature();
-                $game->rounds[ $i ]->creatures[ $j ]->user = $user;
+                $game->rounds[ $i ]->nextCreature( $user );
                 $game->rounds[ $i ]->creatures[ $j ]->round = $game->rounds[ $i ]; 
                 $game->rounds[ $i ]->creatures[ $j ]->locationx = 1;
                 $game->rounds[ $i ]->creatures[ $j ]->locationy = 0;
