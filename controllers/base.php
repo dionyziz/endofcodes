@@ -1,6 +1,6 @@
 <?php
     abstract class ControllerBase {
-        protected function protectFromForgery( $token, $http_request_method ) {
+        protected function protectFromForgery( $token = '', $http_request_method = '' ) {
             if ( $http_request_method === 'POST'
             && ( $token !== $_SESSION[ 'form' ][ 'token' ] || $token == '' ) ) { 
                 throw new HTTPUnauthorizedException();

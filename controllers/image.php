@@ -3,10 +3,10 @@
         public function create( $image ) {
             include_once 'models/image.php';
             include_once 'models/extentions.php';
-            if ( !isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
+            if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $user = User::findByUsername( $_SESSION[ 'user' ][ 'username' ] );
+            $user = $_SESSION[ 'user' ];
             $user->image = new Image();
             $user->image->tmp_name = $image[ 'tmp_name' ];
             $user->image->name = $image[ 'name' ];
