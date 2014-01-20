@@ -2,16 +2,16 @@
     // moves creature
     function creatureMove( $creature ) {
         switch ( $creature->intent->direction ) {
-            case NORTH:
+            case DIRECTION_NORTH:
                 $creature->locationy += 1;
                 break;
-            case EAST:
+            case DIRECTION_EAST:
                 $creature->locationx += 1;
                 break;
-            case SOUTH:
+            case DIRECTION_SOUTH:
                 $creature->locationy -= 1;
                 break;
-            case WEST:
+            case DIRECTION_WEST:
                 $creature->locationx -= 1;
                 break;
         }
