@@ -21,22 +21,22 @@
                 $game->rounds[ $i ]->creatures[ $j ]->locationx = 1;
                 $game->rounds[ $i ]->creatures[ $j ]->locationy = 0;
                 $game->rounds[ $i ]->creatures[ $j ]->hp = 10;
-                $game->rounds[ $i ]->creatures[ $j ]->intent = new Intent( MOVE, NONE );
+                $game->rounds[ $i ]->creatures[ $j ]->intent = new Intent( ACTION_MOVE, DIRECTION_NONE );
                 $game->rounds[ $i ]->creatures[ $j ]->save();
             }
             else {
                 $game->rounds[ $i ]->creatures[ $j ] = $game->rounds[ $i - 1 ]->creatures[ $j ];
                 switch ( $game->rounds[ $i ]->creatures[ $j ]->intent->direction ) {
-                    case NORTH:
+                    case DIRECTION_NORTH:
                         $game->rounds[ $i ]->creatures[ $j ]->locationy += 1;
                         break;
-                    case EAST:
+                    case DIRECTION_EAST:
                         $game->rounds[ $i ]->creatures[ $j ]->locationx += 1;
                         break;
-                    case SOUTH:
+                    case DIRECTION_SOUTH:
                         $game->rounds[ $i ]->creatures[ $j ]->locationy -= 1;
                         break;
-                    case WEST:
+                    case DIRECTION_WEST:
                         $game->rounds[ $i ]->creatures[ $j ]->locationx -= 1;
                         break;
                 }
