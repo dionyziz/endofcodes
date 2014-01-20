@@ -2,7 +2,6 @@
     class UserController extends ControllerBase {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '', 
                 $countryid = '', $day = '', $month = '', $year = '' ) {
-            include_once 'models/user.php';
             include_once 'models/country.php';
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', array( 'password_not_matched' => true ) );
@@ -22,12 +21,11 @@
             $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->save();
-                $id = $user->id;
             }
             catch( ModelValidationException $e ) {
                 go( 'user', 'create', array( $e->error => true ) );
             }
-            $_SESSION[ 'user' ] = compact( 'id', 'username' );
+            $_SESSION[ 'user' ] = $user;
             go();
         }
 
@@ -35,7 +33,6 @@
             if ( $username === NULL ) {
                 throw new HTTPNotFoundException();
             }
-            include_once 'models/user.php';
             include_once 'models/extentions.php';
             include_once 'models/image.php';
             include_once 'models/country.php';
@@ -50,12 +47,11 @@
 
         public function update( $password = '', $password_new = '', $password_repeat = '', 
                 $countryid = '', $email = '' ) {
-            include_once 'models/user.php';
             include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
+            $user = $_SESSION[ 'user' ];
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
                     if ( $password_new !== $password_repeat ) {
@@ -83,11 +79,10 @@
         }
 
         public function delete() {
-            include_once 'models/user.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
+            $user = $_SESSION[ 'user' ];
             $user->delete();
             unset( $_SESSION[ 'user' ] );
             go();
@@ -103,11 +98,10 @@
         public function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong, 
                 $email_invalid, $email_used ) {
             include_once 'models/country.php';
-            include_once 'models/user.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
-            $user = new User( $_SESSION[ 'user' ][ 'id' ] );
+            $user = $_SESSION[ 'user' ];
             $countries = Country::findAll();
             include 'views/user/update.php';
         }
