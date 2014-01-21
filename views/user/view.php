@@ -35,25 +35,19 @@
 <?php
     if ( isset( $_SESSION[ 'user' ] ) && $_SESSION[ 'user' ]->id != $user->id ) {
         if ( !$followExists ) {
-            $form = new Form( 'follow', 'create' );
-            $form->args = array( 
-                'followerid' => $_SESSION[ 'user' ]->id,
-                'followedid' => $user->id
-            );
-            $form->output( function( $self ) { 
-                $self->createInput( 'submit', '', '', 'Follow' );
-            } );
+            $formMethod = 'create';
+            $submitValue = 'Follow';
         }
         else {
-            $form = new Form( 'follow', 'delete' );
-            $form->args = array( 
-                'followerid' => $_SESSION[ 'user' ]->id,
-                'followedid' => $user->id
-            );
-            $form->output( function( $self ) { 
-                $self->createInput( 'submit', '', '', 'Unfollow' );
-            } );
+            $formMethod = 'delete';
+            $submitValue = 'Unfollow';
         }
+        $form = new Form( 'follow', $formMethod );
+        $form->output( function( $self ) use( $user, $submitValue ) { 
+            $self->createInput( 'hidden', 'followerid', '', $_SESSION[ 'user' ]->id );
+            $self->createInput( 'hidden', 'followedid', '', $user->id );
+            $self->createInput( 'submit', '', '', $submitValue );
+        } );
     }
 ?>
 
