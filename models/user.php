@@ -67,17 +67,27 @@
 
         protected function create() {
             // when a user is created he doesn't have an image, so avatarid is by default 0 
-            $day = intval( $this->dateOfBirth[ 'day' ] ); 
-            $month = intval( $this->dateOfBirth[ 'month' ] );
-            $year = intval( $this->dateOfBirth[ 'year' ] );
-            if ( !checkdate( $day, $month, $year ) ) {
-                $day = $month = $year = 0;
+            if ( isset( $this->dateOfBirth[ 'day' ] ) ) {
+                $day = intval( $this->dateOfBirth[ 'day' ] ); 
+                $month = intval( $this->dateOfBirth[ 'month' ] );
+                $year = intval( $this->dateOfBirth[ 'year' ] );
+                if ( !checkdate( $day, $month, $year ) ) {
+                    $day = $month = $year = 0;
+                }
+                $dob = $this->dob = $year . '-' . $month . '-' . $day; 
             }
-            $dob = $this->dob = $year . '-' . $month . '-' . $day; 
+            else {
+                $dob = '0000-00-00';
+            }
             $username = $this->username;
             $password = $this->password;
             $email = $this->email;
-            $countryid = $this->country->id;
+            if ( isset( $this->country ) ) {
+                $countryid = $this->country->id;
+            }
+            else {
+                $countryid = 0;
+            }
             $array = encrypt( $password );
             $password = $array[ 'hash' ];
             $salt = $array[ 'salt' ];

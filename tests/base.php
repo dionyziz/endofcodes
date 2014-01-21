@@ -19,5 +19,13 @@
             $description .= "Expected '$expected', found '$actual'.";
             $this->assertTrue( $expected === $actual, $description );
         }
+        public function setUp() {
+            $tables = dbListTables();
+            foreach ( $tables as $table ) {
+                db( 'TRUNCATE TABLE ' . $table );
+            }
+        }
     }
+
+    class UnitTestFailedException extends Exception {}
 ?>

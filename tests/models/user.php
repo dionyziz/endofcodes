@@ -7,11 +7,20 @@
         }
         public function testCreate() {
             $user = new User();
-            $user->username = 'vitalis';
+            $user->username = 'pkakelas';
+            $user->password = 'secret1234';
+            $user->email = 'pkakelas@gmail.com';
             $user->save();
-
-            $this->assertTrue( $user->exists, 'User must exist after creation' );
-            $this->assertEquals( 'vitalis', $user->username, 'Username must be the one associated during creation' );
+            $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
+            $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
+        }
+        public function testDelete() {
+        }
+        public function testPasswordChange() {
+        }
+        public function testEmailChange() {
+        }
+        public function testSetCountry() {
         }
     }
 
