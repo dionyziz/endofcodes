@@ -2,7 +2,7 @@
     class TestrunController extends ControllerBase {
         public function create( $name ) {
             include_once 'tests/base.php';
-            $path = 'tests/' . $name;
+            $path = 'tests/' . $name . '.php';
             $unittest = include_once $path;
             $unittest->run();
             echo $unittest->passCount . ' / ' . $unittest->assertCount . ' tests pass';
