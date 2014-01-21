@@ -32,7 +32,30 @@
 <p><img src="static/images/twitter-logo.png" alt="twitter link" width="40" height="40" /></p>
 <p><img src="static/images/github-logo.png" alt="github link" width="40" height="40" /></p>
 <p><img src="static/images/google+-logo.jpeg" alt="google+ link" width="40" height="40" /></p>
-<p><a href="">Add friend</a></p>
+<?php
+    if ( isset( $_SESSION[ 'user' ] ) && $_SESSION[ 'user' ]->id != $user->id ) {
+        if ( !$followExists ) {
+            $form = new Form( 'follow', 'create' );
+            $form->args = array( 
+                'followerid' => $_SESSION[ 'user' ]->id,
+                'followedid' => $user->id
+            );
+            $form->output( function( $self ) { 
+                $self->createInput( 'submit', '', '', 'Follow' );
+            } );
+        }
+        else {
+            $form = new Form( 'follow', 'delete' );
+            $form->args = array( 
+                'followerid' => $_SESSION[ 'user' ]->id,
+                'followedid' => $user->id
+            );
+            $form->output( function( $self ) { 
+                $self->createInput( 'submit', '', '', 'Unfollow' );
+            } );
+        }
+    }
+?>
 
 <?php 
     if ( isset( $_SESSION[ 'user' ]->id ) && $_SESSION[ 'user' ]->id == $user->id ) {

@@ -5,6 +5,7 @@
         protected $method;
         public $id;
         public $formMethod;
+        public $args = array();
         protected $hasFile = false;
         protected $token;
 
@@ -148,6 +149,13 @@
                     echo $this->resource;
                 ?>&amp;method=<?php
                     echo $this->method;
+                    ?>&amp;<?php
+                    foreach ( $this->args as $arg => $value ) {
+                        ?>&amp;<?php
+                            echo $arg;
+                        ?>=<?php
+                        echo $value;
+                    }
                 ?>" method="<?php
                     echo $this->formMethod;
                 ?>" <?php
