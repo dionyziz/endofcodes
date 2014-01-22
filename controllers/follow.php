@@ -14,6 +14,7 @@
         public function delete( $followerid, $followedid ) {
             $follow = new Follow( $followerid, $followedid );
             $follow->delete();
+            go();
         }
     }
 ?>
