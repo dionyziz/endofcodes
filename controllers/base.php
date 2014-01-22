@@ -55,7 +55,18 @@
             }
             call_user_func_array( $callable, $arguments );
         }
+        protected function loadConfig() {
+            global $config;
+
+            $config = getConfig()[ $this->environment ];
+        }
+        protected function init() {
+            $this->loadConfig();
+            dbInit();
+        }
         public function dispatch( $get, $post, $files, $http_request_method ) {
+            $this->init();
+
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';
             }
