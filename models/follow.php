@@ -37,5 +37,14 @@
                 compact( 'followerid', 'followedid' )
             );
         }
+
+        public function delete() {
+            $followerid = $this->followerid;
+            $followedid = $this->followedid;
+            dbDelete(
+                'follows',
+                compact( 'followerid', 'followedid' )
+            );
+        }
     }
 ?>
