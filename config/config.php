@@ -22,8 +22,8 @@
             ),
             'persistent_cookie' => array (
                 'name' = 'sessionid',
-                'duration' => '3600 * 24 * 365', 
-                'unset_time' =>  '3600 * 24'
+                'duration' => '630720000', 
+                'unset_time' =>  '630720000'
             )
         );
         if ( getEnv( 'DB_USER' ) !== false ) {

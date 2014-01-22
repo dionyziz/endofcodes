@@ -2,6 +2,7 @@
     class SessionController extends ControllerBase {
         public function create( $username = '', $password = '', $persistent = '' ) {
             global $config;
+
             include_once 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', array( 'username_empty' => true ) );
@@ -18,8 +19,8 @@
             if ( !$user->authenticatesWithPassword( $password ) ) {
                 go( 'session', 'create', array( 'password_wrong' => true ) );
             }
-            if ( $persistent == true ) {
-                $sessionid = $user->createPersistentCookie();     
+            if ( $persistent ) {
+                $sessionid = $user->createPersistentSession();     
                 setcookie(  
                     $config[ 'persistent_cookie'][ 'name' ], 
                     $sessionid, 

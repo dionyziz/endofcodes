@@ -152,7 +152,7 @@
             return false;
         }
 
-        public function createPersistentCookie() {
+        public function createPersistentSession() {
             $id = $this->id;
             $value = openssl_random_pseudo_bytes( 32 );
             $sessionid = base64_encode( $value );
