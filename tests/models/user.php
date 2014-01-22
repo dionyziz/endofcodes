@@ -1,5 +1,6 @@
 <?php
     include_once 'models/user.php';
+    include_once 'models/country.php';
     
     class UserTest extends UnitTest {
         public function run() {
@@ -24,8 +25,15 @@
         public function testPasswordChange() {
         }
         public function testEmailChange() {
+            $user = User::findByUsername( 'pkakelas' );
+            $user->email = 'pkakelas2@gmail.com';
+            $user->save();
+            $this->assertEquals( 'pkakelas2@gmail.com', $user->email, 'Email must be the one associated during update' );
         }
         public function testSetCountry() {
+            $user = User::findByUsername( 'pkakelas' );
+            $user->country = new Country( 1 );
+            $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
         public function testSetAge() {
         }

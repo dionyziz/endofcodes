@@ -27,6 +27,9 @@
         public function setUp() {
             $tables = dbListTables();
             foreach ( $tables as $table ) {
+                if ( $table === 'countries' ) {
+                    continue;
+                }
                 db( 'TRUNCATE TABLE ' . $table );
             }
         }
