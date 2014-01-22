@@ -5,11 +5,11 @@
     class UserTest extends UnitTest {
         public function run() {
             $this->testCreate();
-            $this->testDelete();
             $this->testPasswordChange();
             $this->testEmailChange();
             $this->testSetCountry();
             $this->testSetAge();
+            $this->testDelete();
         }
         public function testCreate() {
             $user = new User();
@@ -23,6 +23,16 @@
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
         }
         public function testDelete() {
+            $user = User::findByUsername( 'pkakelas' );
+            $user->delete();
+            try {
+                $user = User::findByUsername( 'pkakelas' );
+                $success = 0;
+            }
+            catch ( ModelNotFoundException $e ) {
+                $success = 1;
+            }
+            $this->assertEquals( 1, $success, 'The user must be deleted when the $user->delete() function runs' );
         }
         public function testPasswordChange() {
             $user = User::findByUsername( 'pkakelas' );
