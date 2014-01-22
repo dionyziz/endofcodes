@@ -17,6 +17,8 @@
             $user->password = 'secret1234';
             $user->email = 'pkakelas@gmail.com';
             $user->save();
+            $passwordSuccess = intval( $user->authenticatesWithPassword( 'secret1234' ) );
+            $this->assertEquals( 1, $passwordSuccess, 'Password must be the one associated during creation' );
             $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
         }
@@ -27,12 +29,7 @@
             $password = $user->password;
             $user->password = 'newsecret1234';
             $user->save();
-            if ( $user->authenticatesWithPassword( 'newsecret1234' ) ) { 
-                $success = 1;
-            }
-            else {
-                $success = 0;
-            }
+            $success = intval( $user->authenticatesWithPassword( 'newsecret1234' ) );
             $this->assertEquals( 1, $success, 'Password must be the one associated during update' );
         }
         public function testEmailChange() {
