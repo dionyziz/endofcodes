@@ -75,13 +75,14 @@
         }
         public function sessionCheck() {
             global $config;
+
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 return;
             }
             $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
             if ( isset( $_COOKIE[ $cookiename ] ) ) {
                 include 'models/user.php';
-                $id = User::getIdFromCookieValue( $_COOKIE[ $cookiename ] );
+                $user = User::getUserFromCookieValue( $_COOKIE[ $cookiename ] );
                 $user = new User( $id );
                 $username = $user->username;
                 $_SESSION[ 'user' ] = compact( 'id', 'username' );

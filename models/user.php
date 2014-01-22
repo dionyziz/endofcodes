@@ -25,7 +25,7 @@
             return new User( $user[ 'id' ] );
         }
 
-        public static function getIdFromCookieValue( $sessionid ) {
+        public static function getUserFromCookieValue( $sessionid ) {
             try {
                 $row = dbSelectOne( 
                     'users', 
@@ -36,7 +36,7 @@
             catch ( DBException $e ) {
                 throw new HTTPUnauthorizedException();
             }
-            return $row[ 'id' ];
+            return new User( $row[ 'id' ] );
         }
 
         public function __construct( $id = false ) {
