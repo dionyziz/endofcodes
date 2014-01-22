@@ -38,7 +38,7 @@
     class UnitTestFailedException extends Exception {
         public $description;
 
-        public function __construct( $decription ) {
+        public function __construct( $description ) {
             $this->description = $description;
         }
     }

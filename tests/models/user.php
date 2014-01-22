@@ -23,6 +23,17 @@
         public function testDelete() {
         }
         public function testPasswordChange() {
+            $user = User::findByUsername( 'pkakelas' );
+            $password = $user->password;
+            $user->password = 'newsecret1234';
+            $user->save();
+            if ( $user->authenticatesWithPassword( 'newsecret1234' ) ) { 
+                $success = 1;
+            }
+            else {
+                $success = 0;
+            }
+            $this->assertEquals( 1, $success, 'Password must be the one associated during update' );
         }
         public function testEmailChange() {
             $user = User::findByUsername( 'pkakelas' );

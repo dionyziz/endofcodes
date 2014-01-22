@@ -89,8 +89,8 @@
                 $countryid = 0;
             }
             $array = encrypt( $password );
-            $password = $array[ 'hash' ];
-            $salt = $array[ 'salt' ];
+            $password = $this->password = $array[ 'hash' ];
+            $salt = $this->salt = $array[ 'salt' ];
             try {
                 $res = dbInsert( 
                     'users', 
@@ -114,8 +114,8 @@
             $id = $this->id;
             if ( isset( $this->password ) ) {
                 $array = encrypt( $this->password );
-                $this->password = $array[ 'hash' ];
-                $this->salt = $array[ 'salt' ];
+                $this->password = $password = $array[ 'hash' ];
+                $this->salt = $salt = $array[ 'salt' ];
             }
             $email = $this->email;
             $dob = $this->dob;
@@ -135,13 +135,13 @@
 
         public function authenticatesWithPassword( $password ) {
             $username = $this->username;
-            $row = dbSelect(
+            $row = dbSelectOne(
                 'users',
                 array( 'id', 'password', 'salt' ),
                 compact( "username" )
             );
             if ( !empty( $row ) ) {
-                if ( $row[ 0 ][ 'password' ] == hashing( $password, $row[ 0 ][ 'salt' ] ) ) {
+                if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
                     return true;
                 }
             }
