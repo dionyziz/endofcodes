@@ -1,5 +1,5 @@
 <?php
-    class UnitTest {
+    abstract class UnitTest {
         public $assertCount = 0;
         public $passCount = 0;
 
