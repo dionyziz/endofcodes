@@ -4,6 +4,11 @@
     class UserTest extends UnitTest {
         public function run() {
             $this->testCreate();
+            $this->testDelete();
+            $this->testPasswordChange();
+            $this->testEmailChange();
+            $this->testSetCountry();
+            $this->testSetAge();
         }
         public function testCreate() {
             $user = new User();
@@ -21,6 +26,8 @@
         public function testEmailChange() {
         }
         public function testSetCountry() {
+        }
+        public function testSetAge() {
         }
     }
 

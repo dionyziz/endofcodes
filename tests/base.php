@@ -17,7 +17,12 @@
                 $description .= '. ';
             }
             $description .= "Expected '$expected', found '$actual'.";
-            $this->assertTrue( $expected === $actual, $description );
+            try {
+                $this->assertTrue( $expected === $actual, $description );
+            }
+            catch ( UnitTestFailedException $e ) {
+                echo $e->description . "\n";
+            }
         }
         public function setUp() {
             $tables = dbListTables();
@@ -27,5 +32,11 @@
         }
     }
 
-    class UnitTestFailedException extends Exception {}
+    class UnitTestFailedException extends Exception {
+        public $description;
+
+        public function __construct( $decription ) {
+            $this->description = $description;
+        }
+    }
 ?>
