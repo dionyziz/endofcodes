@@ -53,8 +53,6 @@
             $user->country = new Country( 1 );
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
-        public function testSetAge() {
-        }
     }
 
     return new UserTest();
