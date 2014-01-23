@@ -1,7 +1,7 @@
 <?php
     class Follow extends ActiveRecordBase {
-        public $followerid;
-        public $followedid;
+        public $follower;
+        public $followed;
 
         public function __construct( $followerid = false, $followedid = false ) {
             if ( $followerid !== false && $followedid !== false ) {
@@ -15,23 +15,23 @@
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
                 }
-                $this->followerid = $followerid;
-                $this->followedid = $followedid;
+                $this->follower = new User( $followerid );
+                $this->followed = new User( $followedid );
             }
         }
 
         public function validate() {
-            if ( !is_int( $this->followerid ) ) {
+            if ( !is_int( $this->follower->id ) ) {
                 throw new ModelValidationException( 'followerid_not_valid' );
             }
-            if ( !is_int( $this->followedid ) ) {
+            if ( !is_int( $this->followed->id ) ) {
                 throw new ModelValidationException( 'followedid_not_valid' );
             }
         }
 
         public function create() {
-            $followerid = $this->followerid;
-            $followedid = $this->followedid;
+            $followerid = $this->follower->id;
+            $followedid = $this->followed->id;
             dbInsert(
                 'follows',
                 compact( 'followerid', 'followedid' )
@@ -39,8 +39,8 @@
         }
 
         public function delete() {
-            $followerid = $this->followerid;
-            $followedid = $this->followedid;
+            $followerid = $this->follower->id;
+            $followedid = $this->followed->id;
             dbDelete(
                 'follows',
                 compact( 'followerid', 'followedid' )

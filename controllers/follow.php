@@ -2,19 +2,28 @@
     include_once 'models/follow.php';
     class FollowController extends ControllerBase {
         public function create( $followerid, $followedid ) {
-            $follow = new Follow(); 
             $followerid = intval( $followerid );
             $followedid = intval( $followedid );
-            $follow->followerid = $followerid;
-            $follow->followedid = $followedid;
+            $follower = new User( $followerid );
+            $followed = new User( $followedid );
+            $follow = new Follow(); 
+            $follow->follower = $follower;
+            $follow->followed = $followed;
             $follow->save();
-            go(); 
+            go( 'user', 'view', array( 'username' => $followed->username ) ); 
         }
 
         public function delete( $followerid, $followedid ) {
+            if ( $followerid !== $_SESSION[ 'user' ]->id ) {
+                throw new HTTPUnauthorizedException();
+            }
+            $followerid = intval( $followerid );
+            $followedid = intval( $followedid );
             $follow = new Follow( $followerid, $followedid );
+            $follower = $follow->follower;
+            $followed = $follow->followed;
             $follow->delete();
-            go();
+            go( 'user', 'view', array( 'username' => $followed->username ) ); 
         }
     }
 ?>
