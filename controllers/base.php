@@ -83,7 +83,6 @@
             if ( isset( $_COOKIE[ $cookiename ] ) ) {
                 include 'models/user.php';
                 $user = User::getUserFromCookieValue( $_COOKIE[ $cookiename ] );
-                $user = new User( $id );
                 $username = $user->username;
                 $_SESSION[ 'user' ] = compact( 'id', 'username' );
             }

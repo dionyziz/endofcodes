@@ -27,6 +27,7 @@
                     time() + $config[ 'persistent_cookie' ][ 'duration' ] 
                 );
             }
+            $user->save();
             $id = $user->id;
             $_SESSION[ 'user' ] = compact( 'id', 'username' );
             go();

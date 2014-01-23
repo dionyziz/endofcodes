@@ -123,12 +123,13 @@
             }
             $email = $this->email;
             $dob = $this->dob;
+            $sessionid = $this->sessionid;
             $countryid = $this->country->id;
             $avatarid = $this->image->id;
             try {
                 $res = dbUpdate(
                     'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid" ),
                     compact( "id" )
                 );
             }
@@ -156,11 +157,7 @@
             $id = $this->id;
             $value = openssl_random_pseudo_bytes( 32 );
             $sessionid = base64_encode( $value );
-            $res = dbUpdate(
-                'users',
-                compact( 'sessionid' ),
-                compact( 'id' )
-            );
+            $this->sessionid = $sessionid;
             return $sessionid;
         }
     }
