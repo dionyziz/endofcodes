@@ -36,11 +36,21 @@
             include_once 'models/extentions.php';
             include_once 'models/image.php';
             include_once 'models/country.php';
+            include_once 'models/follow.php';
             try { 
                 $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
+            }
+            if ( isset( $_SESSION[ 'user' ] ) ) {
+                try {
+                    $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id ); 
+                    $followExists = true;
+                }
+                catch ( ModelNotFoundException $e ) {
+                    $followExists = false;
+                }
             }
             include_once 'views/user/view.php';
         }

@@ -1,5 +1,7 @@
 <?php
     abstract class ControllerBase {
+        protected $environment = 'development';
+
         protected function protectFromForgery( $token = '', $http_request_method = '' ) {
             if ( $http_request_method === 'POST'
             && ( $token !== $_SESSION[ 'form' ][ 'token' ] || $token == '' ) ) { 
@@ -55,7 +57,18 @@
             }
             call_user_func_array( $callable, $arguments );
         }
+        protected function loadConfig() {
+            global $config;
+
+            $config = getConfig()[ $this->environment ];
+        }
+        protected function init() {
+            $this->loadConfig();
+            dbInit();
+        }
         public function dispatch( $get, $post, $files, $http_request_method ) {
+            $this->init();
+
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';
             }
