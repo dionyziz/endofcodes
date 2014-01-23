@@ -21,7 +21,7 @@
                 'max' => 100
             ),
             'persistent_cookie' => array (
-                'name' = 'sessionid',
+                'name' => 'sessionid',
                 'duration' => '630720000', 
                 'unset_time' =>  '630720000'
             )

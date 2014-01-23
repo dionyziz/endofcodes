@@ -22,7 +22,7 @@
             if ( $persistent ) {
                 $sessionid = $user->createPersistentSession();     
                 setcookie(  
-                    $config[ 'persistent_cookie'][ 'name' ], 
+                    $config[ 'persistent_cookie' ][ 'name' ], 
                     $sessionid, 
                     time() + $config[ 'persistent_cookie' ][ 'duration' ] 
                 );
