@@ -44,7 +44,7 @@
 
         public function createError( $error_msg ) {
             ?><p class="error"><?php
-                echo $error_msg;
+                echo htmlspecialchars( $error_msg );
             ?></p><?php
         }
 
@@ -56,16 +56,16 @@
                 $this->hasFile = true;
             }
             ?><p><input type="<?php
-                echo $type;
+                echo htmlspecialchars( $type );
             ?>" <?php
                 if ( !empty( $name ) ) {
                     ?>name="<?php
-                        echo $name;
+                        echo htmlspecialchars( $name );
                     ?>" <?php
                 }
                 if ( !empty( $id ) ) {
                     ?>id="<?php
-                        echo $id;
+                        echo htmlspecialchars( $id );
                     ?>" <?php
                 }
                 if ( !empty( $value ) ) {
@@ -80,12 +80,12 @@
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
-                        echo $name;
+                        echo htmlspecialchars( $name );
                     ?>" <?php
                 }
                 if ( isset( $id ) ) {
                     ?>id="<?php
-                        echo $id;
+                        echo htmlspecialchars( $id );
                     ?>" <?php
                 }
             ?>><?php
@@ -97,7 +97,7 @@
                         ?>"<?php
                     }
                 ?>><?php
-                    echo $option[ 'content' ];
+                    echo htmlspecialchars( $option[ 'content' ] );
                 ?></option><?php
             }
             ?></select></p><?php
@@ -119,7 +119,7 @@
        
         public function createLabel( $for, $text ) {
             ?><label for="<?php
-                echo $for;
+                echo htmlspecialchars( $for );
             ?>"><?php
                 echo htmlspecialchars( $text );
             ?></label><?php
@@ -141,15 +141,15 @@
             ?><form <?php
                 if ( isset( $this->id ) ) {
                     ?>id="<?php
-                        echo $this->id;
+                        echo htmlspecialchars( $this->id );
                     ?>" <?php
                 }
                 ?>action="index.php?resource=<?php
-                    echo $this->resource;
+                    echo htmlspecialchars( $this->resource );
                 ?>&amp;method=<?php
-                    echo $this->method;
+                    echo htmlspecialchars( $this->method );
                 ?>" method="<?php
-                    echo $this->formMethod;
+                    echo htmlspecialchars( $this->formMethod );
                 ?>" <?php
                     if ( $this->hasFile ) {
                         ?>enctype="multipart/form-data"<?php
@@ -179,7 +179,7 @@
             rel="stylesheet"
             type="text/css"
             href="<?php
-                echo "static/style/" . $path . ".css";
+                echo htmlspecialchars( "static/style/" . $path . ".css" );
             ?>" /><?php
     }
 ?>
