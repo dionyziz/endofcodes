@@ -8,6 +8,7 @@
     }
     include_once 'models/database.php';
     include_once 'models/base.php';
+    include_once 'models/user.php';
     include_once 'controllers/base.php';
     include_once 'helpers/html.php';
 ?>

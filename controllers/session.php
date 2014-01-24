@@ -1,7 +1,6 @@
 <?php
     class SessionController extends ControllerBase {
         public function create( $username = '', $password = '' ) {
-            include_once 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', array( 'username_empty' => true ) );
             }
@@ -17,8 +16,7 @@
             if ( !$user->authenticatesWithPassword( $password ) ) {
                 go( 'session', 'create', array( 'password_wrong' => true ) );
             }
-            $id = $user->id;
-            $_SESSION[ 'user' ] = compact( 'id', 'username' );
+            $_SESSION[ 'user' ] = $user;
             go();
         }
 
