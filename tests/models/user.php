@@ -8,7 +8,6 @@
             $this->testPasswordChange();
             $this->testEmailChange();
             $this->testSetCountry();
-            $this->testSetAge();
             $this->testDelete();
         }
         public function testCreate() {
