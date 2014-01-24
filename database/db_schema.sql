@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 17, 2014 at 02:59 PM
+-- Generation Time: Jan 20, 2014 at 07:18 PM
 -- Server version: 5.5.34-0ubuntu0.13.10.1
 -- PHP Version: 5.5.3-1ubuntu2.1
 
@@ -49,6 +49,18 @@ CREATE TABLE IF NOT EXISTS `creatures` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `follows`
+--
+
+CREATE TABLE IF NOT EXISTS `follows` (
+  `followerid` int(11) NOT NULL,
+  `followedid` int(11) NOT NULL,
+  PRIMARY KEY (`followerid`,`followedid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `games`
 --
 
@@ -58,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `height` int(11) NOT NULL,
   `width` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -83,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   `userid` int(11) NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -95,10 +107,11 @@ CREATE TABLE IF NOT EXISTS `roundcreatures` (
   `roundid` int(11) NOT NULL,
   `gameid` int(11) NOT NULL,
   `creatureid` int(11) NOT NULL,
-  `desire` enum('NORTH','WEST','EAST','SOUTH','NONE') COLLATE utf8_unicode_ci NOT NULL,
+  `direction` enum('NONE','NORTH','EAST','SOUTH','WEST') COLLATE utf8_unicode_ci NOT NULL,
   `locationx` int(11) DEFAULT NULL,
   `locationy` int(11) DEFAULT NULL,
   `hp` int(3) DEFAULT NULL,
+  `action` enum('NONE','MOVE','ATACK') COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`gameid`,`roundid`,`creatureid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

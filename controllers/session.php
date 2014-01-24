@@ -29,7 +29,7 @@
             }
             $user->save();
             $id = $user->id;
-            $_SESSION[ 'user' ] = compact( 'id', 'username' );
+            $_SESSION[ 'user' ] = $user;
             go();
         }
 

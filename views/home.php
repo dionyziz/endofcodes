@@ -26,7 +26,7 @@
             <p>Check your progress <a href="">here</a></p>
             <p>Check your program's process <a href="">here</a></p>
             <?php
-                if ( isset( $username ) ) {
+                if ( isset( $user ) ) {
                     include_once 'views/session/logoutform.php';
                 }
             ?>
