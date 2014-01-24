@@ -62,13 +62,11 @@
 
             $config = getConfig()[ $this->environment ];
         }
-        protected function init() {
+        public function init() {
             $this->loadConfig();
             dbInit();
         }
         public function dispatch( $get, $post, $files, $http_request_method ) {
-            $this->init();
-
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';
             }
@@ -94,10 +92,10 @@
             }
             $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
             if ( isset( $_COOKIE[ $cookiename ] ) ) {
-                include 'models/user.php';
+                include_once 'models/user.php';
                 $user = User::getUserFromCookieValue( $_COOKIE[ $cookiename ] );
                 $username = $user->username;
-                $_SESSION[ 'user' ] = compact( 'id', 'username' );
+                $_SESSION[ 'user' ] = $user;
             }
         }
     }

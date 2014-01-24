@@ -28,7 +28,6 @@
                 );
             }
             $user->save();
-            $id = $user->id;
             $_SESSION[ 'user' ] = $user;
             go();
         }

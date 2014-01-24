@@ -34,7 +34,7 @@
                 );
             }
             catch ( DBException $e ) {
-                throw new HTTPUnauthorizedException();
+                throw new ModelNotFoundException();
             }
             return new User( $row[ 'id' ] );
         }

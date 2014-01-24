@@ -1,7 +1,7 @@
 <?php
     include_once 'models/dependencies.php';
     include_once 'header.php';
-
+    
     if ( isset( $_GET[ 'resource' ] ) ) {
         $resource = $_GET[ 'resource' ];
     }
@@ -17,6 +17,7 @@
     include_once $filename;
     $controllername = ucfirst( $resource ) . 'Controller';
     $controller = new $controllername();
+    $controller->init();
     $controller->sessionCheck();
     try {
         $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
