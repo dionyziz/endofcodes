@@ -17,8 +17,8 @@
                 $this->locationx = $creature_info[ 'locationx' ];
                 $this->locationy = $creature_info[ 'locationy' ];
                 $this->hp = $creature_info[ 'hp' ];
-                $action = convertAction( $creature_info[ 'action' ] );
-                $direction = convertDirection( $creature_info[ 'direction' ] );
+                $action = actionStringToConst( $creature_info[ 'action' ] );
+                $direction = directionStringToConst( $creature_info[ 'direction' ] );
                 $this->intent = new Intent( $action, $direction );
                 $this->intent->creature = $this;
             }

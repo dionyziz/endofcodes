@@ -51,8 +51,8 @@
                     $locationx = $creature->locationx;
                     $locationy = $creature->locationy;
                     $hp = $creature->hp;
-                    $direction = convertDirection( $creature->intent->direction );
-                    $action = convertAction( $creature->intent->action );
+                    $direction = directionConstToString( $creature->intent->direction );
+                    $action = actionConstToString( $creature->intent->action );
                     $creatureid = $creature->id;
                     dbInsert(
                         'roundcreatures',
