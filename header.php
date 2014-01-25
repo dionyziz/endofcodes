@@ -62,13 +62,13 @@
     }
     class HTTPNotFoundException extends HTTPErrorException {
         public function __construct() {
-            parent::__construct( '404', 'Not Found' );
+            parent::__construct( 404, 'Not Found' );
         }
     }
 
     class HTTPUnauthorizedException extends HTTPErrorException {
         public function __construct() {
-            parent::__construct( '401', 'Unauthorized' );
+            parent::__construct( 401, 'Unauthorized' );
         }
     }
 ?>
