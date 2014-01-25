@@ -93,8 +93,7 @@
             $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
             if ( isset( $_COOKIE[ $cookiename ] ) ) {
                 include_once 'models/user.php';
-                $user = User::getUserFromCookieValue( $_COOKIE[ $cookiename ] );
-                $username = $user->username;
+                $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
                 $_SESSION[ 'user' ] = $user;
             }
         }

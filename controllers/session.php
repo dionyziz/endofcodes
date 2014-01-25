@@ -20,20 +20,20 @@
                 go( 'session', 'create', array( 'password_wrong' => true ) );
             }
             if ( $persistent ) {
-                $sessionid = $user->createPersistentSession();     
+                $user->renewSessionId();     
                 setcookie(  
                     $config[ 'persistent_cookie' ][ 'name' ], 
-                    $sessionid, 
+                    $user->sessionid,
                     time() + $config[ 'persistent_cookie' ][ 'duration' ] 
                 );
             }
-            $user->save();
             $_SESSION[ 'user' ] = $user;
             go();
         }
 
         public function delete() {
             global $config; 
+
             unset( $_SESSION[ 'user' ] );
             setcookie( 
                 $config[ 'persistent_cookie' ][ 'name' ], 

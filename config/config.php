@@ -23,8 +23,8 @@
                 ),
                 'persistent_cookie' => array(
                     'name' => 'sessionid',
-                    'duration' => '630720000', 
-                    'unset_time' => '630720000'
+                    'duration' => 60*60*24*365*20, 
+                    'unset_time' => 60*60*24*2
                 )
             ),
             'test' => array(
@@ -49,8 +49,8 @@
                 ),
                 'persistent_cookie' => array(
                     'name' => 'sessionid',
-                    'duration' => '630720000', 
-                    'unset_time' => '630720000'
+                    'duration' => 60*60*24*365*20, 
+                    'unset_time' => 60*60*24*2
                 )
             )
         );

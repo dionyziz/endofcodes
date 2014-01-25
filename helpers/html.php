@@ -73,7 +73,7 @@
                         echo htmlspecialchars( $value );
                     ?>" <?php
                 }
-                if ( $type = 'checkbox' && $checked ) {
+                if ( $type == 'checkbox' && $checked ) {
                     ?>checked="yes"<?php 
                 }
             ?> /></p><?php

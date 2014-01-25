@@ -25,7 +25,7 @@
             return new User( $user[ 'id' ] );
         }
 
-        public static function getUserFromCookieValue( $sessionid ) {
+        public static function findBySessionId( $sessionid ) {
             try {
                 $row = dbSelectOne( 
                     'users', 
@@ -153,12 +153,12 @@
             return false;
         }
 
-        public function createPersistentSession() {
+        public function renewSessionId() {
             $id = $this->id;
             $value = openssl_random_pseudo_bytes( 32 );
             $sessionid = base64_encode( $value );
             $this->sessionid = $sessionid;
-            return $sessionid;
+            $this->save();
         }
     }
 ?>
