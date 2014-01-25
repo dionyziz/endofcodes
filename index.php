@@ -17,8 +17,6 @@
     include_once $filename;
     $controllername = ucfirst( $resource ) . 'Controller';
     $controller = new $controllername();
-    $controller->init();
-    $controller->sessionCheck();
     try {
         $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
     }
