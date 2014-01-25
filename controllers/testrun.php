@@ -11,7 +11,8 @@
             $unittest = include_once $path;
             $unittest->setUp();
             $unittest->run();
-            echo $unittest->passCount . ' / ' . $unittest->assertCount . ' tests pass';
+
+            include_once 'views/testrun/results.php';
         }
 
         public function createView() {

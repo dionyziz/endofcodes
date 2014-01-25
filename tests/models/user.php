@@ -3,13 +3,6 @@
     include_once 'models/country.php';
     
     class UserTest extends UnitTest {
-        public function run() {
-            $this->testCreate();
-            $this->testPasswordChange();
-            $this->testEmailChange();
-            $this->testSetCountry();
-            $this->testDelete();
-        }
         public function testCreate() {
             $user = new User();
             $user->username = 'pkakelas';
