@@ -5,6 +5,9 @@
         public function create( $name ) {
             include_once 'tests/base.php';
             $path = 'tests/' . $name . '.php';
+            if ( !file_exists( $path ) ) {
+                throw new HTTPNotFoundException();
+            }
             $unittest = include_once $path;
             $unittest->setUp();
             $unittest->run();
