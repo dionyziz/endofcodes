@@ -79,7 +79,7 @@
             $this->countryid = $this->country->id;
         }
 
-        protected function onCatch() {
+        protected function onCreateError() {
             try {
                 $other_user = User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );

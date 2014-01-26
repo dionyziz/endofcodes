@@ -27,12 +27,12 @@
                 $this->onCatch();
             }
             $this->exists = true;
-            $this->onCreate();
+            $this->onCreateError();
         }
 
         protected function onBeforeCreate() {} // override me
         protected function onCreate() {} // override me
-        protected function onCatch() {} // override me
+        protected function onCreateError() {} // override me
 
         public function save() {
             $this->validate();
