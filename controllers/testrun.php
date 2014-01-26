@@ -9,7 +9,6 @@
                 throw new HTTPNotFoundException();
             }
             $unittest = include_once $path;
-            $unittest->setUp();
             $unittest->run();
 
             include_once 'views/testrun/results.php';

@@ -12,6 +12,7 @@
         public $image;
         public $salt;
         public $dateOfBirth;
+        public $boturl;
         protected $dob;
         protected $tableName = 'users';
 
@@ -76,7 +77,13 @@
             $array = encrypt( $this->password );
             $this->password = $array[ 'hash' ];
             $this->salt = $array[ 'salt' ];
-            $this->countryid = $this->country->id;
+            $this->avatarid = 0;
+            if ( isset( $this->country ) ) {
+                $this->countryid = $this->country->id;
+            }
+            else {
+                $this->countryid = 0;
+            }
         }
 
         protected function onCreateError() {
@@ -98,8 +105,18 @@
             }
             $email = $this->email;
             $dob = $this->dob;
-            $countryid = $this->country->id;
-            $avatarid = $this->image->id;
+            if ( isset( $this->country ) ) {
+                $countryid = $this->country->id;
+            }
+            else {
+                $countryid = 0;
+            }
+            if ( isset( $this->image ) ) {
+                $avatarid = $this->image->id;
+            }
+            else {
+                $avatarid = 0;
+            }
             try {
                 $res = dbUpdate(
                     'users',
