@@ -5,7 +5,7 @@
         protected $method;
         public $id;
         public $formMethod;
-        protected $hasFile = false;
+        public $hasFile = false;
         protected $token;
 
         public static function isValidType( $type ) {
