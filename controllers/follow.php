@@ -14,11 +14,11 @@
         }
 
         public function delete( $followerid, $followedid ) {
+            $followerid = intval( $followerid );
+            $followedid = intval( $followedid );
             if ( $followerid !== $_SESSION[ 'user' ]->id ) {
                 throw new HTTPUnauthorizedException();
             }
-            $followerid = intval( $followerid );
-            $followedid = intval( $followedid );
             $follow = new Follow( $followerid, $followedid );
             $follower = $follow->follower;
             $followed = $follow->followed;

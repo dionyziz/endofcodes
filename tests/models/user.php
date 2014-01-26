@@ -3,13 +3,6 @@
     include_once 'models/country.php';
     
     class UserTest extends UnitTest {
-        public function run() {
-            $this->testCreate();
-            $this->testPasswordChange();
-            $this->testEmailChange();
-            $this->testSetCountry();
-            $this->testDelete();
-        }
         public function testCreate() {
             $user = new User();
             $user->username = 'pkakelas';
@@ -21,7 +14,15 @@
             $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
         }
+        protected function buildUser( $username ) {
+            $user = new User();
+            $user->username = $username;
+            $user->password = 'secret1234';
+            $user->email = "$username@gmail.com";
+            $user->save();
+        }
         public function testDelete() {
+            $this->buildUser( 'pkakelas' );
             $user = User::findByUsername( 'pkakelas' );
             $user->delete();
             try {
@@ -34,6 +35,7 @@
             $this->assertEquals( 1, $success, 'The user must be deleted when the $user->delete() function runs' );
         }
         public function testPasswordChange() {
+            $this->buildUser( 'pkakelas' );
             $user = User::findByUsername( 'pkakelas' );
             $password = $user->password;
             $user->password = 'newsecret1234';
@@ -42,12 +44,14 @@
             $this->assertEquals( true, $success, 'Password must be the one associated during update' );
         }
         public function testEmailChange() {
+            $this->buildUser( 'pkakelas' );
             $user = User::findByUsername( 'pkakelas' );
             $user->email = 'pkakelas2@gmail.com';
             $user->save();
             $this->assertEquals( 'pkakelas2@gmail.com', $user->email, 'Email must be the one associated during update' );
         }
         public function testSetCountry() {
+            $this->buildUser( 'pkakelas' );
             $user = User::findByUsername( 'pkakelas' );
             $user->country = new Country( 1 );
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
