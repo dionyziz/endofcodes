@@ -7,7 +7,6 @@
             && ( $token !== $_SESSION[ 'form' ][ 'token' ] || $token == '' ) ) { 
                 throw new HTTPUnauthorizedException();
             }
-            unset( $_SESSION[ 'form' ][ 'token' ] );
         }
         protected function getControllerMethod( $requested_method, $http_request_method ) {
             $method = $requested_method; 

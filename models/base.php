@@ -1,5 +1,6 @@
 <?php
     abstract class ActiveRecordBase {
+        public $id;
         protected $exists;
 
         public function delete() {
@@ -9,6 +10,29 @@
                 compact( "id" )
             );
         }
+
+        protected function create() {
+            $this->onBeforeCreate();
+            $attributes = array();
+            foreach ( $this->attributes as $attribute ) {
+                $attributes[ $attribute ] = $this->$attribute;
+            }
+            try {
+                $this->id = dbInsert(
+                    $this->tableName,
+                    $attributes
+                );
+            }
+            catch ( DBException $e ) {
+                $this->onCatch();
+            }
+            $this->exists = true;
+            $this->onCreate();
+        }
+
+        protected function onBeforeCreate() {} // override me
+        protected function onCreate() {} // override me
+        protected function onCatch() {} // override me
 
         public function save() {
             $this->validate();
