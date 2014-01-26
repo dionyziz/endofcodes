@@ -1,6 +1,5 @@
 <?php
     class Creature extends ActiveRecordBase {
-        public $id;
         public $game;
         public $user;
         public $round;
@@ -9,6 +8,9 @@
         public $intent;
         public $alive;
         public $hp;
+        protected $gameid;
+        protected $userid;
+        protected $attributes = array( 'id', 'gameid', 'userid' );
 
         public function __construct( $creature_info = array() ) {
             if ( !empty( $creature_info ) ) {
@@ -36,15 +38,9 @@
             }
         }
 
-        protected function create() {
-            $gameid = $this->game->id;
-            $userid = $this->user->id;
-            $id = $this->id;
-            $this->exists = true;
-            dbInsert( 
-                'creatures',
-                compact( 'id', 'gameid', 'userid' )
-            );
+        protected function onBeforeCreate() {
+            $this->gameid = $this->game->id;
+            $this->userid = $this->user->id;
         }
     }
 ?>

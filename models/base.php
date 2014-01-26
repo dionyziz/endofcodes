@@ -18,10 +18,13 @@
                 $attributes[ $attribute ] = $this->$attribute;
             }
             try {
-                $this->id = dbInsert(
+                $id = dbInsert(
                     $this->tableName,
                     $attributes
                 );
+                if ( !isset( $this->id ) ) {
+                    $this->id = $id;
+                }
             }
             catch ( DBException $e ) {
                 $this->onCreateError();

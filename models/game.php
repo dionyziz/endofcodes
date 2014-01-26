@@ -5,6 +5,7 @@
         public $width;
         public $height;
         public $rounds;
+        protected $attributes = array( 'width', 'height', 'created' );
 
         public function __construct( $id = false ) {
             if ( $id ) {
@@ -33,14 +34,8 @@
             }
         }
 
-        protected function create() {
-            $width = $this->width;
-            $height = $this->height;
-            $created = $this->created = date( 'Y-m-d H:i:s' );
-            $this->id = dbInsert(
-                'games',
-                compact( 'width', 'height', 'created' )
-            );
+        protected function onBeforeCreate() {
+            $this->created = date( 'Y-m-d H:i:s' );
         }
 
         public function nextRound() {

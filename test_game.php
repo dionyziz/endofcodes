@@ -1,10 +1,10 @@
 <?php
-    include 'models/dependencies.php';
-    include 'models/creature.php';
-    include 'models/round.php';
-    include 'models/intent.php';
-    include 'models/user.php';
-    include 'models/game.php';
+    include_once 'models/dependencies.php';
+    include_once 'models/creature.php';
+    include_once 'models/round.php';
+    include_once 'models/intent.php';
+    include_once 'models/user.php';
+    include_once 'models/game.php';
     //$game = new Game( 7 );
     //echo $game->rounds[ 2 ]->creatures[ 1 ]->id;
     //echo $game->rounds[ 2 ]->creatures[ 1 ]->user->id;
