@@ -20,7 +20,8 @@
                 'age' => array(
                     'min' => 8,
                     'max' => 100
-                )
+                ),
+                'base' => 'http://localhost/endofcodes/'
             ),
             'test' => array(
                 'db' => array(
@@ -41,7 +42,8 @@
                 'age' => array(
                     'min' => 8,
                     'max' => 100
-                )
+                ),
+                'base' => 'http://localhost/endofcodes/'
             )
         );
         return $config;

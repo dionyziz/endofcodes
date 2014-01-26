@@ -3,6 +3,11 @@
 <html lang="en">
     <head>
         <title>EndofCodes Demo</title>
+        <base href='<?php
+        global $config;
+
+        echo $config[ 'base' ];
+        ?>' />
         <?php
             includeStyle( "general" );
             includeStyle( "header" );
