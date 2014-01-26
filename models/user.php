@@ -26,6 +26,9 @@
         }
 
         public static function findBySessionId( $sessionid ) {
+            if ( empty ( $sessionid ) ) {
+                throw new HTTPUnauthorizedException();
+            }
             try {
                 $row = dbSelectOne( 
                     'users', 
