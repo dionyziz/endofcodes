@@ -24,10 +24,10 @@
                 );
             }
             catch ( DBException $e ) {
-                $this->onCatch();
+                $this->onCreateError();
             }
             $this->exists = true;
-            $this->onCreateError();
+            $this->onCreate();
         }
 
         protected function onBeforeCreate() {} // override me
