@@ -86,7 +86,7 @@
             }
         }
 
-        protected function onCreateError( $e ) {
+        protected function onCreateError() {
             try {
                 $other_user = User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );

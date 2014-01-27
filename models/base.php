@@ -24,7 +24,7 @@
                 );
             }
             catch ( DBException $e ) {
-                $this->onCreateError( $e );
+                $this->onCreateError();
             }
             $this->exists = true;
             $this->onCreate();

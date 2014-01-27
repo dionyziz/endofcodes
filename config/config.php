@@ -21,8 +21,7 @@
                     'min' => 8,
                     'max' => 100
                 ),
-                'base' => 'http://localhost/endofcodes/',
-                'root' => '/var/www/endofcodes/'
+                'base' => 'http://localhost/endofcodes/'
             ),
             'test' => array(
                 'db' => array(
@@ -44,8 +43,7 @@
                     'min' => 8,
                     'max' => 100
                 ),
-                'base' => 'http://localhost/endofcodes/',
-                'root' => '/var/www/endofcodes/'
+                'base' => 'http://localhost/endofcodes/'
             )
         );
         return $config;

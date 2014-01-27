@@ -24,9 +24,6 @@
                 $this->shortname = $row[ 'shortname' ];
                 $this->flag = $config[ 'paths' ][ 'flag_path' ] . strtolower( $this->shortname ) . '.' . $config[ 'files' ][ 'flag_extention' ];
             }
-            else {
-                $this->id = 0;
-            }
         }
     }
 ?>
