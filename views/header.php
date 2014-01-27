@@ -14,7 +14,10 @@
             includeStyle( "home" );
             includeStyle( "register" );
             includeStyle( "login" );
+            includeStyle( 'test' );
         ?>
+        <script type="text/javascript" src="../script/cssrefresh.js"></script>
+
         <meta charset="utf-8" /> 
     </head>
     <body>

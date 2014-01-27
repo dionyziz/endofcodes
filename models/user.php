@@ -12,6 +12,7 @@
         public $image;
         public $salt;
         public $dateOfBirth;
+        public $boturl;
         protected $dob;
         protected $tableName = 'users';
 
@@ -76,7 +77,13 @@
             $array = encrypt( $this->password );
             $this->password = $array[ 'hash' ];
             $this->salt = $array[ 'salt' ];
-            $this->countryid = $this->country->id;
+            $this->avatarid = 0;
+            if ( isset( $this->country ) ) {
+                $this->countryid = $this->country->id;
+            }
+            else {
+                $this->countryid = 0;
+            }
         }
 
         protected function onCreateError() {
@@ -93,13 +100,23 @@
             $id = $this->id;
             if ( isset( $this->password ) ) {
                 $array = encrypt( $this->password );
-                $this->password = $array[ 'hash' ];
-                $this->salt = $array[ 'salt' ];
+                $this->password = $password = $array[ 'hash' ];
+                $this->salt = $salt = $array[ 'salt' ];
             }
             $email = $this->email;
             $dob = $this->dob;
-            $countryid = $this->country->id;
-            $avatarid = $this->image->id;
+            if ( isset( $this->country ) ) {
+                $countryid = $this->country->id;
+            }
+            else {
+                $countryid = 0;
+            }
+            if ( isset( $this->image ) ) {
+                $avatarid = $this->image->id;
+            }
+            else {
+                $avatarid = 0;
+            }
             try {
                 $res = dbUpdate(
                     'users',
@@ -114,13 +131,13 @@
 
         public function authenticatesWithPassword( $password ) {
             $username = $this->username;
-            $row = dbSelect(
+            $row = dbSelectOne(
                 'users',
                 array( 'id', 'password', 'salt' ),
                 compact( "username" )
             );
             if ( !empty( $row ) ) {
-                if ( $row[ 0 ][ 'password' ] == hashing( $password, $row[ 0 ][ 'salt' ] ) ) {
+                if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
                     return true;
                 }
             }
