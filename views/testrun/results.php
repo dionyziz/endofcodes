@@ -1,66 +1,83 @@
-<ul>
-    <?php
-        foreach ( $unittest->tests as $test ) {
-            ?><li><?php
-            echo htmlspecialchars( $test->methodName );
-            ?>: <?php
-            if ( $test->success ) {
-                ?><span class='pass'>PASS</span><?php
-            }
-            else {
-                ?><span class='fail'>FAIL:</span> <?php
-                echo htmlspecialchars( $test->error );
+<?php
+    include 'views/header.php';
+?>
+<h2>Unit test <?php
+echo htmlspecialchars( $name );
+?></h2>
 
-                ?><table class='calltrace'>
-                    <thead>
-                        <tr>
-                            <th>Filename</th>
-                            <th>Line</th>
-                            <th>Function</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ( $test->calltrace as $call ) {
-                            ?><tr><?php
-                                ?><td><?php
-                                    if ( isset( $call[ 'file' ] ) ) {
-                                        echo htmlspecialchars( $call[ 'file' ] );
-                                    }
-                                ?></td>
-                                <td><?php
-                                    if ( isset( $call[ 'line' ] ) ) {
-                                        echo htmlspecialchars( $call[ 'line' ] );
-                                    }
-                                ?></td>
-                                <td><?php
-                                    echo htmlspecialchars( $call[ 'function' ] );
-                                    ?>(<?php
-                                    $outputargs = array();
-                                    foreach ( $call[ 'args' ] as $arg ) {
-                                        if ( is_scalar( $arg ) ) {
-                                            $outputargs[] = $arg;
+<div class='unittest'>
+    <ul>
+        <?php
+            foreach ( $unittest->tests as $test ) {
+                ?><li><?php
+                echo htmlspecialchars( $test->methodName );
+                ?>: <?php
+                if ( $test->success ) {
+                    ?><span class='pass'>PASS</span><?php
+                }
+                else {
+                    ?><span class='fail'>FAIL:</span> <?php
+                    echo htmlspecialchars( $test->error );
+
+                    ?><table class='calltrace'>
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th class='linenr'>Line</th>
+                                <th>Function</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ( $test->calltrace as $call ) {
+                                ?><tr><?php
+                                    ?><td><?php
+                                        if ( isset( $call[ 'file' ] ) ) {
+                                            $file = $call[ 'file' ];
+                                            if ( substr( $file, 0, strlen( $config[ 'root' ] ) ) == $config[ 'root' ] ) {
+                                                $file = substr( $file, strlen( $config[ 'root' ] ) );
+                                            }
+                                            if ( substr( $file, -strlen( '.php' ) ) == '.php' ) {
+                                                $file = substr( $file, 0, -strlen( '.php' ) );
+                                                echo htmlspecialchars( $file );
+                                                ?><span class='extension'>.php</span><?php
+                                            }
+                                            else {
+                                                echo htmlspecialchars( $file );
+                                            }
                                         }
-                                        else if ( is_array( $arg ) ) {
-                                            $outputargs[] = '[array]';
+                                    ?></td>
+                                    <td class='linenr'><?php
+                                        if ( isset( $call[ 'line' ] ) ) {
+                                            echo htmlspecialchars( $call[ 'line' ] );
                                         }
-                                        else if ( is_object( $arg ) ) {
-                                            $outputargs[] = '[object]';
+                                    ?></td>
+                                    <td>
+                                        <span class='function'><?php
+                                        echo htmlspecialchars( $call[ 'function' ] );
+                                        ?></span><span class='delimiter'>(</span><?php
+                                        $outputargs = array();
+                                        foreach ( $call[ 'args' ] as $arg ) {
+                                            ob_start();
+                                            include 'views/testrun/variable.php';
+                                            $outputargs[] = ob_get_clean();
                                         }
-                                        else {
-                                            $outputargs[] = '[unknown]';
+                                        if ( count( $outputargs ) ) {
+                                            echo " " . implode( ', ', $outputargs ) . " ";
                                         }
-                                    }
-                                    echo implode( ', ', array_map( 'htmlspecialchars', $outputargs ) );
-                                    ?>)<?php
-                                ?></td>
-                            </tr><?php
-                        }
-                        ?>
-                    </tbody>
-                </table><?php
+                                        ?><span class='delimiter'>)</span><?php
+                                    ?></td>
+                                </tr><?php
+                            }
+                            ?>
+                        </tbody>
+                    </table><?php
+                }
+                ?></li><?php
             }
-            ?></li><?php
-        }
-    ?>
-</ul>
+        ?>
+    </ul>
+</div>
+<?php
+    include 'views/footer.php';
+?>
