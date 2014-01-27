@@ -4,7 +4,7 @@
     }
 
     function encrypt( $password ) {
-        $salt = openssl_random_pseudo_bytes( 32 );
+        $salt = base64_encode( openssl_random_pseudo_bytes( 32 ) );
         $hash = hashing( $password, $salt );
         return array( "hash" => $hash, "salt" => $salt );
     }

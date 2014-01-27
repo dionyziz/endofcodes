@@ -26,6 +26,9 @@
                 $this->ext = Extention::get( $this->name );
                 $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
             }
+            else {
+                $this->id = 0;
+            }
         }
 
         protected function validate() {
