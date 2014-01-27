@@ -26,14 +26,14 @@
         }
 
         public static function findBySessionId( $sessionid ) {
-            if ( empty ( $sessionid ) ) {
-                throw new HTTPUnauthorizedException();
+            if ( empty( $sessionid ) ) {
+                throw new ModelNotFoundException();
             }
             try {
                 $row = dbSelectOne( 
                     'users', 
                     array( 'id' ), 
-                    compact( $sessionid ) 
+                    compact( "sessionid" ) 
                 );
             }
             catch ( DBException $e ) {
@@ -115,6 +115,7 @@
             }
             $this->exists = true;
             $this->id = $res;
+            $this->renewSessionId();     
         }
 
         protected function update() {

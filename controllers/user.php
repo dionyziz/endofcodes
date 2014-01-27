@@ -19,7 +19,6 @@
             $user->email = $email;
             $user->country = $country;
             $user->dateOfBirth = compact( 'day', 'month', 'year' );
-            $user->renewSessionId();     
             try {
                 $user->save();
             }
