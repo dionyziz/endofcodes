@@ -35,15 +35,6 @@
             }
         }
 
-        protected function validate() {
-            if ( !is_int( $this->id ) ) {
-                throw new ModelValidationException( 'id_not_valid' );
-            }
-            if ( !is_int( $this->game->id ) ) {
-                throw new ModelValidationException( 'gameid_not_valid' );
-            }
-        }
-
         protected function create() {
             $gameid = $this->game->id;
             $roundid = $this->id;

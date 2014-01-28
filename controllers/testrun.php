@@ -4,6 +4,8 @@
 
         public function create( $name ) {
             include_once 'tests/base.php';
+            include_once 'tests/testwithuser.php';
+
             $path = 'tests/' . $name . '.php';
             if ( !file_exists( $path ) ) {
                 throw new HTTPNotFoundException();
