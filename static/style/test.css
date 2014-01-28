@@ -1,0 +1,70 @@
+body {
+    font-family: "Trebuchet MS", Verdana, sans-serif;
+}
+span.pass, span.fail {
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 18px;
+}
+span.pass {
+    color: #009933;
+    font-weight: bold;
+    background-image: url( '../images/check.png' );
+}
+span.fail {
+    color: #ff5555;
+    font-weight: bold;
+    background-image: url( '../images/alert.png' );
+}
+.unittest table {
+    border-collapse: collapse;
+    border: 1px solid #232526;
+    background-color: #323232;
+    color: white;
+}
+.unittest thead {
+    color: #ef5939;
+    background-color: #403d3d;
+}
+.unittest th {
+    font-weight: normal;
+}
+.unittest table tbody tr {
+    border-top: 1px solid #232526;
+}
+.unittest table td, .unittest table th {
+    padding: 5px;
+}
+.unittest table th {
+    text-align: left;
+}
+.unittest .string {
+    color: #e6db74;
+}
+.unittest .integer, .unittest .double, .unittest .boolean {
+    color: #ae81ff;
+}
+.unittest .null {
+    color: #f92672;
+}
+.unittest .function {
+    color: #a6e22e;
+}
+.unittest .delimiter {
+    color: #8f8f8f;
+}
+.unittest .array, .unittest .object {
+    color: #c4be89;
+}
+.unittest td.linenr {
+    background-color: #232526;
+    color: #fd971f;
+}
+.unittest .linenr {
+}
+.unittest .class {
+    color: white;
+}
+.unittest .extension {
+    color: #465457;
+}
