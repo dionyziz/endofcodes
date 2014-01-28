@@ -20,10 +20,8 @@
                 $this->width = $game_info[ 'width' ];
                 $this->height = $game_info[ 'height' ];
                 $rounds = dbSelect( 'roundcreatures', array( 'roundid' ), compact( 'gameid' ) );
-                if ( !empty( $rounds ) ) {
-                    for ( $i = 0; $i <= count( $rounds ); ++$i ) {
-                        $this->rounds[ $i ] = new Round( $this, $i );
-                    }
+                for ( $i = 0; $i < count( $rounds ); ++$i ) {
+                    $this->rounds[ $i ] = new Round( $this, $i );
                 }
             }
             else {

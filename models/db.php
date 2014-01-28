@@ -26,7 +26,6 @@
         $finalsql = strtr( $sql, $bind );
         $res = mysql_query( $finalsql );
         if ( $res === false ) {
-            die( $finalsql );
             throw new DBException( mysql_error() );
         }
         return $res;

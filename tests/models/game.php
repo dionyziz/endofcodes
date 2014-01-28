@@ -18,7 +18,7 @@
             $game->save();
             return $game;
         }
-        public function testFind() {
+        public function testInitiation() {
             $game = $this->buildGame();
             $dbGame = new Game( 1 );
             $this->assertEquals( $game->height, intval( $dbGame->height ), 'Height in the db must be the same as the height during creation' );
