@@ -56,6 +56,9 @@
             $description .= "Expected '$expected', found '$actual'.";
             $this->assertTrue( $expected === $actual, $description );
         }
+        public function assertFalse( $condition, $description = '' ) {
+            $this->assertTrue( !$condition, $description );
+        }
         public function run() {
             $this_reflection = new ReflectionObject( $this );
 

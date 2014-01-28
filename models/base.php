@@ -18,10 +18,13 @@
                 $attributes[ $attribute ] = $this->$attribute;
             }
             try {
-                $this->id = dbInsert(
+                $id = dbInsert(
                     $this->tableName,
                     $attributes
                 );
+                if ( !isset( $this->id ) ) {
+                    $this->id = $id;
+                }
             }
             catch ( DBException $e ) {
                 $this->onCreateError();
@@ -33,6 +36,7 @@
         protected function onBeforeCreate() {} // override me
         protected function onCreate() {} // override me
         protected function onCreateError() {} // override me
+        protected function validate() {} // override me
 
         public function save() {
             $this->validate();
