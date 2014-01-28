@@ -1,4 +1,10 @@
 <?php
+    define( 'MIN_CREATURES', 100 );
+    define( 'MAX_CREATURES', 199 );
+    define( 'MIN_MULTIPLIER', 3 );
+    define( 'MAX_MULTIPLIER', 4 );
+    define( 'MIN_HP', 100 );
+    define( 'MAX_HP', 199 );
     class Game extends ActiveRecordBase {
         public $id;
         public $created;
@@ -31,22 +37,22 @@
         }
 
         protected function onBeforeCreate() {
-            $this->creaturesPerPlayer = rand( 100, 199 );
+            $this->creaturesPerPlayer = rand( MIN_CREATURES, MAX_CREATURES );
             $multiply = $this->creaturesPerPlayer * count( $this->users );
-            $this->width = rand( 3 * $multiply + 1, 4 * $multiply - 1 );
+            $this->width = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->height = rand( 3 * $multiply + 1, 4 * $multiply - 1 );
-            $this->maxHp = rand( 100, 199 );
+            $this->maxHp = rand( MIN_HP, MAX_HP );
             $this->created = date( 'Y-m-d H:i:s' );
         }
 
         public function genesis() {
             $this->rounds[ 0 ] = new Round();
             $id = 0;
-            for ( $i = 0; $i < count( $this->users ); ++$i ) {
+            foreach ( $this->users as $user ) {
                 for ( $j = 0; $j < $this->creaturesPerPlayer; ++$j, ++$id ) {
                     $creature = new Creature();
                     $creature->id = $id;
-                    $creature->user = $this->users[ $i ];
+                    $creature->user = $user;
                     $creature->game = $this;
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
@@ -64,13 +70,6 @@
                     $this->rounds[ 0 ]->creatures[ $id ] = $creature;
                 }
             }
-        }
-
-        public function nextRound() {
-            $roundid = count( $this->rounds );
-            $this->rounds[ $roundid ] = new Round();
-            $this->rounds[ $roundid ]->id = $roundid;
-            $this->rounds[ $roundid ]->game = $this;
         }
     }
 ?>

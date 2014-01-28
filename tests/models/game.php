@@ -12,11 +12,10 @@
                 $game->users[] = $this->buildUser( $i );
             }
             $game->save();
-            $this->assertEquals( $game->width > 0, true, 'A game with users must have width' );
-            $this->assertEquals( $game->height > 0, true, 'A game with users must have height' );
-            $this->assertEquals( 
+            $this->assertTrue( $game->width > 0, 'A game with users must have width' );
+            $this->assertTrue( $game->height > 0, 'A game with users must have height' );
+            $this->assertTrue( 
                 3 * count( $game->users ) * $game->creaturesPerPlayer < $game->width * $game->height,
-                true,
                 '3NM < WH must be true' 
             );
         }
@@ -51,9 +50,9 @@
                 for ( $j = 0; $j < $game->height; ++$j ) {
                     if ( isset( $game->grid[ $i ][ $j ] ) ) {
                         $creature = $game->grid[ $i ][ $j ];
-                        $userCountCreatures[ $creature->user->id ] += 1;
-                        $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be positive" );
-                        $this->assertTrue( $creature->locationy >= 0, "A creature's y coordinate must be positive" );
+                        ++$userCountCreatures[ $creature->user->id ];
+                        $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
+                        $this->assertTrue( $creature->locationy >= 0, "A creature's y coordinate must be non-negative" );
                         $this->assertTrue( $creature->locationx < $game->width, "A creature's x coordinate must be inside the grid" );
                         $this->assertTrue( $creature->locationy < $game->height, "A creature's y coordinate must be inside the grid" );
                         ++$creatureCount;
@@ -71,7 +70,7 @@
             }
             foreach ( $game->rounds[ 0 ]->creatures as $creature ) {
                 if ( isset( $grid[ $creature->locationx ][ $creature->locationy ] ) ) {
-                    $this->assertEquals( $grid[ $creature->locationx ][ $creature->locationy ], false, 'Only one creature must exist per coordinate' );
+                    $this->assertFalse( $grid[ $creature->locationx ][ $creature->locationy ], 'Only one creature must exist per coordinate' );
                 }
                 else {
                     $grid[ $creature->locationx ][ $creature->locationy ] = true;

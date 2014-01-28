@@ -39,25 +39,25 @@
             $gameid = $this->game->id;
             $roundid = $this->id;
             foreach ( $this->creatures as $creature ) {
-                    $locationx = $creature->locationx;
-                    $locationy = $creature->locationy;
-                    $hp = $creature->hp;
-                    $direction = directionConstToString( $creature->intent->direction );
-                    $action = actionConstToString( $creature->intent->action );
-                    $creatureid = $creature->id;
-                    dbInsert(
-                        'roundcreatures',
-                        compact( 
-                            'gameid', 
-                            'roundid', 
-                            'locationx', 
-                            'locationy', 
-                            'hp', 
-                            'direction', 
-                            'action',
-                            'creatureid' 
-                        )
-                    );
+                $locationx = $creature->locationx;
+                $locationy = $creature->locationy;
+                $hp = $creature->hp;
+                $direction = directionConstToString( $creature->intent->direction );
+                $action = actionConstToString( $creature->intent->action );
+                $creatureid = $creature->id;
+                dbInsert(
+                    'roundcreatures',
+                    compact( 
+                        'gameid', 
+                        'roundid', 
+                        'locationx', 
+                        'locationy', 
+                        'hp', 
+                        'direction', 
+                        'action',
+                        'creatureid' 
+                    )
+                );
             }
         }
 
