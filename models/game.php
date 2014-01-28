@@ -5,6 +5,10 @@
         public $width;
         public $height;
         public $rounds;
+        public $usersCount;
+        public $creaturesPerPlayer;
+        public $maxHp;
+        protected $tableName = 'games';
         protected $attributes = array( 'width', 'height', 'created' );
 
         public function __construct( $id = false ) {
@@ -16,8 +20,10 @@
                 $this->width = $game_info[ 'width' ];
                 $this->height = $game_info[ 'height' ];
                 $rounds = dbSelect( 'roundcreatures', array( 'roundid' ), compact( 'gameid' ) );
-                for ( $i = 0; $i <= count( $rounds ); ++$i ) {
-                    $this->rounds[ $i ] = new Round( $this, $i );
+                if ( !empty( $rounds ) ) {
+                    for ( $i = 0; $i <= count( $rounds ); ++$i ) {
+                        $this->rounds[ $i ] = new Round( $this, $i );
+                    }
                 }
             }
             else {
@@ -25,16 +31,12 @@
             }
         }
 
-        protected function validate() {
-            if ( !is_int( $this->width ) ) {
-                throw new ModelValidationException( 'width_not_valid' );
-            }
-            if ( !is_int( $this->height ) ) {
-                throw new ModelValidationException( 'height_not_valid' );
-            }
-        }
-
         protected function onBeforeCreate() {
+            $this->creaturesPerPlayer = rand( 100, 199 );
+            $multiply = $this->creaturesPerPlayer * $this->usersCount;
+            $this->width = rand( 3 * $multiply + 1, 4 * $multiply - 1 );
+            $this->height = rand( 3 * $multiply + 1, 4 * $multiply - 1 );
+            $this->maxHp = rand( 100, 199 );
             $this->created = date( 'Y-m-d H:i:s' );
         }
 

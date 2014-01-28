@@ -11,6 +11,7 @@
         protected $gameid;
         protected $userid;
         protected $attributes = array( 'id', 'gameid', 'userid' );
+        protected $tableName = 'creatures';
 
         public function __construct( $creature_info = array() ) {
             if ( !empty( $creature_info ) ) {

@@ -36,6 +36,7 @@
         protected function onBeforeCreate() {} // override me
         protected function onCreate() {} // override me
         protected function onCreateError() {} // override me
+        protected function validate() {} // override me
 
         public function save() {
             $this->validate();
