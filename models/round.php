@@ -60,13 +60,5 @@
                 );
             }
         }
-
-        public function nextCreature( $user ) {
-            $creatureid = count( $this->creatures ); 
-            $this->creatures[ $creatureid ] = new Creature();
-            $this->creatures[ $creatureid ]->user = $user;
-            $this->creatures[ $creatureid ]->game = $this->game;
-            $this->creatures[ $creatureid ]->id = $creatureid;
-        }
     }
 ?>
