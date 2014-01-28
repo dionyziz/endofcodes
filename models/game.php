@@ -40,7 +40,7 @@
             $this->creaturesPerPlayer = rand( MIN_CREATURES, MAX_CREATURES );
             $multiply = $this->creaturesPerPlayer * count( $this->users );
             $this->width = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
-            $this->height = rand( 3 * $multiply + 1, 4 * $multiply - 1 );
+            $this->height = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->maxHp = rand( MIN_HP, MAX_HP );
             $this->created = date( 'Y-m-d H:i:s' );
         }
@@ -67,7 +67,7 @@
                             break;
                         }
                     }
-                    $this->rounds[ 0 ]->creatures[ $id ] = $creature;
+                    $this->rounds[ 0 ]->creatures[] = $creature;
                 }
             }
         }
