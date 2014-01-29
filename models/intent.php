@@ -8,25 +8,35 @@
     define( 'ACTION_MOVE', 1 );
     define( 'ACTION_ATACK', 2 );
 
-    function convertDirection( $direction ) {
+    function directionStringToConst( $direction ) {
         $directionMap = array(
             'NONE' => DIRECTION_NONE,
             'NORTH' => DIRECTION_NORTH,
             'EAST' => DIRECTION_EAST,
             'SOUTH' => DIRECTION_SOUTH,
-            'WEST' => DIRECTION_WEST
+            'WEST' => DIRECTION_wEST
         );
         if ( isset( $directionMap[ $direction ] ) ) {
             return $directionMap[ $direction ];
         }
-        $directionMap = array_flip( $directionMap );
+        throw new ModelNotFoundException();
+    }
+
+    function directionConstToString( $direction ) {
+        $directionMap = array(
+            DIRECTION_NONE => 'NONE',
+            DIRECTION_NORTH => 'NORTH',
+            DIRECTION_EAST => 'EAST',
+            DIRECTION_SOUTH => 'SOUTH',
+            DIRECTION_WEST => 'WEST'
+        );
         if ( isset( $directionMap[ $direction ] ) ) {
             return $directionMap[ $direction ];
         }
-        return false;
+        throw new ModelNotFoundException();
     }
 
-    function convertAction( $action ) {
+    function actionStringToConst( $action ) {
         $actionMap = array(
             'NONE' => ACTION_NONE,
             'MOVE' => ACTION_MOVE,
@@ -35,11 +45,19 @@
         if ( isset( $actionMap[ $action ] ) ) {
             return $actionMap[ $action ];
         }
-        $actionMap = array_flip( $actionMap );
+        throw new ModelNotFoundException();
+    }
+
+    function actionConstToString( $action ) {
+        $actionMap = array(
+            ACTION_NONE => 'NONE',
+            ACTION_MOVE => 'MOVE',
+            ACTION_ATACK => 'ATACK'
+        );
         if ( isset( $actionMap[ $action ] ) ) {
             return $actionMap[ $action ];
         }
-        return false;
+        throw new ModelNotFoundException();
     }
 
     class Intent {

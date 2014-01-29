@@ -3,13 +3,21 @@
 <html lang="en">
     <head>
         <title>EndofCodes Demo</title>
+        <base href='<?php
+        global $config;
+
+        echo $config[ 'base' ];
+        ?>' />
         <?php
             includeStyle( "general" );
             includeStyle( "header" );
             includeStyle( "home" );
             includeStyle( "register" );
             includeStyle( "login" );
+            includeStyle( 'test' );
         ?>
+        <script type="text/javascript" src="../script/cssrefresh.js"></script>
+
         <meta charset="utf-8" /> 
     </head>
     <body>
@@ -18,17 +26,17 @@
                 <li><a href="index.php">Endofcodes</a></li>
                 <li><a href="">Rules</a></li>
                 <?php
-                    if ( isset( $_SESSION[ 'user' ]['username' ] ) ) {
+                    if ( isset( $_SESSION[ 'user' ] ) ) {
                         ?><li><a href="index.php?resource=user&amp;method=view&amp;username=<?php
-                            echo htmlspecialchars( $_SESSION[ 'user' ][ 'username' ] );
+                            echo htmlspecialchars( $_SESSION[ 'user' ]->username );
                         ?>">Profile</a></li><?php
                     }
                 ?>
                 <li><a href="http://blog.endofcodes.com">Blog</a></li>
                 <?php
-                    if ( isset( $_SESSION[ 'user' ][ 'username' ] ) ) {
+                    if ( isset( $_SESSION[ 'user' ] ) ) {
                         ?><li id="login" class="username"><?php
-                            echo htmlspecialchars( $_SESSION[ 'user' ][ 'username' ] );
+                            echo htmlspecialchars( $_SESSION[ 'user' ]->username );
                         ?></li><?php
                     }
                     else {

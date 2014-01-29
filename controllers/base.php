@@ -1,11 +1,12 @@
 <?php
     abstract class ControllerBase {
-        protected function protectFromForgery( $token, $http_request_method ) {
+        protected $environment = 'development';
+
+        protected function protectFromForgery( $token = '', $http_request_method = '' ) {
             if ( $http_request_method === 'POST'
             && ( $token !== $_SESSION[ 'form' ][ 'token' ] || $token == '' ) ) { 
                 throw new HTTPUnauthorizedException();
             }
-            unset( $_SESSION[ 'form' ][ 'token' ] );
         }
         protected function getControllerMethod( $requested_method, $http_request_method ) {
             $method = $requested_method; 
@@ -55,7 +56,18 @@
             }
             call_user_func_array( $callable, $arguments );
         }
+        protected function loadConfig() {
+            global $config;
+
+            $config = getConfig()[ $this->environment ];
+        }
+        protected function init() {
+            $this->loadConfig();
+            dbInit();
+        }
         public function dispatch( $get, $post, $files, $http_request_method ) {
+            $this->init();
+
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';
             }

@@ -2,7 +2,7 @@
     class DashboardController extends ControllerBase {
         public function view() {
             if ( isset( $_SESSION[ 'user' ] ) ) {
-                $username = $_SESSION[ 'user' ][ 'username' ];
+                $user = $_SESSION[ 'user' ];
             }
             include 'views/header.php';
             include 'views/home.php';

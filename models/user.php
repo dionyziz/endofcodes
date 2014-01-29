@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        public $id;
+        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email' );
         public $username;
         public $password;
         public $email;
@@ -12,6 +12,7 @@
         public $image;
         public $salt;
         public $dateOfBirth;
+        public $boturl;
         protected $dob;
         protected $tableName = 'users';
 
@@ -65,8 +66,7 @@
             }
         }
 
-        protected function create() {
-            // when a user is created he doesn't have an image, so avatarid is by default 0 
+        protected function onBeforeCreate() {
             $day = intval( $this->dateOfBirth[ 'day' ] ); 
             $month = intval( $this->dateOfBirth[ 'month' ] );
             $year = intval( $this->dateOfBirth[ 'year' ] );
@@ -74,43 +74,49 @@
                 $day = $month = $year = 0;
             }
             $dob = $this->dob = $year . '-' . $month . '-' . $day; 
-            $username = $this->username;
-            $password = $this->password;
-            $email = $this->email;
-            $countryid = $this->country->id;
-            $array = encrypt( $password );
-            $password = $array[ 'hash' ];
-            $salt = $array[ 'salt' ];
+            $array = encrypt( $this->password );
+            $this->password = $array[ 'hash' ];
+            $this->salt = $array[ 'salt' ];
+            $this->avatarid = 0;
+            if ( isset( $this->country ) ) {
+                $this->countryid = $this->country->id;
+            }
+            else {
+                $this->countryid = 0;
+            }
+        }
+
+        protected function onCreateError() {
             try {
-                $res = dbInsert( 
-                    'users', 
-                    compact( "username", "password", "email", "salt", "countryid", "dob" )
-                );
+                $other_user = User::findByUsername( $this->username );
+                throw new ModelValidationException( 'username_used' );
             }
-            catch ( DBException $e ) {
-                try {
-                    $other_user = User::findByUsername( $username );
-                    throw new ModelValidationException( 'username_used' );
-                }
-                catch ( ModelNotFoundException $e ) {
-                    throw new ModelValidationException( 'email_used' );
-                }
+            catch ( ModelNotFoundException $e ) {
+                throw new ModelValidationException( 'email_used' );
             }
-            $this->exists = true;
-            $this->id = $res;
         }
 
         protected function update() {
             $id = $this->id;
             if ( isset( $this->password ) ) {
                 $array = encrypt( $this->password );
-                $this->password = $array[ 'hash' ];
-                $this->salt = $array[ 'salt' ];
+                $this->password = $password = $array[ 'hash' ];
+                $this->salt = $salt = $array[ 'salt' ];
             }
             $email = $this->email;
             $dob = $this->dob;
-            $countryid = $this->country->id;
-            $avatarid = $this->image->id;
+            if ( isset( $this->country ) ) {
+                $countryid = $this->country->id;
+            }
+            else {
+                $countryid = 0;
+            }
+            if ( isset( $this->image ) ) {
+                $avatarid = $this->image->id;
+            }
+            else {
+                $avatarid = 0;
+            }
             try {
                 $res = dbUpdate(
                     'users',
@@ -125,13 +131,13 @@
 
         public function authenticatesWithPassword( $password ) {
             $username = $this->username;
-            $row = dbSelect(
+            $row = dbSelectOne(
                 'users',
                 array( 'id', 'password', 'salt' ),
                 compact( "username" )
             );
             if ( !empty( $row ) ) {
-                if ( $row[ 0 ][ 'password' ] == hashing( $password, $row[ 0 ][ 'salt' ] ) ) {
+                if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
                     return true;
                 }
             }

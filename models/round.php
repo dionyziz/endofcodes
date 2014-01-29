@@ -35,47 +35,30 @@
             }
         }
 
-        protected function validate() {
-            if ( !is_int( $this->id ) ) {
-                throw new ModelValidationException( 'id_not_valid' );
-            }
-            if ( !is_int( $this->game->id ) ) {
-                throw new ModelValidationException( 'gameid_not_valid' );
-            }
-        }
-
         protected function create() {
             $gameid = $this->game->id;
             $roundid = $this->id;
             foreach ( $this->creatures as $creature ) {
-                    $locationx = $creature->locationx;
-                    $locationy = $creature->locationy;
-                    $hp = $creature->hp;
-                    $direction = convertDirection( $creature->intent->direction );
-                    $action = convertAction( $creature->intent->action );
-                    $creatureid = $creature->id;
-                    dbInsert(
-                        'roundcreatures',
-                        compact( 
-                            'gameid', 
-                            'roundid', 
-                            'locationx', 
-                            'locationy', 
-                            'hp', 
-                            'direction', 
-                            'action',
-                            'creatureid' 
-                        )
-                    );
+                $locationx = $creature->locationx;
+                $locationy = $creature->locationy;
+                $hp = $creature->hp;
+                $direction = directionConstToString( $creature->intent->direction );
+                $action = actionConstToString( $creature->intent->action );
+                $creatureid = $creature->id;
+                dbInsert(
+                    'roundcreatures',
+                    compact( 
+                        'gameid', 
+                        'roundid', 
+                        'locationx', 
+                        'locationy', 
+                        'hp', 
+                        'direction', 
+                        'action',
+                        'creatureid' 
+                    )
+                );
             }
-        }
-
-        public function nextCreature( $user ) {
-            $creatureid = count( $this->creatures ); 
-            $this->creatures[ $creatureid ] = new Creature();
-            $this->creatures[ $creatureid ]->user = $user;
-            $this->creatures[ $creatureid ]->game = $this->game;
-            $this->creatures[ $creatureid ]->id = $creatureid;
         }
     }
 ?>
