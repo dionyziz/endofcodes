@@ -109,7 +109,7 @@
         return mysql_affected_rows();
     }
 
-    function dbArray( $sql, $bind = false, $id_column = false ) {
+    function dbArray( $sql, $bind = array(), $id_column = false ) {
         $res = db( $sql, $bind );
         $rows = array();
         if ( $id_column !== false ) {
@@ -123,5 +123,9 @@
             }
         }
         return $rows;
+    }
+
+    function dbListTables() {
+        return array_map( 'array_shift', dbArray( 'SHOW TABLES' ) );
     }
 ?>
