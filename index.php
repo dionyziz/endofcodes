@@ -30,7 +30,4 @@
     catch ( HTTPErrorException $e ) {
         header( $e->header );
     }
-    catch ( Exception $e ) {
-        die( $controllername . ' call rejected: ' . $e->getMessage() );
-    }
 ?>

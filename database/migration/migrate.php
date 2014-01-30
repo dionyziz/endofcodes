@@ -4,6 +4,11 @@
         include_once '../../models/database.php';
         include_once '../../models/db.php';
 
+        global $config;
+
+        $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ];
+        dbInit();
+
         foreach ( $sql_array as $sql ) {
             try {
                 $res = db( $sql );

@@ -5,10 +5,10 @@
     class Image extends ActiveRecordBase {
         public $tmp_name;
         public $name;
-        public $id;
         public $target_path;
         public $ext;
         public $userid;
+        protected $attributes = array( 'name', 'userid' );
         protected $tableName = 'images';
 
         public static function findByUser( $user ) {
@@ -30,28 +30,20 @@
 
         protected function validate() {
             $this->ext = Extention::get( $this->name );
+            $this->name = basename( $this->name );
             if ( !Extention::valid( $this->ext ) ) {
                 throw new ModelValidationException( 'image_invalid' );
             }
         }
 
-        protected function create() {
+        protected function onCreate() {
             global $config;
 
-            $tmp_name = $this->tmp_name;
-            $name = basename( $this->name );
-            $ext = $this->ext;
-            $userid = $this->userid;
             $target_path = $config[ 'paths' ][ 'avatar_path' ];
-            $id = dbInsert( 
-                'images', 
-                compact( "userid", "name" )
-            );
-            $name = $id . "." . $ext;
+            $ext = $this->ext;
+            $name = $this->id . "." . $ext;
             $this->target_path = $target_path . $name;
-            $this->id = $id;
             $this->upload();
-            $this->exists = true;
         }
 
         public function upload() {

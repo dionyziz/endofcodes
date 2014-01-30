@@ -3,6 +3,11 @@
     include_once '../../models/database.php';
     include_once '../../models/db.php';
     include_once 'countries_array.php';
+
+    global $config; 
+
+    $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ];
+    dbInit();
     
     $countries = getCountries();
     $array = array();
@@ -15,9 +20,9 @@
         catch ( DBException $e ) {
             die( "sql query died with the following error\n" . mysql_error() );
         }
-        ++$counter;
+        ++$count;
     }
     
-    echo "You imported $counter rows out of the $countries countries in the table 'countries'.";
+    echo "You imported $count rows out of the " . count( $countries ) . " countries in the table 'countries'.";
 ?>
 

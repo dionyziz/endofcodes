@@ -129,6 +129,9 @@
         }
 
         public function output( $callable ) {
+            ob_start();
+            $callable( $this );
+            $out = ob_get_clean();
             if ( !isset( $_SESSION[ 'form' ][ 'token' ] ) ) {
                 $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create(); 
             }
@@ -158,7 +161,7 @@
                         ?>enctype="multipart/form-data"<?php
                     }
                 ?>><?php
-                $callable( $this );
+                echo $out;
                 $this->createInput( 'hidden', 'token', '', $this->token );
             ?></form><?php
         }

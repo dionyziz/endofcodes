@@ -1,5 +1,6 @@
 <?php
     session_start();
+
     error_reporting( E_ALL ^ E_STRICT ^ E_DEPRECATED );
     ini_set( 'display_errors', '1' );
     date_default_timezone_set( "Europe/Athens" );
@@ -29,8 +30,7 @@
                 $this->url = $resource_or_url;
             }
             else {
-                $args[ 'resource' ] = $resource_or_url;
-                $args[ 'method' ] = $method;
+                $resource = $resource_or_url;
                 foreach ( $args as $key => $arg ) {
                     if ( $arg === true ) {
                         $arg = 'yes';
@@ -40,7 +40,7 @@
                     }
                     $args[ $key ] = "$key=" . urlencode( $arg );
                 }
-                $this->url = 'index.php?' . implode( "&", $args );
+                $this->url = "$resource/$method?" . implode( "&", $args );
             }
         }
     }
@@ -61,13 +61,13 @@
     }
     class HTTPNotFoundException extends HTTPErrorException {
         public function __construct() {
-            parent::__construct( '404', 'Not Found' );
+            parent::__construct( 404, 'Not Found' );
         }
     }
 
     class HTTPUnauthorizedException extends HTTPErrorException {
         public function __construct() {
-            parent::__construct( '401', 'Unauthorized' );
+            parent::__construct( 401, 'Unauthorized' );
         }
     }
 ?>
