@@ -53,6 +53,7 @@
                     $creature = new Creature();
                     $creature->id = $id;
                     $creature->user = $user;
+                    $creature->round = $this->rounds[ 0 ];
                     $creature->game = $this;
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;

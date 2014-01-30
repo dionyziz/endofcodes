@@ -77,6 +77,70 @@
                 }
             }
         }
+        public function testResolution() {
+            $game = $this->buildGame();
+            $game->genesis();
+            $prevRoundCount = count( $game->rounds );
+            $roundid = count( $game->rounds );
+            $game->rounds[ $roundid ] = new Round();
+            $roundCount = count( $game->rounds );
+            $this->assertEquals( $roundCount, $prevRoundCount + 1, 'A new round must be created' );
+            $round = $game->rounds[ $roundid - 1 ];
+            foreach ( $round->creatures as $key => $creature ) {
+                if ( $creature->alive ) {
+                    switch ( $creature->intent->action ) {
+                        case ACTION_MOVE:
+                            $creature = creatureMove( $creature );
+                            break;
+                        case ACTION_ATACK:
+                            $creature = creatureAtack( $creature );
+                            break;
+                    }
+                    $round->creatures[ $key ] = $creature;
+                }
+            }
+            foreach ( $round->creatures as $creature ) {
+                if ( $creature->hp === 0 ) {
+                    $creature->alive = false;
+                }
+            }
+            foreach ( $round->creatures as $creature ) {
+                if ( $creature->hp === 0 ) {
+                    $this->assertFale( $creature->alive, 'A creature with 0 hp must not be alive' );
+                }
+                $this->assertTrue( $creature->locationx < $game->width && $creature->locationx >= 0, 'A creature must be inside the grid' );
+                $this->assertTrue( $creature->locationy < $game->height && $creature->locationy >= 0, 'A creature must be inside the grid' );
+            }
+            $creatureLocation = array( array( array() ) );
+            foreach ( $round->creatures as $creature ) {
+                $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
+                //echo "($creature->locationx,$creature->locationy)\n";
+            }
+            //echo "width: $game->width, height: $game->height";
+            //die();
+            $finished = false;
+            while ( !$finished ) {
+                $finished = true;
+                for ( $i = 0; $i < $game->width; ++$i ) {
+                    for ( $j = 0; $j < $game->height; ++$j ) {
+                        if ( isset( $creatureLocation[ $i ][ $j ] ) && count( $creatureLocation[ $i ][ $j ] ) > 1 ) {
+                            $finished = false;
+                            foreach ( $creatureLocation[ $i ][ $j ] as $key => $creature ) {
+                                $prevCreature = $game->rounds[ $roundid - 1 ]->creatures[ $creature->id ];
+                                if ( $prevCreature->locationx !== $i || $prevCreature->locationy !== $j ) {
+                                    unset( $creatureLocation[ $i ][ $j ][ $key ] );
+                                    $creature->locationx = $prevCreature->locationx;
+                                    $creature->locationy = $prevCreature->locationy;
+                                    $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+                                    $game->rounds[ $roundid ]->creatures[ $creature->id ] = $creature;
+                                    $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return new GameTest();
