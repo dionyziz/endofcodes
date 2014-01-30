@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email' );
+        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' );
         public $username;
         public $password;
         public $email;
@@ -95,13 +95,13 @@
             $this->password = $array[ 'hash' ];
             $this->salt = $array[ 'salt' ];
             $this->avatarid = 0;
+            $this->generateSessionId();
             if ( isset( $this->country ) ) {
                 $this->countryid = $this->country->id;
             }
             else {
                 $this->countryid = 0;
             }
-            $this->renewSessionId();     
         }
 
         protected function onCreateError() {
@@ -123,6 +123,7 @@
             }
             $email = $this->email;
             $dob = $this->dob;
+            $sessionid = $this->sessionid;
             if ( isset( $this->country ) ) {
                 $countryid = $this->country->id;
             }
@@ -147,6 +148,12 @@
             }
         }
 
+        protected function generateSessionId() {
+            $value = openssl_random_pseudo_bytes( 32 );
+            $sessionid = base64_encode( $value );
+            $this->sessionid = $sessionid;
+        }
+
         public function authenticatesWithPassword( $password ) {
             $username = $this->username;
             $row = dbSelectOne(
@@ -163,10 +170,7 @@
         }
 
         public function renewSessionId() {
-            $id = $this->id;
-            $value = openssl_random_pseudo_bytes( 32 );
-            $sessionid = base64_encode( $value );
-            $this->sessionid = $sessionid;
+            $this->generateSessionId();
             $this->save();
         }
     }
