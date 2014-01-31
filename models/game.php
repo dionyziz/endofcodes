@@ -96,7 +96,9 @@
             }
             $creatureLocation = array( array( array() ) );
             foreach ( $currentRound->creatures as $creature ) {
-                $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
+                if ( $creature->alive ) {
+                    $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
+                }
             }
             $finished = false;
             while ( !$finished ) {
