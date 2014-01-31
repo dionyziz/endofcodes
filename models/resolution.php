@@ -31,11 +31,10 @@
         if ( !$moved ) {
             $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
         }
-        return $creature;
     }
 
     function creatureMove( $creature ) {
-        return creatureDirection( $creature );
+        creatureDirection( $creature );
     }
 
     function findCreatureByCoordinates( $round, $x, $y ) {
@@ -51,22 +50,21 @@
     // atacker atacks victim, returns true if victim is still alive
     // after the atack, false otherwise
     function creatureAttack( $creature ) {
-        $victim = creatureDirection( $creature );
+        $victim = clone $creature;
+        creatureDirection( $victim );
         if ( $victim->intent->action === ACTION_NONE ) {
             $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-            return $creature;
+            return;
         }
         $victim = findCreatureByCoordinates( $creature->round, $victim->locationx, $victim->locationy );
         if ( $victim === false ) {
             $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-            return $creature;
+            return;
         }
         if ( $victim->user === $creature->user ) {
             $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-            return $creature;
+            return;
         }
         --$victim->hp;
-        $victim->round->creatures[ $victim->id ] = $victim;
-        return $creature;
     }
 ?>

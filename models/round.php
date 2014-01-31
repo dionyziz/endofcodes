@@ -1,6 +1,6 @@
 <?php
     class Round extends ActiveRecordBase {
-        public $creatures;
+        public $creatures = array();
         public $id;
         public $game;
 
