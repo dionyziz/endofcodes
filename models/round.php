@@ -4,8 +4,18 @@
         public $id;
         public $game;
 
-        public function __construct( $game = false, $id = false ) {
-            if ( $id !== false && $game !== false ) {
+        public function __construct( $a = false, $b = false ) {
+            if ( $a instanceof Round ) {
+                $oldRound = $a;
+                $this->game = $oldRound->game;
+                foreach ( $oldRound->creatures as $creature ) {
+                    $this->creatures[ $creature->id ] = clone $creature;
+                    $this->creatures[ $creature->id ]->round = $this;
+                }
+            }
+            else if ( $a !== false && $b !== false ) {
+                $game = $a;
+                $id = $b;
                 $this->exists = true;
                 $this->id = $id;
                 $this->game = $game;

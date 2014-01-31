@@ -76,14 +76,9 @@
         public function nextRound() {
             include_once 'models/resolution.php';
             $roundid = count( $this->rounds );
-            $this->rounds[ $roundid ] = new Round();
+            $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
             $this->rounds[ $roundid ]->id = $roundid;
-            $this->rounds[ $roundid ]->game = $this;
-            $this->rounds[ $roundid ] = clone( $this->rounds[ $roundid - 1 ] );
             $currentRound = $this->rounds[ $roundid ];
-            foreach ( $currentRound->creatures as $creature ) {
-                $creature->round = $currentRound;
-            }
             foreach ( $currentRound->creatures as $creature ) { 
                 if ( $creature->alive && $creature->intent->action === ACTION_ATACK ) {
                     creatureAttack( $creature );
@@ -99,32 +94,30 @@
                     $creature->alive = false;
                 }
             }
-            /*$creatureLocation = array( array( array() ) );
-            foreach ( $round->creatures as $creature ) {
+            $creatureLocation = array( array( array() ) );
+            foreach ( $currentRound->creatures as $creature ) {
                 $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
             }
             $finished = false;
             while ( !$finished ) {
                 $finished = true;
-                for ( $i = 0; $i < $game->width; ++$i ) {
-                    for ( $j = 0; $j < $game->height; ++$j ) {
+                for ( $i = 0; $i < $this->width; ++$i ) {
+                    for ( $j = 0; $j < $this->height; ++$j ) {
                         if ( isset( $creatureLocation[ $i ][ $j ] ) && count( $creatureLocation[ $i ][ $j ] ) > 1 ) {
                             $finished = false;
                             foreach ( $creatureLocation[ $i ][ $j ] as $key => $creature ) {
-                                $prevCreature = $game->rounds[ $roundid - 1 ]->creatures[ $creature->id ];
+                                $prevCreature = $this->rounds[ $roundid - 1 ]->creatures[ $creature->id ];
                                 if ( $prevCreature->locationx !== $i || $prevCreature->locationy !== $j ) {
-                                    unset( $creatureLocation[ $i ][ $j ][ $key ] );
                                     $creature->locationx = $prevCreature->locationx;
                                     $creature->locationy = $prevCreature->locationy;
-                                    $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-                                    $game->rounds[ $roundid ]->creatures[ $creature->id ] = $creature;
                                     $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
+                                    unset( $creatureLocation[ $i ][ $j ][ $key ] );
                                 }
                             }
                         }
                     }
                 }
-            }*/
+            }
         }
     }
 ?>
