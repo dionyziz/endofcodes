@@ -37,6 +37,24 @@
 
             return $vars;
         }
+        protected function sessionCheck() {
+            global $config;
+
+            if ( isset( $_SESSION[ 'user' ] ) ) {
+                return;
+            }
+            $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
+            if ( isset( $_COOKIE[ $cookiename ] ) ) {
+                include_once 'models/user.php';
+                try {
+                    $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
+                }
+                catch ( ModelNotFoundException $e ) {
+                    throw new HTTPUnauthorizedException();
+                }
+                $_SESSION[ 'user' ] = $user;
+            }
+        }
         protected function callWithNamedArgs( $method_reflection, $callable, $vars ) {
             $parameters = $method_reflection->getParameters();
             $arguments = array();
@@ -67,6 +85,7 @@
         }
         public function dispatch( $get, $post, $files, $http_request_method ) {
             $this->init();
+            $this->sessionCheck();
 
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';

@@ -1,7 +1,7 @@
 <?php
     include_once 'models/dependencies.php';
     include_once 'header.php';
-
+    
     if ( isset( $_GET[ 'resource' ] ) ) {
         $resource = $_GET[ 'resource' ];
     }
