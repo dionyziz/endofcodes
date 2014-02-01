@@ -31,7 +31,7 @@
                 $newCreature = clone $creature;
                 $game->rounds[ $i ]->creatures[ 0 ] = $newCreature;
                 $game->nextRound();
-                $newCreature = clone $game->rounds[ $i + 1 ]->creatures[ 0 ];
+                $newCreature = $game->rounds[ $i + 1 ]->creatures[ 0 ];
                 switch ( $dir ) {
                     case DIRECTION_NORTH:
                         $this->assertEquals( $creature->locationx, $newCreature->locationx, 'A creature must not move to the in the x-direction when moving north' );
