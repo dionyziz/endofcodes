@@ -70,7 +70,7 @@
                 $creature->locationx === $newCreature->locationx && $creature->locationy === $newCreature->locationy,
                 'A creature that tries to go out of bounds should remain to the same position'
             );
-            $this->assertEquals( count( $game->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a creature out of bounds' );
+            $this->assertEquals( count( $game->rounds[ 1 ]->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a creature out of bounds' );
         }
         public function testMoveDeadCreature() {
             $game = $this->buildGameWithUsers( 1 );
@@ -91,7 +91,7 @@
                 $creature->locationx === $newCreature->locationx && $creature->locationy === $newCreature->locationy,
                 'A dead creature can not move'
             );
-            $this->assertEquals( count( $game->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a dead creature' );
+            $this->assertEquals( count( $game->rounds[ 1 ]->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a dead creature' );
         }
         public function testMoveOverlap() {
             $game = $this->buildGameWithUsers( 1 );
@@ -178,7 +178,7 @@
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
             $this->assertEquals( 10, $newCreature2->hp, 'A creature that is being attacked by a dead creature must not lose hp' );
-            $this->assertEquals( 1, count( $game->errors[ $creature1->user->id ] ), 'A user that tries to attack with a dead creature must get an error' );
+            $this->assertEquals( 1, count( $game->rounds[ 1 ]->errors[ $creature1->user->id ] ), 'A user that tries to attack with a dead creature must get an error' );
         }
         public function testAttackCreatureSameUser() {
             $game = $this->buildGameWithUsers( 1 );
@@ -201,7 +201,7 @@
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
             $this->assertEquals( 10, $newCreature2->hp, 'A creature that is being attacked by a creature with the same user must not lose hp' );
-            $this->assertEquals( 1, count( $game->errors[ $creature1->user->id ] ), 'A user that tries to attack a creature of his own must get an error' );
+            $this->assertEquals( 1, count( $game->rounds[ 1 ]->errors[ $creature1->user->id ] ), 'A user that tries to attack a creature of his own must get an error' );
         }
         public function testAttackAsVictimMoves() {
             $game = $this->buildGameWithUsers( 2 );

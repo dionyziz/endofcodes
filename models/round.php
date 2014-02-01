@@ -3,6 +3,7 @@
         public $creatures = array();
         public $id;
         public $game;
+        public $errors = array();
 
         public function __construct( $a = false, $b = false ) {
             if ( $a instanceof Round ) {

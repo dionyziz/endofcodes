@@ -23,6 +23,7 @@
         catch ( CreatureOutOfBoundsException $e ) {
             $roundNumber = $creature->round->id;
             $creature->game->botError( 
+                $creature->round,
                 $creature->user, 
                 "Tried to move creature $creature->id in a location outside of bounds on round $roundNumber."
             );
@@ -58,6 +59,7 @@
         }
         if ( $victim->user->id === $creature->user->id ) {
             $creature->game->botError( 
+                $creature->round,
                 $creature->user, 
                 "Tried to attack creature $victim->id with creature $creature->id while they both belong to the same user."
             );

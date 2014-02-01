@@ -11,7 +11,6 @@
         public $width;
         public $height;
         public $rounds = array();
-        public $errors = array();
         public $users;
         public $creaturesPerPlayer;
         public $maxHp;
@@ -74,11 +73,11 @@
             }
         }
 
-        public function botError( $user, $error ) {
-            if ( !isset( $this->errors[ $user->id ] ) ) {
-                $this->errors[ $user->id ] = array();
+        public function botError( $round, $user, $error ) {
+            if ( !isset( $round->errors[ $user->id ] ) ) {
+                $round->errors[ $user->id ] = array();
             }
-            $this->errors[ $user->id ][] = $error;
+            $round->errors[ $user->id ][] = $error;
         }
 
         protected function killBot( $user, $error ) {
@@ -88,7 +87,7 @@
                     $creature->kill();
                 }
             }
-            $this->botError( $user, $error );
+            $this->botError( $this->rounds[ $roundid ], $user, $error );
         }
 
         public function nextRound() {
