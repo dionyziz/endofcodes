@@ -1,33 +1,19 @@
 <?php
     // moves creature
     function creatureDirection( $creature ) {
-        $moved = false;
-        switch ( $creature->intent->direction ) {
-            case DIRECTION_NORTH:
-                if ( $creature->locationy + 1 >= $creature->game->height ) {
-                    throw new CreatureOutOfBoundsException();
-                }
-                $creature->locationy += 1;
-                break;
-            case DIRECTION_EAST:
-                if ( $creature->locationx + 1 >= $creature->game->width ) {
-                    throw new CreatureOutOfBoundsException();
-                }
-                $creature->locationx += 1;
-                break;
-            case DIRECTION_SOUTH:
-                if ( $creature->locationy - 1 < 0 ) {
-                    throw new CreatureOutOfBoundsException();
-                }
-                $creature->locationy -= 1;
-                break;
-            case DIRECTION_WEST:
-                if ( $creature->locationx - 1 < 0 ) {
-                    throw new CreatureOutOfBoundsException();
-                }
-                $creature->locationx -= 1;
-                break;
+        $delta = array(
+            DIRECTION_NORTH => array( 0, 1 ),
+            DIRECTION_EAST => array( 1, 0 ),
+            DIRECTION_SOUTH => array( 0, -1 ),
+            DIRECTION_WEST => array( -1, 0 )
+        )[ $creature->intent->direction ];
+        $x = $creature->locationx + $delta[ 0 ];
+        $y = $creature->locationy + $delta[ 1 ];
+        if ( $x < 0 || $x >= $creature->game->width || $y < 0 || $y >= $creature->game->height ) {
+            throw new CreatureOutOfBoundsException();
         }
+        $creature->locationx = $x;
+        $creature->locationy = $y;
     }
 
     function creatureMove( $creature ) {
