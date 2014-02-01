@@ -54,23 +54,30 @@
         }
         public function testMoveOutOfBounds() {
             $game = $this->buildGameWithUsers( 1 );
-            $creature = new Creature();
-            $creature->id = 0;
-            $creature->user = $game->users[ 0 ];
-            $creature->locationx = $creature->locationy = 9;
-            $creature->hp = 10;
-            $creature->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
-            $creature->game = $game;
-            $creature->round = $game->rounds[ 0 ];
-            $newCreature = clone $creature;
-            $game->rounds[ 0 ]->creatures = array( $newCreature );
-            $game->nextRound();
-            $newCreature = $game->rounds[ 1 ]->creatures[ 0 ];
-            $this->assertTrue(
-                $creature->locationx === $newCreature->locationx && $creature->locationy === $newCreature->locationy,
-                'A creature that tries to go out of bounds should remain to the same position'
-            );
-            $this->assertEquals( count( $game->rounds[ 1 ]->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a creature out of bounds' );
+            for ( $dir = 1, $i = 0; $dir <= 4; ++$i, ++$dir ) {
+                $creature = new Creature();
+                $creature->id = 0;
+                $creature->user = $game->users[ 0 ];
+                if ( $dir <= 2 ) {
+                    $creature->locationx = $creature->locationy = 9;
+                }
+                else {
+                    $creature->locationx = $creature->locationy = 0;
+                }
+                $creature->intent = new Intent( ACTION_MOVE, $dir );
+                $creature->hp = 10;
+                $creature->game = $game;
+                $creature->round = $game->rounds[ $i ];
+                $newCreature = clone $creature;
+                $game->rounds[ $i ]->creatures = array( $newCreature );
+                $game->nextRound();
+                $newCreature = $game->rounds[ $i + 1 ]->creatures[ 0 ];
+                $this->assertTrue(
+                    $creature->locationx === $newCreature->locationx && $creature->locationy === $newCreature->locationy,
+                    'A creature that tries to go out of bounds should remain to the same position'
+                );
+                $this->assertEquals( count( $game->rounds[ $i + 1 ]->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a creature out of bounds' );
+            }
         }
         public function testMoveDeadCreature() {
             $game = $this->buildGameWithUsers( 1 );
