@@ -11,6 +11,7 @@
         public $width;
         public $height;
         public $rounds = array();
+        public $errors = array();
         public $users;
         public $creaturesPerPlayer;
         public $maxHp;
@@ -73,7 +74,14 @@
             }
         }
 
-        protected function killClient( $user ) {
+        protected function botError( $user, $error ) {
+            if ( !isset( $this->errors[ $user->id ] ) ) {
+                $this->errors[ $user->id ] = array();
+            }
+            $this->errors[ $user->id ][] = $error;
+        }
+
+        protected function killClient( $user, $error ) {
             $roundid = count( $this->rounds ) - 1;
             foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
@@ -81,6 +89,7 @@
                     $creature->alive = false;
                 }
             }
+            $this->botError( $user, $error );
         }
 
         public function nextRound() {
@@ -94,7 +103,13 @@
                         creatureAttack( $creature );
                     }
                     else {
-                        $this->killClient( $creature->user );
+                        $roundNumber = count( $this->rounds ) - 1;
+                        $this->killClient( 
+                            $creature->user, 
+                            "Tried to move creature $creature->id which" .
+                                "was at location ($creature->locationx,$creature->locationy) " .
+                                "to direction" . directionConstantToString( $creature->direction ) . "on round $roundNumber."
+                        );
                     }
                 }
             }
@@ -104,7 +119,13 @@
                         creatureMove( $creature );
                     }
                     else {
-                        $this->killClient( $creature->user );
+                        $roundNumber = count( $this->rounds ) - 1;
+                        $this->killClient( 
+                            $creature->user, 
+                            "Tried to attack with creature $creature->id which" .
+                                "was at location ($creature->locationx,$creature->locationy) " .
+                                "to direction" . directionConstantToString( $creature->direction ) . "on round $roundNumber."
+                        );
                     }
                 }
             }
