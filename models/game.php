@@ -120,9 +120,9 @@
                         $roundNumber = count( $this->rounds ) - 1;
                         $this->killBot( 
                             $creature->user, 
-                            "Tried to attack with dead creature $creature->id which" .
-                                "was at location ($creature->locationx,$creature->locationy) " .
-                                "to direction" . directionConstToString( $creature->intent->direction ) . "on round $roundNumber."
+                            "Tried to attack with dead creature $creature->id which " .
+                                "was at location ($creature->locationx, $creature->locationy) " .
+                                "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."
                         );
                     }
                 }
