@@ -52,6 +52,47 @@
                 }
             }
         }
+        public function testMoveOutOfBounds() {
+            $game = $this->buildGameWithUsers( 1 );
+            $creature = new Creature();
+            $creature->id = 0;
+            $creature->user = $game->users[ 0 ];
+            $creature->locationx = $creature->locationy = 9;
+            $creature->hp = 10;
+            $creature->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
+            $creature->game = $game;
+            $creature->round = $game->rounds[ 0 ];
+            $newCreature = clone $creature;
+            $game->rounds[ 0 ]->creatures = array( $newCreature );
+            $game->nextRound();
+            $newCreature = $game->rounds[ 1 ]->creatures[ 0 ];
+            $this->assertTrue(
+                $creature->locationx === $newCreature->locationx && $creature->locationy === $newCreature->locationy,
+                'A creature that tries to go out of bounds should remain to the same position'
+            );
+            $this->assertEquals( count( $game->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a creature out of bounds' );
+        }
+        public function testMoveDeadCreature() {
+            $game = $this->buildGameWithUsers( 1 );
+            $creature = new Creature();
+            $creature->id = 0;
+            $creature->user = $game->users[ 0 ];
+            $creature->locationx = $creature->locationy = 8;
+            $creature->hp = 0;
+            $creature->alive = false;
+            $creature->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
+            $creature->game = $game;
+            $creature->round = $game->rounds[ 0 ];
+            $newCreature = clone $creature;
+            $game->rounds[ 0 ]->creatures = array( $newCreature );
+            $game->nextRound();
+            $newCreature = $game->rounds[ 1 ]->creatures[ 0 ];
+            $this->assertTrue(
+                $creature->locationx === $newCreature->locationx && $creature->locationy === $newCreature->locationy,
+                'A dead creature can not move'
+            );
+            $this->assertEquals( count( $game->errors[ $creature->user->id ] ), 1, 'A user must get an error if he tries to move a dead creature' );
+        }
         public function testMoveOverlap() {
             $game = $this->buildGameWithUsers( 1 );
             $creature1 = new Creature();
@@ -113,6 +154,54 @@
                 $creature1->locationx === $newCreature1->locationx && $creature1->locationy === $newCreature1->locationy, 
                 'An attacking creature must not change position' 
             );
+        }
+        public function testAttackWithDeadCreature() {
+            $game = $this->buildGameWithUsers( 2 );
+            $creature1 = new Creature();
+            $creature2 = new Creature();
+            $creature1->id = 0;
+            $creature2->id = 1;
+            $creature1->locationx = $creature2->locationx = $creature2->locationy = 2;
+            $creature1->locationy = 3;
+            $creature1->alive = false;
+            $creature1->hp = 0;
+            $creature1->game = $creature2->game = $game;
+            $creature1->round = $creature2->round = $game->rounds[ 0 ];
+            $creature2->hp = 10;
+            $creature1->user = $game->users[ 0 ];
+            $creature2->user = $game->users[ 1 ];
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
+            $newCreature1 = clone $creature1;
+            $newCreature2 = clone $creature2;
+            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->nextRound();
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $this->assertEquals( 10, $newCreature2->hp, 'A creature that is being attacked by a dead creature must not lose hp' );
+            $this->assertEquals( 1, count( $game->errors[ $creature1->user->id ] ), 'A user that tries to attack with a dead creature must get an error' );
+        }
+        public function testAttackCreatureSameUser() {
+            $game = $this->buildGameWithUsers( 1 );
+            $creature1 = new Creature();
+            $creature2 = new Creature();
+            $creature1->id = 0;
+            $creature2->id = 1;
+            $creature1->locationx = $creature2->locationx = $creature2->locationy = 2;
+            $creature1->locationy = 3;
+            $creature1->game = $creature2->game = $game;
+            $creature1->round = $creature2->round = $game->rounds[ 0 ];
+            $creature1->hp = $creature2->hp = 10;
+            $creature1->user = $game->users[ 0 ];
+            $creature2->user = $game->users[ 0 ];
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
+            $newCreature1 = clone $creature1;
+            $newCreature2 = clone $creature2;
+            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->nextRound();
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $this->assertEquals( 10, $newCreature2->hp, 'A creature that is being attacked by a creature with the same user must not lose hp' );
+            $this->assertEquals( 1, count( $game->errors[ $creature1->user->id ] ), 'A user that tries to attack a creature of his own must get an error' );
         }
         public function testAttackAsVictimMoves() {
             $game = $this->buildGameWithUsers( 2 );

@@ -74,7 +74,7 @@
             }
         }
 
-        protected function botError( $user, $error ) {
+        public function botError( $user, $error ) {
             if ( !isset( $this->errors[ $user->id ] ) ) {
                 $this->errors[ $user->id ] = array();
             }
@@ -105,9 +105,9 @@
                         $roundNumber = count( $this->rounds ) - 1;
                         $this->killBot( 
                             $creature->user, 
-                            "Tried to move creature $creature->id which" .
-                                "was at location ($creature->locationx,$creature->locationy) " .
-                                "to direction" . directionConstantToString( $creature->direction ) . "on round $roundNumber."
+                            "Tried to move dead creature $creature->id which " .
+                                "was at location ($creature->locationx, $creature->locationy) " .
+                                "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."
                         );
                     }
                 }
@@ -121,9 +121,9 @@
                         $roundNumber = count( $this->rounds ) - 1;
                         $this->killBot( 
                             $creature->user, 
-                            "Tried to attack with creature $creature->id which" .
+                            "Tried to attack with dead creature $creature->id which" .
                                 "was at location ($creature->locationx,$creature->locationy) " .
-                                "to direction" . directionConstantToString( $creature->direction ) . "on round $roundNumber."
+                                "to direction" . directionConstToString( $creature->intent->direction ) . "on round $roundNumber."
                         );
                     }
                 }

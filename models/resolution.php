@@ -21,6 +21,11 @@
             creatureDirection( $creature );
         }
         catch ( CreatureOutOfBoundsException $e ) {
+            $roundNumber = $creature->round->id;
+            $creature->game->botError( 
+                $creature->user, 
+                "Tried to move creature $creature->id in a location outside of bounds on round $roundNumber."
+            );
             $creature->intent = new Intent();
         }
     }
@@ -52,6 +57,10 @@
             return;
         }
         if ( $victim->user->id === $creature->user->id ) {
+            $creature->game->botError( 
+                $creature->user, 
+                "Tried to attack creature $victim->id with creature $creature->id while they both belong to the same user."
+            );
             $creature->intent = new Intent();
             return;
         }
