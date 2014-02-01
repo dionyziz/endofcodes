@@ -81,7 +81,7 @@
             $this->errors[ $user->id ][] = $error;
         }
 
-        protected function killClient( $user, $error ) {
+        protected function killBot( $user, $error ) {
             $roundid = count( $this->rounds ) - 1;
             foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
@@ -104,7 +104,7 @@
                     }
                     else {
                         $roundNumber = count( $this->rounds ) - 1;
-                        $this->killClient( 
+                        $this->killBot( 
                             $creature->user, 
                             "Tried to move creature $creature->id which" .
                                 "was at location ($creature->locationx,$creature->locationy) " .
@@ -120,7 +120,7 @@
                     }
                     else {
                         $roundNumber = count( $this->rounds ) - 1;
-                        $this->killClient( 
+                        $this->killBot( 
                             $creature->user, 
                             "Tried to attack with creature $creature->id which" .
                                 "was at location ($creature->locationx,$creature->locationy) " .
