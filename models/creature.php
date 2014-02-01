@@ -32,6 +32,12 @@
             }
         }
 
+        public function kill() {
+            $this->alive = false;
+            $this->intent = new Intent();
+            $this->hp = 0;
+        }
+
         public function validate() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
