@@ -18,7 +18,7 @@
             $res = dbInsert( 'countries', array( 'name' => $value, 'shortname' => $key ) );
         }
         catch ( DBException $e ) {
-            die( "sql query died with the following error\n\"" . mysql_error() );
+            die( "sql query died with the following error\n" . mysql_error() );
         }
         ++$count;
     }

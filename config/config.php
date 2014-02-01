@@ -21,6 +21,11 @@
                     'min' => 8,
                     'max' => 100
                 ),
+                'persistent_cookie' => array(
+                    'name' => 'sessionid',
+                    'duration' => 60 * 60 * 24 * 365 * 20, 
+                    'unset_time' => 60 * 60 * 24 * 2
+                ),
                 'base' => 'http://localhost/endofcodes/',
                 'root' => '/var/www/endofcodes/'
             ),
@@ -43,6 +48,11 @@
                 'age' => array(
                     'min' => 8,
                     'max' => 100
+                ),
+                'persistent_cookie' => array(
+                    'name' => 'sessionid',
+                    'duration' => 60 * 60 * 24 * 365 * 20, 
+                    'unset_time' => 60 * 60 * 24 * 2
                 ),
                 'base' => 'http://localhost/endofcodes/',
                 'root' => '/var/www/endofcodes/'

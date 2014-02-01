@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email' );
+        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' );
         public $username;
         public $password;
         public $email;
@@ -24,6 +24,23 @@
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );
+        }
+
+        public static function findBySessionId( $sessionid ) {
+            if ( empty( $sessionid ) ) {
+                throw new ModelNotFoundException();
+            }
+            try {
+                $row = dbSelectOne( 
+                    'users', 
+                    array( 'id' ), 
+                    compact( "sessionid" ) 
+                );
+            }
+            catch ( DBException $e ) {
+                throw new ModelNotFoundException();
+            }
+            return new User( $row[ 'id' ] );
         }
 
         public function __construct( $id = false ) {
@@ -78,6 +95,7 @@
             $this->password = $array[ 'hash' ];
             $this->salt = $array[ 'salt' ];
             $this->avatarid = 0;
+            $this->generateSessionId();
             if ( isset( $this->country ) ) {
                 $this->countryid = $this->country->id;
             }
@@ -105,6 +123,7 @@
             }
             $email = $this->email;
             $dob = $this->dob;
+            $sessionid = $this->sessionid;
             if ( isset( $this->country ) ) {
                 $countryid = $this->country->id;
             }
@@ -120,13 +139,19 @@
             try {
                 $res = dbUpdate(
                     'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob" ),
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid" ),
                     compact( "id" )
                 );
             }
             catch ( DBException $e ) {
                 throw new ModelValidationException( 'email_used' );
             }
+        }
+
+        protected function generateSessionId() {
+            $value = openssl_random_pseudo_bytes( 32 );
+            $sessionid = base64_encode( $value );
+            $this->sessionid = $sessionid;
         }
 
         public function authenticatesWithPassword( $password ) {
@@ -142,6 +167,11 @@
                 }
             }
             return false;
+        }
+
+        public function renewSessionId() {
+            $this->generateSessionId();
+            $this->save();
         }
     }
 ?>

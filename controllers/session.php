@@ -1,6 +1,9 @@
 <?php
     class SessionController extends ControllerBase {
-        public function create( $username = '', $password = '' ) {
+        public function create( $username = '', $password = '', $persistent = '' ) {
+            global $config;
+
+            include_once 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', array( 'username_empty' => true ) );
             }
@@ -16,12 +19,27 @@
             if ( !$user->authenticatesWithPassword( $password ) ) {
                 go( 'session', 'create', array( 'password_wrong' => true ) );
             }
+            if ( $persistent ) {
+                $user->renewSessionId();     
+                setcookie(  
+                    $config[ 'persistent_cookie' ][ 'name' ], 
+                    $user->sessionid,
+                    time() + $config[ 'persistent_cookie' ][ 'duration' ] 
+                );
+            }
             $_SESSION[ 'user' ] = $user;
             go();
         }
 
         public function delete() {
+            global $config; 
+
             unset( $_SESSION[ 'user' ] );
+            setcookie( 
+                $config[ 'persistent_cookie' ][ 'name' ], 
+                '', 
+                time() - $config[ 'persistent_cookie' ][ 'unset_time' ] 
+            );
             go();
         }
 

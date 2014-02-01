@@ -23,6 +23,8 @@
             $self->createError( "Password is incorrect." );
         }
         $self->createInput( 'password', 'password', 'password' );
+        $self->createLabel( 'persistent', 'Remember me' );
+        $self->createInput( 'checkbox', 'persistent', 'persistent', '', true );
         ?><p><a href="">Forgot password?</a></p><?php
         $self->createInput( 'submit', '', '', 'Login' );
     } );
