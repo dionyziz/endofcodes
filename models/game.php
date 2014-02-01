@@ -10,7 +10,7 @@
         public $created;
         public $width;
         public $height;
-        public $rounds;
+        public $rounds = array();
         public $users;
         public $creaturesPerPlayer;
         public $maxHp;
@@ -53,6 +53,7 @@
                     $creature = new Creature();
                     $creature->id = $id;
                     $creature->user = $user;
+                    $creature->round = $this->rounds[ 0 ];
                     $creature->game = $this;
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
@@ -71,5 +72,101 @@
                 }
             }
         }
+
+        public function botError( $round, $user, $error ) {
+            if ( !isset( $round->errors[ $user->id ] ) ) {
+                $round->errors[ $user->id ] = array();
+            }
+            $round->errors[ $user->id ][] = $error;
+        }
+
+        protected function killBot( $user, $error ) {
+            $roundid = count( $this->rounds ) - 1;
+            foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
+                if ( $creature->user->id === $user->id ) {
+                    $creature->kill();
+                }
+            }
+            $this->botError( $this->rounds[ $roundid ], $user, $error );
+        }
+
+        public function nextRound() {
+            include_once 'models/resolution.php';
+            $roundid = count( $this->rounds );
+            $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
+            $currentRound = $this->rounds[ $roundid ];
+            foreach ( $currentRound->creatures as $creature ) { 
+                if ( $creature->intent->action === ACTION_ATTACK ) {
+                    if ( $creature->alive ) {
+                        creatureAttack( $creature );
+                    }
+                    else {
+                        $roundNumber = count( $this->rounds ) - 1;
+                        $this->killBot( 
+                            $creature->user, 
+                            "Tried to move dead creature $creature->id which " .
+                                "was at location ($creature->locationx, $creature->locationy) " .
+                                "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."
+                        );
+                    }
+                }
+            }
+            foreach ( $currentRound->creatures as $creature ) { 
+                if ( $creature->intent->action === ACTION_MOVE ) {
+                    if ( $creature->alive ) {
+                        creatureMove( $creature );
+                    }
+                    else {
+                        $roundNumber = count( $this->rounds ) - 1;
+                        $this->killBot( 
+                            $creature->user, 
+                            "Tried to attack with dead creature $creature->id which " .
+                                "was at location ($creature->locationx, $creature->locationy) " .
+                                "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."
+                        );
+                    }
+                }
+            }
+            foreach ( $currentRound->creatures as $creature ) {
+                if ( $creature->hp <= 0 ) {
+                    $creature->alive = false;
+                }
+            }
+            $creatureLocation = array();
+            foreach ( $currentRound->creatures as $creature ) {
+                if ( $creature->alive ) {
+                    if ( !isset( $creatureLocation[ $creature->locationx ] ) ) {
+                        $creatureLocation[ $creature->locationx ] = array();
+                    }
+                    if ( !isset( $creatureLocation[ $creature->locationx ][ $creature->locationy ] ) ) {
+                        $creatureLocation[ $creature->locationx ][ $creature->locationy ] = array();
+                    }
+                    $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
+                }
+            }
+            $finished = false;
+            while ( !$finished ) {
+                $finished = true;
+                for ( $i = 0; $i < $this->width; ++$i ) {
+                    for ( $j = 0; $j < $this->height; ++$j ) {
+                        if ( isset( $creatureLocation[ $i ][ $j ] ) && count( $creatureLocation[ $i ][ $j ] ) > 1 ) {
+                            $finished = false;
+                            foreach ( $creatureLocation[ $i ][ $j ] as $key => $creature ) {
+                                $prevCreature = $this->rounds[ $roundid - 1 ]->creatures[ $creature->id ];
+                                if ( $prevCreature->locationx !== $i || $prevCreature->locationy !== $j ) {
+                                    $creature->locationx = $prevCreature->locationx;
+                                    $creature->locationy = $prevCreature->locationy;
+                                    $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
+                                    unset( $creatureLocation[ $i ][ $j ][ $key ] );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    class GameException extends Exception {}
+    class CreatureOutOfBoundsException extends GameException {}
 ?>
