@@ -73,19 +73,39 @@
             }
         }
 
+        protected function killClient( $user ) {
+            $roundid = count( $this->rounds ) - 1;
+            foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
+                if ( $creature->user === $user ) {
+                    $creature->intent = new Intent();
+                    $creature->alive = false;
+                }
+            }
+        }
+
         public function nextRound() {
             include_once 'models/resolution.php';
             $roundid = count( $this->rounds );
             $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
             $currentRound = $this->rounds[ $roundid ];
             foreach ( $currentRound->creatures as $creature ) { 
-                if ( $creature->alive && $creature->intent->action === ACTION_ATTACK ) {
-                    creatureAttack( $creature );
+                if ( $creature->intent->action === ACTION_ATTACK ) {
+                    if ( $creature->alive ) {
+                        creatureAttack( $creature );
+                    }
+                    else {
+                        $this->killClient( $creature->user );
+                    }
                 }
             }
             foreach ( $currentRound->creatures as $creature ) { 
-                if ( $creature->alive && $creature->intent->action === ACTION_MOVE ) {
-                    creatureMove( $creature );
+                if ( $creature->intent->action === ACTION_MOVE ) {
+                    if ( $creature->alive ) {
+                        creatureMove( $creature );
+                    }
+                    else {
+                        $this->killClient( $creature->user );
+                    }
                 }
             }
             foreach ( $currentRound->creatures as $creature ) {
@@ -127,4 +147,7 @@
             }
         }
     }
+
+    class GameException extends Exception {}
+    class CreatureOutOfBoundsException extends GameException {}
 ?>
