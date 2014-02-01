@@ -16,7 +16,7 @@
                 }
             }
             else if ( $a !== false && $b !== false ) {
-                //find the whole round from database: new Round( $game, $id );
+                // find the whole round from database: new Round( $game, $id );
                 $game = $a;
                 $id = $b;
                 $this->exists = true;
