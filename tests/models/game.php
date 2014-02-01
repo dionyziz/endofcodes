@@ -77,22 +77,6 @@
                 }
             }
         }
-        public function testResolution() {
-            $game = $this->buildGame();
-            $game->genesis();
-            $prevRoundCount = count( $game->rounds );
-            $roundid = count( $game->rounds );
-            $game->rounds[ $roundid ] = new Round();
-            $roundCount = count( $game->rounds );
-            $this->assertEquals( $roundCount, $prevRoundCount + 1, 'A new round must be created' );
-            foreach ( $round->creatures as $creature ) {
-                if ( $creature->hp === 0 ) {
-                    $this->assertFale( $creature->alive, 'A creature with 0 hp must not be alive' );
-                }
-                $this->assertTrue( $creature->locationx < $game->width && $creature->locationx >= 0, 'A creature must be inside the grid' );
-                $this->assertTrue( $creature->locationy < $game->height && $creature->locationy >= 0, 'A creature must be inside the grid' );
-            }
-        }
     }
 
     return new GameTest();

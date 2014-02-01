@@ -62,6 +62,7 @@
             $creature1->locationy = 1;
             $creature2->locationx = 3;
             $creature2->locationy = 2;
+            $creature1->hp = $creature2->hp = 1;
             $creature1->game = $creature2->game = $game;
             $creature1->round = $creature2->round = $game->rounds[ 0 ];
             $creature1->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
@@ -70,8 +71,8 @@
             $newCreature2 = clone $creature2;
             $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
             $game->nextRound();
-            $newCreature1 = clone $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = clone $game->rounds[ 1 ]->creatures[ 1 ];
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
             $this->assertTrue( 
                 $newCreature1->locationx !== $newCreature2->locationx || $newCreature1->locationy !== $newCreature2->locationy, 
                 'There can not be two creatures in the same location' 
@@ -98,20 +99,19 @@
             $creature1->hp = $creature2->hp = 10;
             $creature1->user = $game->users[ 0 ];
             $creature2->user = $game->users[ 1 ];
-            $creature1->intent = new Intent( ACTION_ATACK, DIRECTION_SOUTH );
-            $creature2->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
             $game->nextRound();
-            $newCreature1 = clone $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = clone $game->rounds[ 1 ]->creatures[ 1 ];
-            $this->assertEquals( $creature1->hp, $newCreature1->hp, 'An atacking creature must not lose hp' );
-            $this->assertEquals( $creature2->hp, $newCreature2->hp + 1, 'A creature that has been atacked by a creature must lose 1 hp' );
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $this->assertEquals( $creature1->hp, $newCreature1->hp, 'An attacking creature must not lose hp' );
+            $this->assertEquals( $creature2->hp - 1, $newCreature2->hp, 'A creature that has been attacked by a creature must lose 1 hp' );
             $this->assertTrue( $creature2->alive, 'A creature must not die if it still has hp' );
             $this->assertTrue( 
                 $creature1->locationx === $newCreature1->locationx && $creature1->locationy === $newCreature1->locationy, 
-                'An atacking creature must not change position' 
+                'An attacking creature must not change position' 
             );
         }
         public function testAttackAsVictimMoves() {
@@ -122,23 +122,30 @@
             $creature2->id = 1;
             $creature1->locationx = $creature2->locationx = $creature2->locationy = 2;
             $creature1->locationy = 3;
+            /* ACCII MAP:
+                3. | - | - | 1 | - |
+                2. | - | - | 2 | 3 |
+                1. | - | - | - | - |
+                0. | - | - | - | 3 |
+                     0.  1.  2.  3. 
+            */
             $creature1->game = $creature2->game = $game;
             $creature1->round = $creature2->round = $game->rounds[ 0 ];
             $creature1->hp = $creature2->hp = 10;
             $creature1->user = $game->users[ 0 ];
             $creature2->user = $game->users[ 1 ];
-            $creature1->intent = new Intent( ACTION_ATACK, DIRECTION_SOUTH );
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_EAST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
             $game->nextRound();
-            $newCreature1 = clone $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = clone $game->rounds[ 1 ]->creatures[ 1 ];
-            $this->assertEquals( $creature2->hp, $newCreature2->hp + 1, 'A creature that has been atacked by a creature must lose 1 hp' );
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $this->assertEquals( $creature2->hp - 1, $newCreature2->hp, 'A creature that has been attacked by a creature must lose 1 hp' );
             $this->assertTrue( 
                 $creature2->locationx === $newCreature2->locationx - 1 && $creature2->locationy === $newCreature2->locationy, 
-                'An atacked creature can move if it is still alive' 
+                'An attacked creature can move if it is still alive' 
             );
         }
         public function testAttackMultipleAttackersSingleVictim() {
@@ -156,18 +163,17 @@
             $creature1->hp = $creature2->hp = 10;
             $creature1->user = $creature3->user = $game->users[ 0 ];
             $creature2->user = $game->users[ 1 ];
-            $creature1->intent = new Intent( ACTION_ATACK, DIRECTION_SOUTH );
-            $creature2->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-            $creature3->intent = new Intent( ACTION_ATACK, DIRECTION_WEST );
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
+            $creature3->intent = new Intent( ACTION_ATTACK, DIRECTION_WEST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $newCreature3 = clone $creature3;
             $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2, $newCreature3 );
             $game->nextRound();
-            $newCreature1 = clone $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = clone $game->rounds[ 1 ]->creatures[ 1 ];
-            $newCreature3 = clone $game->rounds[ 1 ]->creatures[ 2 ];
-            $this->assertEquals( $creature2->hp, $newCreature2->hp + 2, 'A creature that has been atacked by two creatures must lose 2 hp' );
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $newCreature3 = $game->rounds[ 1 ]->creatures[ 2 ];
+            $this->assertEquals( $creature2->hp - 2, $newCreature2->hp, 'A creature that has been attacked by two creatures must lose 2 hp' );
         }
         public function testAttackAndKill() {
             $game = $this->buildGameWithUsers( 2 );
@@ -182,17 +188,16 @@
             $creature1->hp = $creature2->hp = 1;
             $creature1->user = $game->users[ 0 ];
             $creature2->user = $game->users[ 1 ];
-            $creature1->intent = new Intent( ACTION_ATACK, DIRECTION_SOUTH );
-            $creature2->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
             $game->nextRound();
-            $newCreature1 = clone $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = clone $game->rounds[ 1 ]->creatures[ 1 ];
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
             $this->assertFalse( $newCreature2->alive, 'A creature must die if it does not have any hp' );
         }
-        public function testAttackAndKillWhileVictimMuves() {
+        public function testAttackAndKillWhileVictimMoves() {
             $game = $this->buildGameWithUsers( 2 );
             $creature1 = new Creature();
             $creature2 = new Creature();
@@ -205,15 +210,16 @@
             $creature1->hp = $creature2->hp = 1;
             $creature1->user = $game->users[ 0 ];
             $creature2->user = $game->users[ 1 ];
-            $creature1->intent = new Intent( ACTION_ATACK, DIRECTION_SOUTH );
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_EAST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
             $game->nextRound();
-            $newCreature1 = clone $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = clone $game->rounds[ 1 ]->creatures[ 1 ];
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
             $this->assertFalse( $newCreature2->alive, 'A creature must die if it loses hp' );
+            $this->assertTrue( $newCreature2->hp <= 0 && !$newCreature2->alive, 'A creature must die if it has less or equal to 0 hp' );
         }
         public function testAttackAndKillAttackingCreature() {
             $game = $this->buildGameWithUsers( 2 );
@@ -226,25 +232,32 @@
             $creature1->locationx = 2;
             $creature1->locationy = $creature3->locationy = $creature3->locationx = $creature2->locationx = 3;
             $creature2->locationy = 4;
+            /* ACCII MAP:
+                4. | - | - | - | 2 |
+                3. | - | - | 1 | 3 |
+                2. | - | - | - | - |
+                1. | - | - | - | - |
+                0. | - | - | - | - |
+                     0.  1.  2.  3. 
+            */
             $creature1->game = $creature2->game = $creature3->game = $game;
             $creature1->round = $creature2->round = $creature3->round = $game->rounds[ 0 ];
             $creature1->hp = $creature2->hp = 10;
             $creature3->hp = 1;
             $creature1->user = $creature2->user = $game->users[ 0 ];
             $creature3->user = $game->users[ 1 ];
-            $creature1->intent = new Intent( ACTION_ATACK, DIRECTION_EAST );
-            $creature2->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-            $creature3->intent = new Intent( ACTION_ATACK, DIRECTION_NORTH );
+            $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_EAST );
+            $creature3->intent = new Intent( ACTION_ATTACK, DIRECTION_NORTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $newCreature3 = clone $creature3;
             $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2, $newCreature3 );
             $game->nextRound();
-            $newCreature1 = clone $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = clone $game->rounds[ 1 ]->creatures[ 1 ];
-            $newCreature3 = clone $game->rounds[ 1 ]->creatures[ 2 ];
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $newCreature3 = $game->rounds[ 1 ]->creatures[ 2 ];
             $this->assertFalse( $newCreature3->alive, 'A creature must die if it does not have hp' );
-            $this->assertEquals( $creature2->hp, $newCreature2->hp + 1, 'A creature that is attacked before another creature dies must lose hp' );
+            $this->assertEquals( $creature2->hp - 1, $newCreature2->hp, 'A creature that is attacked before another creature dies must lose hp' );
         }
     }
     return new ResolutionTest();

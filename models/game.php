@@ -77,10 +77,9 @@
             include_once 'models/resolution.php';
             $roundid = count( $this->rounds );
             $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
-            $this->rounds[ $roundid ]->id = $roundid;
             $currentRound = $this->rounds[ $roundid ];
             foreach ( $currentRound->creatures as $creature ) { 
-                if ( $creature->alive && $creature->intent->action === ACTION_ATACK ) {
+                if ( $creature->alive && $creature->intent->action === ACTION_ATTACK ) {
                     creatureAttack( $creature );
                 }
             }
@@ -90,13 +89,19 @@
                 }
             }
             foreach ( $currentRound->creatures as $creature ) {
-                if ( $creature->hp === 0 ) {
+                if ( $creature->hp <= 0 ) {
                     $creature->alive = false;
                 }
             }
-            $creatureLocation = array( array( array() ) );
+            $creatureLocation = array();
             foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->alive ) {
+                    if ( !isset( $creatureLocation[ $creature->locationx ] ) ) {
+                        $creatureLocation[ $creature->locationx ] = array();
+                    }
+                    if ( !isset( $creatureLocation[ $creature->locationx ][ $creature->locationy ] ) ) {
+                        $creatureLocation[ $creature->locationx ][ $creature->locationy ] = array();
+                    }
                     $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
                 }
             }

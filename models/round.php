@@ -6,14 +6,17 @@
 
         public function __construct( $a = false, $b = false ) {
             if ( $a instanceof Round ) {
+                // Clone from existing round: new Round( $oldRound )
                 $oldRound = $a;
                 $this->game = $oldRound->game;
+                $this->id = $oldRound->id + 1;
                 foreach ( $oldRound->creatures as $creature ) {
                     $this->creatures[ $creature->id ] = clone $creature;
                     $this->creatures[ $creature->id ]->round = $this;
                 }
             }
             else if ( $a !== false && $b !== false ) {
+                //find the whole round from database: new Round( $game, $id );
                 $game = $a;
                 $id = $b;
                 $this->exists = true;
@@ -39,9 +42,6 @@
                     $this->creatures[ $i ]->round = $this;
                     $this->creatures[ $i ]->user = $user;
                 }
-            }
-            else {
-                $this->creatures = array();
             }
         }
 

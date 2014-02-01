@@ -29,7 +29,7 @@
                 break;
         }
         if ( !$moved ) {
-            $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+            $creature->intent = new Intent();
         }
     }
 
@@ -47,22 +47,20 @@
         }
         return false;
     }
-    // atacker atacks victim, returns true if victim is still alive
-    // after the atack, false otherwise
     function creatureAttack( $creature ) {
         $victim = clone $creature;
         creatureDirection( $victim );
         if ( $victim->intent->action === ACTION_NONE ) {
-            $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+            $creature->intent = new Intent( ACTION_NONE );
             return;
         }
         $victim = findCreatureByCoordinates( $creature->round, $victim->locationx, $victim->locationy );
         if ( $victim === false ) {
-            $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+            $creature->intent = new Intent( ACTION_NONE );
             return;
         }
         if ( $victim->user === $creature->user ) {
-            $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+            $creature->intent = new Intent( ACTION_NONE );
             return;
         }
         --$victim->hp;
