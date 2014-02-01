@@ -47,7 +47,7 @@
                 }
             }
         }
-        return false;
+        throw new ModelNotFoundException();
     }
     function creatureAttack( $creature ) {
         $victim = clone $creature;
@@ -58,13 +58,15 @@
             $creature->intent = new Intent();
             return;
         }
-        $victim = findCreatureByCoordinates( $creature->round, $victim->locationx, $victim->locationy );
-        if ( $victim === false ) {
-            $creature->intent = new Intent( ACTION_NONE );
+        try {
+            $victim = findCreatureByCoordinates( $creature->round, $victim->locationx, $victim->locationy );
+        }
+        catch ( ModelNotFoundException $e ) {
+            $creature->intent = new Intent();
             return;
         }
-        if ( $victim->user === $creature->user ) {
-            $creature->intent = new Intent( ACTION_NONE );
+        if ( $victim->user->id === $creature->user->id ) {
+            $creature->intent = new Intent();
             return;
         }
         --$victim->hp;
