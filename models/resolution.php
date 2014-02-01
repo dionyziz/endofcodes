@@ -41,29 +41,38 @@
         }
         throw new ModelNotFoundException();
     }
-    function creatureAttack( $creature ) {
-        $victim = clone $creature;
+    function creatureAttack( $attackerCreature ) {
+        $potentialVictim = clone $attackerCreature;
         try {
-            creatureDirection( $victim );
+            creatureDirection( $potentialVictim );
         }
         catch ( CreatureOutOfBoundsException $e ) {
-            $creature->intent = new Intent();
+            $attackerCreature->game->botError( 
+                $attackerCreature->round,
+                $attackerCreature->user, 
+                "Tried to attack a creature outside of bounds with creature $attackerCreature->id."
+            );
             return;
         }
+        $victim = $potentialVictim;
         try {
-            $victim = findCreatureByCoordinates( $creature->round, $victim->locationx, $victim->locationy );
+            $victim = findCreatureByCoordinates( $attackerCreature->round, $victim->locationx, $victim->locationy );
         }
         catch ( ModelNotFoundException $e ) {
-            $creature->intent = new Intent();
+            $attackerCreature->intent = new Intent();
+            $attackerCreature->game->botError( 
+                $attackerCreature->round,
+                $attackerCreature->user, 
+                "Tried to attack non existent creature with creature $attackerCreature->id."
+            );
             return;
         }
-        if ( $victim->user->id === $creature->user->id ) {
-            $creature->game->botError( 
-                $creature->round,
-                $creature->user, 
-                "Tried to attack creature $victim->id with creature $creature->id while they both belong to the same user."
+        if ( $victim->user->id === $attackerCreature->user->id ) {
+            $attackerCreature->game->botError( 
+                $attackerCreature->round,
+                $attackerCreature->user, 
+                "Tried to attack creature $victim->id with creature $attackerCreature->id while they both belong to the same user."
             );
-            $creature->intent = new Intent();
             return;
         }
         --$victim->hp;

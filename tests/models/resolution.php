@@ -203,6 +203,33 @@
             $this->assertEquals( 10, $newCreature2->hp, 'A creature that is being attacked by a creature with the same user must not lose hp' );
             $this->assertEquals( 1, count( $game->rounds[ 1 ]->errors[ $creature1->user->id ] ), 'A user that tries to attack a creature of his own must get an error' );
         }
+        public function testKillBot() {
+            $game = $this->buildGameWithUsers( 1 );
+            $creature1 = new Creature();
+            $creature2 = new Creature();
+            $creature2->id = 1;
+            $creature2->user = $game->users[ 0 ];
+            $creature2->locationx = $creature1->locationy = 8;
+            $creature2->hp = 10;
+            $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
+            $creature2->game = $game;
+            $creature2->round = $game->rounds[ 0 ];
+            $creature1->id = 0;
+            $creature1->user = $game->users[ 0 ];
+            $creature1->locationx = $creature1->locationy = 8;
+            $creature1->hp = 0;
+            $creature1->alive = false;
+            $creature1->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
+            $creature1->game = $game;
+            $creature1->round = $game->rounds[ 0 ];
+            $newCreature1 = clone $creature1;
+            $newCreature2 = clone $creature2;
+            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->nextRound();
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $this->assertFalse( $newCreature2->alive, "All of the user's creatures must die if he tries to move a dead creature" );
+        }
         public function testAttackAsVictimMoves() {
             $game = $this->buildGameWithUsers( 2 );
             $creature1 = new Creature();
