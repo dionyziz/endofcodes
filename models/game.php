@@ -76,7 +76,7 @@
         protected function killClient( $user ) {
             $roundid = count( $this->rounds ) - 1;
             foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
-                if ( $creature->user === $user ) {
+                if ( $creature->user->id === $user->id ) {
                     $creature->intent = new Intent();
                     $creature->alive = false;
                 }
