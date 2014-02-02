@@ -7,51 +7,48 @@
             $country->shortname = 'GR';
             $country->name = 'Greece';
             $country->save();
+            $name = $country->name;
         }
         public function testCountryConstruct() {
-            $insert = $created = true;
-            $randomId = 1;
+            $inserted = $created = true;
+            $testId = 1;
             try {
                 $this->insertCountry();
             }
             catch ( DBException $e ) {
-               $insert = false; 
+               $inserted = false; 
             }
             try {
-                $country = new Country( $randomId );
+                $country = new Country( $testId );
             }
             catch ( ModelNotFoundException $e ) {
                 $created = false;
             }
-            $id = isset( $country->id );
-            $shortname = isset( $country->shortname );
-            $name = isset( $country->shortname );
-            $this->assertEquals( true, $insert, 'Problem with dbInsert. We cannot insert countries in the db' );
-            $this->assertEquals( 
-                true, 
-                $created, 
-                'Problem with the dbSelectOne() function or there is not any import with this id in the db' 
-            );
-            $this->assertEquals( true, $id, 'country->id of the new country object is empty' );
-            $this->assertEquals( true, $shortname, 'country->shortname of the new country object is empty' );
-            $this->assertEquals( true, $id, 'country->name of the new country object is empty' );
+            $idExists = isset( $country->id );
+            $shortnameExists = isset( $country->shortname );
+            $nameExists = isset( $country->name );
+            $this->assertTrue( $inserted, 'Problem with country save. We cannot insert countries in the db' );
+            $this->assertTrue( $created, 'Problem with the dbSelectOne() function or there is not any import with this id in the db' );
+            $this->assertTrue( $idExists, 'country->id of the new country object is empty' );
+            $this->assertTrue( $shortnameExists, 'country->shortname of the new country object is empty' );
+            $this->assertTrue( $nameExists, 'country->name of the new country object is empty' );
         }
         public function testFindAll() {
-            $insert = true;
-            $randomId = 2;
+            $inserted = true;
+            $testId = 2;
             try {
                 $this->insertCountry();
             }
             catch ( DBException $e ) {
-               $insert = false; 
+               $inserted = false; 
             }
-            $country = new Country( $randomId ); 
+            $country = new Country( $testId ); 
             $array = Country::findAll(); 
             $success = isset( $array ); 
-            $countryId = "$country->id";
-            $this->assertEquals( true, $insert, 'Problem with dbInsert. We cannot insert countries in the db' );
-            $this->assertEquals( true, $success, 'dbSelectOne did not work' );
-            $this->assertEquals( $array[ $randomId - 1 ][ 'id' ], $countryId, 'Not all countries are imported in the database' );
+            $countryId = intval( $array[ $testId - 1 ][ 'id' ] ); 
+            $this->assertTrue( $inserted, 'Problem with country save. We cannot insert countries in the db' );
+            $this->assertTrue( $success, 'dbSelectOne did not work' );
+            $this->assertEquals( $countryId, $country->id, 'Not all countries are imported in the database' );
         }
     }
 
