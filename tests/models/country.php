@@ -2,9 +2,22 @@
     include_once 'models/country.php';
     
     class CountryTest extends UnitTestWithUser {
+        protected static function insertCountry() {
+            $country = array(
+               'name' => 'Greece', 
+               'shortname' => 'Gr'
+            );
+            dbInsert( 'countries', $country );
+        }
         public function testCountryConstruct() {
-            $randomId = 233;
-            $created = true;
+            $insert = $created = true;
+            $randomId = 1;
+            try {
+                CountryTest::insertCountry();
+            }
+            catch ( DBException $e ) {
+               $insert = false; 
+            }
             try {
                 $country = new Country( $randomId );
             }
@@ -14,6 +27,7 @@
             $id = isset( $country->id );
             $shortname = isset( $country->shortname );
             $name = isset( $country->shortname );
+            $this->assertEquals( true, $insert, 'Problem with dbInsert. We cannot insert countries in the db' );
             $this->assertEquals( 
                 true, 
                 $created, 
@@ -24,11 +38,19 @@
             $this->assertEquals( true, $id, 'country->name of the new country object is empty' );
         }
         public function testFindAll() {
-            $randomId = 169;
+            $insert = true;
+            $randomId = 2;
+            try {
+                CountryTest::insertCountry();
+            }
+            catch ( DBException $e ) {
+               $insert = false; 
+            }
             $country = new Country( $randomId ); 
             $array = Country::findAll(); 
             $success = isset( $array ); 
             $countryId = "$country->id";
+            $this->assertEquals( true, $insert, 'Problem with dbInsert. We cannot insert countries in the db' );
             $this->assertEquals( true, $success, 'dbSelectOne did not work' );
             $this->assertEquals( $array[ $randomId - 1 ][ 'id' ], $countryId, 'Not all countries are imported in the database' );
         }
