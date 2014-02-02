@@ -1,19 +1,18 @@
 <?php
     include_once 'models/country.php';
     
-    class CountryTest extends UnitTestWithUser {
-        protected static function insertCountry() {
-            $country = array(
-               'name' => 'Greece', 
-               'shortname' => 'Gr'
-            );
-            dbInsert( 'countries', $country );
+    class CountryTest extends UnitTest {
+        protected function insertCountry() {
+            $country = new Country();
+            $country->shortname = 'GR';
+            $country->name = 'Greece';
+            $country->save();
         }
         public function testCountryConstruct() {
             $insert = $created = true;
             $randomId = 1;
             try {
-                CountryTest::insertCountry();
+                $this->insertCountry();
             }
             catch ( DBException $e ) {
                $insert = false; 
@@ -41,7 +40,7 @@
             $insert = true;
             $randomId = 2;
             try {
-                CountryTest::insertCountry();
+                $this->insertCountry();
             }
             catch ( DBException $e ) {
                $insert = false; 
