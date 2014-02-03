@@ -18,16 +18,12 @@
                 $country->name = $name;
                 $country->save();
             }
-            return false;
         }
         public function testFindAll() {
-            $inserted = true;
             $this->insertCountries();
             $countriesArray = Country::findAll(); 
-            $arrayExists = is_array( $countriesArray );
-            $success = count( $countriesArray ) > 3;
-            $this->assertTrue( $arrayExists, '$Country::findall() did not return an array' );
-            $this->assertTrue( $success, '$Country::findall() did not return the as much countries as it should' );
+            $this->assertTrue( is_array( $countriesArray ), '$Country::findall() did not return an array' );
+            $this->assertTrue( count( $countriesArray ) > 3, '$Country::findall() did not return the as much countries as it should' );
         } 
         public function testCountryConstruct() {
             $countries = $this->countries;
