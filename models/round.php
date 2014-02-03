@@ -1,4 +1,5 @@
 <?php
+    include_once 'models/creature.php';
     class Round extends ActiveRecordBase {
         public $creatures = array();
         public $id;
@@ -44,6 +45,19 @@
                     $this->creatures[ $i ]->user = $user;
                 }
             }
+        }
+
+        public function toJson() {
+            return json_encode( $this->jsonSerialize() );
+        }
+
+        public function jsonSerialize() {
+            $round = $this->id;
+            $map = array();
+            foreach ( $this->creatures as $creature ) {
+                $map[] = $creature->jsonSerialize();
+            }
+            return compact( 'round', 'map' );
         }
 
         protected function create() {
