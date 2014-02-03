@@ -3,52 +3,51 @@
     
     class CountryTest extends UnitTest {
         protected function insertCountry() {
-            $country = new Country();
-            $country->shortname = 'GR';
-            $country->name = 'Greece';
-            $country->save();
-            $name = $country->name;
-        }
-        public function testCountryConstruct() {
-            $inserted = $created = true;
-            $testId = 1;
-            try {
-                $this->insertCountry();
+            $countries = array(
+                'GR' => 'Greece',
+                'UK' => 'England',
+                'RU' => 'Russia'
+            );
+            $shortnames = array_keys( $countries );
+            $names = array_values( $countries );
+            for ( $i = 0; $i < 2; $i++ ) {
+                $country = new Country();
+                $country->shortname = $shortnames[ $i ];
+                $country->name = $names[ $i ];
+                $country->save();
             }
-            catch ( DBException $e ) {
-               $inserted = false; 
-            }
-            try {
-                $country = new Country( $testId );
-            }
-            catch ( ModelNotFoundException $e ) {
-                $created = false;
-            }
-            $idExists = isset( $country->id );
-            $shortnameExists = isset( $country->shortname );
-            $nameExists = isset( $country->name );
-            $this->assertTrue( $inserted, 'Problem with country save. We cannot insert countries in the db' );
-            $this->assertTrue( $created, 'Problem with the dbSelectOne() function or there is not any import with this id in the db' );
-            $this->assertTrue( $idExists, 'country->id of the new country object is empty' );
-            $this->assertTrue( $shortnameExists, 'country->shortname of the new country object is empty' );
-            $this->assertTrue( $nameExists, 'country->name of the new country object is empty' );
         }
         public function testFindAll() {
             $inserted = true;
-            $testId = 2;
+            $this->insertCountry();
+            $res = Country::findAll(); 
+            $arrayExists = is_array( $res );
+            $success = count( $res ) > 3;
+            $this->assertTrue( $arrayExists, '$Country::findall() did not return an array' );
+            $this->assertTrue( $success, '$Country::findall() did not return the as much countries as it should' );
+        } 
+        public function testCountryConstruct() {
+            $created = true;
+            $testId = 1;
+            $this->insertCountry();
+            $country = new Country( $testId );
+            $idExists = isset( $country->id );
+            $shortnameExists = isset( $country->shortname );
+            $nameExists = isset( $country->name );
+            $this->assertTrue( $idExists, 'country->id of the new country object is empty' );
+            $this->assertEquals ( $testId, $country->id, "'new country()' did not return the appropriate country" );
+            $this->assertTrue( $shortnameExists, 'country->shortname of the new country object is empty' );
+            $this->assertTrue( $nameExists, 'country->name of the new country object is empty' );
+        }
+        public function testCountryCreate() {
+            $created = true;
             try {
                 $this->insertCountry();
             }
             catch ( DBException $e ) {
-               $inserted = false; 
+                $created = false;    
             }
-            $country = new Country( $testId ); 
-            $array = Country::findAll(); 
-            $success = isset( $array ); 
-            $countryId = intval( $array[ $testId - 1 ][ 'id' ] ); 
-            $this->assertTrue( $inserted, 'Problem with country save. We cannot insert countries in the db' );
-            $this->assertTrue( $success, 'dbSelectOne did not work' );
-            $this->assertEquals( $countryId, $country->id, 'Not all countries are imported in the database' );
+            $this->assertTrue( $created, 'Countries could not be saved' );
         }
     }
 
