@@ -33,6 +33,20 @@
             }
         }
 
+        public function toJson() {
+            return json_encode( $this->jsonSerialize() );
+        }
+
+        public function jsonSerialize() {
+            $hp = $this->hp;
+            $x = $this->locationx;
+            $y = $this->locationy;
+            $userid = $this->user->id;
+            $creatureid = $this->id;
+
+            return compact( 'creatureid', 'userid', 'x', 'y', 'hp' );
+        }
+
         public function kill() {
             $this->alive = false;
             $this->intent = new Intent();
