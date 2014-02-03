@@ -5,7 +5,8 @@
             $creature = new Creature();
             $creature->user = $this->buildUser( 'dionyziz' );
             $creature->id = 1;
-            $creature->locationx = $creature->locationy = 1;
+            $creature->locationx = 1;
+            $creature->locationy = 2;
             $creature->hp = 10;
 
             return $creature;
