@@ -59,7 +59,9 @@
                             $list = array_merge( $sublist, $list );
                         }
                         else {
-                            $list[] = Extention::remove( $fullpath );
+                            if ( Extention::get( $fullpath ) === 'php' ) {
+                                $list[] = Extention::remove( $fullpath );
+                            }
                         }
                     }
                 }
