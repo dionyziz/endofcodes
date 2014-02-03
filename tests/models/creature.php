@@ -23,8 +23,8 @@
             $this->assertTrue( isset( $data->y ), 'y must exist in encoded JSON' );
             $this->assertTrue( isset( $data->creatureid ), 'creatureid must exist in encoded JSON' );
 
-            $this->assertEquals( $creature->user->id, $data->userid, 'Userid must be encoded properly to JSON' );
-            $this->assertEquals( $creature->hp, $data->hp, 'Hp must be encoded properly to JSON' );
+            $this->assertEquals( $creature->user->id, $data->userid, 'userid must be encoded properly to JSON' );
+            $this->assertEquals( $creature->hp, $data->hp, 'hp must be encoded properly to JSON' );
             $this->assertEquals( $creature->locationx, $data->x, 'x must be encoded properly to JSON' );
             $this->assertEquals( $creature->locationy, $data->y, 'y must be encoded properly to JSON' );
             $this->assertEquals( $creature->id, $data->creatureid, 'creatureid must be encoded properly to JSON' );

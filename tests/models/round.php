@@ -27,12 +27,12 @@
             $json = $round->toJson();
             $data = json_decode( $json );
 
-            $this->assertTrue( isset( $data->round ), 'Roundid must exist in exported JSON' ); 
+            $this->assertTrue( isset( $data->round ), 'roundid must exist in exported JSON' ); 
             $this->assertEquals( $round->id, $data->round, 'roundid must be encoded properly to JSON' );
 
-            $this->assertTrue( isset( $data->map ), 'Map must exist in exported JSON' );
-            $this->assertTrue( is_array( $data->map ), 'Map must be an array in exported JSON' );
-            $this->assertEquals( 2, count( $data->map ), 'Map must contain correct number of creatures in exported JSON' );
+            $this->assertTrue( isset( $data->map ), 'map must exist in exported JSON' );
+            $this->assertTrue( is_array( $data->map ), 'map must be an array in exported JSON' );
+            $this->assertEquals( 2, count( $data->map ), 'map must contain correct number of creatures in exported JSON' );
 
             $this->assertEquals( 1, $data->map[ 0 ]->creatureid, 'All creatures must exist in exported JSON' );
             $this->assertEquals( 2, $data->map[ 1 ]->creatureid, 'All creatures must exist in exported JSON' );
