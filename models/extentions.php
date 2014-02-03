@@ -7,6 +7,10 @@
             return substr( $name, strrpos( $name, "." ) + 1 );
         }
 
+        public static function remove( $name ) {
+            return substr( $name, 0, strrpos( $name, "." ) );
+        }
+
         public static function getValid() {
             global $config;
             return $config[ 'files' ][ 'avatar_extentions' ];
