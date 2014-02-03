@@ -1,4 +1,5 @@
 <?php
+    include_once 'models/intent.php';
     class Creature extends ActiveRecordBase {
         public $game;
         public $user;
