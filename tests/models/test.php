@@ -1,13 +1,13 @@
 <?php
     class TestTest extends UnitTest {
         public function testFindAllFindsFilesInFolders() {
-            $path = 'tests/mock/depth1/depth2/depth3/';
-            mkdir( $path, 0777, true );
-            file_put_contents( $path . 'magic.php', '' );
+            $path = 'mock/depth1/depth2/depth3/';
+            mkdir( 'tests/' . $path, 0777, true );
+            file_put_contents( 'tests/' . $path . 'magic.php', '' );
 
             $tests = UnitTest::findAll();
 
-            $this->assertTrue( array_search( 'mock/depth1/depth2/depth3/magic', $tests ) !== false, 'findAll() must find tests in subfolders' );
+            $this->assertTrue( array_search( $path . 'magic', $tests ) !== false, 'findAll() must find tests in subfolders' );
         }
         protected function rrmdir( $dir ) {
             if ( is_dir( $dir ) ) {
