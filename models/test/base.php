@@ -15,9 +15,8 @@
         public function run() {
             $methodName = $this->methodName;
             try {
-                $this->unittest->setUp();
+                $this->unittest->baseSetUp();
                 $this->unittest->$methodName();
-                $this->unittest->tearDown();
                 $this->success = true;
             }
             catch ( UnitTestFailedException $e ) {
@@ -32,6 +31,7 @@
                 $this->calltrace = $e->getTrace();
                 $this->error = 'Unanticipated failure: ' . $e->getMessage();
             }
+            $this->unittest->baseTearDown();
         }
     }
 
@@ -40,6 +40,32 @@
         public $tests = array();
         protected $currentTest = null;
 
+        public static function findAll( $subdir = '' ) {
+            include_once 'models/extentions.php';
+            $dir = 'tests/' . $subdir;
+            $list = array();
+            if ( is_dir( $dir ) ) {
+                $objects = scandir( $dir );
+                foreach ( $objects as $object ) {
+                    if ( $object !== '.' && $object !== '..' ) {
+                        if ( $subdir == '' ) {
+                            $fullpath = $object;
+                        }
+                        else {
+                            $fullpath = $subdir . '/' . $object;
+                        }
+                        if ( filetype( $dir . '/' . $object ) === "dir" ) {
+                            $sublist = UnitTest::findAll( $fullpath );
+                            $list = array_merge( $sublist, $list );
+                        }
+                        else {
+                            $list[] = Extention::remove( $fullpath );
+                        }
+                    }
+                }
+            }
+            return $list;
+        }
         public function assertTrue( $condition, $description = '' ) {
             ++$this->currentTest->assertCount;
 
@@ -87,12 +113,16 @@
                 db( 'TRUNCATE TABLE ' . $table );
             }
         }
-        public function setUp() {
+        public function baseSetUp() {
             $this->truncateDb();
+            $this->setUp();
         }
-        public function tearDown() {
+        public function baseTearDown() {
             $this->truncateDb();
+            $this->tearDown();
         }
+        public function setUp() {} // override me
+        public function tearDown() {} // override me
     }
 
     class UnitTestFailedException extends Exception {
