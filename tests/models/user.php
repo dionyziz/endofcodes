@@ -93,6 +93,17 @@
             }
             $this->assertTrue( $cought, 'When we try to find a non existent user we must get a ModelNotFoundException' );
         }
+        public function testFindById() {
+            $user = $this->buildUser( 'dionyziz' );
+            $dbUser = new User( 1 );
+            $this->assertEquals( $user->username, $dbUser->username, "User's username must be correctly stored in the database" );
+            $this->assertEquals( $user->email, $dbUser->email, "User's email must be correctly stored in the database" );
+        }
+        public function testFindByUsername() {
+            $user = $this->buildUser( 'pkakelas' );
+            $dbUser = User::findByUsername( 'pkakelas' );
+            $this->assertEquals( $user->id, intval( $dbUser->id ), "User's id must be stored correctly in the database" );
+        }
     }
 
     return new UserTest();
