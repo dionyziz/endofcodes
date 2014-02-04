@@ -10,7 +10,6 @@
         
         protected function insertCountries() {
             $countries = $this->countries;
-            $shortnames = array_keys( $countries );
             foreach ( $countries as $shortname => $name ) {
                 $country = new Country();
                 $country->shortname = $shortname;
@@ -23,11 +22,21 @@
             $countries = Country::findAll();
             $this->assertTrue( !empty( $countries ), "'insertCountries()' did not insert countries in the db" );
         }
+        public function testFindNonExistentCountry() {
+            $caught = false;
+            try {
+                $country = new Country( 1 );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+            $this->assertTrue( $caught, 'When we try to find a non existent country we must get a ModelNotFoundException' );
+        }
         public function testFindAll() {
             $this->insertCountries();
             $countriesArray = Country::findAll(); 
             $this->assertTrue( is_array( $countriesArray ), 'Country::findAll() did not return an array of countries' );
-            $this->assertTrue( count( $countriesArray ) >= 3, 'Country::findAll() did not return as many countries as it should' );
+            $this->assertTrue( count( $countriesArray ) == 3, 'Country::findAll() did not return as many countries as it should' );
         } 
         public function testCountryConstruct() {
             $countries = $this->countries;
