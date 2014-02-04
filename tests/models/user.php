@@ -46,23 +46,23 @@
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
         public function testDuplicateUsername() {
-            $cought = false;
+            $caught = false;
             $user1 = $this->buildUser( 'pkakelas' );
             try {
                 $user2 = $this->buildUser( 'pkakelas' );
             }
             catch ( ModelValidationException $e ) {
-                $cought = true;
+                $caught = true;
                 $this->assertEquals(
                     'username_used',
                     $e->error,
                     "If the username is used we must get an 'username_used' error"
                 );
             }
-            $this->assertTrue( $cought, 'A ModelValidationException must be cought if we try to make a duplicate username' );
+            $this->assertTrue( $caught, 'A ModelValidationException must be caught if we try to make a duplicate username' );
         }
         public function testDuplicateEmail() {
-            $cought = false;
+            $caught = false;
             $user1 = new User();
             $user2 = new User();
             $user1->username = 'pkakelas';
@@ -74,24 +74,24 @@
                 $user2->save();
             }
             catch ( ModelValidationException $e ) {
-                $cought = true;
+                $caught = true;
                 $this->assertEquals(
                     'email_used',
                     $e->error,
                     "If the email is used we must get an 'email_used' error"
                 );
             }
-            $this->assertTrue( $cought, 'A ModelValidationException must be cought if we try to make a duplicate email' );
+            $this->assertTrue( $caught, 'A ModelValidationException must be caught if we try to make a duplicate email' );
         }
         public function testFindNonExistentUser() {
-            $cought = false;
+            $caught = false;
             try {
                 $user = new User( 1 );
             }
             catch ( ModelNotFoundException $e ) {
-                $cought = true;
+                $caught = true;
             }
-            $this->assertTrue( $cought, 'When we try to find a non existent user we must get a ModelNotFoundException' );
+            $this->assertTrue( $caught, 'When we try to find a non existent user we must get a ModelNotFoundException' );
         }
         public function testFindById() {
             $user = $this->buildUser( 'dionyziz' );
