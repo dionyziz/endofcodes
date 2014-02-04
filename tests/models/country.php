@@ -1,13 +1,13 @@
 <?php
     include_once 'models/country.php';
-    
+
     class CountryTest extends UnitTest {
         protected $countries = [
             'GR' => 'Greece',
             'UK' => 'England',
             'RU' => 'Russia'
         ];
-        
+
         protected function insertCountries() {
             $countries = $this->countries;
             $shortnames = array_keys( $countries );
@@ -21,10 +21,10 @@
         }
         public function testFindAll() {
             $this->insertCountries();
-            $countriesArray = Country::findAll(); 
+            $countriesArray = Country::findAll();
             $this->assertTrue( is_array( $countriesArray ), '$Country::findall() did not return an array' );
             $this->assertTrue( count( $countriesArray ) > 3, '$Country::findall() did not return the as much countries as it should' );
-        } 
+        }
         public function testCountryConstruct() {
             $countries = $this->countries;
             $testId = 1;

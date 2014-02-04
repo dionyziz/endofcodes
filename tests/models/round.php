@@ -28,7 +28,7 @@
             $json = $round->toJson();
             $data = json_decode( $json );
 
-            $this->assertTrue( isset( $data->round ), 'roundid must exist in exported JSON' ); 
+            $this->assertTrue( isset( $data->round ), 'roundid must exist in exported JSON' );
             $this->assertEquals( $round->id, $data->round, 'roundid must be encoded properly to JSON' );
 
             $this->assertTrue( isset( $data->map ), 'map must exist in exported JSON' );
