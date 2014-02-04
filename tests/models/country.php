@@ -42,8 +42,8 @@
             $country = new Country( $testId );
             $this->assertTrue( is_object( $country ), "'new Country()' did not return an object" );
             $this->assertEquals( $testId, $country->id, "'new Country()' did not return the appropriate country" );
-            $this->assertEquals( $country->shortname, $shortname, "'new Country()' did not return the appropriate shortname" );
-            $this->assertEquals( $country->name, $countries[ $shortname ], "'new Country()' did not return the appropriate name" );
+            $this->assertEquals( $shortname, $country->shortname, "'new Country()' did not return the appropriate shortname" );
+            $this->assertEquals( $countries[ $shortname ], $country->name, "'new Country()' did not return the appropriate name" );
         }
     }
 
