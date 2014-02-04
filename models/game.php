@@ -165,6 +165,23 @@
                 }
             }
         }
+
+        public function toJson() {
+            return json_encode( $this->jsonSerialize() );
+        }
+
+        public function jsonSerialize() {
+            $gameid = $this->id;
+            $W = $this->width;
+            $H = $this->height;
+            $M = $this->creaturesPerPlayer;
+            $MAX_HP = $this->maxHp;
+            $players = array();
+            foreach ( $this->users as $user ) {
+                $players[] = $user->jsonSerialize();
+            }
+            return compact( 'gameid', 'W', 'H', 'M', 'MAX_HP', 'players' );
+        }
     }
 
     class GameException extends Exception {}

@@ -104,6 +104,20 @@
             $dbUser = User::findByUsername( 'pkakelas' );
             $this->assertEquals( $user->id, intval( $dbUser->id ), "findByUsername must find the correct user" );
         }
+        public function testJsonSerialize() {
+            $user = $this->buildUser( 'pkakelas' );
+
+            $this->assertTrue( method_exists( $user, 'toJson' ), 'User object must export a "toJson" function' );
+
+            $json = $user->toJson();
+            $data = json_decode( $json );
+
+            $this->assertTrue( isset( $data->username ), 'username must exist in exported JSON' ); 
+            $this->assertEquals( $user->username, $data->username, 'username must be encoded properly to JSON' );
+
+            $this->assertTrue( isset( $data->userid ), 'userid must exist in exported JSON' ); 
+            $this->assertEquals( $user->id, $data->userid, 'userid must be encoded properly to JSON' );
+        }
     }
 
     return new UserTest();
