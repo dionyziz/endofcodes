@@ -17,11 +17,6 @@
                 $country->save();
             }
         }
-        public function testInsertCountries() {
-            $this->insertCountries();
-            $countries = Country::findAll();
-            $this->assertTrue( !empty( $countries ), "'insertCountries()' did not insert countries in the db" );
-        }
         public function testFindNonExistentCountry() {
             $caught = false;
             try {
