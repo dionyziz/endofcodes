@@ -1,5 +1,6 @@
 <?php
     class Country extends ActiveRecordBase {
+        protected $attributes = array( 'shortname', 'name' );
         public $name;
         public $id;
         public $shortname;
