@@ -56,7 +56,7 @@
                 $this->assertEquals(
                     'username_used',
                     $e->error,
-                    "If the username is used we must get an 'username_used' error"
+                    "If the username is used we must get a 'username_used' error"
                 );
             }
             $this->assertTrue( $caught, 'A ModelValidationException must be caught if we try to make a duplicate username' );
@@ -78,7 +78,7 @@
                 $this->assertEquals(
                     'email_used',
                     $e->error,
-                    "If the email is used we must get an 'email_used' error"
+                    "If the email is used we must get a 'email_used' error"
                 );
             }
             $this->assertTrue( $caught, 'A ModelValidationException must be caught if we try to make a duplicate email' );
