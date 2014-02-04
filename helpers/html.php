@@ -9,7 +9,7 @@
         protected $token;
 
         public static function isValidType( $type ) {
-            $valid_types = array(
+            $valid_types = [
                 'button',
                 'checkbox',
                 'color',
@@ -32,7 +32,7 @@
                 'time',
                 'url',
                 'week'
-            );
+            ];
             $valid_types = array_flip( $valid_types );
             return isset( $valid_types[ $type ] );
         }
@@ -107,13 +107,13 @@
         }
 
         public static function getRESTMethodIdempotence( $method ) {
-            $methods = array( 
+            $methods = [ 
                 'create' => 1,
                 'listing' => 0,
                 'delete' => 1,
                 'update' => 1,
                 'view' => 0
-            );
+            ];
             if ( isset( $methods[ $method ] ) ) {
                 return $methods[ $method ];
             }

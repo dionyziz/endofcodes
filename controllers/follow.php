@@ -10,7 +10,7 @@
             $follow->follower = $follower;
             $follow->followed = $followed;
             $follow->save();
-            go( 'user', 'view', array( 'username' => $followed->username ) ); 
+            go( 'user', 'view', [ 'username' => $followed->username ] ); 
         }
 
         public function delete( $followerid, $followedid ) {
@@ -23,7 +23,7 @@
             $follower = $follow->follower;
             $followed = $follow->followed;
             $follow->delete();
-            go( 'user', 'view', array( 'username' => $followed->username ) ); 
+            go( 'user', 'view', [ 'username' => $followed->username ] ); 
         }
     }
 ?>

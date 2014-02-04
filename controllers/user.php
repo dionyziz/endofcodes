@@ -4,7 +4,7 @@
                 $countryid = '', $day = '', $month = '', $year = '' ) {
             include_once 'models/country.php';
             if ( $password !== $password_repeat ) {
-                go( 'user', 'create', array( 'password_not_matched' => true ) );
+                go( 'user', 'create', [ 'password_not_matched' => true ] );
             }
             try {
                 $country = new Country( $countryid );
@@ -23,7 +23,7 @@
                 $user->save();
             }
             catch( ModelValidationException $e ) {
-                go( 'user', 'create', array( $e->error => true ) );
+                go( 'user', 'create', [ $e->error => true ] );
             }
             $_SESSION[ 'user' ] = $user;
             go();
@@ -65,12 +65,12 @@
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
                     if ( $password_new !== $password_repeat ) {
-                        go( 'user', 'update', array( 'password_new_not_matched' => true ) );
+                        go( 'user', 'update', [ 'password_new_not_matched' => true ] );
                     }
                     $user->password = $password_new;
                 }
                 else {
-                    go( 'user', 'update', array( 'password_wrong' => true ) );
+                    go( 'user', 'update', [ 'password_wrong' => true ] );
                 }
             }
             $user->email = $email;
@@ -83,7 +83,7 @@
                 $user->save();
             }
             catch ( ModelValidationException $e ) {
-                go( 'user', 'update', array( $e->error => true ) );
+                go( 'user', 'update', [ $e->error => true ] );
             }
             go();
         }

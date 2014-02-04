@@ -5,19 +5,19 @@
 
             include_once 'models/user.php';
             if ( empty( $username ) ) {
-                go( 'session', 'create', array( 'username_empty' => true ) );
+                go( 'session', 'create', [ 'username_empty' => true ] );
             }
             if ( empty( $password ) ) {
-                go( 'session', 'create', array( 'password_empty' => true ) );
+                go( 'session', 'create', [ 'password_empty' => true ] );
             }
             try {
                 $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
-                go( 'session', 'create', array( 'username_wrong' => true ) );
+                go( 'session', 'create', [ 'username_wrong' => true ] );
             }
             if ( !$user->authenticatesWithPassword( $password ) ) {
-                go( 'session', 'create', array( 'password_wrong' => true ) );
+                go( 'session', 'create', [ 'password_wrong' => true ] );
             }
             if ( $persistent ) {
                 $user->renewSessionId();     

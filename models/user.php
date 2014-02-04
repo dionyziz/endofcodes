@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' );
+        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' ];
         public $username;
         public $password;
         public $email;
@@ -18,7 +18,7 @@
 
         public static function findByUsername( $username ) {
             try {
-                $user = dbSelectOne( 'users', array( 'id' ), compact( "username" ) );
+                $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
             }
             catch ( DBException $e ) {
                 throw new ModelNotFoundException();
@@ -33,7 +33,7 @@
             try {
                 $row = dbSelectOne( 
                     'users', 
-                    array( 'id' ), 
+                    [ 'id' ], 
                     compact( "sessionid" ) 
                 );
             }
@@ -46,7 +46,7 @@
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
-                $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid' ], compact( "id" ) );
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
@@ -156,7 +156,7 @@
             $username = $this->username;
             $row = dbSelectOne(
                 'users',
-                array( 'id', 'password', 'salt' ),
+                [ 'id', 'password', 'salt' ],
                 compact( "username" )
             );
             if ( !empty( $row ) ) {

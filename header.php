@@ -11,7 +11,7 @@
     go( "user", "view", array( "example" => "argument" ) ); // resource & method
     go(); // home page
     */
-    function go( $resource_or_url = false, $method = false, $args = array() ) {
+    function go( $resource_or_url = false, $method = false, $args = [] ) {
         throw new RedirectException( $resource_or_url, $method, $args );
     }
 
@@ -22,7 +22,7 @@
             return $this->url;
         }
 
-        public function __construct( $resource_or_url = false, $method = false, $args = array() ) {
+        public function __construct( $resource_or_url = false, $method = false, $args = [] ) {
             if ( $resource_or_url === false ) {
                 $this->__construct( 'dashboard', 'view' );
             }

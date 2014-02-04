@@ -17,7 +17,7 @@
             $creature2->user = $this->buildUser( 'pkakelas' );
             $creature1->id = 1;
             $creature2->id = 2;
-            $round->creatures = array( $creature1, $creature2 );
+            $round->creatures = [ $creature1, $creature2 ];
             return $round;
         }
         public function testJsonSerialize() {

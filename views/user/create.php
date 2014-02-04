@@ -80,28 +80,28 @@
         }
         $self->createInput( 'text', 'email', 'email', $email_value );
         $self->createLabel( 'dob', 'Date of birth' );
-        $days_select_array = array( array( 'content' => 'Select Day' ) );
+        $days_select_array = [ [ 'content' => 'Select Day' ] ];
         for ( $i = 1; $i <= 31; ++$i ) {
-            $days_select_array[] = array( 'value' => $i, 'content' => $i );
+            $days_select_array[] = [ 'value' => $i, 'content' => $i ];
         }
         $self->createSelect( 'day', 'dob', $days_select_array );
-        $months_select_array = array( array( 'content' => 'Select Month' ) );
+        $months_select_array = [ [ 'content' => 'Select Month' ] ];
         for ( $i = 1; $i <= 12; ++$i ) {
-            $months_select_array[] = array( 
+            $months_select_array[] = [ 
                 'value' => $i, 
                 'content' => date( 'M', mktime( 0, 0, 0, $i, 1, 2000 ) ) 
-            );
+            ];
         }
         $self->createSelect( 'month', '', $months_select_array );
-        $years_select_array = array( array( 'content' => 'Select Year' ) );
+        $years_select_array = [ [ 'content' => 'Select Year' ] ];
         $current_year = date( 'Y' );
         for ( $i = $current_year - $config[ 'age' ][ 'min' ]; $i >= $current_year - $config[ 'age' ][ 'max' ]; --$i ) {
-            $years_select_array[] = array( 'value' => $i, 'content' => $i );
+            $years_select_array[] = [ 'value' => $i, 'content' => $i ];
         }
         $self->createSelect( 'year', '', $years_select_array );
-        $countries_select_array = array( array( 'content' => 'Select Country' ) );
+        $countries_select_array = [ [ 'content' => 'Select Country' ] ];
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = array( 'value' => $key + 1, 'content' => $country[ 'name' ] );
+            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country[ 'name' ] ];
         }
         $self->createSelect( 'countryid', '', $countries_select_array );
         $self->createInput( 'submit', '', '', 'Register' ); 

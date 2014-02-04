@@ -16,9 +16,9 @@
                 $user->save();
             }
             catch ( ModelValidationException $e ) {
-                go( 'user', 'update', array( $e->error => true ) );
+                go( 'user', 'update', [ $e->error => true ] );
             }
-            go( 'user', 'view', array( 'username' => $user->username ) );
+            go( 'user', 'view', [ 'username' => $user->username ] );
         }
     }
 ?>

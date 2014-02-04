@@ -1,63 +1,63 @@
 <?php
     function getConfig() {
-        $config = array(
-            'development' => array(
-                'db' => array(
+        $config = [
+            'development' => [
+                'db' => [
                     'host' => 'sample_host',
                     'user' => 'sample_user',
                     'pass' => 'sample_pass',
                     'dbname' => 'sample_dbname'
-                ),
-                'files' => array(
-                    'avatar_extentions' => array( 'jpg', 'png', 'jpeg' ),
+                ],
+                'files' => [
+                    'avatar_extentions' => [ 'jpg', 'png', 'jpeg' ],
                     'flag_extention' => 'png' 
-                ),
-                'paths' => array(
+                ],
+                'paths' => [
                     'avatar_path' => 'sample_path',
                     'flag_path' => 'static/images/flags/'
-                ),
+                ],
                 'pass_min_len' => 7,
-                'age' => array(
+                'age' => [
                     'min' => 8,
                     'max' => 100
-                ),
-                'persistent_cookie' => array(
+                ],
+                'persistent_cookie' => [
                     'name' => 'sessionid',
                     'duration' => 60 * 60 * 24 * 365 * 20, 
                     'unset_time' => 60 * 60 * 24 * 2
-                ),
+                ],
                 'base' => 'http://localhost/endofcodes/',
                 'root' => '/var/www/endofcodes/'
-            ),
-            'test' => array(
-                'db' => array(
+            ],
+            'test' => [
+                'db' => [
                     'host' => 'sample_host',
                     'user' => 'sample_user',
                     'pass' => 'sample_pass',
                     'dbname' => 'sample_dbname'
-                ),
-                'files' => array(
-                    'avatar_extentions' => array( 'jpg', 'png', 'jpeg' ),
+                ],
+                'files' => [
+                    'avatar_extentions' => [ 'jpg', 'png', 'jpeg' ],
                     'flag_extention' => 'png' 
-                ),
-                'paths' => array(
+                ],
+                'paths' => [
                     'avatar_path' => 'sample_path',
                     'flag_path' => 'static/images/flags/'
-                ),
+                ],
                 'pass_min_len' => 7,
-                'age' => array(
+                'age' => [
                     'min' => 8,
                     'max' => 100
-                ),
-                'persistent_cookie' => array(
+                ],
+                'persistent_cookie' => [
                     'name' => 'sessionid',
                     'duration' => 60 * 60 * 24 * 365 * 20, 
                     'unset_time' => 60 * 60 * 24 * 2
-                ),
+                ],
                 'base' => 'http://localhost/endofcodes/',
                 'root' => '/var/www/endofcodes/'
-            )
-        );
+            ]
+        ];
         return $config;
     }
 ?>

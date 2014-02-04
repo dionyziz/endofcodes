@@ -2,7 +2,7 @@
     include 'migrate.php';
 
     migrate(
-        array(
+        [
             'CREATE TABLE IF NOT EXISTS
                 games (
                     id int(11) NOT NULL AUTO_INCREMENT,
@@ -39,6 +39,6 @@
                     CONSTRAINT uc_roundcreatures UNIQUE KEY ( roundid, gameid, creatureid )
                 )
                 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;'
-        )
+        ]
     );
 ?>
