@@ -178,5 +178,11 @@
             $this->generateSessionId();
             $this->save();
         }
+
+        public function revokePassword() {
+            $value = openssl_random_pseudo_bytes( 32 );
+            $value = base64_encode( $value );
+
+        }
     }
 ?>

@@ -3,7 +3,7 @@
 ?>
 
 <div><?php 
-    $form = new Form( 'user', 'passRevoke' );  
+    $form = new Form( 'forgotPasswordRequest', 'create' );  
     $form->id = 'passRevoke';
     $form->output( function( $self ) use ( $username_empty, $username_not_valid, $username_not_exists ) {
         if ( isset( $username_empty ) ) {
