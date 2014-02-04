@@ -14,6 +14,10 @@
             $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
         }
+        public function testAuthenticatesWithPassword() {
+            $user = $this->buildUser( 'pkakelas' );
+            $this->assertFalse( $user->authenticatesWithPassword( 'wrongsecret' ), 'User must not be authenticated with a wrong password' );
+        }
         public function testDelete() {
             $user = $this->buildUser( 'pkakelas' );
             $user->delete();
