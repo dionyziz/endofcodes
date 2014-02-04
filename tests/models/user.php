@@ -83,6 +83,16 @@
             }
             $this->assertTrue( $cought, 'A ModelValidationException must be cought if we try to make a duplicate email' );
         }
+        public function testFindNonExistentUser() {
+            $cought = false;
+            try {
+                $user = new User( 1 );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $cought = true;
+            }
+            $this->assertTrue( $cought, 'When we try to find a non existent user we must get a ModelNotFoundException' );
+        }
     }
 
     return new UserTest();
