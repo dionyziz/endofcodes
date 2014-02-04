@@ -102,7 +102,7 @@
         public function testFindByUsername() {
             $user = $this->buildUser( 'pkakelas' );
             $dbUser = User::findByUsername( 'pkakelas' );
-            $this->assertEquals( $user->id, intval( $dbUser->id ), "User's id must be stored correctly in the database" );
+            $this->assertEquals( $user->id, intval( $dbUser->id ), "findByUsername must find the correct user" );
         }
     }
 
