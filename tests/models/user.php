@@ -45,6 +45,44 @@
             $user->country = new Country( 1 );
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
+        public function testDuplicateUsername() {
+            $cought = false;
+            $user1 = $this->buildUser( 'pkakelas' );
+            try {
+                $user2 = $this->buildUser( 'pkakelas' );
+            }
+            catch ( ModelValidationException $e ) {
+                $cought = true;
+                $this->assertEquals(
+                    'username_used',
+                    $e->error,
+                    "If the username is used we must get an 'username_used' error"
+                );
+            }
+            $this->assertTrue( $cought, 'A ModelValidationException must be cought if we try to make a duplicate username' );
+        }
+        public function testDuplicateEmail() {
+            $cought = false;
+            $user1 = new User();
+            $user2 = new User();
+            $user1->username = 'pkakelas';
+            $user2->username = 'dionyziz';
+            $user1->password = $user2->password = 'secret1234';
+            $user1->email = $user2->email = 'duplicate@gmail.com';
+            $user1->save();
+            try {
+                $user2->save();
+            }
+            catch ( ModelValidationException $e ) {
+                $cought = true;
+                $this->assertEquals(
+                    'email_used',
+                    $e->error,
+                    "If the email is used we must get an 'email_used' error"
+                );
+            }
+            $this->assertTrue( $cought, 'A ModelValidationException must be cought if we try to make a duplicate email' );
+        }
     }
 
     return new UserTest();
