@@ -21,8 +21,8 @@
         public function testFindAll() {
             $this->insertCountries();
             $countriesArray = Country::findAll(); 
-            $this->assertTrue( is_array( $countriesArray ), 'Country::findall() did not return an array' );
-            $this->assertTrue( count( $countriesArray ) > 3, 'Country::findall() did not return the as many countries as it should' );
+            $this->assertTrue( is_array( $countriesArray ), 'Country::findAll() did not return an array of countries' );
+            $this->assertTrue( count( $countriesArray ) > 3, 'Country::findAll() did not return as many countries as it should' );
         } 
         public function testCountryConstruct() {
             $countries = $this->countries;
