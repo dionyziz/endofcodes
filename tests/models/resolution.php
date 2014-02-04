@@ -5,7 +5,7 @@
     include_once 'models/intent.php';
     include_once 'models/user.php';
 
-    class ResolutionTest extends UnitTestWithUser {
+    class ResolutionTest extends UnitTestWithFixtures {
         protected function buildGameWithUsers( $userCount ) {
             $game = new Game();
             for ( $i = 1; $i <= $userCount; ++$i ) {

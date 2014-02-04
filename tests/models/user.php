@@ -2,7 +2,7 @@
     include_once 'models/user.php';
     include_once 'models/country.php';
     
-    class UserTest extends UnitTestWithUser {
+    class UserTest extends UnitTestWithFixtures {
         public function testCreate() {
             $user = new User();
             $user->username = 'pkakelas';
@@ -41,8 +41,10 @@
             $this->assertEquals( 'pkakelas2@gmail.com', $user->email, 'Email must be the one associated during update' );
         }
         public function testSetCountry() {
+            $country = $this->buildCountry( 'Greece', 'GR' );
+
             $user = $this->buildUser( 'pkakelas' );
-            $user->country = new Country( 1 );
+            $user->country = $country;
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
     }
