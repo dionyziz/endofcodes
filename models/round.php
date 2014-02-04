@@ -1,11 +1,26 @@
 <?php
+    include_once 'models/creature.php';
     class Round extends ActiveRecordBase {
-        public $creatures;
+        public $creatures = array();
         public $id;
         public $game;
+        public $errors = array();
 
-        public function __construct( $game = false, $id = false ) {
-            if ( $id !== false && $game !== false ) {
+        public function __construct( $a = false, $b = false ) {
+            if ( $a instanceof Round ) {
+                // Clone from existing round: new Round( $oldRound )
+                $oldRound = $a;
+                $this->game = $oldRound->game;
+                $this->id = $oldRound->id + 1;
+                foreach ( $oldRound->creatures as $creature ) {
+                    $this->creatures[ $creature->id ] = clone $creature;
+                    $this->creatures[ $creature->id ]->round = $this;
+                }
+            }
+            else if ( $a !== false && $b !== false ) {
+                // find the whole round from database: new Round( $game, $id );
+                $game = $a;
+                $id = $b;
                 $this->exists = true;
                 $this->id = $id;
                 $this->game = $game;
@@ -30,9 +45,19 @@
                     $this->creatures[ $i ]->user = $user;
                 }
             }
-            else {
-                $this->creatures = array();
+        }
+
+        public function toJson() {
+            return json_encode( $this->jsonSerialize() );
+        }
+
+        public function jsonSerialize() {
+            $round = $this->id;
+            $map = array();
+            foreach ( $this->creatures as $creature ) {
+                $map[] = $creature->jsonSerialize();
             }
+            return compact( 'round', 'map' );
         }
 
         protected function create() {

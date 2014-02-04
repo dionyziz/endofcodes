@@ -3,8 +3,8 @@
         protected $environment = 'test';
 
         public function create( $name ) {
-            include_once 'tests/base.php';
-            include_once 'tests/testwithuser.php';
+            include_once 'models/test/base.php';
+            include_once 'models/test/withuser.php';
 
             $path = 'tests/' . $name . '.php';
             if ( !file_exists( $path ) ) {
@@ -17,6 +17,9 @@
         }
 
         public function createView() {
+            include_once 'models/test/base.php';
+
+            $tests = UnitTest::findAll();
             include_once 'views/testrun/create.php';
         }
     }

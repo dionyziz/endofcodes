@@ -6,7 +6,7 @@
     define( 'DIRECTION_WEST', 4 );
     define( 'ACTION_NONE', 0 );
     define( 'ACTION_MOVE', 1 );
-    define( 'ACTION_ATACK', 2 );
+    define( 'ACTION_ATTACK', 2 );
 
     function directionStringToConst( $direction ) {
         $directionMap = array(
@@ -40,7 +40,7 @@
         $actionMap = array(
             'NONE' => ACTION_NONE,
             'MOVE' => ACTION_MOVE,
-            'ATACK' => ACTION_ATACK
+            'ATTACK' => ACTION_ATTACK
         );
         if ( isset( $actionMap[ $action ] ) ) {
             return $actionMap[ $action ];
@@ -52,7 +52,7 @@
         $actionMap = array(
             ACTION_NONE => 'NONE',
             ACTION_MOVE => 'MOVE',
-            ACTION_ATACK => 'ATACK'
+            ACTION_ATTACK => 'ATTACK'
         );
         if ( isset( $actionMap[ $action ] ) ) {
             return $actionMap[ $action ];
@@ -65,7 +65,7 @@
         public $direction;
         public $creature;
 
-        public function __construct( $action, $direction ) {
+        public function __construct( $action = ACTION_NONE, $direction = DIRECTION_NONE ) {
             $this->direction = $direction;
             $this->action = $action;
         }
