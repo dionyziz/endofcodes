@@ -1,4 +1,5 @@
 <?php
+    include_once 'models/intent.php';
     class Creature extends ActiveRecordBase {
         public $game;
         public $user;
@@ -20,11 +21,36 @@
                 $this->locationx = $creature_info[ 'locationx' ];
                 $this->locationy = $creature_info[ 'locationy' ];
                 $this->hp = $creature_info[ 'hp' ];
+                $this->alive = $this->hp > 0;
                 $action = actionStringToConst( $creature_info[ 'action' ] );
                 $direction = directionStringToConst( $creature_info[ 'direction' ] );
                 $this->intent = new Intent( $action, $direction );
                 $this->intent->creature = $this;
             }
+            else {
+                $this->intent = new Intent();
+                $this->alive = true;
+            }
+        }
+
+        public function toJson() {
+            return json_encode( $this->jsonSerialize() );
+        }
+
+        public function jsonSerialize() {
+            $hp = $this->hp;
+            $x = $this->locationx;
+            $y = $this->locationy;
+            $userid = $this->user->id;
+            $creatureid = $this->id;
+
+            return compact( 'creatureid', 'userid', 'x', 'y', 'hp' );
+        }
+
+        public function kill() {
+            $this->alive = false;
+            $this->intent = new Intent();
+            $this->hp = 0;
         }
 
         public function validate() {
