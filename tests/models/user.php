@@ -10,7 +10,7 @@
             $user->email = 'pkakelas@gmail.com';
             $user->save();
             $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
-            $this->assertEquals( true, $passwordSuccess, 'Password must be the one associated during creation' );
+            $this->assertTrue( $passwordSuccess, 'Password must be the one associated during creation' );
             $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
         }
@@ -32,7 +32,7 @@
             $user->password = 'newsecret1234';
             $user->save();
             $success = $user->authenticatesWithPassword( 'newsecret1234' );
-            $this->assertEquals( true, $success, 'Password must be the one associated during update' );
+            $this->assertTrue( $success, 'Password must be the one associated during update' );
         }
         public function testEmailChange() {
             $user = $this->buildUser( 'pkakelas' );
