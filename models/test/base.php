@@ -109,9 +109,6 @@
         protected function truncateDb() {
             $tables = dbListTables();
             foreach ( $tables as $table ) {
-                if ( $table === 'countries' ) {
-                    continue;
-                }
                 db( 'TRUNCATE TABLE ' . $table );
             }
         }

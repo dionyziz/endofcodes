@@ -46,7 +46,12 @@
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
-                $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                try {
+                    $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
