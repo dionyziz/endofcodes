@@ -150,7 +150,7 @@ The Bot API is a RESTful HTTP API that the bots use to communicate with the grad
 
 The bots run on the programmers’ machines. This is intentional, allowing programmers to cooperate behind-the-scenes, scale their hardware, use their programming language of choice, or compete using methods other than simply improving their artificial intelligence code.
 
-Each bot has a root end-point which is an http or https URL and can be any valid domain or IP address, including a custom port, and a custom request URI portion. That URL is configured by the players in the web interface of the game and is referred to as the **bot base**. HTTPS URLs must use correct PKI certificates, or will be ignored. If a bot is configured with an https bot base, the grader will only use https and not fallback to http. The current bot base will be denoted as \{\{botbase\}\} in this document. The botbase must not end in “/”. A “/” will be added at the end of bot base for the request URI portion, so an additional slash is redundant.
+Each bot has a root end-point which is an http or https URL and can be any valid domain or IP address, including a custom port, and a custom request URI portion. That URL is configured by the players in the web interface of the game and is referred to as the **bot base**. HTTPS URLs must use correct PKI certificates, or will be ignored. If a bot is configured with an https bot base, the grader will only use https and not fallback to http. The current bot base will be denoted as `{{botbase}}` in this document. The botbase must not end in “/”. A “/” will be added at the end of bot base for the request URI portion, so an additional slash is redundant.
 
 Note that it is the grader that is making HTTP requests to each individual bot, not the other way around. The grader is the HTTP client and the bots are HTTP servers.
 
@@ -199,70 +199,78 @@ The following general errors are logged and reported during the game:
 * The bot returns valid JSON, but indicates that an error has occurred in the JSON using the `error` key.
 * The bot returns valid JSON and keys, but the value is of inappropriate type. For example, an integer may be returned instead of an array.
 
-The request may also contain JSON in the POST data. This is true for any non-scalar data structure sent from the grader to the bots. These pieces of JSON are again dictionaries, which contain keys specific to the particular request.
+The request can also contain JSON in the POST data. This is true for any non-scalar data structure sent from the grader to the bots. These pieces of JSON are again dictionaries, which contain keys specific to the particular request.
 
-Each bot must be aware of the username of the programmer which it is configured to play for. This user id is displayed in the bot configuration page, along with the api_key.
+Each bot must be aware of the username of the programmer which it is configured to play for. This `userid` is displayed in the bot configuration page, along with the `api_key`.
 
 ### Initiation ###
-Before the initiation phase, the grader hits an HTTP endpoint to determine whether the bot is running. While players should be running their bots constantly, we ensure that dead bots are not included in new games. To do this, the grader sends a GET request to the following:
 
-{{botbase}}/bot
+Before the initiation phase, the grader hits an HTTP endpoint to determine whether each bot is running. While players should be running their bots constantly, we ensure that unaccessible bots are not included in new games. To do this, the grader sends a GET request to the following:
 
-To this, if the bot is ready to play, it must respond with a JSON body that contains the following keys:
-botname: A string, the name of the bot. The botname is up to the programmer.
-version: A string, the version of the bot. The version of the bot is up to the programmer.
-username: A string, the username of the programmer for which the bot is playing
+    {{botbase}}/bot
 
-At this stage, the grader will verify that the username associated with the bot base queried matches the username returned by the bot, and register the bot for the game if so. Otherwise, a username mismatch will be reported.
+To this, if the bot is ready to play, it must respond with a dictionary of the following keys:
 
-When all bots are queried for availability, the grader performs the initiation phase of the game and sends a create request to the following URL:
+* `botname`: String. The name of the bot. The `botname` is up to the programmer.
+* `version`: String. The version of the bot. The `version` of the bot is up to the programmer.
+* `username`: String. The `username` of the programmer for which the bot is playing
 
-{{botbase}}/game
+At this stage, the grader will verify that the username associated with the bot base queried matches the `username` returned by the bot, and register the bot for the game if so. Otherwise, a username mismatch will be reported.
+
+After all bots are queried for availability, the grader performs the initiation phase of the game and sends a create request to the following URL:
+
+    {{botbase}}/game
 
 This request contains the following:
-gameid: Integer; a unique positive integer identifier for the game; this integer must not change during the game.
+
+* `gameid`: Integer; a unique positive integer identifier for the game; this integer must not change during the game.
 players: Array; the list of player objects of the players who will play in the game.
-W: Integer.
-H: Integer.
-M: Integer.
-MAX_HP: Integer.
+* `W`: Integer.
+* `H`: Integer.
+* `M`: Integer.
+* `MAX_HP`: Integer.
 
 A player object is a dictionary with the following keys:
-username: The username of the player
-userid: A unique integer identifying a player across games; this integer must not change from game to game. It can be used by players to deduce the strategy of opponents across games.
 
-The bot must respond with an empty JSON array to this request. Subsequently, the grader generates the genesis round and requests intent from all bots. If the bot doesn’t respond with an empty JSON, this is considered an error and is reported.
+* `username`: String. The `username` of the player.
+* `userid`: Integer. The `userid` of the player.
+
+The bot must respond with an empty JSON array to this request. Subsequently, the grader generates the genesis round and requests intent from all bots. If the bot doesn’t respond with an empty JSON, this is considered an error and is reported. Only bots that respond correctly are included in the game.
 
 ### Round ###
 
 When each round is completed, the grader collects the round configuration and communicates it to each bot. The bot responds with the intent for the next round. This request is a create request sent to the following URL:
 
-{{botbase}}/game/{{gameid}}/round
+    {{botbase}}/game/{{gameid}}/round
 
-Where {{gameid}} indicates the gameid of the game as it was communicated during the initiation phase.
+Where `{{gameid}}` indicates the gameid of the game as it was communicated during the initiation phase.
 
 The HTTP POST request contains the following variables:
-round: Integer; the number of the round; 0 for genesis.
-map: Array; a list of creature objects, as seen during the round that was just completed.
+
+* `round`: Integer. The number of the round; 0 for genesis.
+* `map`: Array. A list of creature objects, as seen during the round that was just completed.
 
 The map array is an array that contains a list of creatures. Each creature is a dictionary with the following keys:
-creatureid: Integer; the id of the creature; must be unique across creatures within an individual game
-userid: Integer; the userid of the owner of the creature
-x: The x coordinate of the creature’s location
-y: The y coordinate of the creature’s location
-hp: Integer; current hit-points of creature
 
-Dead creatures are included in the list of creatures, but with their hp set to 0. The location of a dead creature is set to the location where it died. However, keep in mind that the particular location may be reused by other creatures.
+* `creatureid`: Integer. The `creatureid` of the creature.
+* `userid`: Integer. The `userid` of the owner of the creature.
+* `x`: Integer. The `x` coordinate of the creature’s location.
+* `y`: Integer. The `y` coordinate of the creature’s location.
+* `hp`: Integer; current hit-points of creature
+
+Dead creatures are included in the list of creatures, but with their `hp` set to `0`. The location of a dead creature is set to the location where it died. However, keep in mind that the particular location may be reused by other creatures.
 
 Note that all creatures of a player may die spontaneously, even without being attacked, if the grader decides that a particular bot is misbehaving.
 
 The bot subsequently responds to the request with a JSON indicating intent and containing the following keys:
-intent: Array; a list of intent objects
+
+* `intent`: Array. A list of intent objects.
 
 An intent object contains the following keys:
-creatureid: Integer; the id of the creature the player wishes to signify an intent for
-desire: String; either the string “move” or the string “attack”.
-direction: String, one of “north”, “east”, “south”, or “west”.
+
+* `creatureid`: Integer. The `creatureid` of the creature the player wishes to signify an intent for.
+* `desire`: String. Either the string `move` or the string `attack`.
+* `direction`: String. One of `north`, `east`, `south`, or `west`.
 
 No entries need to be sent for idle intents. The grader subsequently accepts the commit and performs the resolution phase to evaluate the configuration of the next round and makes an additional round create request until the game is completed.
 
@@ -275,10 +283,10 @@ The bot must respond to the last round with an empty array of intents. Any respo
 ## Web interface ##
 The game is mainly accessible through a web interface. This web interface consists of the following main pages:
 
-Ranking page
-Game history page
-Profile page
-Settings page
+* Ranking page
+* Game history page
+* Profile page
+* Settings page
 
 The purpose and structure of all these pages is described below.
 
@@ -288,7 +296,7 @@ Every page follows a general layout which contains some common elements for all 
 
 On the top left, there is the logo of End of Codes. Clicking on it takes one to the Ranking page.
 
-On the top right, the user menu appears. If the user is logged out, the text “Log in or Register” appears. “Log in” is a link to the login page and “Register” is a link to the register page. If the user is logged in, the avatar and username of the user and an arrow pointing downwards appear. These are links to the user menu, a drop-down menu which contains a larger view of the user’s avatar, their name, a button to log out, and a link to the Settings page.
+On the top right, the user menu appears. If the user is logged out, the text “Log in or Register” appears. “Log in” is a link to the login page and “Register” is a link to the register page. If the user is logged in, the avatar and username of the user and an arrow pointing downwards appear. These are links to the user drop-down, a drop-down menu which contains a larger view of the user’s avatar, their name, a button to log out, and a link to the Settings page.
 
 At the bottom of the page appear a link to the development blog labelled “Blog”, a link to the project’s GitHub labelled “Contribute”, and a link to the game rules labelled “Rules”.
 
@@ -300,16 +308,18 @@ Occasionally, some specific pages need to communicate to the user that a specifi
 
 #### Dates and times ####
 Dates and times are displayed in relative format in the past or in the future. Relative date formats follow the following rules:
-If the time is within 10 seconds of the current time, the relative time is reported as “now”
-If the time is in the past then the time is reported as:
-“X seconds ago”, if the event took place less than a minute ago
-“X minutes ago”, similarly if the event took place less than an hour ago
-“X hours ago”, similarly
-“X days ago”
-“X weeks ago”
-“X months ago”
-“X years ago”
-If the time is in the future, then the time is reported similarly to the past, but “in X seconds”, “in X minutes” etc.
+
+* If the time is within 10 seconds of the current time, the relative time is reported as “now”
+* If the time is in the past then the time is reported as:
+    * “X seconds ago”, if the event took place less than a minute ago
+    * “X minutes ago”, similarly if the event took place less than an hour ago
+    * “X hours ago”, similarly
+    * “X days ago”
+    * “X weeks ago”
+    * “X months ago”
+    * “X years ago”
+
+If the time is in the future, then the time is reported similarly to the past, but “in X seconds”, “in X minutes” etc. instead of "X seconds ago".
 
 #### Modals ####
 All modal windows appear on top of the existing application, with a black tint covering the rest of the application in the background. An X button at the top right of the window allows dismissing the modal window and cancelling the action in question.
@@ -514,3 +524,4 @@ If you have chosen to move, then move at a valid diretion uniformly at random.
 
 The strategy illustrates the basic use of the API, including attacking, moving, and idling.
 
+Footnotes!
