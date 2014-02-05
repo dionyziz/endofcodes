@@ -11,7 +11,14 @@
             catch ( ModelNotFoundException $e ) {
                 go( 'forgotPasswordRequest', 'create', array( 'username_not_exists' => true ) );
             }
-            $user->passwordRevoke(); 
+            try {
+                $link = $user->passwordRevoke();
+            }
+            catch ( ModelNotFoundException $e  ) {
+                echo 'bad';
+            }
+            include 'views/forgotPasswordLink.php'; 
+            
         }
         public function view() {
         }

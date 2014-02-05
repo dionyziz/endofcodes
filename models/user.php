@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' );
+        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotPasswordToken' );
         public $username;
         public $password;
         public $email;
@@ -129,6 +129,7 @@
             $email = $this->email;
             $dob = $this->dob;
             $sessionid = $this->sessionid;
+            $forgotPasswordToken = $this->forgotPasswordToken;
             if ( isset( $this->country ) ) {
                 $countryid = $this->country->id;
             }
@@ -144,7 +145,7 @@
             try {
                 $res = dbUpdate(
                     'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid" ),
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotPasswordToken" ),
                     compact( "id" )
                 );
             }
@@ -179,10 +180,16 @@
             $this->save();
         }
 
-        public function revokePassword() {
+        public function passwordRevoke() {
             $value = openssl_random_pseudo_bytes( 32 );
             $value = base64_encode( $value );
-
+            $this->generateSessionId();
+            $this->forgotPasswordToken = $value;
+            $this->save();
+            $email = $this->email;
+            $link = "localhost/endofcodes/index.php?resource=forgotPasswordRequest&method=create&email=$email&token=$value";
+            mail( $this->email, 'testMail', "your random link is $link" );
+            return $link;
         }
     }
 ?>
