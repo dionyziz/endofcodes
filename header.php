@@ -8,7 +8,7 @@
     Redirects to a given URL or resource:
 
     go( "http://www.google.com" ); // full URL
-    go( "user", "view", array( "example" => "argument" ) ); // resource & method
+    go( "user", "view", [ "example" => "argument" ] ); // resource & method
     go(); // home page
     */
     function go( $resource_or_url = false, $method = false, $args = [] ) {

@@ -5,6 +5,7 @@
     define( 'MAX_MULTIPLIER', 4 );
     define( 'MIN_HP', 100 );
     define( 'MAX_HP', 199 );
+
     class Game extends ActiveRecordBase {
         public $id;
         public $created;
@@ -176,7 +177,7 @@
             $H = $this->height;
             $M = $this->creaturesPerPlayer;
             $MAX_HP = $this->maxHp;
-            $players = array();
+            $players = [];
             foreach ( $this->users as $user ) {
                 $players[] = $user->jsonSerialize();
             }
