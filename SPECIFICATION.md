@@ -6,93 +6,96 @@ Dionysis Zindros <dionyziz@gmail.com>
 
 ## Scope ##
 
-End of Codes is a programming game. The project’s goal is to make a game targetting programmers in which each player has to use code to program a strategy for their bot to try and eliminate other players. The game aims to be a competitive programming platform in which programmers can compete for good rankings.
+**End of Codes** is a programming game. The project’s goal is to make a game targetting programmers in which each player has to use code to program a strategy for their bot to try and eliminate other players. The game aims to be a competitive programming platform in which programmers can compete for better rankings.
 
 This specification explains the scope of this project and the design details of the application.
  
-It will also be used as a base for the development of the project.
+It will also be used as a basis for the development of the project.
 
 ## Engineering team ##
-The project will be implemented by an engineering team led by Dionysis Zindros, software engineer at Twitter, and two programmers Vitalis Salis and Dimitris Lamprinos, software engineering students.
+The project will be implemented by an engineering team led by Dionysis Zindros, and two programmers Vitalis Salis and Dimitris Lamprinos, software engineering students. As an open-source project, we are open to contributors, encourage pull requests, and engage in dialogue with the community.
 
 ## Workflow ##
-The game consists of two different end-points. The core of the game is the grader end-point which allows players to actually play the game through a RESTful API. The game also exhibits a web app in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
+The game consists of two different end-points. The core of the game is the **grader** end-point which allows players to actually play the game through a RESTful API. The game also exhibits a **web app** in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
 
 ## Rules of the game ##
-API version 0.1.0
+API version **0.1.0**
 
 ### Overview ###
-The game itself is a turn-based strategy game. In each game, all players play against all others, in a survival-of-the-fittest manner.  There is one game taking place every 24 hours in which all players participate. The purpose of the game is to be the last-player-standing, while eliminating all other players. 
+The game itself is a turn-based strategy game. In each game, all players play against all others, in a survival-of-the-fittest manner. There is one game taking place every 24 hours in which all players participate. The purpose of the game is to be the last-player-standing, while eliminating all other players. 
 
-Each game is associated with a unique gameid. The gameid is a positive integer which is kept constant as the game progresses. It is used as an identifier for the game and to distinguish between games.
+Each game is associated with a unique `gameid`. The `gameid` is a positive integer which is kept constant as the game progresses. It is used as an identifier for the game and to distinguish between games.
 
 ### Game map ###
-Each game is played on a 2D WxH grid where W and H are integers. The coordinates of the game are two zero-based integers in the form (x, y).
+Each game is played on a 2D `W`x`H` grid where `W` and `H` are integers. The coordinates of the game are two zero-based integers in the form `(x, y)`.
 
-A pair (x, y) is called a map location if:
+A pair `(x, y)` is called a **map location** if:
 
-x, y ∈ ℕ
-0 ≤ x < W
-0 ≤ y < H
+    x, y ∈ ℕ
+    0 ≤ x < W
+    0 ≤ y < H
+    
+A map location `(x’, y’)` is called a **neighbouring map location** to `(x, y)` if `(x’, y’)` is a map location and:
 
-A map location (x’, y’) is called a neighbouring map location to (x, y) if (x’, y’) is a map location and:
-
-(x’ = x ∧ |y’ - y| = 1) ∨ (y’ = y ∧ |x’ - x| = 1)
+    (x’ = x ∧ |y’ - y| = 1) ∨ (y’ = y ∧ |x’ - x| = 1)
 
 ### Players ###
-Players play by programming their bots to play for their sake; human players do not interact with the game directly. The games are fast-paced, as they are played by computers. This is what disallows human players from playing directly. All players play in each game. We will use N to denote the number of players participating in the current game.
+
+Players play by programming their bots to play for their sake; human players do not interact with the game directly. The games are fast-paced, as they are played by computers. This is what disallows human players from playing directly. All players play in each game. We will use `N` to denote the number of players participating in the current game.
 
 The players who play in a game are those who have correctly configured their bots and their bots are available to play.
 
-An opponent is any player different from the player in question.
+An **opponent** is any player different from the player in question.
 
-Each player has a unique userid which identifies them. This is a positive integer uniquely associated with every player, which does not change from game to game. Other players can utilize the userid to identify the player and deduce their strategy from game to game in order to be able to adapt to it.
+Each player has a unique `userid` which identifies them. This is a positive integer uniquely associated with every player, which does not change from game to game. Other players can utilize the `userid` to identify the player and deduce their strategy from game to game in order to be able to adapt to it.
 
 ### Creatures ###
-Each player has, in their ownership, a set of M creatures, a number which is the same for all players when the game begins. The game board is filled with creatures. Each creature belongs to exactly one player and can be alive or dead.
+Each player has, in their ownership, a set of `M` **creatures**, a number which is the same for all players when the game begins. The game board is filled with creatures. Each creature belongs to exactly one player and can be **alive** or **dead**.
 
 Each alive creature exists in a specific map location.
 
-Only one alive creature can exist in a particular location. Each particular location is either empty (no creatures are on it), or exactly one creature exists on it. The property that at most one creature may exist on any map location is called consistency.
+Only one alive creature can exist in a particular location. Each particular location is either **empty** (no creatures are on it), or exactly one creature exists on it. The property that at most one creature may exist on any map location is called **consistency**.
 
 Alive creatures can interact with other creatures.
 
-Each creature is associated with a creatureid, a unique positive integer that identifies the creature within the current game. Creatureids may repeat from game to game, but must be unique during a particular game. creatureids allow bots to identify creatures from round to round; a creature retains its creatureid from a round to the next, so that it can be tracked.
+Each creature is associated with a `creatureid`, a unique positive integer that identifies the creature within the current game. `creatureid`s may repeat from game to game, but must be unique during a particular game. `creatureid`s allow bots to identify creatures from round to round; a creature retains its `creatureid` from a round to the next, so that it can be tracked. Creatures in a game are numbered sequentally from 1 up to `N * M`.
 
 ### Rounds ###
 teger, until the final round, which determines the result of the game. Rounds do not have duration; they are instances of the world in a specific configuration.
 The game is round-based. The game begins with round 0, the genesis round. Each round is numbered after a next consequent in
 
 ### Hit points ###
-Creatures have hit points. A creature’s hit points is a non-negative number from 0 up to a maximum number MAX_HP. Creatures with positive hit points are alive. Creatures with 0 hit points are dead. Once a creature is dead, it cannot be revived. A dead creature’s position does not matter. While alive creatures reserve their position and only one alive creature exists in a certain location, dead creatures do not reserve a position; they can be imagined to exist beyond the game board.
+Creatures have **hit points**. A creature’s hit points is a non-negative number from 0 up to a maximum number `MAX_HP`. Creatures with positive hit points are alive. Creatures with 0 hit points are dead. Once a creature is dead, it cannot be revived. A dead creature’s position does not matter. While alive creatures reserve their position and only one alive creature exists in a certain location, dead creatures do not reserve a position; they can be imagined to exist beyond the game board.
 
 ### Grader ###
-The game is overseen by a program called grader. The grader sets the game up, communicates with the bots, determines the configuration of each round, determines the outcome of the game, and tears down the game. Furthermore, the grader is responsible for enforcing game rules. As the grader is the de facto rules arbitrator, the source code of the grader is open source and can be used as a reference to the game rules. The de jure rules of the documentation are only incidental and derived from the grader’s source code, which is the normative source.
+The game is overseen by a program called **grader**. The grader sets the game up, communicates with the bots, determines the configuration of each round, determines the outcome of the game, and tears down the game. Furthermore, the grader is responsible for enforcing game rules. As the grader is the de facto rules arbitrator, the source code of the grader is open source and can be used as a reference to the game rules. The de jure rules of the documentation are only incidental and derived from the grader’s source code, which is the normative source.
 
 ### Initiation ###
-The grader starts the game through the initiation phase. In the initiation phase, the game attributes are decided by the grader. A random W, H, MAX_HP and M are decided. The following inequality must hold in order to ensure there is enough whitespace (set of empty coordinates) in the game board:
+The grader starts the game through the **initiation** phase. In the initiation phase, the game attributes are decided by the grader. A random `W`, `H`, `MAX_HP` and `M` are decided. The following inequality must hold in order to ensure there is enough whitespace (set of empty coordinates) in the game board:
 
-WH > 3NM
+    WH > 3NM
 
-The number N is predetermined. It is equal to the number of bots that are readily available to play. Let “α ⇜ A” denote that α is an indepdendently uniformly randomly chosen element from the set A.
+The number `N` is predetermined. It is equal to the number of bots that are readily available to play. Let “`α ⇜ A`” denote that `α` is an indepdendently uniformly randomly chosen element from the set `A`.
 
-The numbers M, W, H, MAX_HP are determined as follows:
+The numbers `M`, `W`, `H`, `MAX_HP` are determined as follows:
 
-M ⇜ [100, 200[ ∩ ℕ
-W ⇜ ]3NM, 4NM[ ∩ ℕ
-H ⇜ ]3NM, 4NM[ ∩ ℕ
-MAX_HP ⇜ [100, 200[ ∩ ℕ
+    M ⇜ [100, 200[ ∩ ℕ
+    W ⇜ ]3NM, 4NM[ ∩ ℕ
+    H ⇜ ]3NM, 4NM[ ∩ ℕ
+    MAX_HP ⇜ [100, 200[ ∩ ℕ
 
-MAX_HP is the same for all creatures. The initial HP for all creatures is set to MAX_HP.
+`MAX_HP` is the same for all creatures. The initial `HP` for all creatures is set to `MAX_HP`.
 
-Subsequently, the grader automatically creates the genesis round of the game. This is done by creating M creatures per bot and placing them on the map in random locations as follows. For each player i from 1 to N, for each creature j from 1 to M, the creature j of player i is positioned uniformly at random at an x coordinate from 0 to W - 1 and at a y coordinate from 0 to H - 1, as long at that coordinate is not already in use; if the coordinate is already in use, a different coordinate is chosen at random until an empty one is found.
+Subsequently, the grader automatically creates the **genesis** round of the game. This is done by creating `M` creatures per bot and placing them on the map in random locations as follows. For each player `i` from `1` to `N`, for each creature `j` from `1` to `M`, the creature `j` of player `i` is positioned uniformly at random at an `x` coordinate from `0` to `W - 1` and at a `y` coordinate from `0` to `H - 1`, as long at that coordinate is not already in use; if the coordinate is already in use, a different coordinate is chosen at random until an empty one is found.
 
 The configuration of the world on the genesis round is predetermined by the grader.
 
 ### Visibility ###
+
 The grader shares the full state of the world with all players at the completion of each round. Therefore, each bot is able to decide what to do based on the current state of the world. There is no fog of war.
 
 ### Intents ###
+
 Upon the completion of every round, and as long as there are more than two creatures belonging to different players alive, the grader informs each player about the current full state of the world and inquires each player about what they want to do. This phase is called the commit phase.
 
 Each player decides what they want to do with each of their alive creatures. This signifies an intent for each alive creature, for each player. Players are not able to specify intents for dead creatures. The intent can be one of the following:
