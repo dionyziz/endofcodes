@@ -46,7 +46,12 @@
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
-                $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid' ], compact( "id" ) );
+                try {
+                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid' ], compact( "id" ) );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
@@ -57,7 +62,7 @@
             }
         }
 
-        protected function validate() {
+        protected function onSave() {
             global $config;
 
             if ( empty( $this->username ) ) {
@@ -170,6 +175,16 @@
         public function renewSessionId() {
             $this->generateSessionId();
             $this->save();
+        }
+
+        public function toJson() {
+            return json_encode( $this->jsonSerialize() );
+        }
+
+        public function jsonSerialize() {
+            $username = $this->username;
+            $userid = $this->id;
+            return compact( 'username', 'userid' );
         }
     }
 ?>
