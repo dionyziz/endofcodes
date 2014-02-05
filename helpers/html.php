@@ -150,9 +150,9 @@
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
                 }
-                ?>action="index.php?resource=<?php
+                ?>action="<?php
                     echo htmlspecialchars( $this->resource );
-                ?>&amp;method=<?php
+                ?>/<?php
                     echo htmlspecialchars( $this->method );
                 ?>" method="<?php
                     echo htmlspecialchars( $this->formMethod );
