@@ -60,6 +60,22 @@
             return compact( 'round', 'map' );
         }
 
+        public function sendJson() {
+            $json = [ $this->toJson() ];
+            $outputs = [];
+            foreach ( $this->game->users as $user ) {
+                $ch = curl_init();
+                curl_setopt( $ch, CURLOPT_URL, $user->boturl );
+                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+                curl_setopt( $ch, CURLOPT_POST, 1 );
+                curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
+                $output = curl_exec( $ch );
+                $outputs[] = $output;
+                curl_close( $ch );
+            }
+            return $outputs;
+        }
+
         protected function create() {
             $gameid = $this->game->id;
             $roundid = $this->id;

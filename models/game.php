@@ -48,6 +48,8 @@
 
         public function genesis() {
             $this->rounds[ 0 ] = new Round();
+            $this->rounds[ 0 ]->game = $this;
+            $this->rounds[ 0 ]->id = 0;
             $id = 0;
             foreach ( $this->users as $user ) {
                 for ( $j = 0; $j < $this->creaturesPerPlayer; ++$j, ++$id ) {
@@ -182,6 +184,23 @@
                 $players[] = $user->jsonSerialize();
             }
             return compact( 'gameid', 'W', 'H', 'M', 'MAX_HP', 'players' );
+        }
+
+
+        public function sendJson() {
+            $json = [ $this->toJson() ];
+            $outputs = [];
+            foreach ( $this->users as $user ) {
+                $ch = curl_init();
+                curl_setopt( $ch, CURLOPT_URL, $user->boturl );
+                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+                curl_setopt( $ch, CURLOPT_POST, 1 );
+                curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
+                $output = curl_exec( $ch );
+                $outputs[] = $output;
+                curl_close( $ch );
+            }
+            return $outputs;
         }
     }
 

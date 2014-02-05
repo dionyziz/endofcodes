@@ -19,14 +19,6 @@
                 '3NM < WH must be true' 
             );
         }
-        protected function buildGame() {
-            $game = new Game();
-            for ( $i = 1; $i <= 4; ++$i ) {
-                $game->users[] = $this->buildUser( $i );
-            }
-            $game->save();
-            return $game;
-        }
         public function testInitiation() {
             $game = $this->buildGame();
             $dbGame = new Game( 1 );
@@ -109,6 +101,23 @@
             $this->assertEquals( 2, $data->players[ 1 ]->userid, 'all players must exist in exported JSON' );
             $this->assertEquals( 3, $data->players[ 2 ]->userid, 'all players must exist in exported JSON' );
             $this->assertEquals( 4, $data->players[ 3 ]->userid, 'all players must exist in exported JSON' );
+        }
+        public function testSendJson() {
+            $game = $this->buildGame();
+            $game->genesis();
+
+            $this->assertTrue( method_exists( $game, "sendJson" ), 'Game object should export a "sendJson" function' );
+
+            $json = $game->toJson();
+            $outputs = $game->sendJson();
+
+            $this->assertTrue( isset( $outputs ), 'sendJson must return the json it sent' );
+            $this->assertTrue( is_array( $outputs ), 'sendJson must return an array' );
+            $this->assertEquals( 4, count( $outputs ), 'JSON must be sent to all users' );
+
+            foreach ( $outputs as $output ) {
+                $this->assertEquals( $json, $output, 'Valid json must be send via "sendJson" function from each user' );
+            }
         }
     }
 
