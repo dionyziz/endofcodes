@@ -4,7 +4,7 @@
 
         public function create( $name ) {
             include_once 'models/test/base.php';
-            include_once 'models/test/withuser.php';
+            include_once 'models/test/withfixtures.php';
 
             $path = 'tests/' . $name . '.php';
             if ( !file_exists( $path ) ) {

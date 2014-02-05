@@ -62,7 +62,7 @@
             }
         }
 
-        protected function validate() {
+        protected function onSave() {
             global $config;
 
             if ( empty( $this->username ) ) {
@@ -86,6 +86,25 @@
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
                 throw new ModelValidationException( 'email_invalid' );
             }
+
+            if ( isset( $this->password ) ) {
+                $array = encrypt( $this->password );
+                $this->password = $array[ 'hash' ];
+                $this->salt = base64_encode( $array[ 'salt' ] );
+            }
+
+            if ( isset( $this->country ) ) {
+                $this->countryid = $this->country->id;
+            }
+            else {
+                $this->countryid = 0;
+            }
+            if ( isset( $this->image ) ) {
+                $this->imageid = $this->image->id;
+            }
+            else {
+                $this->imageid = 0;
+            }
         }
 
         protected function onBeforeCreate() {
@@ -96,20 +115,11 @@
                 $day = $month = $year = 0;
             }
             $dob = $this->dob = $year . '-' . $month . '-' . $day; 
-            $array = encrypt( $this->password );
-            $this->password = $array[ 'hash' ];
-            $this->salt = $array[ 'salt' ];
             $this->avatarid = 0;
             $this->generateSessionId();
-            if ( isset( $this->country ) ) {
-                $this->countryid = $this->country->id;
-            }
-            else {
-                $this->countryid = 0;
-            }
         }
 
-        protected function onCreateError() {
+        protected function onCreateError( $e ) {
             try {
                 $other_user = User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );
@@ -121,26 +131,14 @@
 
         protected function update() {
             $id = $this->id;
-            if ( isset( $this->password ) ) {
-                $array = encrypt( $this->password );
-                $this->password = $password = $array[ 'hash' ];
-                $this->salt = $salt = $array[ 'salt' ];
-            }
             $email = $this->email;
             $dob = $this->dob;
             $sessionid = $this->sessionid;
-            if ( isset( $this->country ) ) {
-                $countryid = $this->country->id;
-            }
-            else {
-                $countryid = 0;
-            }
-            if ( isset( $this->image ) ) {
-                $avatarid = $this->image->id;
-            }
-            else {
-                $avatarid = 0;
-            }
+            $countryid = $this->countryid;
+            $avatarid = $this->imageid;
+            $password = $this->password;
+            $salt = $this->salt;
+
             try {
                 $res = dbUpdate(
                     'users',
@@ -167,7 +165,7 @@
                 compact( "username" )
             );
             if ( !empty( $row ) ) {
-                if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
+                if ( $row[ 'password' ] == hashing( $password, base64_decode( $row[ 'salt' ] ) ) ) {
                     return true;
                 }
             }

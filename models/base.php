@@ -27,7 +27,7 @@
                 }
             }
             catch ( DBException $e ) {
-                $this->onCreateError();
+                $this->onCreateError( $e );
             }
             $this->exists = true;
             $this->onCreate();
@@ -35,11 +35,11 @@
 
         protected function onBeforeCreate() {} // override me
         protected function onCreate() {} // override me
-        protected function onCreateError() {} // override me
-        protected function validate() {} // override me
+        protected function onCreateError( $e ) {} // override me
+        protected function onSave() {} // override me
 
         public function save() {
-            $this->validate();
+            $this->onSave();
             if ( $this->exists ) {
                 $this->update();
             }

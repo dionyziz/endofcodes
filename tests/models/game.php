@@ -5,7 +5,7 @@
     include_once 'models/intent.php';
     include_once 'models/user.php';
 
-    class GameTest extends UnitTestWithUser {
+    class GameTest extends UnitTestWithFixtures {
         public function testInit() {
             $game = new Game();
             for ( $i = 1; $i <= 4; ++$i ) {

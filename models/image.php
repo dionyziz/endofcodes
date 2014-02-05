@@ -28,7 +28,7 @@
             }
         }
 
-        protected function validate() {
+        protected function onSave() {
             $this->ext = Extention::get( $this->name );
             $this->name = basename( $this->name );
             if ( !Extention::valid( $this->ext ) ) {

@@ -1,6 +1,7 @@
 <?php
     include_once 'models/round.php';
-    class RoundTest extends UnitTestWithUser {
+
+    class RoundTest extends UnitTestWithFixtures {
         protected function buildRound() {
             $round = new Round();
             $round->id = 1;
