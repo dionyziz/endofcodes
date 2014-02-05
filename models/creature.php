@@ -1,5 +1,6 @@
 <?php
     include_once 'models/intent.php';
+
     class Creature extends ActiveRecordBase {
         public $game;
         public $user;
@@ -53,7 +54,7 @@
             $this->hp = 0;
         }
 
-        public function validate() {
+        public function onSave() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
             }

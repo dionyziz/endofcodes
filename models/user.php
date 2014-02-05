@@ -62,7 +62,7 @@
             }
         }
 
-        protected function validate() {
+        protected function onSave() {
             global $config;
 
             if ( empty( $this->username ) ) {
