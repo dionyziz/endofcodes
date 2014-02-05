@@ -12,10 +12,10 @@
         public $hp;
         protected $gameid;
         protected $userid;
-        protected $attributes = array( 'id', 'gameid', 'userid' );
+        protected $attributes = [ 'id', 'gameid', 'userid' ];
         protected $tableName = 'creatures';
 
-        public function __construct( $creature_info = array() ) {
+        public function __construct( $creature_info = [] ) {
             if ( !empty( $creature_info ) ) {
                 $this->exists = true;
                 $this->id = $creature_info[ 'creatureid' ];

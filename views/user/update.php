@@ -30,9 +30,9 @@
         $self->createLabel( 'password_repeat', 'Repeat' );
         $self->createInput( 'password', 'password_repeat', 'password_repeat' );
         ?><p>Change country</p><?php
-        $countries_select_array = array( array( 'content' => 'Select Country' ) );
+        $countries_select_array = [ [ 'content' => 'Select Country' ] ];
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = array( 'value' => $key + 1, 'content' => $country[ 'name' ] );
+            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country[ 'name' ] ];
         }
         $self->createSelect( 'countryid', '', $countries_select_array );
         $self->createInput( 'submit', '', '', 'Save settings' );

@@ -5,34 +5,35 @@
     define( 'MAX_MULTIPLIER', 4 );
     define( 'MIN_HP', 100 );
     define( 'MAX_HP', 199 );
+
     class Game extends ActiveRecordBase {
         public $id;
         public $created;
         public $width;
         public $height;
-        public $rounds = array();
+        public $rounds = [];
         public $users;
         public $creaturesPerPlayer;
         public $maxHp;
-        public $grid = array( array() );
+        public $grid = [ [] ];
         protected $tableName = 'games';
-        protected $attributes = array( 'width', 'height', 'created' );
+        protected $attributes = [ 'width', 'height', 'created' ];
 
         public function __construct( $id = false ) {
             if ( $id ) {
                 $this->exists = true;
-                $game_info = dbSelectOne( 'games', array( 'created', 'width', 'height' ), compact( 'id' ) ); 
+                $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) ); 
                 $this->id = $gameid = $id;
                 $this->created = $game_info[ 'created' ];
                 $this->width = $game_info[ 'width' ];
                 $this->height = $game_info[ 'height' ];
-                $rounds = dbSelect( 'roundcreatures', array( 'roundid' ), compact( 'gameid' ) );
+                $rounds = dbSelect( 'roundcreatures', [ 'roundid' ], compact( 'gameid' ) );
                 for ( $i = 0; $i < count( $rounds ); ++$i ) {
                     $this->rounds[ $i ] = new Round( $this, $i );
                 }
             }
             else {
-                $this->rounds = array();
+                $this->rounds = [];
             }
         }
 
@@ -75,7 +76,7 @@
 
         public function botError( $round, $user, $error ) {
             if ( !isset( $round->errors[ $user->id ] ) ) {
-                $round->errors[ $user->id ] = array();
+                $round->errors[ $user->id ] = [];
             }
             $round->errors[ $user->id ][] = $error;
         }
@@ -132,14 +133,14 @@
                     $creature->alive = false;
                 }
             }
-            $creatureLocation = array();
+            $creatureLocation = [];
             foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->alive ) {
                     if ( !isset( $creatureLocation[ $creature->locationx ] ) ) {
-                        $creatureLocation[ $creature->locationx ] = array();
+                        $creatureLocation[ $creature->locationx ] = [];
                     }
                     if ( !isset( $creatureLocation[ $creature->locationx ][ $creature->locationy ] ) ) {
-                        $creatureLocation[ $creature->locationx ][ $creature->locationy ] = array();
+                        $creatureLocation[ $creature->locationx ][ $creature->locationy ] = [];
                     }
                     $creatureLocation[ $creature->locationx ][ $creature->locationy ][] = $creature;
                 }
@@ -176,7 +177,7 @@
             $H = $this->height;
             $M = $this->creaturesPerPlayer;
             $MAX_HP = $this->maxHp;
-            $players = array();
+            $players = [];
             foreach ( $this->users as $user ) {
                 $players[] = $user->jsonSerialize();
             }

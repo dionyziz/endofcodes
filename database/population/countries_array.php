@@ -1,6 +1,6 @@
 <?php
     function getCountries() {
-        return array( 
+        return [ 
             'AF' => 'Afghanistan',
             'AL' => 'Albania',
             'DZ' => 'Algeria',
@@ -244,6 +244,6 @@
             'YE' => 'Yemen',
             'ZM' => 'Zambia',
             'ZW' => 'Zimbabwe'
-        );
+        ];
     }
 ?>

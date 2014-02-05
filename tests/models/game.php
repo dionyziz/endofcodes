@@ -40,7 +40,7 @@
             $game->genesis();
             $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
-            $userCountCreatures = array();
+            $userCountCreatures = [];
             // start from 1 because user's id starts from 1
             for ( $i = 1; $i <= count( $game->users ); ++$i ) {
                 $userCountCreatures[ $i ] = 0;

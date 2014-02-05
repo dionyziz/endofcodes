@@ -56,7 +56,7 @@ echo htmlspecialchars( $name );
                                         <span class='function'><?php
                                         echo htmlspecialchars( $call[ 'function' ] );
                                         ?></span><span class='delimiter'>(</span><?php
-                                        $outputargs = array();
+                                        $outputargs = [];
                                         foreach ( $call[ 'args' ] as $arg ) {
                                             ob_start();
                                             include 'views/testrun/variable.php';

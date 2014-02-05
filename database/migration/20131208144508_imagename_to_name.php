@@ -2,7 +2,7 @@
     include 'migrate.php';
 
     migrate( 
-        array( 
+        [ 
             'ALTER TABLE
                 images
             DROP COLUMN
@@ -11,6 +11,6 @@
                 images
             ADD COLUMN
                 `name` text COLLATE utf8_unicode_ci NOT NULL"
-        ) 
+        ] 
     );
 ?>

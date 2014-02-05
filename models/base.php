@@ -13,7 +13,7 @@
 
         protected function create() {
             $this->onBeforeCreate();
-            $attributes = array();
+            $attributes = [];
             foreach ( $this->attributes as $attribute ) {
                 $attributes[ $attribute ] = $this->$attribute;
             }

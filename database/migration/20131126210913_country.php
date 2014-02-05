@@ -2,7 +2,7 @@
     include_once 'migrate.php';
 
     migrate( 
-        array( 
+        [ 
             "CREATE TABLE IF NOT EXISTS 
                 `countries` (
                     `id` int(4) NOT NULL AUTO_INCREMENT,
@@ -15,6 +15,6 @@
                 `users` 
             ADD COLUMN
                 `countryid` int(4) unsigned NOT NULL;"
-        ) 
+        ] 
     );
 ?>

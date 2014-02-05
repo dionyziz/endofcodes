@@ -69,7 +69,7 @@
                 $creature->game = $game;
                 $creature->round = $game->rounds[ $i ];
                 $newCreature = clone $creature;
-                $game->rounds[ $i ]->creatures = array( $newCreature );
+                $game->rounds[ $i ]->creatures = [ $newCreature ];
                 $game->nextRound();
                 $newCreature = $game->rounds[ $i + 1 ]->creatures[ 0 ];
                 $this->assertTrue(
@@ -91,7 +91,7 @@
             $creature->game = $game;
             $creature->round = $game->rounds[ 0 ];
             $newCreature = clone $creature;
-            $game->rounds[ 0 ]->creatures = array( $newCreature );
+            $game->rounds[ 0 ]->creatures = [ $newCreature ];
             $game->nextRound();
             $newCreature = $game->rounds[ 1 ]->creatures[ 0 ];
             $this->assertTrue(
@@ -117,7 +117,7 @@
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_WEST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -150,7 +150,7 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -180,7 +180,7 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -203,7 +203,7 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -231,7 +231,7 @@
             $creature1->round = $game->rounds[ 0 ];
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -261,7 +261,7 @@
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_EAST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -291,7 +291,7 @@
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $newCreature3 = clone $creature3;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2, $newCreature3 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2, $newCreature3 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -314,7 +314,7 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -337,7 +337,7 @@
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_EAST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -374,7 +374,7 @@
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $newCreature3 = clone $creature3;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2, $newCreature3 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2, $newCreature3 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];

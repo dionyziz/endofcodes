@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' );
+        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' ];
         public $username;
         public $password;
         public $email;
@@ -18,7 +18,7 @@
 
         public static function findByUsername( $username ) {
             try {
-                $user = dbSelectOne( 'users', array( 'id' ), compact( "username" ) );
+                $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
             }
             catch ( DBException $e ) {
                 throw new ModelNotFoundException();
@@ -33,7 +33,7 @@
             try {
                 $row = dbSelectOne( 
                     'users', 
-                    array( 'id' ), 
+                    [ 'id' ], 
                     compact( "sessionid" ) 
                 );
             }
@@ -47,7 +47,7 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
@@ -161,7 +161,7 @@
             $username = $this->username;
             $row = dbSelectOne(
                 'users',
-                array( 'id', 'password', 'salt' ),
+                [ 'id', 'password', 'salt' ],
                 compact( "username" )
             );
             if ( !empty( $row ) ) {

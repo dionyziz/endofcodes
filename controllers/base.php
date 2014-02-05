@@ -31,7 +31,7 @@
                     $vars = $get;
                     break;
                 default:
-                    $vars = array(); 
+                    $vars = []; 
                     break;
             }
 
@@ -57,7 +57,7 @@
         }
         protected function callWithNamedArgs( $method_reflection, $callable, $vars ) {
             $parameters = $method_reflection->getParameters();
-            $arguments = array();
+            $arguments = [];
 
             foreach ( $parameters as $parameter ) {
                 if ( isset( $vars[ $parameter->name ] ) ) {
@@ -102,7 +102,7 @@
             $this_reflection = new ReflectionObject( $this );
             $method_reflection = $this_reflection->getMethod( $method );
 
-            $this->callWithNamedArgs( $method_reflection, array( $this, $method ), $vars );
+            $this->callWithNamedArgs( $method_reflection, [ $this, $method ], $vars );
         }
     }
 ?>

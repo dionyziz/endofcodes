@@ -2,11 +2,11 @@
     include_once 'models/country.php';
     
     class CountryTest extends UnitTest {
-        protected $countries = array(
+        protected $countries = [
             'GR' => 'Greece',
             'UK' => 'England',
             'RU' => 'Russia'
-        );
+        ];
         
         protected function insertCountries() {
             $countries = $this->countries;
