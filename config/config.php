@@ -10,7 +10,7 @@
                 ],
                 'files' => [
                     'avatar_extentions' => [ 'jpg', 'png', 'jpeg' ],
-                    'flag_extention' => 'png' 
+                    'flag_extention' => 'png'
                 ],
                 'paths' => [
                     'avatar_path' => 'sample_path',
@@ -23,7 +23,7 @@
                 ],
                 'persistent_cookie' => [
                     'name' => 'sessionid',
-                    'duration' => 60 * 60 * 24 * 365 * 20, 
+                    'duration' => 60 * 60 * 24 * 365 * 20,
                     'unset_time' => 60 * 60 * 24 * 2
                 ],
                 'base' => 'http://localhost/endofcodes/',
@@ -38,7 +38,7 @@
                 ],
                 'files' => [
                     'avatar_extentions' => [ 'jpg', 'png', 'jpeg' ],
-                    'flag_extention' => 'png' 
+                    'flag_extention' => 'png'
                 ],
                 'paths' => [
                     'avatar_path' => 'sample_path',
@@ -51,7 +51,7 @@
                 ],
                 'persistent_cookie' => [
                     'name' => 'sessionid',
-                    'duration' => 60 * 60 * 24 * 365 * 20, 
+                    'duration' => 60 * 60 * 24 * 365 * 20,
                     'unset_time' => 60 * 60 * 24 * 2
                 ],
                 'base' => 'http://localhost/endofcodes/',

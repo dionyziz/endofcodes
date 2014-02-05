@@ -31,10 +31,10 @@
                 throw new ModelNotFoundException();
             }
             try {
-                $row = dbSelectOne( 
-                    'users', 
-                    [ 'id' ], 
-                    compact( "sessionid" ) 
+                $row = dbSelectOne(
+                    'users',
+                    [ 'id' ],
+                    compact( "sessionid" )
                 );
             }
             catch ( DBException $e ) {
@@ -108,13 +108,13 @@
         }
 
         protected function onBeforeCreate() {
-            $day = intval( $this->dateOfBirth[ 'day' ] ); 
+            $day = intval( $this->dateOfBirth[ 'day' ] );
             $month = intval( $this->dateOfBirth[ 'month' ] );
             $year = intval( $this->dateOfBirth[ 'year' ] );
             if ( !checkdate( $day, $month, $year ) ) {
                 $day = $month = $year = 0;
             }
-            $dob = $this->dob = $year . '-' . $month . '-' . $day; 
+            $dob = $this->dob = $year . '-' . $month . '-' . $day;
             $this->avatarid = 0;
             $this->generateSessionId();
         }

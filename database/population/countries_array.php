@@ -1,6 +1,6 @@
 <?php
     function getCountries() {
-        return [ 
+        return [
             'AF' => 'Afghanistan',
             'AL' => 'Albania',
             'DZ' => 'Algeria',

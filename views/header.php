@@ -18,7 +18,7 @@
         ?>
         <script type="text/javascript" src="../script/cssrefresh.js"></script>
 
-        <meta charset="utf-8" /> 
+        <meta charset="utf-8" />
     </head>
     <body>
         <div id="header">

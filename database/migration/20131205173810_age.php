@@ -1,8 +1,8 @@
 <?php
     include_once 'migrate.php';
 
-    migrate( 
-        [ 
+    migrate(
+        [
             'ALTER TABLE
                 users
             ADD COLUMN

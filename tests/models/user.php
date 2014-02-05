@@ -1,7 +1,7 @@
 <?php
     include_once 'models/user.php';
     include_once 'models/country.php';
-    
+
     class UserTest extends UnitTestWithFixtures {
         public function testCreate() {
             $user = new User();

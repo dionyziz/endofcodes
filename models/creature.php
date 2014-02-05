@@ -5,7 +5,7 @@
         public $game;
         public $user;
         public $round;
-        public $locationx; 
+        public $locationx;
         public $locationy;
         public $intent;
         public $alive;

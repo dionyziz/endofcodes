@@ -22,9 +22,9 @@
         }
         catch ( CreatureOutOfBoundsException $e ) {
             $roundNumber = $creature->round->id;
-            $creature->game->botError( 
+            $creature->game->botError(
                 $creature->round,
-                $creature->user, 
+                $creature->user,
                 "Tried to move creature $creature->id in a location outside of bounds on round $roundNumber."
             );
             $creature->intent = new Intent();
@@ -47,9 +47,9 @@
             creatureDirection( $potentialVictim );
         }
         catch ( CreatureOutOfBoundsException $e ) {
-            $attackerCreature->game->botError( 
+            $attackerCreature->game->botError(
                 $attackerCreature->round,
-                $attackerCreature->user, 
+                $attackerCreature->user,
                 "Tried to attack a creature outside of bounds with creature $attackerCreature->id."
             );
             return;
@@ -60,17 +60,17 @@
         }
         catch ( ModelNotFoundException $e ) {
             $attackerCreature->intent = new Intent();
-            $attackerCreature->game->botError( 
+            $attackerCreature->game->botError(
                 $attackerCreature->round,
-                $attackerCreature->user, 
+                $attackerCreature->user,
                 "Tried to attack non existent creature with creature $attackerCreature->id."
             );
             return;
         }
         if ( $victim->user->id === $attackerCreature->user->id ) {
-            $attackerCreature->game->botError( 
+            $attackerCreature->game->botError(
                 $attackerCreature->round,
-                $attackerCreature->user, 
+                $attackerCreature->user,
                 "Tried to attack creature $victim->id with creature $attackerCreature->id while they both belong to the same user."
             );
             return;
