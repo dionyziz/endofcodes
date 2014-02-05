@@ -96,96 +96,108 @@ The grader shares the full state of the world with all players at the completion
 
 ### Intents ###
 
-Upon the completion of every round, and as long as there are more than two creatures belonging to different players alive, the grader informs each player about the current full state of the world and inquires each player about what they want to do. This phase is called the commit phase.
+Upon the completion of every round, and as long as there are more than two creatures belonging to different players alive, the grader informs each player about the current full state of the world and inquires each player about what they want to do. This phase is called the **commit phase**.
 
-Each player decides what they want to do with each of their alive creatures. This signifies an intent for each alive creature, for each player. Players are not able to specify intents for dead creatures. The intent can be one of the following:
-Move: The player intents to move the creature from its current location to a new neighbouring location. The move is associated with the desired direction.
-Attack: The player intents to have the creature attack an opponent creature in a neighbouring location. The attack is associated with the desired direction.
-Idle: The player intents for the creature to remain where it is, doing nothing.
+Each player decides what they want to do with each of their alive creatures. This signifies an **intent** for each alive creature, for each player. Players are not able to specify intents for dead creatures. The intent can be one of the following:
+
+* **Move**: The player intents to move the creature from its current location to a new neighbouring location. The move is associated with the desired direction.
+* **Attack**: The player intents to have the creature attack an opponent creature in a neighbouring location. The attack is associated with the desired direction.
+* **Idle**: The player intents for the creature to remain where it is, doing nothing.
 
 Each player commits to an intent for each of their creatures without being able to see the intents committed by other players.
 
 ### Resolution ###
-Each subsequent round configuration is determined through a process called resolution, which is based on the intents committed by each individual player. Resolution follows the following algorithm to advance from round T to round T + 1 after the commit phase.
+
+Each subsequent round configuration is determined from the previous round configuration and from player intents through a process called **resolution**. A description of the resolution algorithm follows, describing how to advance from round `T` to round `T + 1` after the commit phase.
 
 The resolution algorithm has the purpose of ensuring that the order in which creatures’ intents are examined does not affect the game results. It is desired that the following invariant remains true:
 
-The resolution of round T + 1 is independent on the order in which creatures intents are satisfied.
+*The resolution of round `T + 1` is independent of the order in which creatures intents are satisfied.*
 
 Here is the resolution algorithm:
 
-A new round, T + 1, is created and made to be identical with round T. All creatures retain their locations, owners, identifiers, and hit points from round T to round T + 1.
-For each creature alive in round T, its intent is examined and, if it is not idle, the following is performed:
-If its intent is to attack a neighbouring creature, then:
-It is verified that the neighbouring location is within the map bounds. If not, the creature’s intent is set to idle.
-It is verified that an alive neighbouring creature existed in round T in the direction indicated by the intent. If not, the creature’s intent is set to idle.
-It is verified that the neighbouring creature belonged to an opponent and was alive during round T. If not, the creature’s intent is set to idle.
-The creature which is being attacked loses 1 hit point. However, it does not die until the resolution phase is completed. This means that the creature being attacked must still have its intent satisfied.
-If its intent is to move to a neighbouring location, then:
-It is verified that the neighbouring location is within the map bounds. If not, the creature’s intent is set to idle.
-The creature is moved to the new location, regardless of whether a creature already existed in that location during round T. It is also moved to the location regardless of whether another creature moved to that location during round T + 1. This means that, before resolution is completed, a location can be occupied by multiple creatures. A pointer is kept to the old location of the creature in order to be able to move it back if necessary.
-The creatures whose hit points are less than or equal to 0 are now marked as dead.
-For every map location in round T + 1 evaluated so far: 
-If there are more than 1 creatures in that map location, all these creatures are moved to the location that they had during round T
-Step 4 is repeated until every map location has at most one creature in it.
+1. A new round, `T + 1`, is created and made to be identical with round `T`. All creatures retain their locations, owners, identifiers, and hit points from round `T` to round `T + 1`.
+2. For each creature alive in round `T`, its intent is examined and, if it is not idle, the following is performed:
+    1. If its intent is to attack a neighbouring creature, then:
+        1. It is verified that the neighbouring location is within the map bounds. If not, the creature’s intent is set to idle.
+        2. It is verified that an alive neighbouring creature existed in round `T` in the direction indicated by the intent. If not, the creature’s intent is set to idle.
+        3. It is verified that the neighbouring creature belonged to an opponent and was alive during round `T`. If not, the creature’s intent is set to idle.
+        4. The creature which is being attacked loses `1` hit point. However, it does not die until the resolution phase is completed. This means that the victim must still have its intent satisfied.
+    2. If its intent is to move to a neighbouring location, then:
+        1. It is verified that the neighbouring location is within the map bounds. If not, the creature’s intent is set to idle.
+        2. The creature is moved to the new location, regardless of whether a creature already existed in that location during round `T`. It is also moved to the location regardless of whether another creature moved to that location during round `T + 1`. This means that, before resolution is completed, a location can be occupied by multiple creatures. A pointer is kept to the old location of the creature in order to be able to move it back if necessary.
+    3. The creatures whose hit points are less than or equal to `0` are now marked as dead.
+    4. For every map location in round `T + 1` evaluated so far: 
+        1. If there are more than `1` alive creatures in that map location, all these creatures are moved to the location that they had during round `T`.
+    5. Step 4 is repeated until every map location has at most one creature in it.
 
-Steps 4 and 5 ensure that the map is in consistent condition after the resolution phase is completed. The proof of correctness from resolution follows directly from the inductive assumption that round T is consistent, and step 4a is based on round T locations. Clearly the gensis round is consistent. Step 3 ensures that dead creatures do not take up any space during the resolution phase.
+Steps 4 and 5 ensure that the map is in consistent condition after the resolution phase is completed. The proof of correctness follows directly from the inductive assumption that round T is consistent, and step 4a is based on round T locations. Clearly the genesis round is consistent.
+
+Step 3 ensures that dead creatures do not take up any space during the resolution phase.
+
+The invariant that all creatures are treated equally is ensured by the fact that attacking uses the previous round locations for the victims, so moving first does not give any advantage; in addition, creatures do not die before their intents are satisfied, so there is no advantage in attacking first.
+
+As order of creature intent satisfaction is irrelevant, implementers may consider satisfying all attacks before satisfying any move intents to ease the implementation.
 
 ### Conclusion ###
-After the resolution phase is completed, the game is checked for winning conditions. If only creatures owned by a particular user are alive on the map, the particular user is pronounced the winner.
+After the resolution phase is completed, the game is checked for **winning conditions**. If only creatures owned by a particular user are alive on the map, the particular user is pronounced the **winner**.
 
-It is possible that noone is the winner of a particular game. This can happen if all creatures remaining in the last round are killed simultaneously.
+It is possible that noone is the winner of a particular game. This can happen if all creatures remaining in the last round are killed simultaneously. In this case, we have a **draw**.
 
 ## Bot API ##
 
 The Bot API is a RESTful HTTP API that the bots use to communicate with the grader. Each bot is implemented as an Internet-accesssible HTTP server with an end-point that is used to communicate with the grader. The grader performs HTTP requests to the bot, at its discretion, to inquire about the bot’s intents, and to inform the bot about the world state.
 
-The bots run on the programmers’ machines. This is intentional, allowing programmers to cooperate behind-the-scenes, scale their hardware, or compete using methods other than simply improving their artificial intelligence code.
+The bots run on the programmers’ machines. This is intentional, allowing programmers to cooperate behind-the-scenes, scale their hardware, use their programming language of choice, or compete using methods other than simply improving their artificial intelligence code.
 
-Each bot has a root end-point which is an http or https URL and can be any valid domain or IP address, including a custom port, and a custom request URI portion. That URL is configured by the players in the web interface of the game and is referred to as the bot base. HTTPS URLs must use correct PKI certificates, or will be ignored. If a bot is configured with an https bot base, the grader will only use https and not fallback to http. The current bot base will be denoted as {{botbase}} in this document. The botbase must not end in “/”. A “/” will be added at the end of bot base for the request URI portion, so an additional slash is redundant.
+Each bot has a root end-point which is an http or https URL and can be any valid domain or IP address, including a custom port, and a custom request URI portion. That URL is configured by the players in the web interface of the game and is referred to as the **bot base**. HTTPS URLs must use correct PKI certificates, or will be ignored. If a bot is configured with an https bot base, the grader will only use https and not fallback to http. The current bot base will be denoted as \{\{botbase\}\} in this document. The botbase must not end in “/”. A “/” will be added at the end of bot base for the request URI portion, so an additional slash is redundant.
 
-Note that it is the grader that is making HTTP requests to each individual bot, not the other way around. The grader is the HTTP client and the bots are the HTTP server.
+Note that it is the grader that is making HTTP requests to each individual bot, not the other way around. The grader is the HTTP client and the bots are HTTP servers.
 
-A bot can misbehave in many ways. We aim to help the programmers by logging the incorrect behavior of bots. This incorrect behavior is then reported in the bot settings page of the web application. Bots that behave incorrectly must be disconnected immediately from the game and all their creatures killed for the particular game. No incorrect responses by the bots is tolerated. The protocol must be followed by the bots to the letter.
+A bot can misbehave in many ways. We aim to help the programmers diagnose mistakes by logging incorrect bot behavior. This incorrect behavior is then reported in the bot settings page of the web application. Bots that behave incorrectly must be disconnected immediately from the game and all their creatures killed for the particular game. No incorrect responses by the bots are tolerated. The protocol must be followed by the bots to the letter. This is to ensure that bots do not rely on errorneous behavior, as this may make forward compatibility harder.
 
-Before the bot is able to play, the following sanity checks are performed by the grader. These events are logged and reported as successful or errorneous:
-The bot hostname was resolved.
-The bot IP is accessible in the network.
-The bot is accepting connections to its designated port.
-The bot is responding to initiation requests with a 200 HTTP OK.
-The bot is responding with a valid JSON body.
-The bot is reporting a botname, version, and username.
-The username reported by the bot is associated with the user who is using the bot URL.
+Before the bot is able to play, the following **sanity checks** are performed by the grader. These events are logged and reported as successful or errorneous:
+
+* The bot hostname was resolved.
+* The bot IP is accessible in the network.
+* The bot is accepting connections to its designated port.
+* The bot is responding to initiation requests with a 200 HTTP OK.
+* The bot is responding with a valid JSON body.
+* The bot is reporting a botname, version, and username.
+* The username reported by the bot is associated with the user who is using the bot URL.
 
 Each request from the grader to the bot uses either HTTP GET or HTTP POST. The requests are made on the bot base URL and contain an appended request URI which is in the form “resource” where resource is the name of a REST resource. When performing an HTTP GET request, a resource can be a named item, in which case the individual resource is retrieved, or a generic resource type name, in which the listing of all named resource of the particular type are retrieved. When performing an HTTP POST request, an additional “method” HTTP POST variable is included, which can take the following values:
 
-create
-update
-delete
+* `create`
+* `update`
+* `delete`
 
-When the method is create, the request is made to a generic resource type, of which one instance is created; when the method is update, the request is made to an individual resource, which is updated; when the method is delete, the request can be made to a generic resource type, in which case the whole resource is truncated, or, more commonly, to a specific resource, which is subsequently deleted.
+When the method is `create`, the request is made to a generic resource type, of which one instance is created; when the method is `update`, the request is made to an individual resource, which is updated; when the method is `delete`, the request can be made to a generic resource type, in which case the whole resource is truncated, or, more commonly, to a specific resource, which is subsequently deleted.
 
 All requests are authenticated and authorized by the grader. The authentication is URL-based. If the bot desires to do strong authentication, it must switch to HTTPS. It is recommended that HTTPS is used by all bots.
 
-The grader authenticates itself to the bot using an API key, which is displayed to the bot programmer in the web interface available for bot configuration. The API key is included in all requests and has the name “api_key” and the value displayed in the web interface of the grader. The api key is unique for each bot. The bot must verify that the api key is correct to avoid impostors who may be trying to  deduce one’s strategy beyond the history of available games. The api_key is sent as an HTTP GET variable for GET requests and as an HTTP POST variable for POST requests.
+Each player's account is only controller by his own bot. This is ensured because the player uses the web interface of the web app to set their own bot URL. Therefore, other players cannot use their bots to manipulate different player accounts.
+
+The grader authenticates itself to the bot using an `API key`, which is displayed to the bot programmer in the web interface available for bot configuration. The API key is included in all requests and has the name `api_key` and the value displayed in the web interface of the grader. The `api_key` is unique for each bot. The bot must verify that the `api_key` is correct to avoid impostors who may be trying to  deduce one’s strategy beyond the history of available games, or to use their strategy as a black box. The `api_key` is sent as an HTTP GET variable for GET requests and as an HTTP POST variable for POST requests.
 
 The grader identifies itself using the following User-agent:
 
-user-agent: EndOfCodes/version (grader) <grader@endofcodes.com>
+    user-agent: EndOfCodes/version (grader) <grader@endofcodes.com>
 
-Where version denotes the current API version, currently “0.1.0”.
+Where `version` denotes the current API version, currently `0.1.0`.
 
-Responses by the bots to the grader are in JSON format. The response JSON is always a dictionary. It can be successful or unsuccessful. An unsuccessful JSON response contains a single key, “error”, with a value describing the error produced by the bot, as a string. A successful JSON response contains the JSON dictionary keys associated with the particular request.
+Responses by the bots to the grader are in JSON format. The response JSON is always a dictionary. It can be **successful** or **unsuccessful**. An unsuccessful JSON response contains a single key, `error`, with a value describing the error produced by the bot, as a string. A successful JSON response contains the JSON dictionary keys associated with the particular request.
 
-The following general errors are logged and reported:
-The bot stops resolving during the game.
-The bot stops being accessible through the network during the game.
-The bot is rejecting connections during the game.
-The bot responds with a 3xx or 4xx or 5xx HTTP code, or some unknown HTTP code when a 200 OK is expected.
-The bot returns a non-JSON response when valid JSON is expected.
-The bot returns valid JSON, but the JSON contains invalid keys or is missing some keys expected in the particular response.
-The bot returns valid JSON, but indicates that an error has occurred in the JSON using the “error” key.
-The bot returns valid JSON and keys, but the value is of inappropriate type.
+The following general errors are logged and reported during the game:
+
+* The bot stops resolving during the game.
+* The bot stops being accessible through the network during the game.
+* The bot is rejecting connections during the game.
+* The bot responds with a 3xx or 4xx or 5xx HTTP code, or some unknown HTTP code when a 200 OK is expected.
+* The bot returns a non-JSON response when valid JSON is expected.
+* The bot returns valid JSON, but the JSON contains invalid keys or is missing some keys expected in the particular response.
+* The bot returns valid JSON, but indicates that an error has occurred in the JSON using the `error` key.
+* The bot returns valid JSON and keys, but the value is of inappropriate type. For example, an integer may be returned instead of an array.
 
 The request may also contain JSON in the POST data. This is true for any non-scalar data structure sent from the grader to the bots. These pieces of JSON are again dictionaries, which contain keys specific to the particular request.
 
