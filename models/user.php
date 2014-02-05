@@ -47,7 +47,7 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotPasswordToken' ), compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
@@ -58,6 +58,7 @@
                 $this->image = new Image( $user_info[ 'avatarid' ] );
                 $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
+                $this->forgotPasswordToken = $user_info[ 'forgotPasswordToken' ];
                 $this->exists = true;
             }
         }
@@ -180,16 +181,26 @@
             $this->save();
         }
 
-        public function passwordRevoke() {
+        public function createForgotPasswordLink() {
             $value = openssl_random_pseudo_bytes( 32 );
             $value = base64_encode( $value );
             $this->generateSessionId();
             $this->forgotPasswordToken = $value;
             $this->save();
             $email = $this->email;
-            $link = "localhost/endofcodes/index.php?resource=forgotPasswordRequest&method=create&email=$email&token=$value";
+            $username = $this->username;
+            $link = "localhost/endofcodes/index.php?resource=forgotPasswordRequest&method=view&username=$username&token=$value";
             mail( $this->email, 'testMail', "your random link is $link" );
             return $link;
+        }
+        
+        public function revokePassword( $token ) {
+            if( $this->forgotPasswordToken == $token ) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 ?>
