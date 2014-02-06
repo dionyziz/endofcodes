@@ -24,7 +24,7 @@
             }
         }
 
-        protected function onSave() {
+        protected function onBeforeSave() {
             if ( !is_int( $this->follower->id ) ) {
                 throw new ModelValidationException( 'followerid_not_valid' );
             }

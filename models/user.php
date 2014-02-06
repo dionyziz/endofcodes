@@ -62,7 +62,7 @@
             }
         }
 
-        protected function onSave() {
+        protected function onBeforeSave() {
             global $config;
 
             if ( empty( $this->username ) ) {
@@ -119,7 +119,7 @@
             $this->generateSessionId();
         }
 
-        protected function onCreate() {
+        protected function onSave() {
             unset( $this->password );
             unset( $this->salt );
         }

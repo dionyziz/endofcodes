@@ -54,7 +54,7 @@
             $this->hp = 0;
         }
 
-        public function onSave() {
+        public function onBeforeSave() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
             }
