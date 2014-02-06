@@ -22,7 +22,7 @@
         public function __construct( $id = false ) {
             if ( $id ) {
                 $this->exists = true;
-                $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) ); 
+                $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
                 $this->id = $gameid = $id;
                 $this->created = $game_info[ 'created' ];
                 $this->width = $game_info[ 'width' ];
@@ -98,15 +98,15 @@
             $roundid = count( $this->rounds );
             $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
             $currentRound = $this->rounds[ $roundid ];
-            foreach ( $currentRound->creatures as $creature ) { 
+            foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->intent->action === ACTION_ATTACK ) {
                     if ( $creature->alive ) {
                         creatureAttack( $creature );
                     }
                     else {
                         $roundNumber = count( $this->rounds ) - 1;
-                        $this->killBot( 
-                            $creature->user, 
+                        $this->killBot(
+                            $creature->user,
                             "Tried to move dead creature $creature->id which " .
                                 "was at location ($creature->locationx, $creature->locationy) " .
                                 "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."
@@ -114,15 +114,15 @@
                     }
                 }
             }
-            foreach ( $currentRound->creatures as $creature ) { 
+            foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->intent->action === ACTION_MOVE ) {
                     if ( $creature->alive ) {
                         creatureMove( $creature );
                     }
                     else {
                         $roundNumber = count( $this->rounds ) - 1;
-                        $this->killBot( 
-                            $creature->user, 
+                        $this->killBot(
+                            $creature->user,
                             "Tried to attack with dead creature $creature->id which " .
                                 "was at location ($creature->locationx, $creature->locationy) " .
                                 "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."

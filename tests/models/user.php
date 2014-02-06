@@ -1,7 +1,7 @@
 <?php
     include_once 'models/user.php';
     include_once 'models/country.php';
-    
+
     class UserTest extends UnitTestWithFixtures {
         public function testCreate() {
             $user = new User();
@@ -32,7 +32,6 @@
         }
         public function testPasswordChange() {
             $user = $this->buildUser( 'pkakelas' );
-            $password = $user->password;
             $user->password = 'newsecret1234';
             $user->save();
             $success = $user->authenticatesWithPassword( 'newsecret1234' );
@@ -123,6 +122,13 @@
 
             $this->assertTrue( isset( $data->userid ), 'userid must exist in exported JSON' ); 
             $this->assertEquals( $user->id, $data->userid, 'userid must be encoded properly to JSON' );
+        }
+        public function testAuthenticationAfterRenewSessionId() {
+            $user = $this->buildUser( 'pkakelas' );
+
+            $user->renewSessionId();
+            $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
+            $this->assertTrue( $passwordSuccess, 'Password must not be changed after "renewSessionId" is run' );
         }
     }
 

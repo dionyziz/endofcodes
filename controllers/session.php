@@ -20,11 +20,11 @@
                 go( 'session', 'create', [ 'password_wrong' => true ] );
             }
             if ( $persistent ) {
-                $user->renewSessionId();     
-                setcookie(  
-                    $config[ 'persistent_cookie' ][ 'name' ], 
+                $user->renewSessionId();
+                setcookie(
+                    $config[ 'persistent_cookie' ][ 'name' ],
                     $user->sessionid,
-                    time() + $config[ 'persistent_cookie' ][ 'duration' ] 
+                    time() + $config[ 'persistent_cookie' ][ 'duration' ]
                 );
             }
             $_SESSION[ 'user' ] = $user;
@@ -32,13 +32,13 @@
         }
 
         public function delete() {
-            global $config; 
+            global $config;
 
             unset( $_SESSION[ 'user' ] );
-            setcookie( 
-                $config[ 'persistent_cookie' ][ 'name' ], 
-                '', 
-                time() - $config[ 'persistent_cookie' ][ 'unset_time' ] 
+            setcookie(
+                $config[ 'persistent_cookie' ][ 'name' ],
+                '',
+                time() - $config[ 'persistent_cookie' ][ 'unset_time' ]
             );
             go();
         }

@@ -14,9 +14,9 @@
             $game->save();
             $this->assertTrue( $game->width > 0, 'A game with users must have width' );
             $this->assertTrue( $game->height > 0, 'A game with users must have height' );
-            $this->assertTrue( 
+            $this->assertTrue(
                 3 * count( $game->users ) * $game->creaturesPerPlayer < $game->width * $game->height,
-                '3NM < WH must be true' 
+                '3NM < WH must be true'
             );
         }
         public function testInitiation() {
@@ -51,10 +51,10 @@
                     }
                 }
             }
-            $this->assertEquals( 
-                count( $game->users ) * $game->creaturesPerPlayer, 
-                $creatureCount, 
-                'Each player must have a certain number of creatures' 
+            $this->assertEquals(
+                count( $game->users ) * $game->creaturesPerPlayer,
+                $creatureCount,
+                'Each player must have a certain number of creatures'
             );
             $creaturesPerUser = $creatureCount / count( $game->users );
             foreach ( $userCountCreatures as $userCountCreature ) {

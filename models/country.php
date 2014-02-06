@@ -6,7 +6,7 @@
         public $shortname;
         protected $tableName = 'countries';
 
-        public static function findAll() { 
+        public static function findAll() {
             return dbSelect( 'countries' );
         }
 

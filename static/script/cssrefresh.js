@@ -15,7 +15,7 @@
 
 		array_filter: function( arr, func )
 		{
-			var retObj = {}; 
+			var retObj = {};
 			for ( var k in arr )
 			{
 				if ( func( arr[ k ] ) )
@@ -43,7 +43,7 @@
 			try
 			{
 				req.open( 'HEAD', url, false );
-				req.send( null ); 
+				req.send( null );
 				if ( req.readyState < 3 )
 				{
 					return false;

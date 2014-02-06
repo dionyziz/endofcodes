@@ -74,7 +74,7 @@
                     ?>" <?php
                 }
                 if ( $type == 'checkbox' && $checked ) {
-                    ?>checked="yes"<?php 
+                    ?>checked="yes"<?php
                 }
             ?> /></p><?php
         }
@@ -107,7 +107,7 @@
         }
 
         public static function getRESTMethodIdempotence( $method ) {
-            $methods = [ 
+            $methods = [
                 'create' => 1,
                 'listing' => 0,
                 'delete' => 1,
@@ -119,7 +119,7 @@
             }
             throw new HTMLFormInvalidException( $method );
         }
-       
+
         public function createLabel( $for, $text ) {
             ?><label for="<?php
                 echo htmlspecialchars( $for );
@@ -133,7 +133,7 @@
             $callable( $this );
             $out = ob_get_clean();
             if ( !isset( $_SESSION[ 'form' ][ 'token' ] ) ) {
-                $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create(); 
+                $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create();
             }
             else {
                 $this->token = $_SESSION[ 'form' ][ 'token' ];
@@ -150,9 +150,9 @@
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
                 }
-                ?>action="index.php?resource=<?php
+                ?>action="<?php
                     echo htmlspecialchars( $this->resource );
-                ?>&amp;method=<?php
+                ?>/<?php
                     echo htmlspecialchars( $this->method );
                 ?>" method="<?php
                     echo htmlspecialchars( $this->formMethod );
@@ -175,7 +175,7 @@
 
     class HTMLFormInvalidException extends HTMLException {
         public function __construct( $method ) {
-            parent::__construct( "Not a valid REST method: " . $method . 
+            parent::__construct( "Not a valid REST method: " . $method .
                 " (must be one of 'create', 'view', 'listing', 'update', 'delete')" );
         }
     }

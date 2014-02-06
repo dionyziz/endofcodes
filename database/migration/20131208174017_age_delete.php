@@ -1,8 +1,8 @@
 <?php
     include 'migrate.php';
 
-    migrate( 
-        [ 
+    migrate(
+        [
             'ALTER TABLE
                 users
             DROP COLUMN

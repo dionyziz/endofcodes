@@ -88,15 +88,15 @@
                 $creatureid = $creature->id;
                 dbInsert(
                     'roundcreatures',
-                    compact( 
-                        'gameid', 
-                        'roundid', 
-                        'locationx', 
-                        'locationy', 
-                        'hp', 
-                        'direction', 
+                    compact(
+                        'gameid',
+                        'roundid',
+                        'locationx',
+                        'locationy',
+                        'hp',
+                        'direction',
                         'action',
-                        'creatureid' 
+                        'creatureid'
                     )
                 );
             }

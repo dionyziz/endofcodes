@@ -31,10 +31,10 @@
                 throw new ModelNotFoundException();
             }
             try {
-                $row = dbSelectOne( 
-                    'users', 
-                    [ 'id' ], 
-                    compact( "sessionid" ) 
+                $row = dbSelectOne(
+                    'users',
+                    [ 'id' ],
+                    compact( "sessionid" )
                 );
             }
             catch ( DBException $e ) {
@@ -62,7 +62,7 @@
             }
         }
 
-        protected function onSave() {
+        protected function onBeforeSave() {
             global $config;
 
             if ( empty( $this->username ) ) {
@@ -108,15 +108,20 @@
         }
 
         protected function onBeforeCreate() {
-            $day = intval( $this->dateOfBirth[ 'day' ] ); 
+            $day = intval( $this->dateOfBirth[ 'day' ] );
             $month = intval( $this->dateOfBirth[ 'month' ] );
             $year = intval( $this->dateOfBirth[ 'year' ] );
             if ( !checkdate( $day, $month, $year ) ) {
                 $day = $month = $year = 0;
             }
-            $dob = $this->dob = $year . '-' . $month . '-' . $day; 
+            $dob = $this->dob = $year . '-' . $month . '-' . $day;
             $this->avatarid = 0;
             $this->generateSessionId();
+        }
+
+        protected function onSave() {
+            unset( $this->password );
+            unset( $this->salt );
         }
 
         protected function onCreateError( $e ) {
@@ -136,8 +141,12 @@
             $sessionid = $this->sessionid;
             $countryid = $this->countryid;
             $avatarid = $this->imageid;
-            $password = $this->password;
-            $salt = $this->salt;
+            if ( isset( $this->password ) ) {
+                $password = $this->password;
+            }
+            if ( isset( $this->salt ) ) {
+                $salt = $this->salt;
+            }
 
             try {
                 $res = dbUpdate(

@@ -36,16 +36,18 @@
         protected function onBeforeCreate() {} // override me
         protected function onCreate() {} // override me
         protected function onCreateError( $e ) {} // override me
+        protected function onBeforeSave() {} // override me
         protected function onSave() {} // override me
 
         public function save() {
-            $this->onSave();
+            $this->onBeforeSave();
             if ( $this->exists ) {
                 $this->update();
             }
             else {
                 $this->create();
             }
+            $this->onSave();
         }
     }
 
