@@ -12,6 +12,7 @@
         public $image;
         public $salt;
         public $dateOfBirth;
+        public $forgotPasswordToken;
         public $boturl;
         protected $dob;
         protected $tableName = 'users';
@@ -189,18 +190,21 @@
             $this->save();
             $email = $this->email;
             $username = $this->username;
-            $link = "localhost/endofcodes/index.php?resource=forgotPasswordRequest&method=view&username=$username&token=$value";
-            mail( $this->email, 'testMail', "your random link is $link" );
+            $link = "localhost/endofcodes/index.php?resource=forgotpasswordrequest&method=view&username=$username&token=$value";
+            $message = "Hi $username. You requested to change your End of Codes password. To reset your password, please click the following link: $link If you keep having problems, just reply to this e-mail and we’ll be happy to help. Best, The End of Codes Team.";
+            mail(
+                $this->email,
+                'Password Reset',
+                $message 
+            );  
             return $link;
         }
         
         public function revokePassword( $token ) {
-            if( $this->forgotPasswordToken == $token ) {
+            if( $token == $this->forgotPasswordToken ) {
                 return true;
             }
-            else {
-                return false;
-            }
+            return false;
         }
     }
 ?>

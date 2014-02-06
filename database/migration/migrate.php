@@ -6,7 +6,7 @@
 
         global $config;
 
-        $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ];
+        $config = getConfig()[ 'development' ];
         dbInit();
 
         foreach ( $sql_array as $sql ) {

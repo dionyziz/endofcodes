@@ -25,7 +25,7 @@
         $self->createInput( 'password', 'password', 'password' );
         $self->createLabel( 'persistent', 'Remember me' );
         $self->createInput( 'checkbox', 'persistent', 'persistent', '', true );
-        ?><p><a href="index.php?resource=forgotPasswordRequest&amp;method=create">Forgot password?</a></p><?php
+        ?><p><a href="index.php?resource=forgotpasswordrequest&amp;method=create">Forgot password?</a></p><?php
         $self->createInput( 'submit', '', '', 'Login' );
     } );
 ?>
