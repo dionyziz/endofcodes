@@ -62,7 +62,7 @@
             }
         }
 
-        protected function onSave() {
+        protected function onBeforeSave() {
             global $config;
 
             if ( empty( $this->username ) ) {
@@ -119,6 +119,11 @@
             $this->generateSessionId();
         }
 
+        protected function onSave() {
+            unset( $this->password );
+            unset( $this->salt );
+        }
+
         protected function onCreateError( $e ) {
             try {
                 $other_user = User::findByUsername( $this->username );
@@ -136,8 +141,12 @@
             $sessionid = $this->sessionid;
             $countryid = $this->countryid;
             $avatarid = $this->imageid;
-            $password = $this->password;
-            $salt = $this->salt;
+            if ( isset( $this->password ) ) {
+                $password = $this->password;
+            }
+            if ( isset( $this->salt ) ) {
+                $salt = $this->salt;
+            }
 
             try {
                 $res = dbUpdate(
