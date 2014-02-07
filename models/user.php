@@ -185,15 +185,5 @@
             $this->generateSessionId();
             $this->save();
         }
-
-        public function toJson() {
-            return json_encode( $this->jsonSerialize() );
-        }
-
-        public function jsonSerialize() {
-            $username = $this->username;
-            $userid = $this->id;
-            return compact( 'username', 'userid' );
-        }
     }
 ?>

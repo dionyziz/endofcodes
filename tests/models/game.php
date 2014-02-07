@@ -69,56 +69,6 @@
                 }
             }
         }
-        public function testJsonSerialize() {
-            $game = $this->buildGame();
-            $game->genesis();
-
-            $this->assertTrue( method_exists( $game, "toJson" ), 'Game object should export a "toJson" function' );
-
-            $json = $game->toJson();
-            $data = json_decode( $json );
-
-            $this->assertTrue( isset( $data->gameid ), 'gameid must exist in exported JSON' );
-            $this->assertEquals( $game->id, $data->gameid, 'gameid must be encoded properly to JSON' );
-            
-            $this->assertTrue( isset( $data->W ), 'W must exist in exported JSON' );
-            $this->assertEquals( $game->width, $data->W, 'W must be encoded properly to JSON' );
-
-            $this->assertTrue( isset( $data->H ), 'H must exist in exported JSON' );
-            $this->assertEquals( $game->height, $data->H, 'H must be encoded properly to JSON' );
-
-            $this->assertTrue( isset( $data->M ), 'M must exist in exported JSON' );
-            $this->assertEquals( $game->creaturesPerPlayer, $data->M, 'M must be encoded properly to JSON' );
-
-            $this->assertTrue( isset( $data->MAX_HP ), 'MAX_HP must exist in exported JSON' );
-            $this->assertEquals( $game->maxHp, $data->MAX_HP, 'MAX_HP must be encoded properly to JSON' );
-
-            $this->assertTrue( isset( $data->players ), 'players must exist in exported JSON' );
-            $this->assertTrue( is_array( $data->players ), 'players must be an array in exported JSON' );
-            $this->assertEquals( 4, count( $data->players ), 'players must contain correct number of users in exported JSON' );
-
-            $this->assertEquals( 1, $data->players[ 0 ]->userid, 'all players must exist in exported JSON' );
-            $this->assertEquals( 2, $data->players[ 1 ]->userid, 'all players must exist in exported JSON' );
-            $this->assertEquals( 3, $data->players[ 2 ]->userid, 'all players must exist in exported JSON' );
-            $this->assertEquals( 4, $data->players[ 3 ]->userid, 'all players must exist in exported JSON' );
-        }
-        public function testSendJson() {
-            $game = $this->buildGame();
-            $game->genesis();
-
-            $this->assertTrue( method_exists( $game, "sendJson" ), 'Game object should export a "sendJson" function' );
-
-            $json = $game->toJson();
-            $outputs = $game->sendJson();
-
-            $this->assertTrue( isset( $outputs ), 'sendJson must return the json it sent' );
-            $this->assertTrue( is_array( $outputs ), 'sendJson must return an array' );
-            $this->assertEquals( 4, count( $outputs ), 'JSON must be sent to all users' );
-
-            foreach ( $outputs as $output ) {
-                $this->assertEquals( $json, $output, 'Valid json must be send via "sendJson" function from each user' );
-            }
-        }
     }
 
     return new GameTest();

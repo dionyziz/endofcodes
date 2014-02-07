@@ -1,5 +1,6 @@
 <?php
     include_once 'models/creature.php';
+
     class Round extends ActiveRecordBase {
         public $creatures = [];
         public $id;
@@ -45,35 +46,6 @@
                     $this->creatures[ $i ]->user = $user;
                 }
             }
-        }
-
-        public function toJson() {
-            return json_encode( $this->jsonSerialize() );
-        }
-
-        public function jsonSerialize() {
-            $round = $this->id;
-            $map = [];
-            foreach ( $this->creatures as $creature ) {
-                $map[] = $creature->jsonSerialize();
-            }
-            return compact( 'round', 'map' );
-        }
-
-        public function sendJson() {
-            $json = [ $this->toJson() ];
-            $outputs = [];
-            foreach ( $this->game->users as $user ) {
-                $ch = curl_init();
-                curl_setopt( $ch, CURLOPT_URL, $user->boturl );
-                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-                curl_setopt( $ch, CURLOPT_POST, 1 );
-                curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
-                $output = curl_exec( $ch );
-                $outputs[] = $output;
-                curl_close( $ch );
-            }
-            return $outputs;
         }
 
         protected function create() {
