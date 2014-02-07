@@ -2,9 +2,12 @@
     class GraderBot {
         public $curlConnectionObject;
         protected $url;
+        public $user;
+        public $errors = array();
 
         public function __construct( $user ) {
             $this->curlConnectionObject = new CurlConnection();
+            $this->user = $user;
             $this->url = $user->boturl;
         }
         protected function httpRequest( $endpoint = '', $method = 'view', $data = array() ) {
@@ -41,23 +44,27 @@
             }
             $output = $ch->exec();
 
+            if ( isset( $ch->response ) ) {
+                if ( $this->user->username !== $ch->response->username ) {
+                    $this->errors[] = 'username_mismatch';
+                    throw new GraderBotException();
+                }
+            }
+
             return $output;
         }
         public function sendInitiateRequest() {
             $this->httpRequest( 'bot', 'create' ); 
         }
         public function sendGameRequest( $game ) {
-            $json = $game->toJson();
-            $this->httpRequest( 'game', 'create', [
-                'M' => $game->M,
-                'N' => $game->N,
-                'players' => somehow_serialize( $game->players ),
-            ] );
+            $this->httpRequest( 'game', 'create', GraderSerializer::gameRequestParams( $game ) );
         }
         public function buildGameRequestParams() {
         }
-        public function build
-        public function sendRoundRequest() {
+        public function sendRoundRequest( $round ) {
+            $this->httpRequest( 'round', 'create', GraderSerializer::roundRequestParams( $round ) );
         }
     }
+
+    class GraderBotException extends Exception {}
 ?>

@@ -2,7 +2,7 @@
     include_once 'models/grader/serializer.php';
 
     class SerializerTest extends UnitTestWithFixtures {
-        public function testGameSerialize() {
+        public function testGameRequestParams() {
             $game = $this->buildGame();
             $game->genesis();
 
@@ -36,7 +36,7 @@
             $this->assertEquals( 3, $players[ 2 ]->userid, 'All players must exist in exported request params' );
             $this->assertEquals( 4, $players[ 3 ]->userid, 'All players must exist in exported request params' );
         }
-        public function testRoundSerialize() {
+        public function testRoundRequestParams() {
             $round = $this->buildRound();
 
             $this->assertTrue( method_exists( 'GraderSerializer', "roundRequestParams" ), 'GraderSerializer must have a "roundRequestParams" function' );
@@ -76,10 +76,48 @@
             $data = json_decode( $json );
             
             $this->assertTrue( is_array( $data ), 'Data returned from decoded json must be an array' );
-            $this->assertEquals( count( $userList ), count( $data ), 'Data must have the same number of users as userlist has' );
+            $this->assertEquals( count( $userList ), count( $data ), 'Decoded json must have the same number of users as userList has' );
 
             $this->assertEquals( $userList[ 0 ]->id, $data[ 0 ]->userid, 'All users must be serialized' );
             $this->assertEquals( $userList[ 1 ]->id, $data[ 1 ]->userid, 'All users must be serialized' );
+        }
+        public function testFlattenCreature() {
+            $creature = $this->buildCreature( 1, 1, 2, $this->buildUser( 'vitsalis' ) );
+
+            $this->assertTrue( method_exists( 'GraderSerializer', 'flattenCreature' ), 'GraderSerializer must have a "flattenCreature" function' );
+
+            $flattenedCreature = GraderSerializer::flattenCreature( $creature );
+
+            $this->assertTrue( isset( $flattenedCreature[ 'x' ] ), 'x must exist in exported flattened data' );
+            $this->assertEquals( $creature->locationx, $flattenedCreature[ 'x' ], 'locationx must be encoded properly to flattened data' );
+
+            $this->assertTrue( isset( $flattenedCreature[ 'y' ] ), 'y must exist in exported flattened data' );
+            $this->assertEquals( $creature->locationy, $flattenedCreature[ 'y' ], 'locationy must be encoded properly to flattened data' );
+
+            $this->assertTrue( isset( $flattenedCreature[ 'hp' ] ), 'hp must exist in exported flattened data' );
+            $this->assertEquals( $creature->hp, $flattenedCreature[ 'hp' ], 'hp must be encoded properly to flattened data' );
+
+            $this->assertTrue( isset( $flattenedCreature[ 'userid' ] ), 'userid must exist in exported flattened data' );
+            $this->assertEquals( $creature->user->id, $flattenedCreature[ 'userid' ], 'userid must be encoded properly to flattened data' );
+
+            $this->assertTrue( isset( $flattenedCreature[ 'creatureid' ] ), 'creatureid must exist in exported flattened data' );
+            $this->assertEquals( $creature->id, $flattenedCreature[ 'creatureid' ], 'creatureid must be encoded properly to flattened data' );
+        }
+        public function testSerializeCreatureList() {
+            $creature1 = $this->buildCreature( 1, 1, 2, $this->buildUser( 'vitsalis' ) );
+            $creature2 = $this->buildCreature( 2, 3, 4, $this->buildUser( 'pkakelas' ) );
+            $creatureList = array( $creature1, $creature2 );
+
+            $this->assertTrue( method_exists( 'GraderSerializer', 'serializeCreatureList' ), 'GraderSerializer must have a "serializeCreatureList" function' );
+
+            $json = GraderSerializer::serializeCreatureList( $creatureList );
+            $data = json_decode( $json );
+
+            $this->assertTrue( is_array( $data ), 'Data returned from decoded json must be an array' );
+            $this->assertEquals( count( $creatureList ), count( $data ), 'Decoded json must have the same number of creatures as creatureList has' );
+
+            $this->assertEquals( $creatureList[ 0 ]->id, $data[ 0 ]->creatureid, 'All creatures must be serialized' );
+            $this->assertEquals( $creatureList[ 1 ]->id, $data[ 1 ]->creatureid, 'All creatures must be serialized' );
         }
     }
 

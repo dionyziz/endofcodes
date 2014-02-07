@@ -168,40 +168,6 @@
                 }
             }
         }
-
-        public function toJson() {
-            return json_encode( $this->jsonSerialize() );
-        }
-
-        public function jsonSerialize() {
-            $gameid = $this->id;
-            $W = $this->width;
-            $H = $this->height;
-            $M = $this->creaturesPerPlayer;
-            $MAX_HP = $this->maxHp;
-            $players = [];
-            foreach ( $this->users as $user ) {
-                $players[] = $user->jsonSerialize();
-            }
-            return compact( 'gameid', 'W', 'H', 'M', 'MAX_HP', 'players' );
-        }
-
-
-        public function sendJson() {
-            $json = [ $this->toJson() ];
-            $outputs = [];
-            foreach ( $this->users as $user ) {
-                $ch = curl_init();
-                curl_setopt( $ch, CURLOPT_URL, $user->boturl );
-                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-                curl_setopt( $ch, CURLOPT_POST, 1 );
-                curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
-                $output = curl_exec( $ch );
-                $outputs[] = $output;
-                curl_close( $ch );
-            }
-            return $outputs;
-        }
     }
 
     class GameException extends Exception {}

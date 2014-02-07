@@ -13,11 +13,21 @@
 
             return compact( 'gameid', 'W', 'H', 'M', 'MAX_HP', 'players' );
         }
-        public static function roundRequestParams( $round ) {
+        public static function roundRequestParams( $roundObject ) {
+            $round = $roundObject->id;
+            $map = GraderSerializer::serializeCreatureList( $roundObject->creatures );
+
+            return compact( 'round', 'map' );
         }
         public static function serializeUserList( $users ) {
             $flattenedUsers = array_map( array( 'GraderSerializer', 'flattenUser' ), $users );
+
             return json_encode( $flattenedUsers );
+        }
+        public static function serializeCreatureList( $creatures ) {
+            $flattenedCreatures = array_map( array( 'GraderSerializer', 'flattenCreature' ), $creatures );
+
+            return json_encode( $flattenedCreatures );
         }
         public static function flattenUser( $user ) {
             $username = $user->username;

@@ -20,21 +20,21 @@
 
             return $country;
         }
+        protected function buildCreature( $id, $x, $y, $user ) {
+            $creature = new Creature();
+            $creature->locationx = $x;
+            $creature->locationy = $y;
+            $creature->hp = 10;
+            $creature->user = $user;
+            $creature->id = $id;
+
+            return $creature;
+        }
         protected function buildRound() {
             $round = new Round();
             $round->id = 1;
-            $creature1 = new Creature();
-            $creature2 = new Creature();
-            $creature1->locationx = 1;
-            $creature1->locationy = 2;
-            $creature2->locationx = 3;
-            $creature2->locationy = 4;
-            $creature1->hp = 10;
-            $creature2->hp = 11;
-            $creature1->user = $this->buildUser( 'vitsalis' );
-            $creature2->user = $this->buildUser( 'pkakelas' );
-            $creature1->id = 1;
-            $creature2->id = 2;
+            $creature1 = $this->buildCreature( 1, 1, 2, $this->buildUser( 'vitsalis' ) );
+            $creature2 = $this->buildCreature( 2, 3, 4, $this->buildUser( 'pkakelas' ) );
             $round->creatures = [ $creature1, $creature2 ];
             return $round;
         }
