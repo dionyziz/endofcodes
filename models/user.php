@@ -15,7 +15,7 @@
         public $boturl;
         protected $dob;
         protected $tableName = 'users';
-
+        
         public static function findByUsername( $username ) {
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
@@ -60,6 +60,16 @@
                 $this->dob = $user_info[ 'dob' ];
                 $this->exists = true;
             }
+        }
+        
+        public static function findByEmail( $email ) {
+            try {
+                $user = dbSelectOne( 'users', [ 'id' ], compact( "email" ) );
+            }
+            catch ( DBException $e ) {
+                throw new ModelNotFoundException();
+            }
+            return new User( $user[ 'id' ] );
         }
 
         protected function onBeforeSave() {
@@ -130,8 +140,10 @@
                 throw new ModelValidationException( 'username_used' );
             }
             catch ( ModelNotFoundException $e ) {
+                $other_user = User::findByEmail( $this->email );
                 throw new ModelValidationException( 'email_used' );
             }
+            throw new ModelNotFoundException();
         }
 
         protected function update() {
