@@ -1,8 +1,8 @@
 <?php
     include_once 'models/user.php';
     include_once 'models/country.php';
-    
-    class UserTest extends UnitTestWithUser {
+
+    class UserTest extends UnitTestWithFixtures {
         public function testCreate() {
             $user = new User();
             $user->username = 'pkakelas';
@@ -10,9 +10,13 @@
             $user->email = 'pkakelas@gmail.com';
             $user->save();
             $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
-            $this->assertEquals( true, $passwordSuccess, 'Password must be the one associated during creation' );
+            $this->assertTrue( $passwordSuccess, 'Password must be the one associated during creation' );
             $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
+        }
+        public function testAuthenticatesWithPassword() {
+            $user = $this->buildUser( 'pkakelas' );
+            $this->assertFalse( $user->authenticatesWithPassword( 'wrongsecret' ), 'User must not be authenticated with a wrong password' );
         }
         public function testDelete() {
             $user = $this->buildUser( 'pkakelas' );
@@ -28,11 +32,10 @@
         }
         public function testPasswordChange() {
             $user = $this->buildUser( 'pkakelas' );
-            $password = $user->password;
             $user->password = 'newsecret1234';
             $user->save();
             $success = $user->authenticatesWithPassword( 'newsecret1234' );
-            $this->assertEquals( true, $success, 'Password must be the one associated during update' );
+            $this->assertTrue( $success, 'Password must be the one associated during update' );
         }
         public function testEmailChange() {
             $user = $this->buildUser( 'pkakelas' );
@@ -41,8 +44,10 @@
             $this->assertEquals( 'pkakelas2@gmail.com', $user->email, 'Email must be the one associated during update' );
         }
         public function testSetCountry() {
+            $country = $this->buildCountry( 'Greece', 'GR' );
+
             $user = $this->buildUser( 'pkakelas' );
-            $user->country = new Country( 1 );
+            $user->country = $country;
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
         public function testDuplicateUsername() {
@@ -103,6 +108,27 @@
             $user = $this->buildUser( 'pkakelas' );
             $dbUser = User::findByUsername( 'pkakelas' );
             $this->assertEquals( $user->id, intval( $dbUser->id ), "findByUsername must find the correct user" );
+        }
+        public function testJsonSerialize() {
+            $user = $this->buildUser( 'pkakelas' );
+
+            $this->assertTrue( method_exists( $user, 'toJson' ), 'User object must export a "toJson" function' );
+
+            $json = $user->toJson();
+            $data = json_decode( $json );
+
+            $this->assertTrue( isset( $data->username ), 'username must exist in exported JSON' ); 
+            $this->assertEquals( $user->username, $data->username, 'username must be encoded properly to JSON' );
+
+            $this->assertTrue( isset( $data->userid ), 'userid must exist in exported JSON' ); 
+            $this->assertEquals( $user->id, $data->userid, 'userid must be encoded properly to JSON' );
+        }
+        public function testAuthenticationAfterRenewSessionId() {
+            $user = $this->buildUser( 'pkakelas' );
+
+            $user->renewSessionId();
+            $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
+            $this->assertTrue( $passwordSuccess, 'Password must not be changed after "renewSessionId" is run' );
         }
     }
 

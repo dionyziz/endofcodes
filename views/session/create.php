@@ -2,8 +2,8 @@
     include 'views/header.php';
 ?>
 
-<div id="login"><?php 
-    $form = new Form( 'session', 'create' );  
+<div id="login"><?php
+    $form = new Form( 'session', 'create' );
     $form->id = 'login-form';
     $form->output( function( $self ) use ( $username_empty, $password_empty,
             $username_wrong, $password_wrong ) {

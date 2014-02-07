@@ -1,12 +1,12 @@
 <?php
     include 'migrate.php';
 
-    migrate( 
-        array( 
+    migrate(
+        [
             'ALTER TABLE
                 users
             ADD
                 dob date NOT NULL'
-        ) 
+        ]
     );
 ?>

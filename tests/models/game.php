@@ -5,7 +5,7 @@
     include_once 'models/intent.php';
     include_once 'models/user.php';
 
-    class GameTest extends UnitTestWithUser {
+    class GameTest extends UnitTestWithFixtures {
         public function testInit() {
             $game = new Game();
             for ( $i = 1; $i <= 4; ++$i ) {
@@ -14,9 +14,9 @@
             $game->save();
             $this->assertTrue( $game->width > 0, 'A game with users must have width' );
             $this->assertTrue( $game->height > 0, 'A game with users must have height' );
-            $this->assertTrue( 
+            $this->assertTrue(
                 3 * count( $game->users ) * $game->creaturesPerPlayer < $game->width * $game->height,
-                '3NM < WH must be true' 
+                '3NM < WH must be true'
             );
         }
         protected function buildGame() {
@@ -40,7 +40,7 @@
             $game->genesis();
             $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
-            $userCountCreatures = array();
+            $userCountCreatures = [];
             // start from 1 because user's id starts from 1
             for ( $i = 1; $i <= count( $game->users ); ++$i ) {
                 $userCountCreatures[ $i ] = 0;
@@ -59,10 +59,10 @@
                     }
                 }
             }
-            $this->assertEquals( 
-                count( $game->users ) * $game->creaturesPerPlayer, 
-                $creatureCount, 
-                'Each player must have a certain number of creatures' 
+            $this->assertEquals(
+                count( $game->users ) * $game->creaturesPerPlayer,
+                $creatureCount,
+                'Each player must have a certain number of creatures'
             );
             $creaturesPerUser = $creatureCount / count( $game->users );
             foreach ( $userCountCreatures as $userCountCreature ) {
@@ -76,6 +76,39 @@
                     $grid[ $creature->locationx ][ $creature->locationy ] = true;
                 }
             }
+        }
+        public function testJsonSerialize() {
+            $game = $this->buildGame();
+            $game->genesis();
+
+            $this->assertTrue( method_exists( $game, "toJson" ), 'Game object should export a "toJson" function' );
+
+            $json = $game->toJson();
+            $data = json_decode( $json );
+
+            $this->assertTrue( isset( $data->gameid ), 'gameid must exist in exported JSON' );
+            $this->assertEquals( $game->id, $data->gameid, 'gameid must be encoded properly to JSON' );
+            
+            $this->assertTrue( isset( $data->W ), 'W must exist in exported JSON' );
+            $this->assertEquals( $game->width, $data->W, 'W must be encoded properly to JSON' );
+
+            $this->assertTrue( isset( $data->H ), 'H must exist in exported JSON' );
+            $this->assertEquals( $game->height, $data->H, 'H must be encoded properly to JSON' );
+
+            $this->assertTrue( isset( $data->M ), 'M must exist in exported JSON' );
+            $this->assertEquals( $game->creaturesPerPlayer, $data->M, 'M must be encoded properly to JSON' );
+
+            $this->assertTrue( isset( $data->MAX_HP ), 'MAX_HP must exist in exported JSON' );
+            $this->assertEquals( $game->maxHp, $data->MAX_HP, 'MAX_HP must be encoded properly to JSON' );
+
+            $this->assertTrue( isset( $data->players ), 'players must exist in exported JSON' );
+            $this->assertTrue( is_array( $data->players ), 'players must be an array in exported JSON' );
+            $this->assertEquals( 4, count( $data->players ), 'players must contain correct number of users in exported JSON' );
+
+            $this->assertEquals( 1, $data->players[ 0 ]->userid, 'all players must exist in exported JSON' );
+            $this->assertEquals( 2, $data->players[ 1 ]->userid, 'all players must exist in exported JSON' );
+            $this->assertEquals( 3, $data->players[ 2 ]->userid, 'all players must exist in exported JSON' );
+            $this->assertEquals( 4, $data->players[ 3 ]->userid, 'all players must exist in exported JSON' );
         }
     }
 

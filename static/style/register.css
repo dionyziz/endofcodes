@@ -1,6 +1,6 @@
-div.steps { 
+div.steps {
     width: 15%;
-    float:left; 
+    float:left;
     margin-right: 9%;
     border: 1px solid black;
 }
@@ -13,5 +13,5 @@ div.steps {
     margin-top: 5%;
     height: 86px;
     margin-bottom: 7%;
-    text-align: center;  
+    text-align: center;
 }

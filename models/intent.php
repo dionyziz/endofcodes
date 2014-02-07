@@ -9,13 +9,13 @@
     define( 'ACTION_ATTACK', 2 );
 
     function directionStringToConst( $direction ) {
-        $directionMap = array(
+        $directionMap = [
             'NONE' => DIRECTION_NONE,
             'NORTH' => DIRECTION_NORTH,
             'EAST' => DIRECTION_EAST,
             'SOUTH' => DIRECTION_SOUTH,
             'WEST' => DIRECTION_wEST
-        );
+        ];
         if ( isset( $directionMap[ $direction ] ) ) {
             return $directionMap[ $direction ];
         }
@@ -23,13 +23,13 @@
     }
 
     function directionConstToString( $direction ) {
-        $directionMap = array(
+        $directionMap = [
             DIRECTION_NONE => 'NONE',
             DIRECTION_NORTH => 'NORTH',
             DIRECTION_EAST => 'EAST',
             DIRECTION_SOUTH => 'SOUTH',
             DIRECTION_WEST => 'WEST'
-        );
+        ];
         if ( isset( $directionMap[ $direction ] ) ) {
             return $directionMap[ $direction ];
         }
@@ -37,11 +37,11 @@
     }
 
     function actionStringToConst( $action ) {
-        $actionMap = array(
+        $actionMap = [
             'NONE' => ACTION_NONE,
             'MOVE' => ACTION_MOVE,
             'ATTACK' => ACTION_ATTACK
-        );
+        ];
         if ( isset( $actionMap[ $action ] ) ) {
             return $actionMap[ $action ];
         }
@@ -49,11 +49,11 @@
     }
 
     function actionConstToString( $action ) {
-        $actionMap = array(
+        $actionMap = [
             ACTION_NONE => 'NONE',
             ACTION_MOVE => 'MOVE',
             ACTION_ATTACK => 'ATTACK'
-        );
+        ];
         if ( isset( $actionMap[ $action ] ) ) {
             return $actionMap[ $action ];
         }

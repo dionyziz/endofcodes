@@ -1,10 +1,10 @@
 <?php
     class UserController extends ControllerBase {
-        public function create( $username = '', $password = '', $password_repeat = '', $email = '', 
+        public function create( $username = '', $password = '', $password_repeat = '', $email = '',
                 $countryid = '', $day = '', $month = '', $year = '' ) {
             include_once 'models/country.php';
             if ( $password !== $password_repeat ) {
-                go( 'user', 'create', array( 'password_not_matched' => true ) );
+                go( 'user', 'create', [ 'password_not_matched' => true ] );
             }
             try {
                 $country = new Country( $countryid );
@@ -23,7 +23,7 @@
                 $user->save();
             }
             catch( ModelValidationException $e ) {
-                go( 'user', 'create', array( $e->error => true ) );
+                go( 'user', 'create', [ $e->error => true ] );
             }
             $_SESSION[ 'user' ] = $user;
             go();
@@ -37,7 +37,7 @@
             include_once 'models/image.php';
             include_once 'models/country.php';
             include_once 'models/follow.php';
-            try { 
+            try {
                 $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
@@ -45,7 +45,7 @@
             }
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 try {
-                    $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id ); 
+                    $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id );
                     $followExists = true;
                 }
                 catch ( ModelNotFoundException $e ) {
@@ -55,7 +55,7 @@
             include_once 'views/user/view.php';
         }
 
-        public function update( $password = '', $password_new = '', $password_repeat = '', 
+        public function update( $password = '', $password_new = '', $password_repeat = '',
                 $countryid = '', $email = '' ) {
             include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
@@ -65,12 +65,12 @@
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
                     if ( $password_new !== $password_repeat ) {
-                        go( 'user', 'update', array( 'password_new_not_matched' => true ) );
+                        go( 'user', 'update', [ 'password_new_not_matched' => true ] );
                     }
                     $user->password = $password_new;
                 }
                 else {
-                    go( 'user', 'update', array( 'password_wrong' => true ) );
+                    go( 'user', 'update', [ 'password_wrong' => true ] );
                 }
             }
             $user->email = $email;
@@ -79,11 +79,11 @@
             }
             catch ( ModelNotFoundException $e ) {
             }
-            try { 
+            try {
                 $user->save();
             }
             catch ( ModelValidationException $e ) {
-                go( 'user', 'update', array( $e->error => true ) );
+                go( 'user', 'update', [ $e->error => true ] );
             }
             go();
         }
@@ -98,14 +98,14 @@
             go();
         }
 
-        public function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid, 
+        public function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid,
                 $password_empty, $password_not_matched, $password_small ) {
-            include_once 'models/country.php'; 
+            include_once 'models/country.php';
             $countries = Country::findAll();
             include 'views/user/create.php';
         }
 
-        public function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong, 
+        public function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong,
                 $email_invalid, $email_used ) {
             include_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {

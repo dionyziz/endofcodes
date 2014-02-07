@@ -1,12 +1,12 @@
 <?php
     class Country extends ActiveRecordBase {
-        protected $attributes = array( 'shortname', 'name' );
+        protected $attributes = [ 'shortname', 'name' ];
         public $name;
         public $id;
         public $shortname;
         protected $tableName = 'countries';
 
-        public static function findAll() { 
+        public static function findAll() {
             return dbSelect( 'countries' );
         }
 
@@ -15,7 +15,7 @@
 
             if ( $id ) {
                 try {
-                    $row = dbSelectOne( 'countries', array( 'name', 'shortname' ), compact( 'id' ) );
+                    $row = dbSelectOne( 'countries', [ 'name', 'shortname' ], compact( 'id' ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();

@@ -2,7 +2,7 @@
     include_once 'migrate.php';
 
     migrate(
-        array(
+        [
             'ALTER TABLE
                 roundcreatures
             CHANGE
@@ -11,6 +11,6 @@
                 games
             CHANGE
                 `created` `created` DATETIME NOT NULL'
-        )
+        ]
     );
 ?>

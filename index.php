@@ -1,7 +1,7 @@
 <?php
     include_once 'models/dependencies.php';
     include_once 'header.php';
-    
+
     if ( isset( $_GET[ 'resource' ] ) ) {
         $resource = $_GET[ 'resource' ];
     }
@@ -24,8 +24,11 @@
         die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() );
     }
     catch ( RedirectException $e ) {
+        global $config;
+
         $url = $e->getURL();
-        header( 'Location: ' . $url );
+
+        header( 'Location: ' . $config[ 'base' ] . $url );
     }
     catch ( HTTPErrorException $e ) {
         header( $e->header );

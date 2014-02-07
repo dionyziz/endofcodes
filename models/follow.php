@@ -2,7 +2,7 @@
     class Follow extends ActiveRecordBase {
         public $follower;
         public $followed;
-        protected $attributes = array( 'followerid', 'followedid' );
+        protected $attributes = [ 'followerid', 'followedid' ];
         protected $followerid;
         protected $followedid;
         protected $tableName = 'follows';
@@ -12,7 +12,7 @@
                 try {
                     $res = dbSelectOne(
                         'follows',
-                        array( 'followerid', 'followedid' ),
+                        [ 'followerid', 'followedid' ],
                         compact( 'followerid', 'followedid' )
                     );
                 }
@@ -24,7 +24,7 @@
             }
         }
 
-        protected function validate() {
+        protected function onBeforeSave() {
             if ( !is_int( $this->follower->id ) ) {
                 throw new ModelValidationException( 'followerid_not_valid' );
             }

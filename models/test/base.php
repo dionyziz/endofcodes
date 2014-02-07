@@ -37,13 +37,13 @@
 
     abstract class UnitTest {
         public $successTestsCount = 0;
-        public $tests = array();
+        public $tests = [];
         protected $currentTest = null;
 
         public static function findAll( $subdir = '' ) {
             include_once 'models/extentions.php';
             $dir = 'tests/' . $subdir;
-            $list = array();
+            $list = [];
             if ( is_dir( $dir ) ) {
                 $objects = scandir( $dir );
                 foreach ( $objects as $object ) {
@@ -109,9 +109,6 @@
         protected function truncateDb() {
             $tables = dbListTables();
             foreach ( $tables as $table ) {
-                if ( $table === 'countries' ) {
-                    continue;
-                }
                 db( 'TRUNCATE TABLE ' . $table );
             }
         }

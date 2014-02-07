@@ -1,53 +1,49 @@
 <?php
     include_once 'models/country.php';
-    
+
     class CountryTest extends UnitTest {
-        protected function insertCountry() {
-            $countries = array(
-                'GR' => 'Greece',
-                'UK' => 'England',
-                'RU' => 'Russia'
-            );
-            $shortnames = array_keys( $countries );
-            $names = array_values( $countries );
-            for ( $i = 0; $i < 2; $i++ ) {
+        protected $countries = [
+            'GR' => 'Greece',
+            'UK' => 'England',
+            'RU' => 'Russia'
+        ];
+
+        protected function insertCountries() {
+            $countries = $this->countries;
+            foreach ( $countries as $shortname => $name ) {
                 $country = new Country();
-                $country->shortname = $shortnames[ $i ];
-                $country->name = $names[ $i ];
+                $country->shortname = $shortname;
+                $country->name = $name;
                 $country->save();
             }
         }
+        public function testFindNonExistentCountry() {
+            $caught = false;
+            try {
+                $country = new Country( 1 );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+            $this->assertTrue( $caught, 'When we try to find a non existent country we must get a ModelNotFoundException' );
+        }
         public function testFindAll() {
-            $inserted = true;
-            $this->insertCountry();
-            $res = Country::findAll(); 
-            $arrayExists = is_array( $res );
-            $success = count( $res ) > 3;
-            $this->assertTrue( $arrayExists, '$Country::findall() did not return an array' );
-            $this->assertTrue( $success, '$Country::findall() did not return the as much countries as it should' );
+            $this->insertCountries();
+            $countriesArray = Country::findAll();
+            $this->assertTrue( is_array( $countriesArray ), 'Country::findAll() did not return an array of countries' );
+            $this->assertTrue( count( $countriesArray ) === 3, 'Country::findAll() did not return as many countries as it should' );
         } 
         public function testCountryConstruct() {
-            $created = true;
+            $countries = $this->countries;
             $testId = 1;
-            $this->insertCountry();
+            $shortnames = array_keys( $countries );
+            $shortname = $shortnames[ 0 ];
+            $this->insertCountries();
             $country = new Country( $testId );
-            $idExists = isset( $country->id );
-            $shortnameExists = isset( $country->shortname );
-            $nameExists = isset( $country->name );
-            $this->assertTrue( $idExists, 'country->id of the new country object is empty' );
-            $this->assertEquals ( $testId, $country->id, "'new country()' did not return the appropriate country" );
-            $this->assertTrue( $shortnameExists, 'country->shortname of the new country object is empty' );
-            $this->assertTrue( $nameExists, 'country->name of the new country object is empty' );
-        }
-        public function testCountryCreate() {
-            $created = true;
-            try {
-                $this->insertCountry();
-            }
-            catch ( DBException $e ) {
-                $created = false;    
-            }
-            $this->assertTrue( $created, 'Countries could not be saved' );
+            $this->assertTrue( is_object( $country ), "'new Country()' did not return an object" );
+            $this->assertEquals( $testId, $country->id, "'new Country()' did not return the appropriate country" );
+            $this->assertEquals( $shortname, $country->shortname, "'new Country()' did not return the appropriate shortname" );
+            $this->assertEquals( $countries[ $shortname ], $country->name, "'new Country()' did not return the appropriate name" );
         }
     }
 
