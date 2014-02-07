@@ -130,8 +130,11 @@
             }
             $email = $this->email;
             $dob = $this->dob;
-            $sessionid = $this->sessionid;
             $forgotPasswordToken = $this->forgotPasswordToken;
+            if ( empty( $this->sessionid ) ) {
+                $this->generateSessionId();
+            }
+            $sessionid = $this->sessionid;
             if ( isset( $this->country ) ) {
                 $countryid = $this->country->id;
             }
@@ -206,5 +209,6 @@
             }
             return false;
         }
+
     }
 ?>
