@@ -22,6 +22,19 @@ Blog
 ====
 You can read more about the development of the game on our [blog](http://blog.endofcodes.com)
 
+Technology
+==========
+End of Codes is written in HTML, CSS, Javascript, PHP, and MySQL. We require:
+
+ * PHP 5.5+
+ * MySQL
+ * Apache
+
+PHP 5.5 is required because we use array-access-after-definition. PHP 5.4 is required because we use JSON notation
+for arrays. PHP 5 is required because we use OOP5 features.
+
+End of Codes has been tested under MySQL 5.5 and 5.6 and Apache 2.2, but it may work with other versions also.
+
 License
 =======
-MIT. See the file LICENSE.
+MIT. See the file [LICENSE](https://github.com/dionyziz/endofcodes/blob/master/LICENSE).
