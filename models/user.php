@@ -140,8 +140,9 @@
                 throw new ModelValidationException( 'username_used' );
             }
             catch ( ModelNotFoundException $e ) {
-                $other_user = User::findByEmail( $this->email );
-                throw new ModelValidationException( 'email_used' );
+                if ( $other_user = User::findByEmail( $this->email ) ) {
+                    throw new ModelValidationException( 'email_used' );
+                }
             }
             throw new DBException( mysql_error() );
         }
