@@ -144,7 +144,7 @@
                     throw new ModelValidationException( 'email_used' );
                 }
             }
-            throw new DBException( mysql_error() );
+            throw $e;
         }
 
         protected function update() {
