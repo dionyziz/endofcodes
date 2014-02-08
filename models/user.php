@@ -136,11 +136,11 @@
 
         protected function onCreateError( $e ) {
             try {
-                $other_user = User::findByUsername( $this->username );
+                User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );
             }
             catch ( ModelNotFoundException $e ) {
-                if ( $other_user = User::findByEmail( $this->email ) ) {
+                if ( User::findByEmail( $this->email ) ) {
                     throw new ModelValidationException( 'email_used' );
                 }
             }
