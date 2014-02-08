@@ -8,7 +8,8 @@
 
     class CurlConnection implements CurlConnectionInterface {
         protected $ch;
-        public $output;
+        public $response;
+        public $responseCode;
 
         public function __construct() {
             $this->ch = curl_init();
@@ -20,7 +21,21 @@
             curl_setopt( $this->ch, $option, $value );
         }
         public function exec() {
-            $this->output = curl_exec( $this->ch );
+            $response = curl_exec( $this->ch );
+            if ( $response === false ) {
+                throw new CurlException( curl_error() );
+            }
+            $this->response = $response;
+            $this->responseCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+        }
+    }
+
+    class CurlException extends Exception {
+        public $error;
+
+        public function __construct( $error = '' ) {
+            parent::__construct( $error );
+            $this->error = $error;
         }
     }
 ?>

@@ -12,6 +12,9 @@
         public $requestMethod;
         public $executed = false;
         public $response;
+        protected $responseError;
+        protected $hasResponseError;
+        public $responseCode = 200;
 
         public function __construct() {
         }
@@ -29,12 +32,21 @@
             }
         }
         public function exec() {
+            if ( $this->hasResponseError ) {
+                throw new CurlException( $this->responseError );
+            }
             $this->executed = true;
         }
-        public function __destruct() {
-        }
+        public function __destruct() {}
         public function makeRespondWith( $json ) {
-            $this->response = json_decode( $json );
+            $this->response = $json;
+        }
+        public function makeRespondWithError( $errorno ) {
+            $this->hasResponseError = true;
+            $this->responseError = $errorno;
+        }
+        public function makeRespondWithErrorCode( $code ) {
+            $this->responseCode = $code;
         }
     }
 
@@ -48,7 +60,12 @@
 
             $curlConnectionMock = new CurlConnectionMock();
             $bot->curlConnectionObject = $curlConnectionMock;
-            $answer = $bot->sendInitiateRequest();
+            $curlConnectionMock->makeRespondWith( json_encode( [
+                'botname' => 'suprabot',
+                'version' => '0.1.0',
+                'username' => 'vitsalis'
+            ] ) );
+            $bot->sendInitiateRequest();
 
             $this->assertEquals( $botbase . '/bot', $curlConnectionMock->url, 'Initiation must send a request to the URL {{botbase}}/bot' );
             $this->assertEquals( 'POST', $curlConnectionMock->requestMethod, 'Initiation must do a POST request' );
@@ -135,15 +152,15 @@
 
             $this->assertFalse( $caught, 'A GraderBotException should not be thrown if the username is correct' );
 
+            $bot = new GraderBot( $user );
+
             $curlConnectionMock = new CurlConnectionMock();
             $curlConnectionMock->makeRespondWith( json_encode( [
                 'botname' => 'suprabot',
                 'version' => '0.1.0',
                 'username' => 'god'
             ] ) );
-            $bot->curlConnectionObject = $curlConnectionMock;
 
-            $bot = new GraderBot( $user );
             $bot->curlConnectionObject = $curlConnectionMock;
 
             $caught = false;
@@ -158,6 +175,117 @@
 
             $this->assertEquals( 1, count( $bot->errors ), 'Bot that replies with incorrect username should have an error reported' );
             $this->assertEquals( 'username_mismatch', $bot->errors[ 0 ], 'Bot that replies with incorrect username should have a "username_mismatch" error reported' );
+        }
+        protected function initiateAndGetErrors( $mock_error ) {
+            $user = $this->buildUser( 'vitsalis' );
+            $user->boturl = 'http://endofcodes.com/does_not_matter';
+            $bot = new GraderBot( $user );
+
+            $curlConnectionMock = new CurlConnectionMock();
+            $bot->curlConnectionObject = $curlConnectionMock;
+
+            $curlConnectionMock->makeRespondWithError( $mock_error );
+
+            $caught = false;
+            try {
+                $bot->sendInitiateRequest();
+            }
+            catch ( GraderBotException $e ) {
+                $caught = true;
+            }
+
+            return [
+                'caught' => $caught,
+                'errors' => $bot->errors
+            ];
+        }
+        public function testResolvedHostname() {
+            $result = $this->initiateAndGetErrors( CURLE_COULDNT_RESOLVE_HOST );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught when curl responds with an error' );
+            $this->assertEquals( 'could_not_resolve', $result[ 'errors' ][ 0 ], 'Bot with url that could not be resolved must have a "could_not_resolve" error' );
+        }
+        public function testNetworkUnreachable() {
+            $result = $this->initiateAndGetErrors( CURLE_COULDNT_CONNECT );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught when curl responds with an error' );
+            $this->assertEquals( 'could_not_connect', $result[ 'errors' ][ 0 ], 'Bot with url that could not be resolved must have a "could_not_connect" error' );
+        }
+        public function testRespondCode() {
+            $user = $this->buildUser( 'vitsalis' );
+            $bot = new GraderBot( $user );
+
+            $curlConnectionMock = new CurlConnectionMock();
+            $bot->curlConnectionObject = $curlConnectionMock;
+
+            $curlConnectionMock->makeRespondWithErrorCode( 404 );
+
+            $caught = false;
+            try {
+                $bot->sendInitiateRequest();
+            }
+            catch ( GraderBotException $e ) {
+                $caught = true;
+            }
+
+            $this->assertTrue( $caught, 'A GraderBotExcpetion must be caught when HTTP response code is not OK(200)' );
+            $this->assertEquals( 'http_code_not_ok', $bot->errors[ 0 ], 'Bot whose HTTP response code is not OK(200) must have a "http_code_not_ok" error' );
+        }
+        public function testRespondInvalidJson() {
+            $result = $this->initiateWithJsonAndGetErrors( '{ invalid_json }' );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response has invalid json' );
+            $this->assertEquals( 'invalid_json', $result[ 'errors' ][ 0 ], 'Bot who has invalid json as a response must have a "invalid_json" error' );
+        }
+        protected function initiateWithJsonAndGetErrors( $json ) {
+            $user = $this->buildUser( 'vitsalis' );
+            $bot = new GraderBot( $user );
+
+            $curlConnectionMock = new CurlConnectionMock();
+            $curlConnectionMock->makeRespondWith( $json );
+
+            $bot->curlConnectionObject = $curlConnectionMock;
+
+            $caught = false;
+            try {
+                $bot->sendInitiateRequest();
+            }
+            catch ( GraderBotException $e ) {
+                $caught = true;
+            }
+
+            return [
+                'caught' => $caught,
+                'errors' => $bot->errors
+            ];
+        }
+        public function testRespondWithoutBotname() {
+            $result = $this->initiateWithJsonAndGetErrors( json_encode( [
+                'version' => '0.1.0',
+                'username' => 'vitsalis'
+            ] ) );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response does not have a botname' );
+            $this->assertEquals( 'botname_not_set', $result[ 'errors' ][ 0 ], 'Bot whose botname is not set must have a "botname_not_set" error' );
+        }
+        public function testRespondWithoutVersion() {
+
+            $result = $this->initiateWithJsonAndGetErrors( json_encode( [
+                'botname' => 'suprabot',
+                'username' => 'vitsalis'
+            ] ) );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response does not have a version' );
+            $this->assertEquals( 'version_not_set', $result[ 'errors' ][ 0 ], 'Bot whose version is not set must have a "version_not_set" error' );
+        }
+        public function testRespondWithoutUsername() {
+            $result = $this->initiateWithJsonAndGetErrors( json_encode( [
+                'botname' => 'suprabot',
+                'version' => '0.1.0'
+            ] ) );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response does not have a username' );
+            $this->assertEquals( 'username_not_set', $result[ 'errors' ][ 0 ], 'Bot whose username is not set must have a "username_not_set" error' );
         }
     }
 

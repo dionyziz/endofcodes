@@ -4,11 +4,20 @@
     include_once 'models/grader/bot.php';
 
     class Grader {
-        protected $bots;
+        public $bots;
+        public $registeredBots;
         protected $game;
 
         public function initiate() {
-            $bot->sendInitiateRequest();
+            $this->registeredBots = [];
+            foreach ( $this->bots as $bot ) {
+                try {
+                    $bot->sendInitiateRequest();
+                    $this->registeredBots[] = $bot;
+                }
+                catch ( GraderBotException $e ) {
+                }
+            }
         }
         public function createGame() {
             foreach ( $this->bots as $bot ) {

@@ -4,6 +4,8 @@
         protected $url;
         public $user;
         public $errors = array();
+        public $version;
+        public $name;
 
         public function __construct( $user ) {
             $this->curlConnectionObject = new CurlConnection();
@@ -42,19 +44,50 @@
                 $ch->setOpt( CURLOPT_POST, 1 );
                 $ch->setOpt( CURLOPT_POSTFIELDS, $data );
             }
-            $output = $ch->exec();
+            $ch->exec();
 
-            if ( isset( $ch->response ) ) {
-                if ( $this->user->username !== $ch->response->username ) {
-                    $this->errors[] = 'username_mismatch';
-                    throw new GraderBotException();
-                }
-            }
-
-            return $output;
+            return $ch;
         }
         public function sendInitiateRequest() {
-            $this->httpRequest( 'bot', 'create' ); 
+            try {
+                $ch = $this->httpRequest( 'bot', 'create' );
+            }
+            catch ( CurlException $e ) {
+                $this->errors[] = [
+                    CURLE_COULDNT_RESOLVE_HOST => 'could_not_resolve',
+                    CURLE_COULDNT_CONNECT => 'could_not_connect'
+                ][ $e->error ];
+                throw new GraderBotException();
+            }
+
+            if ( $ch->responseCode !== 200 ) {
+                $this->errors[] = 'http_code_not_ok';
+                throw new GraderBotException();
+            }
+
+            $decodedResponse = json_decode( $ch->response );
+            if ( $decodedResponse === null ) {
+                $this->errors[] = 'invalid_json';
+                throw new GraderBotException();
+            }
+            if ( !isset( $decodedResponse->botname ) ) {
+                $this->errors[] = 'botname_not_set';
+                throw new GraderBotException();
+            }
+            if ( !isset( $decodedResponse->version ) ) {
+                $this->errors[] = 'version_not_set';
+                throw new GraderBotException();
+            }
+            if ( !isset( $decodedResponse->username ) ) {
+                $this->errors[] = 'username_not_set';
+                throw new GraderBotException();
+            }
+            if ( $this->user->username !== $decodedResponse->username ) {
+                $this->errors[] = 'username_mismatch';
+                throw new GraderBotException();
+            }
+            $this->version = $decodedResponse->version;
+            $this->botname = $decodedResponse->botname;
         }
         public function sendGameRequest( $game ) {
             $this->httpRequest( 'game', 'create', GraderSerializer::gameRequestParams( $game ) );
