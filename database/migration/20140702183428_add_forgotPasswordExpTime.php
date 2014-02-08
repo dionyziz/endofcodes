@@ -6,7 +6,7 @@
             'ALTER TABLE
                 users
             ADD COLUMN
-                forgotPasswordToken text;'
+                forgotpasswordexptime datetime;'
         )
     );
 ?>

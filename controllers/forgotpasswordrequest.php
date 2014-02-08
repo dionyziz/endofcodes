@@ -24,8 +24,8 @@
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPUnauthorizedException();
             }
-            $_SESSION[ 'user' ] = $user;
             if ( $user->revokePassword( $token ) ) {
+                $_SESSION[ 'user' ] = $user;
                 go( 'forgotpasswordrequest', 'update' );
             }
             else {

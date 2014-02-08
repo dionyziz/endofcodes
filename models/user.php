@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotPasswordToken' ];
+        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordexptime' ];
         public $username;
         public $password;
         public $email;
@@ -48,7 +48,7 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotPasswordToken' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordexptime', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
@@ -59,7 +59,8 @@
                 $this->image = new Image( $user_info[ 'avatarid' ] );
                 $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
-                $this->forgotPasswordToken = $user_info[ 'forgotPasswordToken' ];
+                $this->forgotPasswordToken = $user_info[ 'forgotpasswordtoken' ];
+                $this->forgotPasswordExpTime = $user_info[ 'forgotpasswordexptime' ];
                 $this->exists = true;
             }
         }
@@ -140,7 +141,8 @@
             $id = $this->id;
             $email = $this->email;
             $dob = $this->dob;
-            $forgotPasswordToken = $this->forgotPasswordToken;
+            $forgotpasswordtoken = $this->forgotPasswordToken;
+            $forgotpasswordexptime = $this->forgotPasswordExpTime;
             if ( empty( $this->sessionid ) ) {
                 $this->generateSessionId();
             }
@@ -157,7 +159,7 @@
             try {
                 $res = dbUpdate(
                     'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotPasswordToken" ),
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordexptime", "forgotpasswordtoken" ),
                     compact( "id" )
                 );
             }
@@ -197,11 +199,12 @@
             $value = base64_encode( $value );
             $this->generateSessionId();
             $this->forgotPasswordToken = $value;
+            $this->forgotPasswordExpTime = date("Y-m-d h:i:s");
             $this->save();
             $email = $this->email;
             $username = $this->username;
             $link = "localhost/endofcodes/index.php?resource=forgotpasswordrequest&method=view&username=$username&token=$value";
-            $message = "Hi $username. You requested to change your End of Codes password. To reset your password, please click the following link: $link If you keep having problems, just reply to this e-mail and we’ll be happy to help. Best, The End of Codes Team.";
+            $message ="d" ;
             mail(
                 $this->email,
                 'Password Reset',
@@ -211,9 +214,12 @@
         }
         
         public function revokePassword( $token ) {
-            if( $token == $this->forgotPasswordToken ) {
+            if ( $token == $this->forgotPasswordToken ) {
+                $datetime = strtotime($this->forgotPasswordExpTime);
+                $now = strtotime( date("Y-m-d h:i:s") );
                 return true;
             }
+             
             return false;
         }
 
