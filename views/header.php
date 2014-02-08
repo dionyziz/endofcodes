@@ -11,10 +11,13 @@
         <?php
             includeStyle( "general" );
             includeStyle( "header" );
+            includeStyle( "footer" );
+            includeStyle( "navigation" );
             includeStyle( "home" );
             includeStyle( "register" );
             includeStyle( "login" );
-            includeStyle( 'test' );
+            includeStyle( "test" );
+            includeStyle( "links" );
         ?>
         <script type="text/javascript" src="../script/cssrefresh.js"></script>
 
@@ -23,16 +26,6 @@
     <body>
         <div id="header">
             <ul>
-                <li><a href="index.php">Endofcodes</a></li>
-                <li><a href="">Rules</a></li>
-                <?php
-                    if ( isset( $_SESSION[ 'user' ] ) ) {
-                        ?><li><a href="index.php?resource=user&amp;method=view&amp;username=<?php
-                            echo htmlspecialchars( $_SESSION[ 'user' ]->username );
-                        ?>">Profile</a></li><?php
-                    }
-                ?>
-                <li><a href="http://blog.endofcodes.com">Blog</a></li>
                 <?php
                     if ( isset( $_SESSION[ 'user' ] ) ) {
                         ?><li id="login" class="username"><?php
@@ -43,5 +36,14 @@
                         ?><li id="login"><a href="index.php?resource=session&amp;method=create">Login</a></li><?php
                     }
                 ?>
+                <li><h1><a href="index.php">End of Codes</a></h1></li>
+                <?php
+                    if ( isset( $_SESSION[ 'user' ] ) ) {
+                        ?><li><a href="index.php?resource=user&amp;method=view&amp;username=<?php
+                            echo htmlspecialchars( $_SESSION[ 'user' ]->username );
+                        ?>">Profile</a></li><?php
+                    }
+                ?>
             </ul>
         </div>
+        <div class='content'>
