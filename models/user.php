@@ -143,6 +143,7 @@
                 $other_user = User::findByEmail( $this->email );
                 throw new ModelValidationException( 'email_used' );
             }
+            throw new DBException( mysql_error() );
         }
 
         protected function update() {
