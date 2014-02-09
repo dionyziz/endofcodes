@@ -4,7 +4,6 @@
 
 <div><?php 
     $form = new Form( 'forgotpasswordrequest', 'create' );  
-    $form->id = 'passRevoke';
     $form->output( function( $self ) use ( $username_empty, $username_not_valid, $username_not_exists ) {
         if ( isset( $username_empty ) ) {
             $self->createError( "Please enter your username" );
@@ -19,7 +18,7 @@
 ?>
 </div>
 
-<p><a href="index.php?resource=user&amp;method=create">Don't have an account?</a></p>
+<p><a href="user/create">Don't have an account?</a></p>
 
 <?php
     include 'views/footer.php';

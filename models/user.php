@@ -191,13 +191,15 @@
         }
 
         public function createForgotPasswordLink() {
+            global $config;
+
             $value = md5( 32 );
             $this->forgotPasswordToken = $value;
             $this->forgotPasswordExpTime = date("Y-m-d h:i:s");
             $this->save();
             $email = $this->email;
             $username = $this->username;
-            $link = "localhost/endofcodes/index.php?resource=forgotpasswordrequest&method=view&username=$username&token=$value";
+            $link = $config[ 'base'] . "/forgotpasswordrequest/view?username=$username&token=$value";
             $mailVars = array(
                 'username' => $username,
                 'link' => $link
@@ -208,24 +210,27 @@
         
         public function mailFromExternalView( $email, $extView, $subject = '', $vars = array() ) {
             if ( !file_exists( $extView ) ) {
-                return false;
+                throw new ModelNotFoundException();
             }
-            if ( !empty( $vars ) ) {
-                extract( $vars );
-            } 
+            extract( $vars );
             $data = file_get_contents( $extView );
             mail( $email, $subject, $data );
         }
 
         public function revokePasswordCheck( $token ) {
+            global $config;
+
             if ( $token == $this->forgotPasswordToken ) {
+                if ( empty( $token ) ) {
+                    throw new HTTPUnauthorizedException();
+                }
                 $datetime = strtotime( $this->forgotPasswordExpTime );
                 $now = strtotime( date( "Y-m-d h:i:s" ) );
                 $period = $now - $datetime;
-                if ( $period > 3600 * 24 ) {
+                if ( $period > $config[ 'forgot_password_exp_time' ] ) {
                     throw new ModelValidationException( 'link_expired' );
                 } 
-                return true;
+                return;
             }
             throw new HTTPUnauthorizedException();
         }
