@@ -1,5 +1,8 @@
 .content {
-    margin-bottom: 50px;
+    padding-bottom: 50px;
+}
+body {
+    position: relative;
 }
 #footer {
     width: 100%;
