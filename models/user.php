@@ -204,7 +204,7 @@
             $email = $this->email;
             $username = $this->username;
             $link = "localhost/endofcodes/index.php?resource=forgotpasswordrequest&method=view&username=$username&token=$value";
-            $message ="d" ;
+            $message ="test" ;
             mail(
                 $this->email,
                 'Password Reset',
@@ -215,8 +215,12 @@
         
         public function revokePassword( $token ) {
             if ( $token == $this->forgotPasswordToken ) {
-                $datetime = strtotime($this->forgotPasswordExpTime);
-                $now = strtotime( date("Y-m-d h:i:s") );
+                $datetime = strtotime( $this->forgotPasswordExpTime );
+                $now = strtotime( date( "Y-m-d h:i:s" ) );
+                $period = $now - $datetime;
+                if ( $period > 3600 * 24 ) {
+                    return false;
+                } 
                 return true;
             }
              
