@@ -26,7 +26,3 @@
 </div><?
     include 'views/footer.php';
 ?>
-
-
-
-   
