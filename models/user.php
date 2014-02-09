@@ -143,9 +143,6 @@
             $dob = $this->dob;
             $forgotpasswordtoken = $this->forgotPasswordToken;
             $forgotpasswordexptime = $this->forgotPasswordExpTime;
-            if ( empty( $this->sessionid ) ) {
-                $this->generateSessionId();
-            }
             $sessionid = $this->sessionid;
             $countryid = $this->countryid;
             $avatarid = $this->imageid;
