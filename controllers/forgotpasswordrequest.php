@@ -24,12 +24,13 @@
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPUnauthorizedException();
             }
-            if ( $user->revokePasswordCheck( $token ) ) {
+            try {
+                $user->revokePasswordCheck( $token ); 
                 $_SESSION[ 'user' ] = $user;
                 go( 'forgotpasswordrequest', 'update' );
             }
-            else {
-                throw new HTTPUnauthorizedException();
+            catch ( ModelValidationException $e ) {
+                go( 'forgotpasswordrequest', 'update', [ $e->error => true ] );
             }
         }
         public function update( $password, $password_repeat ) {
@@ -56,8 +57,13 @@
                 include 'views/user/passwordrevoke.php';
             }
         }
-        public function updateView( $password_empty, $password_invalid, $password_not_matched ) {
-            include 'views/user/passwordreset.php'; 
+        public function updateView( $link_expired, $password_empty, $password_invalid, $password_not_matched ) {
+            if ( $link_expired ) {
+                include 'views/user/fplinkexpired.php';
+            }
+            else {
+                include 'views/user/passwordreset.php'; 
+            }
         }
     }
 

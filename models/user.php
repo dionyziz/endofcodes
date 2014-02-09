@@ -228,12 +228,11 @@
                 $now = strtotime( date( "Y-m-d h:i:s" ) );
                 $period = $now - $datetime;
                 if ( $period > 3600 * 24 ) {
-                    return false;
+                    throw new ModelValidationException( 'link_expired' );
                 } 
                 return true;
             }
-             
-            return false;
+            throw new HTTPUnauthorizedException();
         }
 
         public function toJson() {
