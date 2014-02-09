@@ -195,25 +195,34 @@
         }
 
         public function createForgotPasswordLink() {
-            $value = openssl_random_pseudo_bytes( 32 );
+            $value = md5( 32 );
             $value = base64_encode( $value );
-            $this->generateSessionId();
             $this->forgotPasswordToken = $value;
             $this->forgotPasswordExpTime = date("Y-m-d h:i:s");
             $this->save();
             $email = $this->email;
             $username = $this->username;
             $link = "localhost/endofcodes/index.php?resource=forgotpasswordrequest&method=view&username=$username&token=$value";
-            $message ="test" ;
-            mail(
-                $this->email,
-                'Password Reset',
-                $message 
-            );  
+            $mailVars = array(
+                'username' => $username,
+                'link' => $link
+            );
+            $this->mailFromExternalView( $email, "views/forgotpasswordmail.php", 'Password Reset', $mailVars );
             return $link;
         }
         
-        public function revokePassword( $token ) {
+        public function mailFromExternalView( $email, $extView, $subject = '', $vars = array() ) {
+            if ( !file_exists( $extView ) ) {
+                return false;
+            }
+            if ( !empty( $vars ) ) {
+                extract( $vars );
+            } 
+            $data = file_get_contents( $extView );
+            mail( $email, $subject, $data );
+        }
+
+        public function revokePasswordCheck( $token ) {
             if ( $token == $this->forgotPasswordToken ) {
                 $datetime = strtotime( $this->forgotPasswordExpTime );
                 $now = strtotime( date( "Y-m-d h:i:s" ) );

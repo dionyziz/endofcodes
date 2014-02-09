@@ -24,7 +24,7 @@
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPUnauthorizedException();
             }
-            if ( $user->revokePassword( $token ) ) {
+            if ( $user->revokePasswordCheck( $token ) ) {
                 $_SESSION[ 'user' ] = $user;
                 go( 'forgotpasswordrequest', 'update' );
             }
@@ -44,20 +44,20 @@
             }
             $user = $_SESSION[ 'user' ];
             $user->password = $password;
-            $user->forgotPasswordToken = null;
+            $user->forgotPasswordToken = $user->forgotPasswordExpTime =  null;
             $user->save();
             go();
         } 
         public function createView( $created, $link, $username_empty, $username_not_valid, $username_not_exists ) {
             if ( $created ) {
-                include 'views/forgotPasswordLink.php'; 
+                include 'views/user/forgotpasswordlink.php'; 
             }
             else {
-                include 'views/passwordRevoke.php';
+                include 'views/user/passwordrevoke.php';
             }
         }
         public function updateView( $password_empty, $password_invalid, $password_not_matched ) {
-            include 'views/passwordReset.php'; 
+            include 'views/user/passwordreset.php'; 
         }
     }
 
