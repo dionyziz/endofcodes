@@ -33,7 +33,7 @@
                         ?></li><?php
                     }
                     else {
-                        ?><li id="login"><a href="index.php?resource=session&amp;method=create">Login</a></li><?php
+                        ?><li id="login"><a href="session/create">Login</a> or <a href="user/create">Register</a></li><?php
                     }
                 ?>
                 <li><h1><a href="index.php">End of Codes</a></h1></li>
