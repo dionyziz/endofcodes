@@ -10,19 +10,15 @@
             catch ( ModelNotFoundException $e ) {
                 go( 'forgotpasswordrequest', 'create', array( 'username_not_exists' => true ) );
             }
-            try {
-                $link = $user->createForgotPasswordLink();
-            }
-            catch ( ModelNotFoundException $e ) {
-            }
-            go( 'forgotpasswordrequest', 'create', array( 'created' => true, 'link' => $link ) );
+            $link = $user->createForgotPasswordLink();
+            include 'views/user/forgot/link.php'; 
         }
         public function view( $token, $username ) {
             try {
                 $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
-                throw new HTTPUnauthorizedException();
+                throw new HTTPNotFoundException();
             }
             try {
                 $user->revokePasswordCheck( $token ); 
@@ -45,24 +41,19 @@
             }
             $user = $_SESSION[ 'user' ];
             $user->password = $password;
-            $user->forgotPasswordToken = $user->forgotPasswordExpTime =  null;
+            $user->forgotPasswordToken = $user->forgotPasswordExpTime = null;
             $user->save();
             go();
         } 
         public function createView( $created, $link, $username_empty, $username_not_valid, $username_not_exists ) {
-            if ( $created ) {
-                include 'views/user/forgotpasswordlink.php'; 
-            }
-            else {
-                include 'views/user/passwordrevoke.php';
-            }
+            include 'views/user/passwordrevoke.php';
         }
         public function updateView( $link_expired, $password_empty, $password_invalid, $password_not_matched ) {
             if ( $link_expired ) {
-                include 'views/user/fplinkexpired.php';
+                include 'views/user/forgot/expired.php';
             }
             else {
-                include 'views/user/passwordreset.php'; 
+                include 'views/user/forgot/reset.php'; 
             }
         }
     }

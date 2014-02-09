@@ -192,7 +192,6 @@
 
         public function createForgotPasswordLink() {
             $value = md5( 32 );
-            $value = base64_encode( $value );
             $this->forgotPasswordToken = $value;
             $this->forgotPasswordExpTime = date("Y-m-d h:i:s");
             $this->save();

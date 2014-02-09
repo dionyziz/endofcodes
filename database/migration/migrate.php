@@ -5,8 +5,8 @@
         include_once '../../models/db.php';
 
         global $config;
-
-        $config = getConfig()[ 'development' ];
+        
+        $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ];
         dbInit();
 
         foreach ( $sql_array as $sql ) {
