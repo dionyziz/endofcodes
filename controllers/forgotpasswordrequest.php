@@ -41,7 +41,7 @@
             }
             $user = $_SESSION[ 'user' ];
             $user->password = $password;
-            $user->forgotPasswordToken = $user->forgotPasswordExpTime = null;
+            $user->forgotPasswordToken = $user->forgotPasswordRequestCreated = null;
             $user->save();
             go();
         } 

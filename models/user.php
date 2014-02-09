@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordexptime' ];
+        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
         public $username;
         public $password;
         public $email;
@@ -47,7 +47,7 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordexptime', 'forgotpasswordtoken' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
@@ -59,7 +59,7 @@
                 $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
                 $this->forgotPasswordToken = $user_info[ 'forgotpasswordtoken' ];
-                $this->forgotPasswordExpTime = $user_info[ 'forgotpasswordexptime' ];
+                $this->forgotPasswordRequestCreated = $user_info[ 'forgotpasswordrequestcreated' ];
                 $this->exists = true;
             }
         }
@@ -141,7 +141,7 @@
             $email = $this->email;
             $dob = $this->dob;
             $forgotpasswordtoken = $this->forgotPasswordToken;
-            $forgotpasswordexptime = $this->forgotPasswordExpTime;
+            $forgotpasswordrequestcreated = $this->forgotPasswordRequestCreated;
             $sessionid = $this->sessionid;
             $countryid = $this->countryid;
             $avatarid = $this->imageid;
@@ -155,7 +155,7 @@
             try {
                 $res = dbUpdate(
                     'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordexptime", "forgotpasswordtoken" ),
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordrequest", "forgotpasswordtoken" ),
                     compact( "id" )
                 );
             }
@@ -195,7 +195,7 @@
 
             $value = md5( 32 );
             $this->forgotPasswordToken = $value;
-            $this->forgotPasswordExpTime = date("Y-m-d h:i:s");
+            $this->forgotPasswordRequestCreated = date("Y-m-d h:i:s");
             $this->save();
             $email = $this->email;
             $username = $this->username;
@@ -224,7 +224,7 @@
                 if ( empty( $token ) ) {
                     throw new HTTPUnauthorizedException();
                 }
-                $datetime = strtotime( $this->forgotPasswordExpTime );
+                $datetime = strtotime( $this->forgotPasswordRequestCreated );
                 $now = strtotime( date( "Y-m-d h:i:s" ) );
                 $period = $now - $datetime;
                 if ( $period > $config[ 'forgot_password_exp_time' ] ) {
