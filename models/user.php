@@ -15,7 +15,7 @@
         public $boturl;
         protected $dob;
         protected $tableName = 'users';
-        
+
         public static function findByUsername( $username ) {
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
@@ -140,11 +140,14 @@
                 throw new ModelValidationException( 'username_used' );
             }
             catch ( ModelNotFoundException $e ) {
-                if ( User::findByEmail( $this->email ) ) {
+                try { 
+                    User::findByEmail( $this->email ); 
                     throw new ModelValidationException( 'email_used' );
+                } 
+                catch ( ModelNotFoundException $e ) {
+                    throw $e;
                 }
             }
-            throw $e;
         }
 
         protected function update() {
