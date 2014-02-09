@@ -12,7 +12,6 @@
         public $image;
         public $salt;
         public $dateOfBirth;
-        public $forgotPasswordToken;
         public $boturl;
         protected $dob;
         protected $tableName = 'users';
