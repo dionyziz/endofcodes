@@ -8,7 +8,4 @@
 <?php
     include 'views/footer.php';
 ?>
-
-
-
     
