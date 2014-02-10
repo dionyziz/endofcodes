@@ -22,7 +22,7 @@
             $link = $user->createForgotPasswordLink();
             include 'views/user/forgot/link.php'; 
         }
-        public function view( $token, $username ) {
+        public function view( $passwordToken, $username ) {
             try {
                 $user = User::findByUsername( $username );
             }
@@ -30,15 +30,15 @@
                 throw new HTTPNotFoundException();
             }
             try {
-                $user->revokePasswordCheck( $token ); 
+                $user->revokePasswordCheck( $passwordToken ); 
                 $_SESSION[ 'user' ] = $user;
-                go( 'forgotpasswordrequest', 'update' );
+                go( 'forgotpasswordrequest', 'update', [ 'passwordToken' => $passwordToken ] );
             }
             catch ( ModelValidationException $e ) {
                 go( 'forgotpasswordrequest', 'update', [ $e->error => true ] );
             }
         }
-        public function update( $password, $password_repeat ) {
+        public function update( $password, $password_repeat, $passwordToken ) {
             if ( $password !== $password_repeat ) {
                 go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true ] );
             }
@@ -47,6 +47,12 @@
             }
             else {
                 throw new HTTPUnauthorizedException();
+            }
+            try {
+                $user->revokePasswordCheck( $passwordToken );
+            }
+            catch ( HTTPUnauthorizedException $e ) {
+                throw $e;
             }
             try {
                 $user::passwordValidate( $password );
@@ -62,7 +68,7 @@
         public function createView( $input_empty, $username_not_exists, $email_not_exists ) {
             include 'views/user/passwordrevoke.php';
         }
-        public function updateView( $link_expired, $password_empty, $password_invalid, $password_not_matched ) {
+        public function updateView( $link_expired, $password_empty, $password_invalid, $password_not_matched, $passwordToken ) {
             if ( $link_expired ) {
                 include 'views/user/forgot/expired.php';
             }
@@ -71,5 +77,4 @@
             }
         }
     }
-
 ?>

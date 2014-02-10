@@ -226,7 +226,7 @@
             $this->save();
             $email = $this->email;
             $username = urlencode( $this->username );
-            $link = $config[ 'base'] . "/forgotpasswordrequest/view?username=$username&token=$value";
+            $link = $config[ 'base'] . "/forgotpasswordrequest/view?username=$username&passwordToken=$value";
             $mailVars = [ 
                 'username' => $username,
                 'link' => $link
@@ -244,11 +244,11 @@
             mail( $email, $subject, $data );
         }
 
-        public function revokePasswordCheck( $token ) {
+        public function revokePasswordCheck( $passwordToken ) {
             global $config;
 
-            if ( $token == $this->forgotPasswordToken ) {
-                if ( empty( $token ) ) {
+            if ( $passwordToken == $this->forgotPasswordToken ) {
+                if ( empty( $passwordToken ) ) {
                     throw new HTTPUnauthorizedException();
                 }
                 $datetime = strtotime( $this->forgotPasswordRequestCreated );
