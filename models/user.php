@@ -63,6 +63,16 @@
                 $this->exists = true;
             }
         }
+        
+        public static function findByEmail( $email ) {
+            try {
+                $user = dbSelectOne( 'users', [ 'id' ], compact( "email" ) );
+            }
+            catch ( DBException $e ) {
+                throw new ModelNotFoundException();
+            }
+            return new User( $user[ 'id' ] );
+        }
 
         protected function onBeforeSave() {
             global $config;
@@ -128,11 +138,17 @@
 
         protected function onCreateError( $e ) {
             try {
-                $other_user = User::findByUsername( $this->username );
+                User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );
             }
             catch ( ModelNotFoundException $e ) {
-                throw new ModelValidationException( 'email_used' );
+                try { 
+                    User::findByEmail( $this->email ); 
+                    throw new ModelValidationException( 'email_used' );
+                } 
+                catch ( ModelNotFoundException $e ) {
+                    throw $e;
+                }
             }
         }
 
