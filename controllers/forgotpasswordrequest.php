@@ -39,12 +39,6 @@
             }
         }
         public function update( $password, $password_repeat ) {
-            if ( empty( $password ) ) {
-                go( 'forgotpasswordrequest', 'update', [ 'password_empty' => true ] );
-            }
-            if ( strlen( $password ) < 6 ) {
-                go( 'forgotpasswordrequest', 'update', [ 'password_invalid' => true ] );
-            }
             if ( $password !== $password_repeat ) {
                 go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true ] );
             }
@@ -54,12 +48,18 @@
             else {
                 throw new HTTPUnauthorizedException();
             }
+            try {
+                $user::passwordValidate( $password );
+            }
+            catch ( ModelValidationException $e ) {
+                go( 'forgotpasswordrequest', 'update', [ $e->error => true ] );
+            }
             $user->password = $password;
             $user->forgotPasswordToken = $user->forgotPasswordRequestCreated = null;
             $user->save();
             go();
         } 
-        public function createView( $created, $link, $username_empty, $username_not_valid, $username_not_exists ) {
+        public function createView( $input_empty, $username_not_exists, $email_not_exists ) {
             include 'views/user/passwordrevoke.php';
         }
         public function updateView( $link_expired, $password_empty, $password_invalid, $password_not_matched ) {

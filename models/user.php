@@ -43,6 +43,17 @@
             return new User( $row[ 'id' ] );
         }
 
+        public static function passwordValidate( $password ) {
+            global $config;
+
+            if ( empty( $password ) ) {
+                throw new ModelValidationException( 'password_empty' );
+            }
+            if ( strlen( $password ) < $config[ 'pass_min_len' ] ) {
+                throw new ModelValidationException( 'password_invalid' );
+            }
+        }
+
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
