@@ -79,6 +79,10 @@
             ?> /></p><?php
         }
 
+        public function createSubmit( $value ) {
+            $this->createInput( 'submit', '', '', $value );
+        }
+
         public function createSelect( $name = '', $id = '', $option_array ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
