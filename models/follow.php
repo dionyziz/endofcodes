@@ -2,7 +2,7 @@
     class Follow extends ActiveRecordBase {
         public $follower;
         public $followed;
-        protected $attributes = [ 'followerid', 'followedid' ];
+        protected static $attributes = [ 'followerid', 'followedid' ];
         protected $followerid;
         protected $followedid;
         protected static $tableName = 'follows';

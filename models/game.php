@@ -17,7 +17,7 @@
         public $maxHp;
         public $grid = [ [] ];
         protected static $tableName = 'games';
-        protected $attributes = [ 'width', 'height', 'created' ];
+        protected static $attributes = [ 'width', 'height', 'created' ];
 
         public function __construct( $id = false ) {
             if ( $id ) {

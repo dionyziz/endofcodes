@@ -12,7 +12,7 @@
         public $hp;
         protected $gameid;
         protected $userid;
-        protected $attributes = [ 'id', 'gameid', 'userid' ];
+        protected static $attributes = [ 'id', 'gameid', 'userid' ];
         protected static $tableName = 'creatures';
 
         public function __construct( $creature_info = [] ) {

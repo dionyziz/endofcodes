@@ -8,7 +8,7 @@
         public $target_path;
         public $ext;
         public $userid;
-        protected $attributes = [ 'name', 'userid' ];
+        protected static $attributes = [ 'name', 'userid' ];
         protected static $tableName = 'images';
 
         public static function findByUser( $user ) {

@@ -14,7 +14,7 @@
         protected function create() {
             $this->onBeforeCreate();
             $attributes = [];
-            foreach ( $this->attributes as $attribute ) {
+            foreach ( static::$attributes as $attribute ) {
                 $attributes[ $attribute ] = $this->$attribute;
             }
 
