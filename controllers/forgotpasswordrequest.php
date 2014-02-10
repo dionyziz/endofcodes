@@ -1,14 +1,23 @@
 <?php
     class ForgotPasswordRequestController extends ControllerBase {
-        public function create( $username ) {
-            if ( empty( $username ) ) {
-                go( 'forgotpasswordrequest', 'create', array( 'username_empty' => true ) );
+        public function create( $input ) {
+            if ( empty( $input ) ) {
+                go( 'forgotpasswordrequest', 'create', [ 'input_empty' => true ] );
             }
-            try {
-                $user = User::findByUsername( $username );
-            }
-            catch ( ModelNotFoundException $e ) {
-                go( 'forgotpasswordrequest', 'create', array( 'username_not_exists' => true ) );
+            if ( filter_var( $input, FILTER_VALIDATE_EMAIL ) ) {
+                try {
+                    $user = User::findByEmail( $input );
+                }    
+                catch ( ModelNotFoundException $e ) {
+                    go( 'forgotpasswordrequest', 'create', [ 'email_not_exists' => true ] );
+                }
+            } else {
+                try {
+                    $user = User::findByUsername( $input );
+                }
+                catch ( ModelNotFoundException $e ) {
+                    go( 'forgotpasswordrequest', 'create', [ 'username_not_exists' => true ] );
+                }
             }
             $link = $user->createForgotPasswordLink();
             include 'views/user/forgot/link.php'; 
@@ -31,15 +40,20 @@
         }
         public function update( $password, $password_repeat ) {
             if ( empty( $password ) ) {
-                go( 'forgotpasswordrequest', 'update', array( 'password_empty' => true ) );
+                go( 'forgotpasswordrequest', 'update', [ 'password_empty' => true ] );
             }
             if ( strlen( $password ) < 6 ) {
-                go( 'forgotpasswordrequest', 'update', array( 'password_invalid' => true ) );
+                go( 'forgotpasswordrequest', 'update', [ 'password_invalid' => true ] );
             }
             if ( $password !== $password_repeat ) {
-                go( 'forgotpasswordrequest', 'update', array( 'password_not_matched' => true ) );
+                go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true ] );
             }
-            $user = $_SESSION[ 'user' ];
+            if ( isset( $_SESSION[ 'user' ] ) ) {
+                $user = $_SESSION[ 'user' ];
+            }
+            else {
+                throw new HTTPUnauthorizedException();
+            }
             $user->password = $password;
             $user->forgotPasswordToken = $user->forgotPasswordRequestCreated = null;
             $user->save();

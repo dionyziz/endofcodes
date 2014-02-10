@@ -198,17 +198,17 @@
             $this->forgotPasswordRequestCreated = date("Y-m-d h:i:s");
             $this->save();
             $email = $this->email;
-            $username = $this->username;
+            $username = urlencode( $this->username );
             $link = $config[ 'base'] . "/forgotpasswordrequest/view?username=$username&token=$value";
-            $mailVars = array(
+            $mailVars = [ 
                 'username' => $username,
                 'link' => $link
-            );
+            ];
             $this->mailFromExternalView( $email, "views/forgotpasswordmail.php", 'Password Reset', $mailVars );
             return $link;
         }
         
-        public function mailFromExternalView( $email, $extView, $subject = '', $vars = array() ) {
+        public function mailFromExternalView( $email, $extView, $subject = '', $vars = [] ) {
             if ( !file_exists( $extView ) ) {
                 throw new ModelNotFoundException();
             }
