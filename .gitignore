@@ -4,3 +4,5 @@
 *.swn
 config-local.php
 avatars
+.DS_STORE
+tags

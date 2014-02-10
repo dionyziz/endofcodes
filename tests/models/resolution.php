@@ -5,11 +5,11 @@
     include_once 'models/intent.php';
     include_once 'models/user.php';
 
-    class ResolutionTest extends UnitTestWithUser {
+    class ResolutionTest extends UnitTestWithFixtures {
         protected function buildGameWithUsers( $userCount ) {
             $game = new Game();
             for ( $i = 1; $i <= $userCount; ++$i ) {
-                $game->users[] = $this->buildUser( $i ); 
+                $game->users[] = $this->buildUser( $i );
             }
             $game->rounds[ 0 ] = new Round();
             $game->rounds[ 0 ]->id = 0;
@@ -69,7 +69,7 @@
                 $creature->game = $game;
                 $creature->round = $game->rounds[ $i ];
                 $newCreature = clone $creature;
-                $game->rounds[ $i ]->creatures = array( $newCreature );
+                $game->rounds[ $i ]->creatures = [ $newCreature ];
                 $game->nextRound();
                 $newCreature = $game->rounds[ $i + 1 ]->creatures[ 0 ];
                 $this->assertTrue(
@@ -91,7 +91,7 @@
             $creature->game = $game;
             $creature->round = $game->rounds[ 0 ];
             $newCreature = clone $creature;
-            $game->rounds[ 0 ]->creatures = array( $newCreature );
+            $game->rounds[ 0 ]->creatures = [ $newCreature ];
             $game->nextRound();
             $newCreature = $game->rounds[ 1 ]->creatures[ 0 ];
             $this->assertTrue(
@@ -117,21 +117,21 @@
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_WEST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
-            $this->assertTrue( 
-                $newCreature1->locationx !== $newCreature2->locationx || $newCreature1->locationy !== $newCreature2->locationy, 
-                'There can not be two creatures in the same location' 
+            $this->assertTrue(
+                $newCreature1->locationx !== $newCreature2->locationx || $newCreature1->locationy !== $newCreature2->locationy,
+                'There can not be two creatures in the same location'
             );
-            $this->assertTrue( 
-                $creature1->locationx === $newCreature1->locationx && $creature1->locationy === $newCreature1->locationy, 
-                'When there are multiple creatures in one position all of them must return to the starting position' 
+            $this->assertTrue(
+                $creature1->locationx === $newCreature1->locationx && $creature1->locationy === $newCreature1->locationy,
+                'When there are multiple creatures in one position all of them must return to the starting position'
             );
-            $this->assertTrue( 
-                $creature2->locationx === $newCreature2->locationx && $creature2->locationy === $newCreature2->locationy, 
-                'When there are multiple creatures in one position all of them must return to the starting position' 
+            $this->assertTrue(
+                $creature2->locationx === $newCreature2->locationx && $creature2->locationy === $newCreature2->locationy,
+                'When there are multiple creatures in one position all of them must return to the starting position'
             );
         }
         public function testAttackSingleCreature() {
@@ -150,16 +150,16 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
             $this->assertEquals( $creature1->hp, $newCreature1->hp, 'An attacking creature must not lose hp' );
             $this->assertEquals( $creature2->hp - 1, $newCreature2->hp, 'A creature that has been attacked by a creature must lose 1 hp' );
             $this->assertTrue( $creature2->alive, 'A creature must not die if it still has hp' );
-            $this->assertTrue( 
-                $creature1->locationx === $newCreature1->locationx && $creature1->locationy === $newCreature1->locationy, 
-                'An attacking creature must not change position' 
+            $this->assertTrue(
+                $creature1->locationx === $newCreature1->locationx && $creature1->locationy === $newCreature1->locationy,
+                'An attacking creature must not change position'
             );
         }
         public function testAttackWithDeadCreature() {
@@ -180,7 +180,7 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -203,7 +203,7 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -231,7 +231,7 @@
             $creature1->round = $game->rounds[ 0 ];
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -250,7 +250,7 @@
                 2. | - | - | 2 | 3 |
                 1. | - | - | - | - |
                 0. | - | - | - | 3 |
-                     0.  1.  2.  3. 
+                     0.  1.  2.  3.
             */
             $creature1->game = $creature2->game = $game;
             $creature1->round = $creature2->round = $game->rounds[ 0 ];
@@ -261,14 +261,14 @@
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_EAST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
             $this->assertEquals( $creature2->hp - 1, $newCreature2->hp, 'A creature that has been attacked by a creature must lose 1 hp' );
-            $this->assertTrue( 
-                $creature2->locationx === $newCreature2->locationx - 1 && $creature2->locationy === $newCreature2->locationy, 
-                'An attacked creature can move if it is still alive' 
+            $this->assertTrue(
+                $creature2->locationx === $newCreature2->locationx - 1 && $creature2->locationy === $newCreature2->locationy,
+                'An attacked creature can move if it is still alive'
             );
         }
         public function testAttackMultipleAttackersSingleVictim() {
@@ -291,7 +291,7 @@
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $newCreature3 = clone $creature3;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2, $newCreature3 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2, $newCreature3 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -314,7 +314,7 @@
             $creature1->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -337,7 +337,7 @@
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_EAST );
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
@@ -361,7 +361,7 @@
                 2. | - | - | - | - |
                 1. | - | - | - | - |
                 0. | - | - | - | - |
-                     0.  1.  2.  3. 
+                     0.  1.  2.  3.
             */
             $creature1->game = $creature2->game = $creature3->game = $game;
             $creature1->round = $creature2->round = $creature3->round = $game->rounds[ 0 ];
@@ -374,7 +374,7 @@
             $newCreature1 = clone $creature1;
             $newCreature2 = clone $creature2;
             $newCreature3 = clone $creature3;
-            $game->rounds[ 0 ]->creatures = array( $newCreature1, $newCreature2, $newCreature3 );
+            $game->rounds[ 0 ]->creatures = [ $newCreature1, $newCreature2, $newCreature3 ];
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];

@@ -13,7 +13,7 @@
 
         protected function create() {
             $this->onBeforeCreate();
-            $attributes = array();
+            $attributes = [];
             foreach ( $this->attributes as $attribute ) {
                 $attributes[ $attribute ] = $this->$attribute;
             }
@@ -27,7 +27,7 @@
                 }
             }
             catch ( DBException $e ) {
-                $this->onCreateError();
+                $this->onCreateError( $e );
             }
             $this->exists = true;
             $this->onCreate();
@@ -35,17 +35,19 @@
 
         protected function onBeforeCreate() {} // override me
         protected function onCreate() {} // override me
-        protected function onCreateError() {} // override me
-        protected function validate() {} // override me
+        protected function onCreateError( $e ) {} // override me
+        protected function onBeforeSave() {} // override me
+        protected function onSave() {} // override me
 
         public function save() {
-            $this->validate();
+            $this->onBeforeSave();
             if ( $this->exists ) {
                 $this->update();
             }
             else {
                 $this->create();
             }
+            $this->onSave();
         }
     }
 

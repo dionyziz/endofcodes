@@ -5,7 +5,7 @@
         }
     }
 
-    function db( $sql, $bind = array() ) {
+    function db( $sql, $bind = [] ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
                 $value = addslashes( $value );
@@ -32,7 +32,7 @@
     }
 
     function dbInsert( $table, $set ) {
-        $fields = array();
+        $fields = [];
         foreach ( $set as $field => $value ) {
             $fields[] = "$field = :$field";
         }
@@ -47,7 +47,7 @@
     }
 
     function dbDelete( $table, $where ) {
-        $fields = array();
+        $fields = [];
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
@@ -61,8 +61,8 @@
         return mysql_affected_rows();
     }
 
-    function dbSelect( $table, $select = array( "*" ), $where = array() ) {
-        $fields = array();
+    function dbSelect( $table, $select = [ "*" ], $where = [] ) {
+        $fields = [];
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
@@ -76,7 +76,7 @@
         );
     }
 
-    function dbSelectOne( $table, $select = array( "*" ), $where = array() ) {
+    function dbSelectOne( $table, $select = [ "*" ], $where = [] ) {
         $array = dbSelect( $table, $select, $where );
         if ( count( $array ) !== 1 ) {
             throw new DBException( mysql_error() );
@@ -85,14 +85,14 @@
     }
 
     function dbUpdate( $table, $set, $where ) {
-        $wfields = array();
-        $wreplace = array();
+        $wfields = [];
+        $wreplace = [];
         foreach ( $where as $field => $value ) {
             $wfields[] = "$field = :where_$field";
             $wreplace[ 'where_' . $field ] = $value;
         }
-        $sfields = array();
-        $sreplace = array();
+        $sfields = [];
+        $sreplace = [];
         foreach ( $set as $field => $value ) {
             $sfields[] = "$field = :set_$field";
             $sreplace[ 'set_' . $field ] = $value;
@@ -109,9 +109,9 @@
         return mysql_affected_rows();
     }
 
-    function dbArray( $sql, $bind = array(), $id_column = false ) {
+    function dbArray( $sql, $bind = [], $id_column = false ) {
         $res = db( $sql, $bind );
-        $rows = array();
+        $rows = [];
         if ( $id_column !== false ) {
             while ( $row = mysql_fetch_array( $res ) ) {
                 $rows[ $row[ $id_column ] ] = $row;

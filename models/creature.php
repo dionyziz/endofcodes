@@ -1,20 +1,21 @@
 <?php
     include_once 'models/intent.php';
+
     class Creature extends ActiveRecordBase {
         public $game;
         public $user;
         public $round;
-        public $locationx; 
+        public $locationx;
         public $locationy;
         public $intent;
         public $alive;
         public $hp;
         protected $gameid;
         protected $userid;
-        protected $attributes = array( 'id', 'gameid', 'userid' );
+        protected $attributes = [ 'id', 'gameid', 'userid' ];
         protected $tableName = 'creatures';
 
-        public function __construct( $creature_info = array() ) {
+        public function __construct( $creature_info = [] ) {
             if ( !empty( $creature_info ) ) {
                 $this->exists = true;
                 $this->id = $creature_info[ 'creatureid' ];
@@ -53,7 +54,7 @@
             $this->hp = 0;
         }
 
-        public function validate() {
+        public function onBeforeSave() {
             if ( !is_int( $this->id ) ) {
                 throw new ModelValidationException( 'id_not_valid' );
             }

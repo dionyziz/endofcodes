@@ -16,55 +16,66 @@ span.fail {
     font-weight: bold;
     background-image: url( '../images/alert.png' );
 }
-.unittest table {
+.unittest .results {
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+.unittest .results td {
+    padding: 5px 5px 5px 5px;
+}
+.unittest .results td:first-child {
+    border-right: 1px solid #ddd;
+    text-align: right;
+}
+.calltrace {
     border-collapse: collapse;
     border: 1px solid #232526;
     background-color: #323232;
     color: white;
 }
-.unittest thead {
+.calltrace thead {
     color: #ef5939;
     background-color: #403d3d;
 }
-.unittest th {
+.calltrace th {
     font-weight: normal;
 }
-.unittest table tbody tr {
+.calltrace table tbody tr {
     border-top: 1px solid #232526;
 }
-.unittest table td, .unittest table th {
+.calltrace table td, .unittest table th {
     padding: 5px;
 }
-.unittest table th {
+.calltrace table th {
     text-align: left;
 }
-.unittest .string {
+.calltrace .string {
     color: #e6db74;
 }
-.unittest .integer, .unittest .double, .unittest .boolean {
+.calltrace .integer, .unittest .double, .unittest .boolean {
     color: #ae81ff;
 }
-.unittest .null {
+.calltrace .null {
     color: #f92672;
 }
-.unittest .function {
+.calltrace .function {
     color: #a6e22e;
 }
-.unittest .delimiter {
+.calltrace .delimiter {
     color: #8f8f8f;
 }
-.unittest .array, .unittest .object {
+.calltrace .array, .unittest .object {
     color: #c4be89;
 }
-.unittest td.linenr {
+.calltrace td.linenr {
     background-color: #232526;
     color: #fd971f;
 }
-.unittest .linenr {
+.calltrace .linenr {
 }
-.unittest .class {
+.calltrace .class {
     color: white;
 }
-.unittest .extension {
+.calltrace .extension {
     color: #465457;
 }

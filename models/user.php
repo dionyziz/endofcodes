@@ -4,7 +4,7 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = array( 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' );
+        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' ];
         public $username;
         public $password;
         public $email;
@@ -18,7 +18,7 @@
 
         public static function findByUsername( $username ) {
             try {
-                $user = dbSelectOne( 'users', array( 'id' ), compact( "username" ) );
+                $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
             }
             catch ( DBException $e ) {
                 throw new ModelNotFoundException();
@@ -31,10 +31,10 @@
                 throw new ModelNotFoundException();
             }
             try {
-                $row = dbSelectOne( 
-                    'users', 
-                    array( 'id' ), 
-                    compact( "sessionid" ) 
+                $row = dbSelectOne(
+                    'users',
+                    [ 'id' ],
+                    compact( "sessionid" )
                 );
             }
             catch ( DBException $e ) {
@@ -47,7 +47,7 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', array( 'dob', 'username', 'email', 'countryid', 'avatarid' ), compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
@@ -62,7 +62,7 @@
             }
         }
 
-        protected function validate() {
+        protected function onBeforeSave() {
             global $config;
 
             if ( empty( $this->username ) ) {
@@ -86,30 +86,45 @@
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
                 throw new ModelValidationException( 'email_invalid' );
             }
-        }
 
-        protected function onBeforeCreate() {
-            $day = intval( $this->dateOfBirth[ 'day' ] ); 
-            $month = intval( $this->dateOfBirth[ 'month' ] );
-            $year = intval( $this->dateOfBirth[ 'year' ] );
-            if ( !checkdate( $day, $month, $year ) ) {
-                $day = $month = $year = 0;
+            if ( isset( $this->password ) ) {
+                $array = encrypt( $this->password );
+                $this->password = $array[ 'hash' ];
+                $this->salt = base64_encode( $array[ 'salt' ] );
             }
-            $dob = $this->dob = $year . '-' . $month . '-' . $day; 
-            $array = encrypt( $this->password );
-            $this->password = $array[ 'hash' ];
-            $this->salt = $array[ 'salt' ];
-            $this->avatarid = 0;
-            $this->generateSessionId();
+
             if ( isset( $this->country ) ) {
                 $this->countryid = $this->country->id;
             }
             else {
                 $this->countryid = 0;
             }
+            if ( isset( $this->image ) ) {
+                $this->imageid = $this->image->id;
+            }
+            else {
+                $this->imageid = 0;
+            }
         }
 
-        protected function onCreateError() {
+        protected function onBeforeCreate() {
+            $day = intval( $this->dateOfBirth[ 'day' ] );
+            $month = intval( $this->dateOfBirth[ 'month' ] );
+            $year = intval( $this->dateOfBirth[ 'year' ] );
+            if ( !checkdate( $day, $month, $year ) ) {
+                $day = $month = $year = 0;
+            }
+            $dob = $this->dob = $year . '-' . $month . '-' . $day;
+            $this->avatarid = 0;
+            $this->generateSessionId();
+        }
+
+        protected function onSave() {
+            unset( $this->password );
+            unset( $this->salt );
+        }
+
+        protected function onCreateError( $e ) {
             try {
                 $other_user = User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );
@@ -121,26 +136,18 @@
 
         protected function update() {
             $id = $this->id;
-            if ( isset( $this->password ) ) {
-                $array = encrypt( $this->password );
-                $this->password = $password = $array[ 'hash' ];
-                $this->salt = $salt = $array[ 'salt' ];
-            }
             $email = $this->email;
             $dob = $this->dob;
             $sessionid = $this->sessionid;
-            if ( isset( $this->country ) ) {
-                $countryid = $this->country->id;
+            $countryid = $this->countryid;
+            $avatarid = $this->imageid;
+            if ( isset( $this->password ) ) {
+                $password = $this->password;
             }
-            else {
-                $countryid = 0;
+            if ( isset( $this->salt ) ) {
+                $salt = $this->salt;
             }
-            if ( isset( $this->image ) ) {
-                $avatarid = $this->image->id;
-            }
-            else {
-                $avatarid = 0;
-            }
+
             try {
                 $res = dbUpdate(
                     'users',
@@ -163,11 +170,11 @@
             $username = $this->username;
             $row = dbSelectOne(
                 'users',
-                array( 'id', 'password', 'salt' ),
+                [ 'id', 'password', 'salt' ],
                 compact( "username" )
             );
             if ( !empty( $row ) ) {
-                if ( $row[ 'password' ] == hashing( $password, $row[ 'salt' ] ) ) {
+                if ( $row[ 'password' ] == hashing( $password, base64_decode( $row[ 'salt' ] ) ) ) {
                     return true;
                 }
             }

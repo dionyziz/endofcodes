@@ -8,7 +8,7 @@
         public $target_path;
         public $ext;
         public $userid;
-        protected $attributes = array( 'name', 'userid' );
+        protected $attributes = [ 'name', 'userid' ];
         protected $tableName = 'images';
 
         public static function findByUser( $user ) {
@@ -20,7 +20,7 @@
                 global $config;
 
                 $this->exists = true;
-                $image_info = dbSelectOne( 'images', array( '*' ), compact( "id" ) );
+                $image_info = dbSelectOne( 'images', [ '*' ], compact( "id" ) );
                 $this->id = $id;
                 $this->name = $image_info[ 'name' ];
                 $this->ext = Extention::get( $this->name );
@@ -28,7 +28,7 @@
             }
         }
 
-        protected function validate() {
+        protected function onBeforeSave() {
             $this->ext = Extention::get( $this->name );
             $this->name = basename( $this->name );
             if ( !Extention::valid( $this->ext ) ) {

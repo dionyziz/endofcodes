@@ -1,12 +1,12 @@
-<?php 
+<?php
     include_once 'migrate.php';
 
-    migrate( 
-        array(
-            "ALTER TABLE 
+    migrate(
+        [
+            "ALTER TABLE
                 images
-            CHANGE 
+            CHANGE
                 `imageid` `id` INT( 11 ) NOT NULL AUTO_INCREMENT"
-        )
+        ]
     );
 ?>

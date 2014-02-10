@@ -1,6 +1,7 @@
 <?php
     include_once 'models/round.php';
-    class RoundTest extends UnitTestWithUser {
+
+    class RoundTest extends UnitTestWithFixtures {
         protected function buildRound() {
             $round = new Round();
             $round->id = 1;
@@ -16,7 +17,7 @@
             $creature2->user = $this->buildUser( 'pkakelas' );
             $creature1->id = 1;
             $creature2->id = 2;
-            $round->creatures = array( $creature1, $creature2 );
+            $round->creatures = [ $creature1, $creature2 ];
             return $round;
         }
         public function testJsonSerialize() {
@@ -27,7 +28,7 @@
             $json = $round->toJson();
             $data = json_decode( $json );
 
-            $this->assertTrue( isset( $data->round ), 'roundid must exist in exported JSON' ); 
+            $this->assertTrue( isset( $data->round ), 'roundid must exist in exported JSON' );
             $this->assertEquals( $round->id, $data->round, 'roundid must be encoded properly to JSON' );
 
             $this->assertTrue( isset( $data->map ), 'map must exist in exported JSON' );

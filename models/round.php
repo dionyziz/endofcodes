@@ -1,10 +1,10 @@
 <?php
     include_once 'models/creature.php';
     class Round extends ActiveRecordBase {
-        public $creatures = array();
+        public $creatures = [];
         public $id;
         public $game;
-        public $errors = array();
+        public $errors = [];
 
         public function __construct( $a = false, $b = false ) {
             if ( $a instanceof Round ) {
@@ -28,14 +28,14 @@
                 $roundid = $id;
                 $creatures_info = dbSelect(
                     'roundcreatures',
-                    array( 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ),
+                    [ 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ],
                     compact( 'roundid', 'gameid' )
                 );
                 foreach ( $creatures_info as $i => $creature_info ) {
                     $id = $creature_info[ 'creatureid' ];
                     $user_info = dbSelectOne(
                         'creatures',
-                        array( 'userid' ),
+                        [ 'userid' ],
                         compact( 'id' )
                     );
                     $user = new User( $user_info[ 'userid' ] );
@@ -53,7 +53,7 @@
 
         public function jsonSerialize() {
             $round = $this->id;
-            $map = array();
+            $map = [];
             foreach ( $this->creatures as $creature ) {
                 $map[] = $creature->jsonSerialize();
             }
@@ -72,15 +72,15 @@
                 $creatureid = $creature->id;
                 dbInsert(
                     'roundcreatures',
-                    compact( 
-                        'gameid', 
-                        'roundid', 
-                        'locationx', 
-                        'locationy', 
-                        'hp', 
-                        'direction', 
+                    compact(
+                        'gameid',
+                        'roundid',
+                        'locationx',
+                        'locationy',
+                        'hp',
+                        'direction',
                         'action',
-                        'creatureid' 
+                        'creatureid'
                     )
                 );
             }

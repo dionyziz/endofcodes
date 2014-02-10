@@ -5,26 +5,26 @@
 
             include_once 'models/user.php';
             if ( empty( $username ) ) {
-                go( 'session', 'create', array( 'username_empty' => true ) );
+                go( 'session', 'create', [ 'username_empty' => true ] );
             }
             if ( empty( $password ) ) {
-                go( 'session', 'create', array( 'password_empty' => true ) );
+                go( 'session', 'create', [ 'password_empty' => true ] );
             }
             try {
                 $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
-                go( 'session', 'create', array( 'username_wrong' => true ) );
+                go( 'session', 'create', [ 'username_wrong' => true ] );
             }
             if ( !$user->authenticatesWithPassword( $password ) ) {
-                go( 'session', 'create', array( 'password_wrong' => true ) );
+                go( 'session', 'create', [ 'password_wrong' => true ] );
             }
             if ( $persistent ) {
-                $user->renewSessionId();     
-                setcookie(  
-                    $config[ 'persistent_cookie' ][ 'name' ], 
+                $user->renewSessionId();
+                setcookie(
+                    $config[ 'persistent_cookie' ][ 'name' ],
                     $user->sessionid,
-                    time() + $config[ 'persistent_cookie' ][ 'duration' ] 
+                    time() + $config[ 'persistent_cookie' ][ 'duration' ]
                 );
             }
             $_SESSION[ 'user' ] = $user;
@@ -32,13 +32,13 @@
         }
 
         public function delete() {
-            global $config; 
+            global $config;
 
             unset( $_SESSION[ 'user' ] );
-            setcookie( 
-                $config[ 'persistent_cookie' ][ 'name' ], 
-                '', 
-                time() - $config[ 'persistent_cookie' ][ 'unset_time' ] 
+            setcookie(
+                $config[ 'persistent_cookie' ][ 'name' ],
+                '',
+                time() - $config[ 'persistent_cookie' ][ 'unset_time' ]
             );
             go();
         }

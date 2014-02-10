@@ -5,7 +5,7 @@
     include_once 'models/intent.php';
     include_once 'models/user.php';
 
-    class GameTest extends UnitTestWithUser {
+    class GameTest extends UnitTestWithFixtures {
         public function testInit() {
             $game = new Game();
             for ( $i = 1; $i <= 4; ++$i ) {
@@ -14,9 +14,9 @@
             $game->save();
             $this->assertTrue( $game->width > 0, 'A game with users must have width' );
             $this->assertTrue( $game->height > 0, 'A game with users must have height' );
-            $this->assertTrue( 
+            $this->assertTrue(
                 3 * count( $game->users ) * $game->creaturesPerPlayer < $game->width * $game->height,
-                '3NM < WH must be true' 
+                '3NM < WH must be true'
             );
         }
         protected function buildGame() {
@@ -40,7 +40,7 @@
             $game->genesis();
             $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
-            $userCountCreatures = array();
+            $userCountCreatures = [];
             // start from 1 because user's id starts from 1
             for ( $i = 1; $i <= count( $game->users ); ++$i ) {
                 $userCountCreatures[ $i ] = 0;
@@ -59,10 +59,10 @@
                     }
                 }
             }
-            $this->assertEquals( 
-                count( $game->users ) * $game->creaturesPerPlayer, 
-                $creatureCount, 
-                'Each player must have a certain number of creatures' 
+            $this->assertEquals(
+                count( $game->users ) * $game->creaturesPerPlayer,
+                $creatureCount,
+                'Each player must have a certain number of creatures'
             );
             $creaturesPerUser = $creatureCount / count( $game->users );
             foreach ( $userCountCreatures as $userCountCreature ) {

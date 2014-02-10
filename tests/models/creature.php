@@ -1,6 +1,7 @@
 <?php
     include_once 'models/creature.php';
-    class CreatureTest extends UnitTestWithUser {
+
+    class CreatureTest extends UnitTestWithFixtures {
         protected function buildCreature() {
             $creature = new Creature();
             $creature->user = $this->buildUser( 'dionyziz' );

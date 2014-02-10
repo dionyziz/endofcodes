@@ -4,12 +4,12 @@
 
         protected function protectFromForgery( $token = '', $http_request_method = '' ) {
             if ( $http_request_method === 'POST'
-            && ( $token !== $_SESSION[ 'form' ][ 'token' ] || $token == '' ) ) { 
+            && ( $token !== $_SESSION[ 'form' ][ 'token' ] || $token == '' ) ) {
                 throw new HTTPUnauthorizedException();
             }
         }
         protected function getControllerMethod( $requested_method, $http_request_method ) {
-            $method = $requested_method; 
+            $method = $requested_method;
 
             try {
                 if ( Form::getRESTMethodIdempotence( $method ) === 1 && $http_request_method != 'POST' ) {
@@ -31,7 +31,7 @@
                     $vars = $get;
                     break;
                 default:
-                    $vars = array(); 
+                    $vars = [];
                     break;
             }
 
@@ -57,7 +57,7 @@
         }
         protected function callWithNamedArgs( $method_reflection, $callable, $vars ) {
             $parameters = $method_reflection->getParameters();
-            $arguments = array();
+            $arguments = [];
 
             foreach ( $parameters as $parameter ) {
                 if ( isset( $vars[ $parameter->name ] ) ) {
@@ -102,7 +102,7 @@
             $this_reflection = new ReflectionObject( $this );
             $method_reflection = $this_reflection->getMethod( $method );
 
-            $this->callWithNamedArgs( $method_reflection, array( $this, $method ), $vars );
+            $this->callWithNamedArgs( $method_reflection, [ $this, $method ], $vars );
         }
     }
 ?>
