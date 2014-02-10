@@ -6,7 +6,7 @@
         public function delete() {
             $id = $this->id;
             dbDelete(
-                $this->tableName,
+                static::$tableName,
                 compact( "id" )
             );
         }
@@ -17,9 +17,10 @@
             foreach ( $this->attributes as $attribute ) {
                 $attributes[ $attribute ] = $this->$attribute;
             }
+
             try {
                 $id = dbInsert(
-                    $this->tableName,
+                    static::$tableName,
                     $attributes
                 );
                 if ( !isset( $this->id ) ) {
@@ -31,6 +32,10 @@
             }
             $this->exists = true;
             $this->onCreate();
+        }
+
+        public static function findAll() {
+            return dbSelect( static::$tableName );
         }
 
         protected function onBeforeCreate() {} // override me

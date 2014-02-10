@@ -4,11 +4,7 @@
         public $name;
         public $id;
         public $shortname;
-        protected $tableName = 'countries';
-
-        public static function findAll() {
-            return dbSelect( 'countries' );
-        }
+        protected static $tableName = 'countries';
 
         public function __construct( $id = false ) {
             global $config;

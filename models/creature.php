@@ -13,7 +13,7 @@
         protected $gameid;
         protected $userid;
         protected $attributes = [ 'id', 'gameid', 'userid' ];
-        protected $tableName = 'creatures';
+        protected static $tableName = 'creatures';
 
         public function __construct( $creature_info = [] ) {
             if ( !empty( $creature_info ) ) {

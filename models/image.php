@@ -9,7 +9,7 @@
         public $ext;
         public $userid;
         protected $attributes = [ 'name', 'userid' ];
-        protected $tableName = 'images';
+        protected static $tableName = 'images';
 
         public static function findByUser( $user ) {
             return new Image( $user->avatarid );

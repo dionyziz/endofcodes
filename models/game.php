@@ -16,7 +16,7 @@
         public $creaturesPerPlayer;
         public $maxHp;
         public $grid = [ [] ];
-        protected $tableName = 'games';
+        protected static $tableName = 'games';
         protected $attributes = [ 'width', 'height', 'created' ];
 
         public function __construct( $id = false ) {

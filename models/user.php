@@ -14,7 +14,7 @@
         public $dateOfBirth;
         public $boturl;
         protected $dob;
-        protected $tableName = 'users';
+        protected static $tableName = 'users';
 
         public static function findByUsername( $username ) {
             try {
