@@ -53,37 +53,45 @@
                 $ch = $this->httpRequest( 'bot', 'create' );
             }
             catch ( CurlException $e ) {
-                $this->errors[] = [
+                $errorMap = [
                     CURLE_COULDNT_RESOLVE_HOST => 'initiate_could_not_resolve',
-                    CURLE_COULDNT_CONNECT => 'initiate_could_not_connect'
-                ][ $e->error ];
-                throw new GraderBotException();
+                    CURLE_COULDNT_CONNECT => 'initiate_could_not_connect',
+                    CURLE_URL_MALFORMAT => 'initiate_malformed_url'
+                ];
+                if ( isset( $errorMap[ $e->error ] ) ) {
+                    $this->errors[] = $errorMap[ $e->error ];
+                }
+                else {
+                    throw $e;
+                }
+
+                throw new GraderBotException( end( $this->errors ) );
             }
 
             if ( $ch->responseCode !== 200 ) {
                 $this->errors[] = 'initiate_http_code_not_ok';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
 
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
                 $this->errors[] = 'initiate_invalid_json';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
             $requiredAttributes = [ 'botname', 'version', 'username' ];
             foreach ( $requiredAttributes as $attribute ) {
                 if ( !isset( $decodedResponse->$attribute ) ) {
                     $this->errors[] = 'initiate_' . $attribute . '_not_set';
-                    throw new GraderBotException();
+                    throw new GraderBotException( end( $this->errors ) );
                 }
             }
             if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
                 $this->errors[] = 'initiate_additional_data';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
             if ( $this->user->username !== $decodedResponse->username ) {
                 $this->errors[] = 'initiate_username_mismatch';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
             $this->version = $decodedResponse->version;
             $this->botname = $decodedResponse->botname;
@@ -93,16 +101,16 @@
                 $ch = $this->httpRequest( 'game', 'create', GraderSerializer::gameRequestParams( $game ) );
             }
             catch ( CurlException $e ) {
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
                 $this->errors[] = 'game_invalid_json';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
             if ( count( ( array )$decodedResponse ) ) {
                 $this->errors[] = 'game_additional_data';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
         }
         public function sendRoundRequest( $round ) {
@@ -111,26 +119,30 @@
                 $ch = $this->httpRequest( "game/$gameid/round", 'create', GraderSerializer::roundRequestParams( $round ) );
             }
             catch ( CurlException $e ) {
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
                 $this->errors[] = 'round_invalid_json';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
             $requiredAttributes = [ 'creatureid', 'direction', 'desire' ];
             foreach ( $requiredAttributes as $attribute ) {
                 if ( !isset( $decodedResponse->$attribute ) ) {
                     $this->errors[] = 'round_' . $attribute . '_not_set';
-                    throw new GraderBotException();
+                    throw new GraderBotException( end( $this->errors ) );
                 }
             }
             if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
                 $this->errors[] = 'round_additional_data';
-                throw new GraderBotException();
+                throw new GraderBotException( end( $this->errors ) );
             }
         }
     }
 
-    class GraderBotException extends Exception {}
+    class GraderBotException extends Exception {
+        public function __construct( $error ) {
+            parent::__construct( "Grader bot error: $error" );
+        }
+    }
 ?>
