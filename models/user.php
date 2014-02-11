@@ -228,7 +228,7 @@
             $this->save();
             $email = $this->email;
             $username = urlencode( $this->username );
-            $link = $config[ 'base'] . "/forgotpasswordrequest/view?username=$username&password_token=$value";
+            $link = $config[ 'base'] . "/forgotpasswordrequest/update?username=$username&password_token=$value";
             $mailVars = [ 
                 'username' => $username,
                 'link' => $link

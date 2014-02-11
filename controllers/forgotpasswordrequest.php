@@ -23,22 +23,6 @@
             $link = $user->createForgotPasswordLink();
             include 'views/user/forgot/link.php'; 
         }
-        public function view( $password_token, $username ) {
-            try {
-                $user = User::findByUsername( $username );
-            }
-            catch ( ModelNotFoundException $e ) {
-                throw new HTTPNotFoundException();
-            }
-            try {
-                $user->revokePasswordCheck( $password_token ); 
-                $_SESSION[ 'user' ] = $user;
-                go( 'forgotpasswordrequest', 'update', [ 'password_token' => $password_token ] );
-            }
-            catch ( ModelValidationException $e ) {
-                go( 'forgotpasswordrequest', 'update', [ $e->error => true ] );
-            }
-        }
         public function update( $password, $password_repeat, $password_token ) {
             if ( $password !== $password_repeat ) {
                 go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true ] );
@@ -69,13 +53,36 @@
         public function createView( $input_empty, $username_not_exists, $email_not_exists ) {
             include 'views/user/passwordrevoke.php';
         }
-        public function updateView( $link_expired, $password_empty, $password_invalid, $password_not_matched, $password_token ) {
-            if ( $link_expired ) {
-                include 'views/user/forgot/expired.php';
+        public function updateView( $username, $link_expired, $password_empty, $password_invalid, 
+                $password_not_matched, $password_token ) {            
+            if ( isset( $password_empty ) || isset( $password_not_matched ) || isset( $password_invalid ) ) {
+                include 'views/user/forgot/reset.php'; 
+                return;
+            }
+            if ( isset( $username ) ) {
+                try {
+                    $user = User::findByUsername( $username );
+                    $_SESSION[ 'user' ] = $user;
+                }
+                catch ( ModelNotFoundException $e ) {
+                    throw new HTTPNotFoundException();
+                }
             }
             else {
-                include 'views/user/forgot/reset.php'; 
+                $user = $_SESSION[ 'user' ];
             }
+            try {
+                $user->revokePasswordCheck( $password_token ); 
+            }
+            catch ( ModelValidationException $e ) {
+                if ( $e->error = 'link_expired' )  {
+                    include 'views/user/forgot/expired.php';
+                }
+                else {
+                    throw $e;
+                }
+            }
+            include 'views/user/forgot/reset.php'; 
         }
     }
 ?>
