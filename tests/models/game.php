@@ -19,6 +19,16 @@
                 '3NM < WH must be true'
             );
         }
+        public function testSaveInDb() {
+            $game = $this->buildGame();
+
+            $dbGame = new Game( 1 );
+
+            $this->assertEquals( $game->id, intval( $dbGame->id ), "Game's id must be correctly stored in the database" );
+            $this->assertEquals( $game->width, intval( $dbGame->width ), "Game's width must be correctly stored in the database" );
+            $this->assertEquals( $game->height, intval( $dbGame->height ), "Game's height must be correctly stored in the database" );
+            $this->assertEquals( $game->created, $dbGame->created, "Game's created must be correctly stored in the database" );
+        }
         public function testInitiation() {
             $game = $this->buildGame();
             $dbGame = new Game( 1 );

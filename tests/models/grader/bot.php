@@ -152,6 +152,12 @@
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught when curl responds with an error' );
             $this->assertEquals( 'initiate_could_not_connect', $result[ 'errors' ][ 0 ], 'Bot with url that could not be resolved must have a "initiate_could_not_connect" error' );
         }
+        public function testIniatiateMalformedUrl() {
+            $result = $this->initiateAndGetErrors( CURLE_URL_MALFORMAT );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught when curl responds with an error' );
+            $this->assertEquals( 'initiate_malformed_url', $result[ 'errors' ][ 0 ], 'Bot with malformed url must have a "initiate_malformed_url" error' );
+        }
         public function testInitiateRespondCodeInvalid() {
             $user = $this->buildUser( 'vitsalis' );
             $bot = new GraderBot( $user );
