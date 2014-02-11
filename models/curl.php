@@ -23,10 +23,10 @@
         public function exec() {
             $response = curl_exec( $this->ch );
             if ( $response === false ) {
-                throw new CurlException( curl_error() );
+                throw new CurlException( curl_errno( $this->ch ) );
             }
             $this->response = $response;
-            $this->responseCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+            $this->responseCode = curl_getinfo( $this->ch, CURLINFO_HTTP_CODE );
         }
     }
 
