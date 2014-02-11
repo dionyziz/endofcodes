@@ -5,9 +5,10 @@
 
     class Grader {
         public $registeredBots;
+        public $registeredUsers;
         protected $game;
         protected $users;
-        protected $bots = [];
+        public $bots = [];
 
         public function __construct( $users, $game ) {
             $this->users = $users;
@@ -18,18 +19,21 @@
         }
         public function initiate() {
             $this->registeredBots = [];
+            $this->registeredUsers = [];
             foreach ( $this->bots as $bot ) {
                 try {
                     $bot->sendInitiateRequest();
                     $this->registeredBots[] = $bot;
+                    $this->registeredUsers[] = $bot->user;
                 }
                 catch ( GraderBotException $e ) {
                 }
             }
         }
         public function createGame() {
-            $this->game->users = $this->users;
+            $this->game->users = $this->registeredUsers;
             $this->game->save();
+            $this->game->genesis();
 
             foreach ( $this->registeredBots as $bot ) {
                 $bot->sendGameRequest( $this->game );
