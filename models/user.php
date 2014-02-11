@@ -229,11 +229,7 @@
             $email = $this->email;
             $username = urlencode( $this->username );
             $link = $config[ 'base'] . "/forgotpasswordrequest/update?username=$username&password_token=$value";
-            $mailVars = [ 
-                'username' => $username,
-                'link' => $link
-            ];
-            $this->mailFromExternalView( $email, "views/forgotpasswordmail.php", 'Password Reset', $mailVars );
+            $this->mailFromExternalView( $email, "views/forgotpasswordmail.php", 'Password Reset', compact ( "username", "link" ) );
             return $link;
         }
         
@@ -242,7 +238,7 @@
                 throw new ModelNotFoundException();
             }
             extract( $vars );
-            $data = file_get_contents( $extView );
+            $data = include( $extView );
             mail( $email, $subject, $data );
         }
 

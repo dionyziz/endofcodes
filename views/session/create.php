@@ -31,7 +31,7 @@
 ?>
 </div>
 
-<p><a href="/user/create">Don't have an account?</a></p>
+<p><a href="user/create">Don't have an account?</a></p>
 
 <?php
     include 'views/footer.php';
