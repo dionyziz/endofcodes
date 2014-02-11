@@ -34,11 +34,17 @@
                 );
                 foreach ( $creatures_info as $i => $creature_info ) {
                     $id = $creature_info[ 'creatureid' ];
-                    $user_info = dbSelectOne(
-                        'creatures',
-                        [ 'userid' ],
-                        compact( 'id' )
-                    );
+                    try {
+                        $user_info = dbSelectOne(
+                            'creatures',
+                            [ 'userid' ],
+                            compact( 'id' )
+                        );
+                    }
+                    catch ( DBException $e ) {
+                        //unexpected error
+                        throw $e;
+                    }
                     $user = new User( $user_info[ 'userid' ] );
                     $this->creatures[ $i ] = new Creature( $creature_info );
                     $this->creatures[ $i ]->game = $game;
@@ -66,8 +72,8 @@
                         'locationx',
                         'locationy',
                         'hp',
-                        'direction',
                         'action',
+                        'direction',
                         'creatureid'
                     )
                 );
