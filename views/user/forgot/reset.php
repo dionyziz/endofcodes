@@ -5,7 +5,7 @@
 <div>
 <?php 
     $form = new Form( 'forgotpasswordrequest', 'update' );  
-    $form->output( function( $self ) use ( $password_empty, $password_invalid, $password_not_matched, $passwordToken ) {
+    $form->output( function( $self ) use ( $password_empty, $password_invalid, $password_not_matched, $password_token ) {
         if ( isset( $password_empty ) ) {
             $self->createError( "Please enter a new password" );
         }
@@ -20,7 +20,7 @@
         $self->createLabel( 'password_repeat', 'Password (repeat)' );
         $self->createInput( 'password', 'password_repeat', 'password_repeat' );
         $self->createInput( 'submit', '', '', 'Change password' );
-        $self->createInput( 'hidden', 'passwordToken', '', "$passwordToken" );
+        $self->createInput( 'hidden', 'password_token', '', "$password_token" );
     } );
 ?>
 </div><?

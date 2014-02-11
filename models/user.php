@@ -182,7 +182,7 @@
             try {
                 $res = dbUpdate(
                     'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordrequest", "forgotpasswordtoken" ),
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordrequestcreated", "forgotpasswordtoken" ),
                     compact( "id" )
                 );
             }
@@ -220,13 +220,15 @@
         public function createForgotPasswordLink() {
             global $config;
 
-            $value = md5( 32 );
+            $bytes = openssl_random_pseudo_bytes( 32 );
+            $value = bin2hex( $bytes );
+            $this->generateSessionId();
             $this->forgotPasswordToken = $value;
             $this->forgotPasswordRequestCreated = date("Y-m-d h:i:s");
             $this->save();
             $email = $this->email;
             $username = urlencode( $this->username );
-            $link = $config[ 'base'] . "/forgotpasswordrequest/view?username=$username&passwordToken=$value";
+            $link = $config[ 'base'] . "/forgotpasswordrequest/view?username=$username&password_token=$value";
             $mailVars = [ 
                 'username' => $username,
                 'link' => $link
