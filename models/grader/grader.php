@@ -10,10 +10,10 @@
         protected $users;
         public $bots = [];
 
-        public function __construct( $users, $game ) {
+        public function __construct( $users, $game, $graderBotObject = 'GraderBot' ) {
             $this->users = $users;
             foreach ( $users as $user ) {
-                $this->bots[] = new GraderBot( $user );
+                $this->bots[] = new $graderBotObject( $user );
             }
             $this->game = $game;
         }
