@@ -238,7 +238,9 @@
                 throw new ModelNotFoundException();
             }
             extract( $vars );
+            ob_start();
             $data = include( $extView );
+            ob_get_clean();
             mail( $email, $subject, $data );
         }
 
