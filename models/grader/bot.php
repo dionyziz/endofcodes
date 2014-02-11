@@ -1,5 +1,12 @@
 <?php
-    class GraderBot {
+    interface GraderBotInterface {
+        public function __construct( $user );
+        public function sendInitiateRequest();
+        public function sendGameRequest( $game );
+        public function sendRoundRequest( $round );
+    }
+
+    class GraderBot implements GraderBotInterface {
         public $curlConnectionObject;
         protected $url;
         public $user;

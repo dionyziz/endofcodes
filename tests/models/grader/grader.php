@@ -1,7 +1,7 @@
 <?php
     include_once 'models/grader/grader.php';
 
-    class GraderBotMock {
+    class GraderBotMock implements GraderBotInterface {
         public $boturlValid;
         public $user;
 
@@ -13,6 +13,8 @@
                 throw new GraderBotException( 'error' );
             }
         }
+        public function sendGameRequest( $game ) {}
+        public function sendRoundRequest( $round ) {}
     }
 
     class GraderTest extends UnitTestWithFixtures {
