@@ -7,7 +7,7 @@
             $user->username = $username;
             $user->password = 'secret1234';
             $user->email = "$username@gmail.com";
-            $user->boturl = $config[ 'base' ] . 'bot_prototype.php';
+            $user->boturl = $config[ 'base' ] . 'bots/php';
             $user->save();
 
             return $user;
@@ -27,6 +27,10 @@
             $creature->hp = 10;
             $creature->user = $user;
             $creature->id = $id;
+            $creature->game = new Game();
+            $creature->game->id = 1;
+            $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+            $creature->save();
 
             return $creature;
         }
