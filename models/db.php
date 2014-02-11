@@ -9,7 +9,7 @@
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
                 $value = addslashes( $value );
-                $value = '"' . $value .'"';
+                $value = '"' . $value . '"';
             }
             else if ( is_array( $value ) ) {
                 foreach ( $value as $i => $subvalue ) {
