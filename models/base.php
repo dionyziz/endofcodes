@@ -35,7 +35,12 @@
         }
 
         public static function findAll() {
-            return dbSelect( static::$tableName );
+            $resultArray = dbSelect( static::$tableName );
+            $objectsCollection = [];
+            foreach ( $resultArray as $result ) {
+                $objectsCollection[] = new static( $result[ 'id' ] );
+            }
+            return $objectsCollection;
         }
 
         protected function onBeforeCreate() {} // override me
