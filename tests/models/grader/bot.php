@@ -285,7 +285,7 @@
             $this->assertTrue( method_exists( $bot, 'sendGameRequest' ), 'GraderBot object must export a "sendGameRequest" function' );
 
             $curlConnectionMock = new CurlConnectionMock();
-            $curlConnectionMock->makeRespondWith( json_encode( array() ) );
+            $curlConnectionMock->makeRespondWith( json_encode( [] ) );
             $bot->curlConnectionObject = $curlConnectionMock;
             $bot->sendGameRequest( $game );
             $data = GraderSerializer::gameRequestParams( $game );
@@ -313,7 +313,7 @@
             $this->assertEquals( $data[ 'players' ], $curlConnectionMock->data[ 'players' ], 'players must be sent properly to curl' );
         }
         public function testGameRespondValidJson() {
-            $result = $this->gameRequestWithJsonAndGetErrors( json_encode( array() ) );
+            $result = $this->gameRequestWithJsonAndGetErrors( json_encode( [] ) );
 
             $this->assertFalse( $result[ 'caught' ], 'A GraderBotException must not be caught if the response is valid' );
             $this->assertTrue( empty( $result[ 'errors' ] ), 'There should be no errors if the json is valid' );

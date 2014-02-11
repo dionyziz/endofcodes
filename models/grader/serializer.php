@@ -20,12 +20,12 @@
             return compact( 'round', 'map' );
         }
         public static function serializeUserList( $users ) {
-            $flattenedUsers = array_map( array( 'GraderSerializer', 'flattenUser' ), $users );
+            $flattenedUsers = array_map( [ 'GraderSerializer', 'flattenUser' ], $users );
 
             return json_encode( $flattenedUsers );
         }
         public static function serializeCreatureList( $creatures ) {
-            $flattenedCreatures = array_map( array( 'GraderSerializer', 'flattenCreature' ), $creatures );
+            $flattenedCreatures = array_map( [ 'GraderSerializer', 'flattenCreature' ], $creatures );
 
             return json_encode( $flattenedCreatures );
         }
