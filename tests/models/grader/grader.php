@@ -1,8 +1,10 @@
 <?php
     include_once 'models/grader/grader.php';
+
     class GraderBotMock {
         public $boturlValid;
         public $user;
+
         public function __construct( $user ) {
             $this->user = $user;
         }
@@ -12,6 +14,7 @@
             }
         }
     }
+
     class GraderTest extends UnitTestWithFixtures {
         public function testIncludeUsersWithInvalidBots() {
             $game = new Game();
