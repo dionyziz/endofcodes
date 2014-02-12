@@ -8,7 +8,6 @@
             $grader = new Grader( $users, $game );
             $grader->initiate();
             $grader->createGame();
-            $grader->game->genesis();
         }
         public function createView() {
             include 'views/game/create.php';

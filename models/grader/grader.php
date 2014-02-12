@@ -36,14 +36,22 @@
             $this->game->genesis();
 
             foreach ( $this->registeredBots as $bot ) {
-                $bot->sendGameRequest( $this->game );
+                try {
+                    $bot->sendGameRequest( $this->game );
+                }
+                catch ( GraderBotException $e ) {
+                }
             }
         }
         public function nextRound() {
             $round = $this->game->getCurrentRound();
 
             foreach ( $this->registeredBots as $bot ) {
-                $bot->sendRoundRequest( $round );
+                try {
+                    $bot->sendRoundRequest( $round );
+                }
+                catch ( GraderBotException $e ) {
+                }
             }
         }
     }
