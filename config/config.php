@@ -27,6 +27,7 @@
                     'unset_time' => 60 * 60 * 24 * 2
                 ],
                 'forgot_password_exp_time' => 3600 * 24, 
+                'email' => 'team@endofcodes.com',
                 'base' => 'http://localhost/endofcodes/',
                 'root' => '/var/www/endofcodes/'
             ],

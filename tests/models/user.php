@@ -130,6 +130,14 @@
             $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
             $this->assertTrue( $passwordSuccess, 'Password must not be changed after "renewSessionId" is run' );
         }
+        public function testCreateForgotPasswordLink() {
+            $user = $this->buildUser( 'pkakelas' );
+            
+            $link = $user->createForgotPasswordLink();
+            $this->assertTrue( isset( $link ), 'CreateForgotPasswordLink must return a variable' );
+            $this->assertTrue( isset( $user->forgotPasswordToken ), 'CreateForgotPasswordLink must save the token to $user->forgotPasswordToken' );
+            $this->assertTrue( isset( $user->forgotPasswordRequestCreated ), 'CreateForgotPasswordLink must save the time it created the link to $user->forgotPasswordRequestCreated' );
+        }
     }
 
     return new UserTest();

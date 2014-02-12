@@ -20,12 +20,12 @@
                     go( 'forgotpasswordrequest', 'create', [ 'username_not_exists' => true ] );
                 }
             }
-            $link = $user->createForgotPasswordLink();
+            $user->createForgotPasswordLink();
             include 'views/user/forgot/link.php'; 
         }
         public function update( $password, $password_repeat, $password_token ) {
             if ( $password !== $password_repeat ) {
-                go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true ] );
+                go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true, 'password_token' => $password_token ] );
             }
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $user = $_SESSION[ 'user' ];
@@ -53,15 +53,15 @@
         public function createView( $input_empty, $username_not_exists, $email_not_exists ) {
             include 'views/user/passwordrevoke.php';
         }
-        public function updateView( $username, $link_expired, $password_empty, $password_invalid, 
-                $password_not_matched, $password_token ) {            
-            if ( isset( $password_empty ) || isset( $password_not_matched ) || isset( $password_invalid ) ) {
+        public function updateView( $username, $password_empty, $password_invalid, $password_not_matched, $password_token ) {            
+            if ( !empty( $password_empty ) || !empty( $password_not_matched ) || !empty( $password_invalid ) ) {
                 include 'views/user/forgot/reset.php'; 
                 return;
             }
-            if ( isset( $username ) ) {
+            if ( !empty( $username ) ) {
                 try {
                     $user = User::findByUsername( $username );
+                    $user->revokePasswordCheck( $password_token );
                     $_SESSION[ 'user' ] = $user;
                 }
                 catch ( ModelNotFoundException $e ) {
@@ -77,9 +77,6 @@
             catch ( ModelValidationException $e ) {
                 if ( $e->error = 'link_expired' )  {
                     include 'views/user/forgot/expired.php';
-                }
-                else {
-                    throw $e;
                 }
             }
             include 'views/user/forgot/reset.php'; 

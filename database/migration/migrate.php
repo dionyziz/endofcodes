@@ -5,7 +5,7 @@
         include_once '../../models/db.php';
 
         global $config;
-        
+
         $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ];
         dbInit();
 

@@ -224,24 +224,27 @@
             $value = bin2hex( $bytes );
             $this->generateSessionId();
             $this->forgotPasswordToken = $value;
-            $this->forgotPasswordRequestCreated = date("Y-m-d h:i:s");
+            $this->forgotPasswordRequestCreated = date( "Y-m-d h:i:s" );
             $this->save();
             $email = $this->email;
             $username = urlencode( $this->username );
-            $link = $config[ 'base'] . "/forgotpasswordrequest/update?username=$username&password_token=$value";
+            $link = $config[ 'base' ] . "/forgotpasswordrequest/update?username=$username&password_token=$value";
             $this->mailFromExternalView( $email, "views/forgotpasswordmail.php", 'Password Reset', compact ( "username", "link" ) );
-            return $link;
+            return;
         }
         
         public function mailFromExternalView( $email, $extView, $subject = '', $vars = [] ) {
+            global $config;
+
             if ( !file_exists( $extView ) ) {
                 throw new ModelNotFoundException();
             }
             extract( $vars );
             ob_start();
             $data = include( $extView );
-            ob_get_clean();
-            mail( $email, $subject, $data );
+            $data = ob_get_clean();
+            $headers = "From:" . $config[ 'email' ];
+            mail( $email, $subject, $data, $headers );
         }
 
         public function revokePasswordCheck( $passwordToken ) {
