@@ -4,11 +4,13 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
+        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotPasswordToken', 'forgotPasswordRequestCreated' ];
         public $username;
         public $password;
         public $email;
         public $country;
+        public $forgotPasswordRequestCreated;
+        public $forgotPasswordToken;
         public $image;
         public $salt;
         public $dateOfBirth;
