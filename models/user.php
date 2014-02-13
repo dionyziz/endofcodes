@@ -255,7 +255,7 @@
                     throw new ForgotPasswordModelInvalidTokenException();
                 }
                 $datetime = strtotime( $this->forgotPasswordRequestCreated );
-                $now = strtotime( date( "Y-m-d h:i:s" ) );
+                $now = time();
                 $period = $now - $datetime;
                 if ( $period > $config[ 'forgot_password_exp_time' ] ) {
                     throw new ModelValidationException( 'link_expired' );
