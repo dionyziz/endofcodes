@@ -4,6 +4,7 @@
     class GameController extends ControllerBase {
         public function create() {
             $game = new Game();
+            $game->save();
             $users = User::findAll();
             $grader = new Grader( $users, $game );
             $grader->initiate();

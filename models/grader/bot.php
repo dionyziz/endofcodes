@@ -148,7 +148,9 @@
     }
 
     class GraderBotException extends Exception {
+        public $error;
         public function __construct( $error ) {
+            $this->error = $error;
             parent::__construct( "Grader bot error: $error" );
         }
     }

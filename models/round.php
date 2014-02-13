@@ -5,7 +5,6 @@
         public $creatures = [];
         public $id;
         public $game;
-        public $errors = [];
 
         public function __construct( $a = false, $b = false ) {
             if ( $a instanceof Round ) {

@@ -34,16 +34,30 @@
             }
             else {
                 $this->rounds = [];
+                $this->width = 0;
+                $this->height = 0;
+                $this->created = date( 'Y-m-d H:i:s' );
             }
         }
 
-        protected function onBeforeCreate() {
+        public function initiateAttributes() {
             $this->creaturesPerPlayer = rand( MIN_CREATURES, MAX_CREATURES );
             $multiply = $this->creaturesPerPlayer * count( $this->users );
             $this->width = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->height = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->maxHp = rand( MIN_HP, MAX_HP );
-            $this->created = date( 'Y-m-d H:i:s' );
+        }
+
+        protected function update() {
+            $id = $this->id;
+            $width = $this->width;
+            $height = $this->height;
+
+            dbUpdate(
+                'games',
+                compact( 'width', 'height' ),
+                compacT( 'id' )
+            );
         }
 
         public function genesis() {
@@ -76,21 +90,13 @@
             }
         }
 
-        public function botError( $round, $user, $error ) {
-            if ( !isset( $round->errors[ $user->id ] ) ) {
-                $round->errors[ $user->id ] = [];
-            }
-            $round->errors[ $user->id ][] = $error;
-        }
-
-        protected function killBot( $user, $error ) {
+        protected function killBot( $user ) {
             $roundid = count( $this->rounds ) - 1;
             foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
                     $creature->kill();
                 }
             }
-            $this->botError( $this->rounds[ $roundid ], $user, $error );
         }
 
         public function nextRound() {
@@ -167,6 +173,9 @@
                     }
                 }
             }
+        }
+        public function getCurrentRound() {
+            return end( $this->rounds );
         }
     }
 
