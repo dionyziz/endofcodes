@@ -50,19 +50,37 @@
             $this->onSave();
         }
     }
+    
+    class ModelException extends Exception {
+        public function __construct( $description, $error = "" ) {
+            if ( !empty( $error ) ) {
+                $args = $description . ':' . $error; 
+                parent::__construct( $args );
+            }
+            else {
+                parent::__construct( $description );
+            }
+        }
+    }
 
-    class ModelNotFoundException extends Exception {
+    class ModelNotFoundException extends ModelException {
         public function __construct() {
             parent::__construct( 'Model not found' );
         }
     }
-
-    class ModelValidationException extends Exception {
+    
+    class ModelValidationException extends ModelException {
         public $error;
 
         public function __construct( $error = "" ) {
-            parent::__construct( "Model validation error: " . $error );
+            parent::__construct( "Model validation error", $error );
             $this->error = $error;
+        }
+    }
+
+    class ForgotPasswordModelInvalidTokenException extends ModelException {
+        public function __construct() {
+            parent::__construct( 'Invalid Token' );
         }
     }
 ?>

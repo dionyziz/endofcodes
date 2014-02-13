@@ -36,8 +36,8 @@
             try {
                 $user->revokePasswordCheck( $password_token );
             }
-            catch ( HTTPUnauthorizedException $e ) {
-                throw $e;
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+                throw new HTTPUnauthorizedException();
             }
             try {
                 $user::passwordValidate( $password );
@@ -61,11 +61,16 @@
             if ( !empty( $username ) ) {
                 try {
                     $user = User::findByUsername( $username );
-                    $user->revokePasswordCheck( $password_token );
-                    $_SESSION[ 'user' ] = $user;
                 }
                 catch ( ModelNotFoundException $e ) {
                     throw new HTTPNotFoundException();
+                }
+                try {
+                    $user->revokePasswordCheck( $password_token );
+                    $_SESSION[ 'user' ] = $user;
+                }
+                catch ( ForgotPasswordModelInvalidTokenException $e ) {
+                    throw new HTTPUnauthorizedException();
                 }
             }
             else {

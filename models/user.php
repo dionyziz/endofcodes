@@ -252,7 +252,7 @@
 
             if ( $passwordToken == $this->forgotPasswordToken ) {
                 if ( empty( $passwordToken ) ) {
-                    throw new HTTPUnauthorizedException();
+                    throw new ForgotPasswordModelInvalidTokenException();
                 }
                 $datetime = strtotime( $this->forgotPasswordRequestCreated );
                 $now = strtotime( date( "Y-m-d h:i:s" ) );
@@ -262,7 +262,7 @@
                 } 
                 return;
             }
-            throw new HTTPUnauthorizedException();
+            throw new ForgotPasswordModelInvalidTokenException();
         }
 
         public function toJson() {
