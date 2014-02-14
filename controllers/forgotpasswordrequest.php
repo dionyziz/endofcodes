@@ -74,13 +74,15 @@
                 }
             }
             else {
-                $user = $_SESSION[ 'user' ];
+                if ( !empty( $_SESSION[ 'user' ] ) ) {
+                    $user = $_SESSION[ 'user' ];
+                }
             }
             try {
                 $user->revokePasswordCheck( $password_token ); 
             }
             catch ( ModelValidationException $e ) {
-                if ( $e->error = 'link_expired' )  {
+                if ( $e->error == 'link_expired' )  {
                     include 'views/user/forgot/expired.php';
                 }
             }

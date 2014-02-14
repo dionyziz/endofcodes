@@ -6,13 +6,13 @@
 <?php 
     $form = new Form( 'forgotpasswordrequest', 'update' );  
     $form->output( function( $self ) use ( $password_empty, $password_invalid, $password_not_matched, $password_token ) {
-        if ( isset( $password_empty ) ) {
+        if ( $password_empty ) {
             $self->createError( "Please enter a new password" );
         }
-        if ( isset( $password_invalid ) ) {
+        if ( $password_invalid ) {
             $self->createError( "Your new password must be more than 6 characters long" );
         }
-        if ( isset( $password_not_matched ) ) {
+        if ( $password_not_matched ) {
             $self->createError( "Your two passwords do not match" );
         }
         $self->createLabel( 'password', 'password' );
@@ -20,7 +20,7 @@
         $self->createLabel( 'password_repeat', 'Password (repeat)' );
         $self->createInput( 'password', 'password_repeat', 'password_repeat' );
         $self->createInput( 'submit', '', '', 'Change password' );
-        $self->createInput( 'hidden', 'password_token', '', "$password_token" );
+        $self->createInput( 'hidden', 'password_token', '', $password_token );
     } );
 ?>
 </div><?

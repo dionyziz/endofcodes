@@ -12,6 +12,7 @@
         public $forgotPasswordRequestCreated;
         public $forgotPasswordToken;
         public $image;
+        public $sessionid;
         public $salt;
         public $dateOfBirth;
         public $boturl;
@@ -224,15 +225,13 @@
 
             $bytes = openssl_random_pseudo_bytes( 32 );
             $value = bin2hex( $bytes );
-            $this->generateSessionId();
             $this->forgotPasswordToken = $value;
             $this->forgotPasswordRequestCreated = date( "Y-m-d h:i:s" );
             $this->save();
             $email = $this->email;
             $username = urlencode( $this->username );
             $link = $config[ 'base' ] . "/forgotpasswordrequest/update?username=$username&password_token=$value";
-            $this->mailFromExternalView( $email, "views/forgotpasswordmail.php", 'Password Reset', compact ( "username", "link" ) );
-            return;
+            $this->mailFromExternalView( $email, "views/forgotpasswordmail.php", 'Password Reset', compact( "username", "link" ) );
         }
         
         public function mailFromExternalView( $email, $extView, $subject = '', $vars = [] ) {

@@ -137,6 +137,45 @@
             $this->assertTrue( isset( $user->forgotPasswordToken ), 'CreateForgotPasswordLink must save the token to $user->forgotPasswordToken' );
             $this->assertTrue( isset( $user->forgotPasswordRequestCreated ), 'CreateForgotPasswordLink must save the time it created the link to $user->forgotPasswordRequestCreated' );
         }
+        public function testRevokePasswordCheck() {
+            $user = $this->buildUser( 'pkakelas' );
+            
+            $user->createForgotPasswordLink();
+            try {
+                $user->revokePasswordCheck( $user->forgotPasswordToken );
+                $trueSuccess = 1;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+               $trueSuccess = 0; 
+            }
+            try {
+                $user->revokePasswordCheck( 'dsafasfjsakf21ekjwlrfhkl321jhl' );
+                $falseSuccess = 0;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+                $falseSuccess = 1; 
+            }
+            try {
+                $user->revokePasswordCheck( '' );
+                $emptySuccess = 0;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+               $emptySuccess = 1; 
+            }
+            $oldToken = $user->forgotPasswordToken;
+            $user->createForgotPasswordLink();
+            try {
+                $user->revokePasswordCheck( $oldToken );
+                $oldTokenSuccess = 0;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+               $oldTokenSuccess = 1; 
+            }
+            $this->assertTrue( $trueSuccess, 'revokePasswordCheck should validate correct tokens' );
+            $this->assertTrue( $falseSuccess, 'revokePasswordCheck should not validate correct tokens' );
+            $this->assertTrue( $emptySuccess, 'revokePasswordCheck should not validate empty tokens' );
+            $this->assertTrue( $oldTokenSuccess, 'revokePasswordCheck should not validate with old tokens' );
+        }
     }
 
     return new UserTest();
