@@ -1,6 +1,6 @@
 <?php
-    include_once 'models/user.php';
-    include_once 'models/extentions.php';
+    require_once 'models/user.php';
+    require_once 'models/extentions.php';
 
     class Image extends ActiveRecordBase {
         public $tmp_name;

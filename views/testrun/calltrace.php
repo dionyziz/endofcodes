@@ -41,7 +41,7 @@
                     $outputargs = [];
                     foreach ( $call[ 'args' ] as $arg ) {
                         ob_start();
-                        include 'views/testrun/variable.php';
+                        require 'views/testrun/variable.php';
                         $outputargs[] = ob_get_clean();
                     }
                     if ( count( $outputargs ) ) {

@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 ?>
 <div id="steps">
     <div div="step1" class="steps">
@@ -107,5 +107,5 @@
         $self->createInput( 'submit', '', '', 'Register' );
     } );
 
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

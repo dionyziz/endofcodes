@@ -1,8 +1,8 @@
 <?php
     function migrate( $sql_array = [] ) {
-        include_once '../../config/config-local.php';
-        include_once '../../models/database.php';
-        include_once '../../models/db.php';
+        require_once '../../config/config-local.php';
+        require_once '../../models/database.php';
+        require_once '../../models/db.php';
 
         global $config;
 

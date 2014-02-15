@@ -1,6 +1,6 @@
 <?php
-    include_once 'models/round.php';
-    include_once 'models/game.php';
+    require_once 'models/round.php';
+    require_once 'models/game.php';
 
     class RoundTest extends UnitTestWithFixtures {
         public function testSaveDb() {

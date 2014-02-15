@@ -1,9 +1,9 @@
 <?php
-    include_once 'models/game.php';
-    include_once 'models/creature.php';
-    include_once 'models/round.php';
-    include_once 'models/intent.php';
-    include_once 'models/user.php';
+    require_once 'models/game.php';
+    require_once 'models/creature.php';
+    require_once 'models/round.php';
+    require_once 'models/intent.php';
+    require_once 'models/user.php';
 
     class GameTest extends UnitTestWithFixtures {
         public function testInit() {
@@ -12,6 +12,7 @@
                 $game->users[] = $this->buildUser( $i );
             }
             $game->save();
+            $game->initiateAttributes();
             $this->assertTrue( $game->width > 0, 'A game with users must have width' );
             $this->assertTrue( $game->height > 0, 'A game with users must have height' );
             $this->assertTrue(
@@ -39,6 +40,7 @@
         }
         public function testGenesis() {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $game->genesis();
             $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );

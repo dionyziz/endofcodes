@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 ?>
 
 <div id="login"><?php
@@ -34,5 +34,5 @@
 <p><a href="index.php?resource=user&amp;method=create">Don't have an account?</a></p>
 
 <?php
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

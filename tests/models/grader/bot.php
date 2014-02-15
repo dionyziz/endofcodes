@@ -1,10 +1,10 @@
 <?php
-    include_once 'models/grader/bot.php';
-    include_once 'models/grader/grader.php';
-    include_once 'models/grader/serializer.php';
-    include_once 'models/game.php';
-    include_once 'models/round.php';
-    include_once 'models/curl.php';
+    require_once 'models/grader/bot.php';
+    require_once 'models/grader/grader.php';
+    require_once 'models/grader/serializer.php';
+    require_once 'models/game.php';
+    require_once 'models/round.php';
+    require_once 'models/curl.php';
 
     class CurlConnectionMock implements CurlConnectionInterface {
         public $url;
@@ -256,6 +256,7 @@
         }
         protected function gameRequestWithJsonAndGetErrors( $json ) {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $user = $game->users[ 0 ];
             $bot = new GraderBot( $user );
 
@@ -278,6 +279,7 @@
         }
         public function testGameRequest() {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $user = $game->users[ 0 ];
             $bot = new GraderBot( $user );
             $botbase = $user->boturl;
@@ -334,6 +336,7 @@
         }
         protected function roundRequestWithJsonAndGetErrors( $json ) {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $game->genesis();
             $round = $game->rounds[ 0 ];
             $user = $game->users[ 0 ];
@@ -359,6 +362,7 @@
         }
         public function testRoundRequest() {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $game->genesis();
             $round = $game->rounds[ 0 ];
             $user = $game->users[ 0 ];

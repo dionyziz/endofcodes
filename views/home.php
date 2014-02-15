@@ -27,7 +27,7 @@
             <p>Check your program's process <a href="">here</a></p>
             <?php
                 if ( isset( $user ) ) {
-                    include_once 'views/session/logoutform.php';
+                    require_once 'views/session/logoutform.php';
                 }
             ?>
         </div>

@@ -51,7 +51,7 @@
                 $this->header = "HTTP/1.1 $error";
             }
             parent::__construct( $this->header );
-            include_once "views/http/$error.php";
+            require_once "views/http/$error.php";
         }
     }
 

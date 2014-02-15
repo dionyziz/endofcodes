@@ -1,6 +1,6 @@
 <?php
-    include_once 'models/dependencies.php';
-    include_once 'header.php';
+    require_once 'models/dependencies.php';
+    require_once 'header.php';
 
     if ( isset( $_GET[ 'resource' ] ) ) {
         $resource = $_GET[ 'resource' ];
@@ -14,7 +14,7 @@
         $resource = 'dashboard';
         $filename = 'controllers/' . $resource . '.php';
     }
-    include_once $filename;
+    require_once $filename;
     $controllername = ucfirst( $resource ) . 'Controller';
     $controller = new $controllername();
     try {

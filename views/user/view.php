@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 ?>
 
 <p><img src="<?php
@@ -55,5 +55,5 @@
     if ( isset( $_SESSION[ 'user' ]->id ) && $_SESSION[ 'user' ]->id == $user->id ) {
         ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
     }
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

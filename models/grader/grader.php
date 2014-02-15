@@ -1,8 +1,8 @@
 <?php
-    include_once 'models/curl.php';
-    include_once 'models/grader/serializer.php';
-    include_once 'models/grader/bot.php';
-    include_once 'models/grader/error.php';
+    require_once 'models/curl.php';
+    require_once 'models/grader/serializer.php';
+    require_once 'models/grader/bot.php';
+    require_once 'models/error.php';
 
     class Grader {
         public $registeredBots;
@@ -12,8 +12,10 @@
         public $bots = [];
 
         public function __construct( $users, $game, $graderBotObject = 'GraderBot' ) {
+            assert( $game instanceof Game, '$grader->game is not an instance of Game' );
             $this->users = $users;
             foreach ( $users as $user ) {
+                assert( $user instanceof User, '$grader->users is not a collection of users' );
                 $this->bots[] = new $graderBotObject( $user );
             }
             $this->game = $game;
@@ -29,7 +31,10 @@
                     $this->registeredUsers[] = $bot->user;
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error( $this->game->id, $bot->user->id, $e->error );
+                    $error = new Error();
+                    $error->game = $this->game;
+                    $error->user = $bot->user;
+                    $error->error = $e->error;
                     $error->save();
                 }
             }
@@ -45,7 +50,10 @@
                     $bot->sendGameRequest( $this->game );
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error( $this->game->id, $bot->user->id, $e->error );
+                    $error = new Error();
+                    $error->game = $this->game;
+                    $error->user = $bot->user;
+                    $error->error = $e->error;
                     $error->save();
                 }
             }
@@ -58,10 +66,27 @@
                     $bot->sendRoundRequest( $round );
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error( $this->game->id, $bot->user->id, $e->error );
+                    $error = new Error();
+                    $error->game = $this->game;
+                    $error->user = $bot->user;
+                    $error->error = $e->error;
                     $error->save();
                 }
             }
+            /*
+            // resolution?!
+            ...->nextRound();
+
+            foreach ( bot ... ) {
+                foreach ( ...->errors as $error ) {
+                    if ( $error[ 'roundid' ] == $currentround ) {
+                        // this is a new error
+                        $error = new Error( $this->game->id, $bot->user->id, $error[ 'description' ] );
+                        $error->save();
+                    }
+                }
+            }
+            */
         }
     }
 ?>

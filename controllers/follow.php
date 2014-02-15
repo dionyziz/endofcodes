@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/follow.php';
+    require_once 'models/follow.php';
     class FollowController extends ControllerBase {
         public function create( $followerid, $followedid ) {
             $followerid = intval( $followerid );

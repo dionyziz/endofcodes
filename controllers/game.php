@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/grader/grader.php';
+    require_once 'models/grader/grader.php';
 
     class GameController extends ControllerBase {
         public function create() {
@@ -11,7 +11,7 @@
             $grader->createGame();
         }
         public function createView() {
-            include 'views/game/create.php';
+            require 'views/game/create.php';
         }
         public function update( $grader ) {
             $grader->nextRound();

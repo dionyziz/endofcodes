@@ -16,6 +16,7 @@
         public $creaturesPerPlayer;
         public $maxHp;
         public $grid = [ [] ];
+        public $attributesInitiated = false;
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
@@ -46,6 +47,7 @@
             $this->width = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->height = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->maxHp = rand( MIN_HP, MAX_HP );
+            $this->attributesInitiated = true;
         }
 
         protected function update() {
@@ -61,6 +63,7 @@
         }
 
         public function genesis() {
+            assert( $this->attributesInitiated, 'game attributes not initiated before genesis' );
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
             $this->rounds[ 0 ]->id = 0;
@@ -90,17 +93,19 @@
             }
         }
 
-        protected function killBot( $user ) {
+        public function killBot( $user, $description ) {
             $roundid = count( $this->rounds ) - 1;
             foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
                     $creature->kill();
                 }
             }
+
+            $this->getCurrentRound()->error( $user->id, $description );
         }
 
         public function nextRound() {
-            include_once 'models/resolution.php';
+            require_once 'models/resolution.php';
             $roundid = count( $this->rounds );
             $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
             $currentRound = $this->rounds[ $roundid ];
@@ -123,7 +128,15 @@
             foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->intent->action === ACTION_MOVE ) {
                     if ( $creature->alive ) {
-                        creatureMove( $creature );
+                        try {
+                            creatureMove( $creature );
+                        }
+                        catch ( CreatureOutOfBoundsException $e ) {
+                            $this->killBot(
+                                $creature->user,
+                                "Tried to move creature $creature->id out of map bounds."
+                            );
+                        }
                     }
                     else {
                         $roundNumber = count( $this->rounds ) - 1;
@@ -179,6 +192,9 @@
         }
     }
 
-    class GameException extends Exception {}
-    class CreatureOutOfBoundsException extends GameException {}
+    class GameException extends Exception {
+        public function __construct( $description ) {
+            parent::__construct( "Game error: $description" );
+        }
+    }
 ?>

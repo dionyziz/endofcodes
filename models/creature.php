@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/intent.php';
+    require_once 'models/intent.php';
 
     class Creature extends ActiveRecordBase {
         public $game;
@@ -69,6 +69,16 @@
         protected function onBeforeCreate() {
             $this->gameid = $this->game->id;
             $this->userid = $this->user->id;
+        }
+    }
+
+    class CreatureOutOfBoundsException extends GameException {
+        public $creature;
+
+        public function __construct( $creature ) {
+            $this->creature = $creature;
+            parent::__construct( "Creature $creature->id in location ($creature->locationx, $creature->locationy) "
+                               . "of user " . $creature->user->id . " tried to go out of bounds" );
         }
     }
 ?>
