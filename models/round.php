@@ -5,7 +5,7 @@
         public $creatures = [];
         public $id;
         public $game;
-        public $errors; // dictionary from userid to list of errors
+        public $errors = []; // dictionary from userid to list of errors
 
         public function error( $userid, $description ) {
             if ( !isset( $this->errors[ $userid ] ) ) {

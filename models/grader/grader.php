@@ -73,20 +73,16 @@
                     $error->save();
                 }
             }
-            /*
-            // resolution?!
-            ...->nextRound();
 
-            foreach ( bot ... ) {
-                foreach ( ...->errors as $error ) {
-                    if ( $error[ 'roundid' ] == $currentround ) {
-                        // this is a new error
-                        $error = new Error( $this->game->id, $bot->user->id, $error[ 'description' ] );
-                        $error->save();
-                    }
+            foreach ( $this->game->getCurrentRound()->errors as $userid => $errors ) {
+                foreach ( $errors as $error ) {
+                    $error = new Error();
+                    $error->game = $this->game;
+                    $error->user = new User( $userid );
+                    $error->error = $error;
+                    $error->save();
                 }
             }
-            */
         }
     }
 ?>
