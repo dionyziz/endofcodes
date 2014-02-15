@@ -105,7 +105,7 @@
         }
 
         public function nextRound() {
-            include_once 'models/resolution.php';
+            require_once 'models/resolution.php';
             $roundid = count( $this->rounds );
             $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
             $currentRound = $this->rounds[ $roundid ];

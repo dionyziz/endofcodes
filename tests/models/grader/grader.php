@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/grader/grader.php';
+    require_once 'models/grader/grader.php';
 
     class GraderBotMock implements GraderBotInterface {
         public $boturlValid;

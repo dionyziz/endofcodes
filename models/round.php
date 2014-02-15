@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/creature.php';
+    require_once 'models/creature.php';
 
     class Round extends ActiveRecordBase {
         public $creatures = [];

@@ -1,9 +1,9 @@
 <?php
-    include_once 'models/game.php';
-    include_once 'models/creature.php';
-    include_once 'models/round.php';
-    include_once 'models/intent.php';
-    include_once 'models/user.php';
+    require_once 'models/game.php';
+    require_once 'models/creature.php';
+    require_once 'models/round.php';
+    require_once 'models/intent.php';
+    require_once 'models/user.php';
 
     class GameTest extends UnitTestWithFixtures {
         public function testInit() {

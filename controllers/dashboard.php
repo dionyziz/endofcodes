@@ -4,9 +4,9 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $user = $_SESSION[ 'user' ];
             }
-            include 'views/header.php';
-            include 'views/home.php';
-            include 'views/footer.php';
+            require 'views/header.php';
+            require 'views/home.php';
+            require 'views/footer.php';
         }
     }
 ?>

@@ -1,7 +1,7 @@
 <?php
-    include_once 'models/encrypt.php';
-    include_once 'models/country.php';
-    include_once 'models/image.php';
+    require_once 'models/encrypt.php';
+    require_once 'models/country.php';
+    require_once 'models/image.php';
 
     class User extends ActiveRecordBase {
         protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' ];

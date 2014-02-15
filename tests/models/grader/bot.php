@@ -1,10 +1,10 @@
 <?php
-    include_once 'models/grader/bot.php';
-    include_once 'models/grader/grader.php';
-    include_once 'models/grader/serializer.php';
-    include_once 'models/game.php';
-    include_once 'models/round.php';
-    include_once 'models/curl.php';
+    require_once 'models/grader/bot.php';
+    require_once 'models/grader/grader.php';
+    require_once 'models/grader/serializer.php';
+    require_once 'models/game.php';
+    require_once 'models/round.php';
+    require_once 'models/curl.php';
 
     class CurlConnectionMock implements CurlConnectionInterface {
         public $url;

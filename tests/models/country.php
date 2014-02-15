@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/country.php';
+    require_once 'models/country.php';
 
     class CountryTest extends UnitTest {
         protected $countries = [

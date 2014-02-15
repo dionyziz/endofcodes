@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/grader/serializer.php';
+    require_once 'models/grader/serializer.php';
 
     class SerializerTest extends UnitTestWithFixtures {
         public function testGameRequestParams() {

@@ -1,8 +1,8 @@
 <?php
     class ImageController extends ControllerBase {
         public function create( $image ) {
-            include_once 'models/image.php';
-            include_once 'models/extentions.php';
+            require_once 'models/image.php';
+            require_once 'models/extentions.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }

@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/formtoken.php';
+    require_once 'models/formtoken.php';
     class Form {
         protected $resource;
         protected $method;

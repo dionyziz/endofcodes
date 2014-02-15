@@ -1,5 +1,5 @@
 <?php
-    include 'migrate.php';
+    require 'migrate.php';
 
     migrate(
         [

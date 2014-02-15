@@ -3,8 +3,8 @@
         protected $environment = 'test';
 
         public function create( $name, $all = false ) {
-            include_once 'models/test/base.php';
-            include_once 'models/test/withfixtures.php';
+            require_once 'models/test/base.php';
+            require_once 'models/test/withfixtures.php';
 
             if ( $all ) {
                 $tests = UnitTest::findAll();
@@ -19,19 +19,19 @@
                 if ( !file_exists( $path ) ) {
                     throw new HTTPNotFoundException();
                 }
-                $unittest = include_once $path;
+                $unittest = require_once $path;
                 $unittest->run();
 
                 $unittests[] = $unittest;
             }
-            include_once 'views/testrun/results.php';
+            require_once 'views/testrun/results.php';
         }
 
         public function createView() {
-            include_once 'models/test/base.php';
+            require_once 'models/test/base.php';
 
             $tests = UnitTest::findAll();
-            include_once 'views/testrun/create.php';
+            require_once 'views/testrun/create.php';
         }
     }
 ?>

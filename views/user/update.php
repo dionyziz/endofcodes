@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 
     $form = new Form( 'user', 'update' );
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong,
@@ -53,5 +53,5 @@
         $self->createInput( 'submit', '', '', 'Delete your account' );
     } );
 
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

@@ -45,7 +45,7 @@
             $this->testName = get_class( $this );
         }
         public static function findAll( $subdir = '' ) {
-            include_once 'models/extentions.php';
+            require_once 'models/extentions.php';
             $dir = 'tests/' . $subdir;
             $list = [];
             if ( is_dir( $dir ) ) {

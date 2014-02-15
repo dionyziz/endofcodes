@@ -1,6 +1,6 @@
 <?php
-    include_once 'models/user.php';
-    include_once 'models/country.php';
+    require_once 'models/user.php';
+    require_once 'models/country.php';
 
     class UserTest extends UnitTestWithFixtures {
         public function testCreate() {

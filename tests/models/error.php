@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/grader/error.php';
+    require_once 'models/grader/error.php';
 
     class ErrorTest extends UnitTestWithFixtures {
         public function testCreate() {

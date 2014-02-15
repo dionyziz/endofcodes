@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 
     ?><h1>Select a test to run</h1><?php
 
@@ -17,5 +17,5 @@
         } );
     }
 
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

@@ -3,7 +3,7 @@
         public function create( $username = '', $password = '', $persistent = '' ) {
             global $config;
 
-            include_once 'models/user.php';
+            require_once 'models/user.php';
             if ( empty( $username ) ) {
                 go( 'session', 'create', [ 'username_empty' => true ] );
             }
@@ -44,7 +44,7 @@
         }
 
         public function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
-            include 'views/session/create.php';
+            require 'views/session/create.php';
         }
     }
 ?>

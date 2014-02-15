@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 ?>
 
 <div class='breadcrumbs'>
@@ -37,7 +37,7 @@
                             else {
                                 ?><span class='fail'>FAIL:</span> <?php
                                 echo htmlspecialchars( $test->error );
-                                include 'views/testrun/calltrace.php';
+                                require 'views/testrun/calltrace.php';
                             }
                             ?></td>
                         </tr><?php
@@ -46,5 +46,5 @@
             </table>
         </div><?php
     }
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

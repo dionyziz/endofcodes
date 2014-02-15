@@ -1,6 +1,6 @@
 <?php
-    include_once 'models/game.php';
-    include_once 'models/round.php';
+    require_once 'models/game.php';
+    require_once 'models/round.php';
 
     class GraderSerializer {
         public static function gameRequestParams( $game ) {
