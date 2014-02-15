@@ -2,17 +2,28 @@
     class TestrunController extends ControllerBase {
         protected $environment = 'test';
 
-        public function create( $name ) {
+        public function create( $name, $all = false ) {
             include_once 'models/test/base.php';
             include_once 'models/test/withfixtures.php';
 
-            $path = 'tests/' . $name . '.php';
-            if ( !file_exists( $path ) ) {
-                throw new HTTPNotFoundException();
+            if ( $all ) {
+                $tests = UnitTest::findAll();
             }
-            $unittest = include_once $path;
-            $unittest->run();
+            else {
+                $tests = [ $name ];
+            }
 
+            $unittests = [];
+            foreach ( $tests as $test ) {
+                $path = 'tests/' . $test . '.php';
+                if ( !file_exists( $path ) ) {
+                    throw new HTTPNotFoundException();
+                }
+                $unittest = include_once $path;
+                $unittest->run();
+
+                $unittests[] = $unittest;
+            }
             include_once 'views/testrun/results.php';
         }
 
