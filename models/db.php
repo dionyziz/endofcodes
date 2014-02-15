@@ -1,10 +1,4 @@
 <?php
-    class DBException extends Exception {
-        public function __construct( $error ) {
-            parent::__construct( 'Database error: ' . $error );
-        }
-    }
-
     function db( $sql, $bind = [] ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
@@ -78,8 +72,11 @@
 
     function dbSelectOne( $table, $select = [ "*" ], $where = [] ) {
         $array = dbSelect( $table, $select, $where );
-        if ( count( $array ) !== 1 ) {
-            throw new DBException( mysql_error() );
+        if ( count( $array ) > 1 ) {
+            throw new DBException( 'select one with multiple results' );
+        }
+        else if ( count( $array ) < 1 ) {
+            throw new DBException( 'select one with no results' );
         }
         return $array[ 0 ];
     }
@@ -127,5 +124,11 @@
 
     function dbListTables() {
         return array_map( 'array_shift', dbArray( 'SHOW TABLES' ) );
+    }
+
+    class DBException extends Exception {
+        public function __construct( $error ) {
+            parent::__construct( 'Database error: ' . $error );
+        }
     }
 ?>
