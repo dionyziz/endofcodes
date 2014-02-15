@@ -8,9 +8,9 @@
         public $user;
         public $error;
 
-        public function __construct( $errorid = false ) {
-            if ( $errorid ) {
-                $errorArray = dbSelectOne( 'errors', [ 'gameid', 'error', 'userid' ], compact( 'errorid' ) );
+        public function __construct( $id = false ) {
+            if ( $id !== false ) {
+                $errorArray = dbSelectOne( 'errors', [ 'gameid', 'error', 'userid' ], compact( 'id' ) );
                 $this->gameid = $errorArray[ 'gameid' ];
                 $this->userid = $errorArray[ 'userid' ];
                 $this->error = $errorArray[ 'error' ];

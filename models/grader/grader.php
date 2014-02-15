@@ -8,12 +8,14 @@
         public $registeredBots;
         public $registeredUsers;
         protected $game;
-        protected $user;
+        protected $users;
         public $bots = [];
 
         public function __construct( $users, $game, $graderBotObject = 'GraderBot' ) {
+            assert( $game instanceof Game, '$grader->game is not an instance of Game' );
             $this->users = $users;
             foreach ( $users as $user ) {
+                assert( $user instanceof User, '$grader->users is not a collection of users' );
                 $this->bots[] = new $graderBotObject( $user );
             }
             $this->game = $game;
@@ -31,7 +33,7 @@
                 catch ( GraderBotException $e ) {
                     $error = new Error();
                     $error->game = $this->game;
-                    $error->user = $this->user;
+                    $error->user = $bot->user;
                     $error->error = $e->error;
                     $error->save();
                 }
@@ -50,7 +52,7 @@
                 catch ( GraderBotException $e ) {
                     $error = new Error();
                     $error->game = $this->game;
-                    $error->user = $this->user;
+                    $error->user = $bot->user;
                     $error->error = $e->error;
                     $error->save();
                 }
@@ -66,7 +68,7 @@
                 catch ( GraderBotException $e ) {
                     $error = new Error();
                     $error->game = $this->game;
-                    $error->user = $this->user;
+                    $error->user = $bot->user;
                     $error->error = $e->error;
                     $error->save();
                 }
