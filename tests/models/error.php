@@ -5,7 +5,10 @@
         public function testCreate() {
             $game = $this->buildGame();
             $user = $this->buildUser( 'vitsalis' );
-            $error = new Error( $game->id, $user->id, 'error' );
+            $error = new Error();
+            $error->game = $game;
+            $error->user = $user;
+            $error->error = 'error';
             $error->save();
 
             $errorObjects = Error::findErrorsByGameAndUser( $game->id, $user->id );
