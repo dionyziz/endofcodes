@@ -34,13 +34,17 @@
             $this->onCreate();
         }
 
-        public static function findAll() {
-            $resultArray = dbSelect( static::$tableName );
-            $objectsCollection = [];
-            foreach ( $resultArray as $result ) {
-                $objectsCollection[] = new static( $result[ 'id' ] );
+        protected static function arrayToCollection( $array ) {
+            $collection = [];
+            foreach ( $array as $result ) {
+                $collection[] = new static( $result[ 'id' ] );
             }
-            return $objectsCollection;
+            return $collection;
+        }
+
+        public static function findAll() {
+            $array = dbSelect( static::$tableName );
+            return self::arrayToCollection( $array );
         }
 
         protected function onBeforeCreate() {} // override me
