@@ -7,7 +7,7 @@
 
             global $config;
 
-            $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ];
+            $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ]; 
             dbInit();
 
             try {
@@ -23,14 +23,14 @@
             $sql = "ALTER TABLE
                         $table
                     ADD COLUMN
-                        field` $description;";
+                        `field` $description;";
             self::migrate( $sql );              
         }
     
         public static function renameField( $table, $oldName, $newName, $description ) {
             $sql = "ALTER TABLE
                         $table
-                    CHANGE'
+                    CHANGE
                         `$oldName` `$newName` $description;";
             self::migrate( $sql );
         }
@@ -45,14 +45,14 @@
 	
 	    public static function createTable( $tableName, $fields = [] ) {
 		    $attributes = [];
-		    foreach ( $fields as $field => description ) {
-			    $attributes[] = "'$field' $description";
+		    foreach ( $fields as $field => $description ) {
+			    $attributes[] = "$field $description";
 		    }
 		    $attributes = implode( ',', $attributes );
 		    $sql = "CREATE TABLE IF NOT EXISTS
 			        $tableName (
 				        $attributes
-			        );
+			        )
 			        ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		    self::migrate( $sql );
 	    }
