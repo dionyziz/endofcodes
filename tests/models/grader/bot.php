@@ -347,18 +347,18 @@
 
             $bot->curlConnectionObject = $curlConnectionMock;
 
-            $caught = false;
+            $return = [ 'caught' => false ];
             try {
-                $bot->sendRoundRequest( $round );
+                $response = $bot->sendRoundRequest( $round );
+                $return[ 'response' ] = $response;
             }
             catch ( GraderBotException $e ) {
-                $caught = true;
+                $return[ 'caught' ] = true;
             }
 
-            return [
-                'caught' => $caught,
-                'errors' => $bot->errors
-            ];
+            $return[ 'errors' ] = $bot->errors;
+
+            return $return;
         }
         public function testRoundRequest() {
             $game = $this->buildGame();
@@ -374,9 +374,13 @@
             $curlConnectionMock = new CurlConnectionMock();
             $bot->curlConnectionObject = $curlConnectionMock;
             $curlConnectionMock->makeRespondWith( json_encode( [
-                'creatureid' => 1,
-                'desire' => 'ATTACK',
-                'direction' => 'NORTH'
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'ATTACK',
+                        'direction' => 'NORTH'
+                    ]
+                ]
             ] ) );
             $bot->sendRoundRequest( $round );
             $data = GraderSerializer::roundRequestParams( $round );
@@ -393,9 +397,13 @@
         }
         public function testRoundRespondValidJson() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
-                'creatureid' => 1,
-                'desire' => 'ATTACK',
-                'direction' => 'NORTH'
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'ATTACK',
+                        'direction' => 'NORTH'
+                    ]
+                ]
             ] ) );
 
             $this->assertFalse( $result[ 'caught' ], 'A GraderBotException must not be caught if the response is valid' );
@@ -409,26 +417,38 @@
         }
         public function testRoundRespondWithoutCreatureid() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
-                'desire' => 'ATTACK',
-                'direction' => 'NORTH'
+                'intent' => [
+                    [
+                        'action' => 'ATTACK',
+                        'direction' => 'NORTH'
+                    ]
+                ]
             ] ) );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response is invalid' );
             $this->assertEquals( 'round_creatureid_not_set', $result[ 'errors' ][ 0 ], 'A "round_creatureid_not_set" error must be recorded when bot responds with creatureid not set' );
         }
-        public function testRoundRespondWithoutDesire() {
+        public function testRoundRespondWithoutaction() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
-                'creatureid' => 1,
-                'direction' => 'NORTH'
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'direction' => 'NORTH'
+                    ]
+                ]
             ] ) );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response is invalid' );
-            $this->assertEquals( 'round_desire_not_set', $result[ 'errors' ][ 0 ], 'A "round_desire_not_set" error must be recorded when bot responds with desire not set' );
+            $this->assertEquals( 'round_action_not_set', $result[ 'errors' ][ 0 ], 'A "round_action_not_set" error must be recorded when bot responds with action not set' );
         }
         public function testRoundRespondWithoutDirection() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
-                'creatureid' => 1,
-                'desire' => 'ATTACK'
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'faksdfjaskfja'
+                    ]
+                ]
             ] ) );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response is invalid' );
@@ -436,14 +456,107 @@
         }
         public function testRoundRespondAdditionalData() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
-                'creatureid' => 1,
-                'desire' => 'ATTACK',
-                'direction' => 'NORTH',
-                'additional' => 'shit'
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'faksdfjaskfja',
+                        'direction' => 'NORTH',
+                        'additional' => 'shit'
+                    ]
+                ]
             ] ) );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response has additional data' );
             $this->assertEquals( 'round_additional_data', $result[ 'errors' ][ 0 ], 'A "round_additional_data" error must be recorded when the bot responds with additional data' );
+        }
+        public function testRoundRespondInvalidAction() {
+            $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'faksdfjaskfja',
+                        'direction' => 'NORTH'
+                    ]
+                ]
+            ] ) );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response has invalid action' );
+            $this->assertEquals( 'round_action_invalid', $result[ 'errors' ][ 0 ], 'A "round_action_invalid" error must be recorded when the bot responds with invalid action' );
+        }
+        public function testRoundRespondInvalidDirection() {
+            $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'ATTACK',
+                        'direction' => 'faksdfjasljf'
+                    ]
+                ]
+            ] ) );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response has invalid direction' );
+            $this->assertEquals( 'round_direction_invalid', $result[ 'errors' ][ 0 ], 'A "round_direction_invalid" error must be recorded when the bot responds with invalid direction' );
+        }
+        public function testRoundRespondNotObject() {
+            $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
+                'intent' => [
+                    3, 4, 5
+                ]
+            ] ) );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response is not an object' );
+            $this->assertEquals( 'round_response_not_object', $result[ 'errors' ][ 0 ], 'A "round_response_not_object" error must be recorded when the bot response is not an object' );
+        }
+        public function testRoundRespondMultipleIntents() {
+            $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
+                'intent' => [
+                     [
+                        'creatureid' => 1,
+                        'action' => 'ATTACK',
+                        'direction' => 'NORTH'
+                    ],
+                    [
+                        'creatureid' => 1
+                    ]
+                ]
+            ] ) );
+
+            $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response is not an object' );
+            $this->assertEquals( 'round_direction_not_set', $result[ 'errors' ][ 0 ], 'A "round_creatureid_not_set" error must be recorded when creatureid is not set' );
+        }
+        public function testRoundRespondIntents() {
+            $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'ATTACK',
+                        'direction' => 'NORTH'
+                    ]
+                ]
+            ] ) );
+
+            $clone = new Creature();
+            $clone->id = 1;
+            $clone->intent = new Intent( ACTION_ATTACK, DIRECTION_NORTH );
+
+            $this->assertTrue( isset( $result[ 'response' ] ), 'A bot must respond with a dictionary containing the response key' ); 
+            $this->assertTrue( is_array( $result[ 'response' ] ), 'A bot must respond with a collection' );
+            $this->assertEquals( 1, count( $result[ 'response' ] ), 'The collection must have as much objects as specified' );
+
+            $this->assertEquals( $clone->id, $result[ 'response'][ 0 ]->id, 'creatureid must be the same as specified' );
+            $this->assertEquals( $clone->intent->action, $result[ 'response'][ 0 ]->intent->action, 'action must be the same as specified' );
+            $this->assertEquals( $clone->intent->direction, $result[ 'response'][ 0 ]->intent->direction, 'direction must be the same as specified' );
+        }
+        public function testRoundMoveDifferentUsersCreature() {
+            $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
+                'intent' => [
+                    [
+                        'creatureid' => 2,
+                        'action' => 'ATTACK',
+                        'direction' => 'NORTH'
+                    ]
+                ]
+            ] ) );
         }
     }
 

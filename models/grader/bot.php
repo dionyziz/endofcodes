@@ -133,17 +133,45 @@
                 $this->errors[] = 'round_invalid_json';
                 throw new GraderBotException( end( $this->errors ) );
             }
-            $requiredAttributes = [ 'creatureid', 'direction', 'desire' ];
+            $requiredAttributes = [ 'creatureid', 'direction', 'action' ];
             foreach ( $requiredAttributes as $attribute ) {
-                if ( !isset( $decodedResponse->$attribute ) ) {
-                    $this->errors[] = 'round_' . $attribute . '_not_set';
-                    throw new GraderBotException( end( $this->errors ) );
+                foreach ( $decodedResponse->intent as $creatureIntent) {
+                    if ( !is_object( $creatureIntent ) ) {
+                        $this->errors[] = 'round_response_not_object';
+                        throw new GraderBotException( end( $this->errors ) );
+                    }
+                    if ( !isset( $creatureIntent->$attribute ) ) {
+                        $this->errors[] = 'round_' . $attribute . '_not_set';
+                        throw new GraderBotException( end( $this->errors ) );
+                    }
                 }
             }
-            if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
+            if ( count( ( array )$decodedResponse->intent[ 0 ] ) > count( $requiredAttributes ) ) {
                 $this->errors[] = 'round_additional_data';
                 throw new GraderBotException( end( $this->errors ) );
             }
+            $collection = [];
+            foreach ( $decodedResponse->intent as $creatureIntentData ) {
+                $creature = new Creature();
+                $creature->id = $creatureIntentData->creatureid;
+                try {
+                    $action = actionStringToConst( $creatureIntentData->action );
+                }
+                catch ( ModelNotFoundException $e ) {
+                    $this->errors[] = 'round_action_invalid';
+                    throw new GraderBotException( end( $this->errors ) );
+                }
+                try {
+                    $direction = directionStringToConst( $creatureIntentData->direction );
+                }
+                catch ( ModelNotFoundException $e ) {
+                    $this->errors[] = 'round_direction_invalid';
+                    throw new GraderBotException( end( $this->errors ) );
+                }
+                $creature->intent = new Intent( $action, $direction );
+                $collection[] = $creature;
+            }
+            return $collection;
         }
     }
 
