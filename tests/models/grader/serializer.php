@@ -4,6 +4,7 @@
     class SerializerTest extends UnitTestWithFixtures {
         public function testGameRequestParams() {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $game->genesis();
 
             $this->assertTrue( method_exists( 'GraderSerializer', "gameRequestParams" ), 'GraderSerializer must have a "gameRequestParams" function' );

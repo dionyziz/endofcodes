@@ -49,6 +49,7 @@
                         $this->assertEquals( $creature->locationx - 1, $newCreature->locationx, 'A creature must move left by one when moving west' );
                         $this->assertEquals( $creature->locationy, $newCreature->locationy, 'A creature must not move to the y-direction when moving west' );
                         break;
+            $game->initiateAttributes();
                 }
             }
         }
@@ -207,7 +208,6 @@
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
-            $this->assertEquals( 10, $newCreature2->hp, 'A creature that is being attacked by a creature with the same user must not lose hp' );
             $this->assertEquals( 1, count( $game->rounds[ 1 ]->errors[ $creature1->user->id ] ), 'A user that tries to attack a creature of his own must get an error' );
         }
         public function testKillBot() {

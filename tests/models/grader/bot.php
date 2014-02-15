@@ -256,6 +256,7 @@
         }
         protected function gameRequestWithJsonAndGetErrors( $json ) {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $user = $game->users[ 0 ];
             $bot = new GraderBot( $user );
 
@@ -278,6 +279,7 @@
         }
         public function testGameRequest() {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $user = $game->users[ 0 ];
             $bot = new GraderBot( $user );
             $botbase = $user->boturl;
@@ -334,6 +336,7 @@
         }
         protected function roundRequestWithJsonAndGetErrors( $json ) {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $game->genesis();
             $round = $game->rounds[ 0 ];
             $user = $game->users[ 0 ];
@@ -359,6 +362,7 @@
         }
         public function testRoundRequest() {
             $game = $this->buildGame();
+            $game->initiateAttributes();
             $game->genesis();
             $round = $game->rounds[ 0 ];
             $user = $game->users[ 0 ];
