@@ -70,6 +70,7 @@ span.fail {
 .calltrace td.linenr {
     background-color: #232526;
     color: #fd971f;
+    text-align: right;
 }
 .calltrace .linenr {
 }
