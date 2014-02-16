@@ -171,10 +171,19 @@
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
                $oldTokenSuccess = 1; 
             }
+            $user->forgotPasswordRequestCreated = time() - 60 * 24 * 2; 
+            try {
+                $user->revokePasswordCheck( $user->forgotPasswordToken );
+                $expiredSuccess = 0;
+            }
+            catch ( ModelValidationException $e ) {
+                $expiredSuccess = 1;
+            }
             $this->assertTrue( $trueSuccess, 'revokePasswordCheck should validate correct tokens' );
             $this->assertTrue( $falseSuccess, 'revokePasswordCheck should not validate correct tokens' );
             $this->assertTrue( $emptySuccess, 'revokePasswordCheck should not validate empty tokens' );
             $this->assertTrue( $oldTokenSuccess, 'revokePasswordCheck should not validate with old tokens' );
+            $this->assertTrue( $expiredSuccess, 'revokePasswordCheck should not validate when request is expired' );
         }
     }
 

@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.6deb1
+-- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 20, 2014 at 07:18 PM
--- Server version: 5.5.34-0ubuntu0.13.10.1
--- PHP Version: 5.5.3-1ubuntu2.1
+-- Generation Time: Feb 16, 2014 at 06:21 PM
+-- Server version: 5.5.35
+-- PHP Version: 5.5.8-3+sury.org~precise+2
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `countries` (
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `shortname` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -44,6 +44,17 @@ CREATE TABLE IF NOT EXISTS `creatures` (
   `gameid` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   PRIMARY KEY (`gameid`,`userid`,`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `data`
+--
+
+CREATE TABLE IF NOT EXISTS `data` (
+  `country` text COLLATE utf8_unicode_ci NOT NULL,
+  `shortname` text COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -70,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `height` int(11) NOT NULL,
   `width` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
 -- --------------------------------------------------------
 
@@ -95,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   `userid` int(11) NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
 -- --------------------------------------------------------
 
@@ -132,10 +143,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   `dob` date NOT NULL,
   `boturl` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `sessionid` text COLLATE utf8_unicode_ci NOT NULL,
+  `forgotpasswordrequestcreated` datetime DEFAULT NULL,
+  `forgotpasswordtoken` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
