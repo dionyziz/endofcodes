@@ -76,6 +76,9 @@
             ++$this->currentTest->assertCount;
 
             if ( !$condition ) {
+                if ( $description == '' ) {
+                    $description = 'Expected true, but found false.';
+                }
                 throw new UnitTestFailedException( $description );
             }
 
@@ -89,6 +92,9 @@
             $this->assertTrue( $expected === $actual, $description );
         }
         public function assertFalse( $condition, $description = '' ) {
+            if ( $description != '' ) {
+                $description = 'Expected false, but found true.';
+            }
             $this->assertTrue( !$condition, $description );
         }
         public function run() {
