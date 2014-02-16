@@ -27,7 +27,7 @@
             self::migrate( $sql );              
         }
     
-        public static function renameField( $table, $oldName, $newName, $description ) {
+        public static function alterField( $table, $oldName, $newName, $description ) {
             $sql = "ALTER TABLE
                         $table
                     CHANGE
@@ -35,14 +35,37 @@
             self::migrate( $sql );
         }
     
-        public static function DropField ($table, $field ) {
+        public static function dropField($table, $field ) {
             $sql = "ALTER TABLE
                         $table
                     DROP COLUMN
                         $field;";
             self::migrate( $sql );
         }
-	
+
+        public static function dropPrimaryKey( $table ) {
+            $sql = "ALTER TABLE
+                        $table
+                    DROP PRIMARY KEY;";
+            self::migrate( $sql );
+        } 
+
+        public static function addPrimaryKey( $table, $name, $columns = [] ) {
+            $columns = implode( ',', $columns );
+            $sql = "ALTER TABLE
+                        $table 
+                    ADD CONSTRAINT $name PRIMARY KEY ( $columns );";
+            self::migrate( $sql );
+        }
+
+        public static function dropIndex( $table, $name ) {
+            $sql = "ALTER TABLE
+                        $table
+                    DROP INDEX
+                        $name;";
+            self::migrate( $sql );
+        }
+
 	    public static function createTable( $tableName, $fields = [], $keys = [] ) {
 		    foreach ( $fields as $field => $description ) {
 			    $attributes[] = "$field $description";
