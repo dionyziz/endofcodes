@@ -1,15 +1,12 @@
 <?php
     include 'migrate.php';
 
-    migrate(
+    Migration::createTable( 
+        'follows',
         [
-            'CREATE TABLE IF NOT EXISTS
-                follows (
-                    followerid int(11) NOT NULL,
-                    followedid int(11) NOT NULL,
-                    CONSTRAINT pk_follows PRIMARY KEY ( followerid, followedid )
-                )
-                ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;'
+            'followerid' => 'int(11) NOT NULL',
+            'followedid' => 'int(11) NOT NULL'
         ]
     );
+    Migration::addPrimaryKey( 'follows', 'pk_follows', [ 'followerid', 'followedid' ] );
 ?>

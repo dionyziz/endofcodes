@@ -1,12 +1,5 @@
 <?php
     include 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE
-                creatures
-            CHANGE
-                `id` `id` int(11) NOT NULL'
-        ]
-    );
+    Migration::renameField( 'creatures', 'id', 'id', 'int(11) NOT NULL' );
 ?>

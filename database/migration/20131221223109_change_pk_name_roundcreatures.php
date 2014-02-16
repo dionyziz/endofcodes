@@ -1,14 +1,6 @@
 <?php
     include 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE
-                roundcreatures
-            DROP PRIMARY KEY',
-            'ALTER TABLE
-                roundcreatures
-            ADD CONSTRAINT pk_roundcreatures PRIMARY KEY (gameid,roundid,creatureid)'
-        ]
-    );
+    Migration::dropPrimaryKey( 'roundcreatures' );
+    Migration::addPrimaryKey( 'roundcreatures', 'pk_roundcreatures', [ 'gameid', 'roundid', 'creatureid' ] );
 ?>

@@ -1,12 +1,5 @@
 <?php
     include 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE
-                users
-            DROP COLUMN
-                age'
-        ]
-    );
+    Migration::dropField( 'users', 'age' );
 ?>

@@ -1,16 +1,11 @@
 <?php
     include_once 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE
-                roundcreatures
-            CHANGE
-                `desire` `desire` ENUM("NONE","NORTH","EAST","SOUTH","WEST") COLLATE utf8_unicode_ci NOT NULL',
-            'ALTER TABLE
-                games
-            CHANGE
-                `created` `created` DATETIME NOT NULL'
-        ]
+    Migration::alterField( 
+        'roundcreatures', 
+        'desire', 
+        'desire', 
+        'ENUM("NONE","NORTH","EAST","SOUTH","WEST") COLLATE utf8_unicode_ci NOT NULL' 
     );
+    Migration::alterField( 'games', 'created', 'DATETIME NOT NULL' );
 ?>
