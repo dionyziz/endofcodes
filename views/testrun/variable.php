@@ -42,7 +42,9 @@
             break;
         case 'resource':
             $type = 'resource';
-            ?>[ resource ]<?php
+            ?>[ resource: <?php
+            echo htmlspecialchars( get_resource_type( $arg ) );
+            ?> ]<?php
             break;
         case 'NULL':
             $type = 'null';
