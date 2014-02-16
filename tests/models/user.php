@@ -185,6 +185,33 @@
             $this->assertTrue( $oldTokenSuccess, 'revokePasswordCheck should not validate with old tokens' );
             $this->assertTrue( $expiredSuccess, 'revokePasswordCheck should not validate when request is expired' );
         }
+        public function testPasswordValidate() {
+            $user = $this->buildUser( 'pkakelas' );
+            try {
+                $user->passwordValidate( 'Bob and Alice' );
+                $trueSuccess = 1;
+            } 
+            catch ( ModelValidationException $e ) {
+                $trueSuccess = 0;
+            } 
+            try {
+                $user->passwordValidate( '' );
+                $emptySuccess = 0;
+            }
+            catch ( ModelValidationException $e ) {
+                $emptySuccess = 1;
+            } 
+            try {
+                $user->passwordValidate( 'Bob' ); 
+                $smallSuccess = 0;
+            }
+            catch ( ModelValidationException $e ) {
+                $smallSuccess = 1;
+            } 
+            $this->assertTrue( $trueSuccess, 'passwordValidate should validate the default password that we have set' );
+            $this->assertTrue( $emptySuccess, 'passwordValidate should not validate empty passwords' );
+            $this->assertTrue( $smallSuccess, 'passwordValidate should not validate too small passwords' );
+        }
     }
 
     return new UserTest();
