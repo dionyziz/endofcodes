@@ -13,12 +13,14 @@
 
         public function __construct( $users, $game, $graderBotObject = 'GraderBot' ) {
             assert( $game instanceof Game, '$grader->game is not an instance of Game' );
+            $this->game = $game;
             $this->users = $users;
             foreach ( $users as $user ) {
                 assert( $user instanceof User, '$grader->users is not a collection of users' );
+                $bot = new $graderBotObject( $user );
+                $bot->game = $game;
                 $this->bots[] = new $graderBotObject( $user );
             }
-            $this->game = $game;
         }
         public function initiate() {
             $this->registeredBots = [];
@@ -28,12 +30,13 @@
                 try {
                     $bot->sendInitiateRequest();
                     $this->registeredBots[] = $bot;
+                    $bot->game = $this->game;
                     $this->registeredUsers[] = $bot->user;
                 }
                 catch ( GraderBotException $e ) {
                     $error = new Error();
-                    $error->game = $this->game;
                     $error->user = $bot->user;
+                    $error->game = $this->game;
                     $error->error = $e->error;
                     $error->save();
                 }
@@ -51,8 +54,8 @@
                 }
                 catch ( GraderBotException $e ) {
                     $error = new Error();
-                    $error->game = $this->game;
                     $error->user = $bot->user;
+                    $error->game = $this->game;
                     $error->error = $e->error;
                     $error->save();
                 }
@@ -63,23 +66,28 @@
 
             foreach ( $this->registeredBots as $bot ) {
                 try {
-                    $bot->sendRoundRequest( $round );
+                    $creatureCollection = $bot->sendRoundRequest( $round );
+                    foreach ( $creatureCollection as $creatureIntent ) {
+                        $round->creatures[ $creatureIntent->id ]->intent = $creatureIntent->intent;
+                    }
                 }
                 catch ( GraderBotException $e ) {
                     $error = new Error();
-                    $error->game = $this->game;
                     $error->user = $bot->user;
+                    $error->game = $this->game;
                     $error->error = $e->error;
                     $error->save();
                 }
             }
 
+            $this->game->nextRound();
+
             foreach ( $this->game->getCurrentRound()->errors as $userid => $errors ) {
-                foreach ( $errors as $error ) {
+                foreach ( $errors as $description ) {
                     $error = new Error();
                     $error->game = $this->game;
                     $error->user = new User( $userid );
-                    $error->error = $error;
+                    $error->error = $description;
                     $error->save();
                 }
             }

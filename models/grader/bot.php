@@ -13,6 +13,7 @@
         public $errors = array();
         public $version;
         public $name;
+        public $game;
 
         public function __construct( $user ) {
             $this->curlConnectionObject = new CurlConnection();
@@ -152,6 +153,11 @@
             }
             $collection = [];
             foreach ( $decodedResponse->intent as $creatureIntentData ) {
+                $round = $this->game->getCurrentRound();
+                if ( $round->creatures[ $creatureIntentData->creatureid ]->user->id !== $this->user->id ) {
+                    $this->errors[] = 'round_intent_not_own_creature';
+                    throw new GraderBotException( end( $this->errors ) );
+                }
                 $creature = new Creature();
                 $creature->id = $creatureIntentData->creatureid;
                 try {

@@ -24,6 +24,12 @@
                 $this->assertEquals( $creature->user->id, intval( $dbCreature->user->id ), "Creature's userid must be correctly stored in the database" );
             }
         }
+        public function testError() {
+            $round = new Round();
+            $round->error( 1, 'fuck this user' );
+
+            $this->assertEquals( 'fuck this user', $round->errors[ 1 ][ 0 ], 'error must store the description of the error specfied' );
+        }
     }
     return new RoundTest();
 ?>

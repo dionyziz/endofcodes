@@ -149,6 +149,7 @@
                     }
                 }
             }
+
             foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->hp <= 0 ) {
                     $creature->alive = false;

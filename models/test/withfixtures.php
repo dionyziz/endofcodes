@@ -1,4 +1,9 @@
 <?php
+    include_once 'models/game.php';
+    include_once 'models/user.php';
+    include_once 'models/round.php';
+    include_once 'models/creature.php';
+    include_once 'models/country.php';
     class UnitTestWithFixtures extends UnitTest {
         protected function buildUser( $username ) {
             global $config;
@@ -20,15 +25,20 @@
 
             return $country;
         }
-        protected function buildCreature( $id, $x, $y, $user ) {
+        protected function buildCreature( $id, $x, $y, $user, $game = false ) {
             $creature = new Creature();
             $creature->locationx = $x;
             $creature->locationy = $y;
             $creature->hp = 10;
             $creature->user = $user;
             $creature->id = $id;
-            $creature->game = new Game();
-            $creature->game->id = 1;
+            if ( $game === false ) {
+                $creature->game = new Game();
+                $creature->game->id = 1;
+            }
+            else {
+                $creature->game = $game;
+            }
             $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
             $creature->save();
 

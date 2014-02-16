@@ -1,5 +1,6 @@
 <?php
     require_once 'models/grader/grader.php';
+    require_once 'tests/models/grader/bot.php';
 
     class GraderBotMock implements GraderBotInterface {
         public $boturlValid;
@@ -24,6 +25,7 @@
             if ( !$this->roundResponseValid ) {
                 throw new GraderBotException( 'round_error' );
             }
+            return array();
         }
     }
 
@@ -78,7 +80,8 @@
             $this->assertTrue( empty( $error2 ), 'A user with valid boturl must not have errors' );
         }
         public function testCreateGameInvalidResponse() {
-            $game = new Game(); $game->save();
+            $game = new Game();
+            $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
             $grader = new Grader( $users, $game, 'GraderBotMock' );
             foreach ( $grader->bots as $bot ) {
@@ -118,7 +121,8 @@
             $this->assertTrue( empty( $error2 ), 'A user with valid game response must not have errors' );
         }
         public function testNextRoundInvalidResponse() {
-            $game = new Game(); $game->save();
+            $game = new Game();
+            $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
             $grader = new Grader( $users, $game, 'GraderBotMock' );
             foreach ( $grader->bots as $bot ) {
@@ -143,7 +147,8 @@
             $this->assertEquals( 'round_error', $error2[ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
         }
         public function testNextRoundValidResponse() {
-            $game = new Game(); $game->save();
+            $game = new Game();
+            $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
             $grader = new Grader( $users, $game, 'GraderBotMock' );
             foreach ( $grader->bots as $bot ) {
@@ -160,6 +165,66 @@
 
             $this->assertTrue( empty( $error1 ), 'A user with valid round response must not have errors' );
             $this->assertTrue( empty( $error2 ), 'A user with valid round response must not have errors' );
+        }
+        public function testRoundResolution() {
+            $users = [ $this->buildUser( 'vitsalis' ), $this->buildUser( 'dionyziz' ) ];
+            $game = new Game();
+            $game->users = $users;
+            $game->initiateAttributes();
+            $game->id = 1;
+            $creature1 = $this->buildCreature( 0, 1, 1, $users[ 0 ], $game );
+            $creature2 = $this->buildCreature( 1, 2, 2, $users[ 1 ], $game );
+            $round = new Round();
+            $round->creatures = [ $creature1, $creature2 ];
+            $round->game = $game;
+            $game->rounds[ 0 ] = $round;
+            $grader = new Grader( $users, $game );
+            $grader->registeredUsers = $users;
+            $bot1 = new GraderBot( $users[ 0 ] );
+            $bot1->game = $game;
+            $bot1->curlConnectionObject = new CurlConnectionMock();
+            $bot1->curlConnectionObject->makeRespondWith( json_encode( [
+                'intent' => [
+                    [
+                        'creatureid' => 0,
+                        'action' => 'MOVE',
+                        'direction' => 'NORTH'
+                    ]
+                ]
+            ] ) );
+            $bot2 = new GraderBot( $users[ 1 ] );
+            $bot2->game = $game;
+            $bot2->curlConnectionObject = new CurlConnectionMock();
+            $bot2->curlConnectionObject->makeRespondWith( json_encode( [
+                'intent' => [
+                    [
+                        'creatureid' => 1,
+                        'action' => 'MOVE',
+                        'direction' => 'NORTH'
+                    ]
+                ]
+            ] ) );
+
+            $grader->registeredBots = [ $bot1, $bot2 ];
+            $grader->nextRound();
+
+            $this->assertTrue( isset( $game->rounds[ 1 ] ), 'A new round must be created after nextRound is called' );
+            $this->assertTrue( is_object( $game->rounds[ 1 ] ), 'The new round must be an object' );
+
+            $this->assertTrue( isset( $game->rounds[ 1 ]->creatures ), 'the new round must have creatures' );
+            $this->assertTrue( is_array( $game->rounds[ 1 ]->creatures ), 'the new round must have a creatures array' );
+
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+
+            $this->assertEquals( $creature1->id, $newCreature1->id, 'The creature must not change id' );
+            $this->assertEquals( $creature2->id, $newCreature2->id, 'The creature must not change id' );
+
+            $this->assertEquals( 1, $newCreature1->locationx, 'A creature must move in x axis if it is specified' );
+            $this->assertEquals( 2, $newCreature1->locationy, 'A creature must move in y axis if it is specified' );
+
+            $this->assertEquals( 2, $newCreature2->locationx, 'A creature must move in x axis if it is specified' );
+            $this->assertEquals( 3, $newCreature2->locationy, 'A creature must move in y axis if it is specified' );
         }
     }
     return new GraderTest();

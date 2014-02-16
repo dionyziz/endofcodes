@@ -81,6 +81,23 @@
                 }
             }
         }
+        public function testKillBot() {
+            $game = $this->buildGame();
+            $game->initiateAttributes();
+            $game->genesis();
+
+            $this->assertTrue( method_exists( $game, "killBot" ), 'Game object must export a killBot function' ); 
+            $game->killBot( $game->users[ 0 ], 'fuck him' );
+
+            foreach ( $game->rounds[ 0 ]->creatures as $creature ) {
+                if ( $creature->user->id === $game->users[ 0 ]->id ) {
+                    $this->assertFalse( $creature->alive, 'killBot must kill all the creatures of a user' );
+                    $this->assertEquals( 0, $creature->hp, 'Dead creatures must have 0 hp' );
+                    $this->assertEquals( ACTION_NONE, $creature->intent->action, 'Dead creature must have action set to none' );
+                    $this->assertEquals( DIRECTION_NONE, $creature->intent->direction, 'Dead creature must have direction set to none' );
+                }
+            }
+        }
     }
 
     return new GameTest();
