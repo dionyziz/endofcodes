@@ -4,13 +4,13 @@
     include_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotPasswordToken', 'forgotPasswordRequestCreated' ];
+        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
         public $username;
         public $password;
         public $email;
         public $country;
-        public $forgotPasswordRequestCreated;
-        public $forgotPasswordToken;
+        public $forgotpasswordrequestcreated;
+        public $forgotpasswordtoken;
         public $image;
         public $sessionid;
         public $salt;
@@ -72,8 +72,8 @@
                 $this->image = new Image( $user_info[ 'avatarid' ] );
                 $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
-                $this->forgotPasswordToken = $user_info[ 'forgotpasswordtoken' ];
-                $this->forgotPasswordRequestCreated = $user_info[ 'forgotpasswordrequestcreated' ];
+                $this->forgotpasswordtoken = $user_info[ 'forgotpasswordtoken' ];
+                $this->forgotpasswordrequestcreated = $user_info[ 'forgotpasswordrequestcreated' ];
                 $this->exists = true;
             }
         }
@@ -170,8 +170,8 @@
             $id = $this->id;
             $email = $this->email;
             $dob = $this->dob;
-            $forgotpasswordtoken = $this->forgotPasswordToken;
-            $forgotpasswordrequestcreated = $this->forgotPasswordRequestCreated;
+            $forgotpasswordtoken = $this->forgotpasswordtoken;
+            $forgotpasswordrequestcreated = $this->forgotpasswordrequestcreated;
             $sessionid = $this->sessionid;
             $countryid = $this->countryid;
             $avatarid = $this->imageid;
@@ -225,8 +225,8 @@
 
             $bytes = openssl_random_pseudo_bytes( 32 );
             $value = bin2hex( $bytes );
-            $this->forgotPasswordToken = $value;
-            $this->forgotPasswordRequestCreated = date( "Y-m-d h:i:s" );
+            $this->forgotpasswordtoken = $value;
+            $this->forgotpasswordrequestcreated = date( "Y-m-d h:i:s" );
             $this->save();
             $email = $this->email;
             $username = urlencode( $this->username );
@@ -251,11 +251,11 @@
         public function revokePasswordCheck( $passwordToken ) {
             global $config;
 
-            if ( $passwordToken == $this->forgotPasswordToken ) {
+            if ( $passwordToken == $this->forgotpasswordtoken ) {
                 if ( empty( $passwordToken ) ) {
                     throw new ForgotPasswordModelInvalidTokenException();
                 }
-                $datetime = strtotime( $this->forgotPasswordRequestCreated );
+                $datetime = strtotime( $this->forgotpasswordrequestcreated );
                 $now = time();
                 $period = $now - $datetime;
                 if ( $period > $config[ 'forgot_password_exp_time' ] ) {

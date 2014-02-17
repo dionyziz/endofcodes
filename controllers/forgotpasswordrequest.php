@@ -46,7 +46,7 @@
                 go( 'forgotpasswordrequest', 'update', [ $e->error => true, 'password_token' => $password_token ] );
             }
             $user->password = $password;
-            $user->forgotPasswordToken = $user->forgotPasswordRequestCreated = null;
+            $user->forgotpasswordtoken = $user->forgotpasswordrequestCreated = null;
             $user->save();
             go();
         } 

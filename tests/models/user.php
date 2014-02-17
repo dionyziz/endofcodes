@@ -134,15 +134,15 @@
             $user = $this->buildUser( 'pkakelas' );
             
             $link = $user->createForgotPasswordLink();
-            $this->assertTrue( isset( $user->forgotPasswordToken ), 'CreateForgotPasswordLink must save the token to $user->forgotPasswordToken' );
-            $this->assertTrue( isset( $user->forgotPasswordRequestCreated ), 'CreateForgotPasswordLink must save the time it created the link to $user->forgotPasswordRequestCreated' );
+            $this->assertTrue( isset( $user->forgotpasswordtoken ), 'CreateForgotPasswordLink must save the token to $user->forgotpasswordtoken' );
+            $this->assertTrue( isset( $user->forgotpasswordrequestcreated ), 'CreateForgotPasswordLink must save the time it created the link to $user->forgotpasswordrequestcreated' );
         }
         public function testRevokePasswordCheck() {
             $user = $this->buildUser( 'pkakelas' );
             
             $user->createForgotPasswordLink();
             try {
-                $user->revokePasswordCheck( $user->forgotPasswordToken );
+                $user->revokePasswordCheck( $user->forgotpasswordtoken );
                 $trueSuccess = 1;
             } 
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
@@ -162,8 +162,8 @@
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
                $emptySuccess = 1; 
             }
-            $oldToken = $user->forgotPasswordToken;
-            $user->createForgotPasswordLink();
+            $oldToken = $user->forgotpasswordtoken;
+            $user->createforgotpasswordlink();
             try {
                 $user->revokePasswordCheck( $oldToken );
                 $oldTokenSuccess = 0;
@@ -171,9 +171,9 @@
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
                $oldTokenSuccess = 1; 
             }
-            $user->forgotPasswordRequestCreated = time() - 60 * 24 * 2; 
+            $user->forgotpasswordrequestcreated = time() - 60 * 24 * 2; 
             try {
-                $user->revokePasswordCheck( $user->forgotPasswordToken );
+                $user->revokePasswordCheck( $user->forgotpasswordtoken );
                 $expiredSuccess = 0;
             }
             catch ( ModelValidationException $e ) {
