@@ -184,6 +184,29 @@
             $this->assertTrue( $caught, 'A GraderBotExcpetion must be caught when HTTP response code is not OK(200)' );
             $this->assertEquals( 'initiate_http_code_not_ok', $bot->errors[ 0 ], 'Bot whose HTTP response code is not OK(200) must have a "initiate_http_code_not_ok" error' );
         }
+        protected function initiateWithJsonAndGetErrors( $json ) {
+            $user = $this->buildUser( 'vitsalis' );
+            $bot = new GraderBot( $user );
+            $bot->game = $this->buildGame();
+
+            $curlConnectionMock = new CurlConnectionMock();
+            $curlConnectionMock->makeRespondWith( $json );
+
+            $bot->curlConnectionObject = $curlConnectionMock;
+
+            $caught = false;
+            try {
+                $bot->sendInitiateRequest();
+            }
+            catch ( GraderBotException $e ) {
+                $caught = true;
+            }
+
+            return [
+                'caught' => $caught,
+                'errors' => $bot->errors
+            ];
+        }
         public function testInitiateRespondValidJson() {
             $result = $this->initiateWithJsonAndGetErrors( json_encode( [
                 'botname' => 'suprabot',
