@@ -11,15 +11,15 @@
         protected $users;
         public $bots = [];
 
-        public function __construct( $users, $game, $graderBotObject = 'GraderBot' ) {
+        public function __construct( $users, $game, $graderBotClass = 'GraderBot' ) {
             assert( $game instanceof Game, '$grader->game is not an instance of Game' );
             $this->game = $game;
             $this->users = $users;
             foreach ( $users as $user ) {
                 assert( $user instanceof User, '$grader->users is not a collection of users' );
-                $bot = new $graderBotObject( $user );
+                $bot = new $graderBotClass( $user );
                 $bot->game = $game;
-                $this->bots[] = new $graderBotObject( $user );
+                $this->bots[] = new $graderBotClass( $user );
             }
         }
         public function initiate() {
