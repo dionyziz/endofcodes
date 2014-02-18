@@ -35,7 +35,7 @@
             self::migrate( $sql );
         }
     
-        public static function dropField($table, $field ) {
+        public static function dropField( $table, $field ) {
             $sql = "ALTER TABLE
                         $table
                     DROP COLUMN
@@ -72,14 +72,10 @@
 		    }
             if ( !empty( $keys ) ) {
                 foreach ( $keys as $key ) {
-                    if ( $key[ 'type' ] == 'unique' ) {
+                    if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' || $key[ 'type' ] == 'foreign' ) {
+                        $type = strtoupper( $key[ 'type' ] );
                         foreach ( $key[ 'field' ] as $field ) {
-                            $args[] = "UNIQUE KEY $field";
-                        }
-                    }
-                    if ( $key[ 'type' ] == 'primary' ) {
-                        foreach ( $key[ 'field' ] as $field ) {
-                            $args[] = "PRIMARY KEY $field";
+                            $args[] = "$type KEY $field";
                         }
                     }
                 }
@@ -87,7 +83,7 @@
             } 
             $attributes = implode( ',', $attributes );
             $sql = "CREATE TABLE IF NOT EXISTS
-                $tableName (
+                    $tableName (
                     $attributes
                 )
                 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
