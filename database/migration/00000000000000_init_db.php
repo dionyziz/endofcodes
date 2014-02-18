@@ -12,19 +12,8 @@
 		    'avatarid' => 'int(11) NOT NULL'
         ],
         [ 
-            'unique' => [ 'username', 'email' ],
-            'primary' => [ 'id' ]
-        ]
-    );
-    Migration::createTable(
-        'images',
-        [
-            'imageid' => 'int(11) NOT NULL AUTO_INCREMENT',
-            'userid' => 'int(11) NOT NULL',
-            'imagename' => 'varchar(200) COLLATE utf8_unicode_ci NOT NULL'
-        ],
-        [
-            'primary' => [ 'imageid' ]
+            [ 'type' => 'unique', 'field' => [ 'username', 'email' ] ],
+            [ 'type' => 'primary', 'field' => ['id'] ]
         ]
     );
 ?>

@@ -10,7 +10,7 @@
             'width' => 'int(11) NOT NULL' 
         ],
         [ 
-            'primary' => ['id']
+            [ 'type' => 'primary', 'field' => [ 'id' ] ]
         ]
     );
 
@@ -22,7 +22,7 @@
             'userid' => 'int(11) NOT NULL',
         ],
         [ 
-            'primary' => ['id']
+            [ 'type' => 'primary', 'field' => [ 'id' ] ]
         ]
     );
 
@@ -34,7 +34,7 @@
             'gameid' => 'int(11) NOT NULL',
         ],
         [ 
-            'unique' => [ 'userid', 'gameid' ]
+            [ 'type' => 'unique', 'field' => [ 'userid', 'gameid' ] ]
         ]
     );
 
@@ -51,7 +51,7 @@
             'locationy' => 'int(11)',
         ],
         [ 
-            'unique' => [ 'roundid', 'gameid', 'creatureid' ]
+            [ 'type' => 'unique', 'field' => [ 'roundid', 'gameid', 'creatureid' ] ]
         ]
     );
 ?>

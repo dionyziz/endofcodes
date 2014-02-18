@@ -71,15 +71,15 @@
 			    $attributes[] = "$field $description";
 		    }
             if ( !empty( $keys ) ) {
-                foreach ( $keys as $key => $value ) {
-                    if ( $key == 'unique' ) {
-                        foreach ( $value as $string ) {
-                            $args[] = "UNIQUE KEY $string";
+                foreach ( $keys as $key ) {
+                    if ( $key[ 'type' ] == 'unique' ) {
+                        foreach ( $key[ 'field' ] as $field ) {
+                            $args[] = "UNIQUE KEY $field";
                         }
-                    } 
-                    else {
-                        foreach ( $value as $string ) {
-                            $args[] = "PRIMARY KEY $string";
+                    }
+                    if ( $key[ 'type' ] == 'primary' ) {
+                        foreach ( $key[ 'field' ] as $field ) {
+                            $args[] = "PRIMARY KEY $field";
                         }
                     }
                 }
