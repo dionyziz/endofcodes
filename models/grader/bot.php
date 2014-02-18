@@ -109,6 +109,7 @@
                 $ch = $this->httpRequest( 'game', 'create', GraderSerializer::gameRequestParams( $game ) );
             }
             catch ( CurlException $e ) {
+                $this->errors[] = $e->error;
                 throw new GraderBotException( end( $this->errors ) );
             }
             $decodedResponse = json_decode( $ch->response );
