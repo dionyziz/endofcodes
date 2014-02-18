@@ -104,7 +104,8 @@
             $this->assertEquals( 'game_error', $error2[ 0 ]->error, 'A user must get a "game_error" error if he has an invalid game response' );
         }
         public function testCreateGameValidResponse() {
-            $game = new Game(); $game->save();
+            $game = new Game();
+            $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
             $grader = new Grader( $users, $game, 'GraderBotMock' );
             foreach ( $grader->bots as $bot ) {
