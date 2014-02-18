@@ -2,7 +2,7 @@
     function db( $sql, $bind = [] ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
-                $value = addslashes( $value );
+                $value = mysql_real_escape_string( $value );
                 $value = '"' . $value . '"';
             }
             else if ( is_array( $value ) ) {
