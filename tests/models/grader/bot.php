@@ -223,29 +223,6 @@
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response has invalid json' );
             $this->assertEquals( 'initiate_invalid_json', $result[ 'errors' ][ 0 ], 'Bot who has invalid json as a response must have a "initiate_invalid_json" error' );
         }
-        protected function initiateWithJsonAndGetErrors( $json ) {
-            $user = $this->buildUser( 'vitsalis' );
-            $bot = new GraderBot( $user );
-            $bot->game = $this->buildGame();
-
-            $curlConnectionMock = new CurlConnectionMock();
-            $curlConnectionMock->makeRespondWith( $json );
-
-            $bot->curlConnectionObject = $curlConnectionMock;
-
-            $caught = false;
-            try {
-                $bot->sendInitiateRequest();
-            }
-            catch ( GraderBotException $e ) {
-                $caught = true;
-            }
-
-            return [
-                'caught' => $caught,
-                'errors' => $bot->errors
-            ];
-        }
         public function testInitiateRespondWithoutBotname() {
             $result = $this->initiateWithJsonAndGetErrors( json_encode( [
                 'version' => '0.1.0',
