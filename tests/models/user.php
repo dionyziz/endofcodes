@@ -13,6 +13,7 @@
             $this->assertTrue( $passwordSuccess, 'Password must be the one associated during creation' );
             $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
+            $this->assertTrue( false );
         }
         public function testAuthenticatesWithPassword() {
             $user = $this->buildUser( 'pkakelas' );

@@ -26,7 +26,7 @@
             break;
         case 'array':
             $type = 'array';
-            ?>[ array of <span class='integer'><?php
+            ?><div id='array-expansion'>[ array of <span class='integer'><?php
             echo count( $arg );
             ?></span> element<?php
             if ( count( $arg ) != 1 ) {
