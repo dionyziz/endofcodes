@@ -11,7 +11,7 @@
         public $width;
         public $height;
         public $rounds = [];
-        public $users;
+        public $users = []; // dictionary from userid to user
         public $creaturesPerPlayer;
         public $maxHp;
         public $grid = [ [] ];
@@ -36,7 +36,7 @@
                     foreach ( $this->rounds[ 0 ]->creatures as $creature ) {
                         $userid = $creature->user->id;
                         if ( !isset( $this->users[ $userid ] ) ) {
-                            $this->users[ $userid ] = new User( intval( $userid ) );
+                            $this->users[ $userid ] = new User( $userid );
                         }
                     }
                 }
@@ -66,7 +66,7 @@
             dbUpdate(
                 'games',
                 compact( 'width', 'height' ),
-                compacT( 'id' )
+                compact( 'id' )
             );
         }
 

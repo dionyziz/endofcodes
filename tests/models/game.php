@@ -25,10 +25,10 @@
 
             $dbGame = new Game( 1 );
 
-            $this->assertEquals( $game->id, intval( $dbGame->id ), "Game's id must be correctly stored in the database" );
-            $this->assertEquals( $game->width, intval( $dbGame->width ), "Game's width must be correctly stored in the database" );
-            $this->assertEquals( $game->height, intval( $dbGame->height ), "Game's height must be correctly stored in the database" );
-            $this->assertEquals( $game->created, $dbGame->created, "Game's created must be correctly stored in the database" );
+            $this->assertSame( $game->id, $dbGame->id, "Game's id must be correctly stored in the database" );
+            $this->assertSame( $game->width, $dbGame->width, "Game's width must be correctly stored in the database" );
+            $this->assertSame( $game->height, $dbGame->height, "Game's height must be correctly stored in the database" );
+            $this->assertSame( $game->created, $dbGame->created, "Game's created must be correctly stored in the database" );
         }
         public function testRetrieveRound() {
             $game = $this->buildGame();
@@ -36,8 +36,8 @@
             $round->id = 0;
             $round->game = $game;
             $round->creatures = [
-                $this->buildCreature( 1, 0, 0, $game->users[ 1 ] ),
-                $this->buildCreature( 2, 1, 1, $game->users[ 2 ] )
+                1 => $this->buildCreature( 1, 0, 0, $game->users[ 1 ] ),
+                2 => $this->buildCreature( 2, 1, 1, $game->users[ 2 ] )
             ];
             $round->save();
             $game->rounds = [ $round ];
@@ -47,8 +47,8 @@
             $this->assertTrue( isset( $dbGame->users ), 'Constructor of game must find the users' );
             $this->assertEquals( 2, count( $dbGame->users ), 'Game users must be retrieved' );
 
-            $this->assertEquals( $game->users[ 1 ]->id, $dbGame->users[ 1 ]->id, 'Constructor of the game must find the actual users' );
-            $this->assertEquals( $game->users[ 2 ]->id, $dbGame->users[ 2 ]->id, 'Constructor of the game must find the actual users' );
+            $this->assertSame( $game->users[ 1 ]->id, $dbGame->users[ 1 ]->id, 'Constructor of the game must find the actual users' );
+            $this->assertSame( $game->users[ 2 ]->id, $dbGame->users[ 2 ]->id, 'Constructor of the game must find the actual users' );
 
             $this->assertTrue( isset( $dbGame->rounds ), 'Constructor of game must find the rounds' );
             $this->assertEquals( 1, count( $dbGame->rounds ), 'Game rounds must be retrieved' );
@@ -56,10 +56,10 @@
         public function testInitiation() {
             $game = $this->buildGame();
             $dbGame = new Game( 1 );
-            $this->assertEquals( $game->height, intval( $dbGame->height ), 'Height in the db must be the same as the height during creation' );
-            $this->assertEquals( $game->width, intval( $dbGame->width ), 'Width in the db must be the same as the width during creation' );
+            $this->assertSame( $game->height, $dbGame->height, 'Height in the db must be the same as the height during creation' );
+            $this->assertSame( $game->width, $dbGame->width, 'Width in the db must be the same as the width during creation' );
             $this->assertEquals( $game->created, $dbGame->created, 'Created in the db must be the same as the created during creation' );
-            $this->assertEquals( $game->id, intval( $dbGame->id ), 'Id in the db must be the same as the id during creation' );
+            $this->assertSame( $game->id, $dbGame->id, 'Id in the db must be the same as the id during creation' );
         }
         public function testGenesis() {
             $game = $this->buildGame();
@@ -123,6 +123,7 @@
         }
         public function testGameIdNonZero() {
             $game = $this->buildGame();
+
             $this->assertEquals( 1, $game->id, 'Game id must be 1 when the first game is created' );
         }
     }

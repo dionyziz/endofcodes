@@ -2,10 +2,11 @@
     class DBTest extends UnitTest {
         public function setUp() {
             db(
-                'CREATE TABLE IF NOT EXISTS models (
-                    id INT(4) NOT NULL AUTO_INCREMENT,
-                    PRIMARY KEY (id)
-                )'
+                'CREATE TABLE IF NOT EXISTS
+                    models (
+                        id INT(4) NOT NULL AUTO_INCREMENT,
+                        PRIMARY KEY (id)
+                    )'
             );
         }
         public function testDbInsertNoFields() {

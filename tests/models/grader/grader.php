@@ -8,7 +8,7 @@
         public $roundResponseValid;
         public $user;
 
-        public function __construct( $user ) {
+        public function __construct( User $user ) {
             $this->user = $user;
         }
         public function sendInitiateRequest() {
@@ -16,12 +16,12 @@
                 throw new GraderBotException( 'initiate_error' );
             }
         }
-        public function sendGameRequest( $game ) {
+        public function sendGameRequest( Game $game ) {
             if ( !$this->gameResponseValid ) {
                 throw new GraderBotException( 'game_error' );
             }
         }
-        public function sendRoundRequest( $round ) {
+        public function sendRoundRequest( Round $round ) {
             if ( !$this->roundResponseValid ) {
                 throw new GraderBotException( 'round_error' );
             }
