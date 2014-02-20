@@ -1,9 +1,9 @@
 <?php
     interface GraderBotInterface {
-        public function __construct( $user );
+        public function __construct( User $user );
         public function sendInitiateRequest();
-        public function sendGameRequest( $game );
-        public function sendRoundRequest( $round );
+        public function sendGameRequest( Game $game );
+        public function sendRoundRequest( Round $round );
     }
 
     class GraderBot implements GraderBotInterface {
@@ -15,7 +15,7 @@
         public $name;
         public $game;
 
-        public function __construct( $user ) {
+        public function __construct( User $user ) {
             $this->curlConnectionObject = new CurlConnection();
             $this->user = $user;
             $this->url = $user->boturl;
@@ -67,97 +67,90 @@
                     CURLE_URL_MALFORMAT => 'initiate_malformed_url'
                 ];
                 if ( isset( $errorMap[ $e->error ] ) ) {
-                    $this->errors[] = $errorMap[ $e->error ];
+                    $this->reportError( $errorMap[ $e->error ] );
                 }
-                else {
-                    throw $e;
-                }
-
-                throw new GraderBotException( end( $this->errors ) );
+                throw $e;
             }
 
             if ( $ch->responseCode !== 200 ) {
-                $this->errors[] = 'initiate_http_code_not_ok';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'initiate_http_code_not_ok' );
             }
 
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->errors[] = 'initiate_invalid_json';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'initiate_invalid_json' );
             }
             $requiredAttributes = [ 'botname', 'version', 'username' ];
             foreach ( $requiredAttributes as $attribute ) {
                 if ( !isset( $decodedResponse->$attribute ) ) {
-                    $this->errors[] = 'initiate_' . $attribute . '_not_set';
-                    throw new GraderBotException( end( $this->errors ) );
+                    $this->reportError( 'initiate_' . $attribute . '_not_set' );
                 }
             }
             if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
-                $this->errors[] = 'initiate_additional_data';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'initiate_additional_data' );
             }
             if ( $this->user->username !== $decodedResponse->username ) {
-                $this->errors[] = 'initiate_username_mismatch';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'initiate_username_mismatch' );
             }
             $this->version = $decodedResponse->version;
             $this->botname = $decodedResponse->botname;
         }
-        public function sendGameRequest( $game ) {
+        public function sendGameRequest( Game $game ) {
             try {
                 $ch = $this->httpRequest( 'game', 'create', GraderSerializer::gameRequestParams( $game ) );
             }
             catch ( CurlException $e ) {
-                $this->errors[] = $e->error;
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( $e->error );
             }
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->errors[] = 'game_invalid_json';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'game_invalid_json' );
             }
             if ( count( ( array )$decodedResponse ) ) {
-                $this->errors[] = 'game_additional_data';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'game_additional_data' );
             }
         }
-        public function sendRoundRequest( $round ) {
+        protected function reportError( $error ) {
+            $this->errors[] = $error;
+            throw new GraderBotException( end( $this->errors ) );
+        }
+        public function sendRoundRequest( Round $round ) {
             $gameid = $round->game->id;
             try {
                 $ch = $this->httpRequest( "game/$gameid/round", 'create', GraderSerializer::roundRequestParams( $round ) );
             }
             catch ( CurlException $e ) {
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( $e->error );
             }
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->errors[] = 'round_invalid_json';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'round_invalid_json' );
+            }
+            if ( !isset( $decodedResponse->intent ) ) {
+                $this->reportError( 'round_intent_not_set' );
             }
             $requiredAttributes = [ 'creatureid', 'direction', 'action' ];
-            foreach ( $requiredAttributes as $attribute ) {
-                foreach ( $decodedResponse->intent as $creatureIntent) {
+            foreach ( $decodedResponse->intent as $creatureIntent ) {
+                foreach ( $requiredAttributes as $attribute ) {
                     if ( !is_object( $creatureIntent ) ) {
-                        $this->errors[] = 'round_response_not_object';
-                        throw new GraderBotException( end( $this->errors ) );
+                        $this->reportError( 'round_response_not_object' );
                     }
                     if ( !isset( $creatureIntent->$attribute ) ) {
-                        $this->errors[] = 'round_' . $attribute . '_not_set';
-                        throw new GraderBotException( end( $this->errors ) );
+                        $this->reportError( 'round_' . $attribute . '_not_set' );
                     }
                 }
             }
             if ( count( ( array )$decodedResponse->intent[ 0 ] ) > count( $requiredAttributes ) ) {
-                $this->errors[] = 'round_additional_data';
-                throw new GraderBotException( end( $this->errors ) );
+                $this->reportError( 'round_additional_data' );
             }
             $collection = [];
+            $round = $this->game->getCurrentRound();
             foreach ( $decodedResponse->intent as $creatureIntentData ) {
-                $round = $this->game->getCurrentRound();
+                if ( !isset( $round->creatures[ $creatureIntentData->creatureid ] ) ) {
+                    $this->reportError( 'round_invalid_creatureid' );
+                }
                 if ( $round->creatures[ $creatureIntentData->creatureid ]->user->id !== $this->user->id ) {
-                    $this->errors[] = 'round_intent_not_own_creature';
-                    throw new GraderBotException( end( $this->errors ) );
+                    $this->reportError( 'round_intent_not_own_creature' );
                 }
                 $creature = new Creature();
                 $creature->id = $creatureIntentData->creatureid;
@@ -165,15 +158,13 @@
                     $action = actionStringToConst( $creatureIntentData->action );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    $this->errors[] = 'round_action_invalid';
-                    throw new GraderBotException( end( $this->errors ) );
+                    $this->reportError( 'round_action_invalid' );
                 }
                 try {
                     $direction = directionStringToConst( $creatureIntentData->direction );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    $this->errors[] = 'round_direction_invalid';
-                    throw new GraderBotException( end( $this->errors ) );
+                    $this->reportError( 'round_direction_invalid' );
                 }
                 $creature->intent = new Intent( $action, $direction );
                 $collection[] = $creature;

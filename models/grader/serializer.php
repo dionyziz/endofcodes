@@ -3,7 +3,7 @@
     require_once 'models/round.php';
 
     class GraderSerializer {
-        public static function gameRequestParams( $game ) {
+        public static function gameRequestParams( Game $game ) {
             assert( $game->id > 0 );
             $gameid = $game->id;
             $W = $game->width;
@@ -14,7 +14,7 @@
 
             return compact( 'gameid', 'W', 'H', 'M', 'MAX_HP', 'players' );
         }
-        public static function roundRequestParams( $roundObject ) {
+        public static function roundRequestParams( Round $roundObject ) {
             $round = $roundObject->id;
             $map = GraderSerializer::serializeCreatureList( $roundObject->creatures );
 
@@ -26,17 +26,17 @@
             return json_encode( $flattenedUsers );
         }
         public static function serializeCreatureList( $creatures ) {
-            $flattenedCreatures = array_map( [ 'GraderSerializer', 'flattenCreature' ], $creatures );
+            $flattenedCreatures = array_map( [ 'GraderSerializer', 'flattenCreature' ], array_values( $creatures ) );
 
             return json_encode( $flattenedCreatures );
         }
-        public static function flattenUser( $user ) {
+        public static function flattenUser( User $user ) {
             $username = $user->username;
             $userid = $user->id;
 
             return compact( 'username', 'userid' );
         }
-        public static function flattenCreature( $creature ) {
+        public static function flattenCreature( Creature $creature ) {
             $hp = $creature->hp;
             $x = $creature->locationx;
             $y = $creature->locationy;
