@@ -7,22 +7,43 @@
     class Grader {
         public $registeredBots;
         public $registeredUsers;
+        public $bots = [];
+        public $graderBotClass = 'GraderBot';
         protected $game;
         protected $users;
-        public $bots = [];
+        protected $botsInitiated = false;
 
-        public function __construct( $users, $game, $graderBotClass = 'GraderBot' ) {
-            assert( $game instanceof Game, '$grader->game is not an instance of Game' );
-            $this->game = $game;
-            $this->users = $users;
-            foreach ( $users as $user ) {
-                assert( $user instanceof User, '$grader->users is not a collection of users' );
-                $bot = new $graderBotClass( $user );
-                $bot->game = $game;
-                $this->bots[] = new $graderBotClass( $user );
+        public function __construct( Game $game, $users = false ) {
+            assert( $game->exists, 'Game must exist when grader is constructed' );
+            
+            if ( count( $game->rounds ) ) {
+                // already existing game
+                assert( $users === false, 'game already has users since genesis has run' );
+                assert( isset( $game->users ), 'game must have users' );
+                $this->registeredUsers = $game->users;
             }
+            else {
+                // new game
+                assert( is_array( $users ), 'Users must be an array' );
+                $this->users = $users;
+                foreach ( $this->users as $user ) {
+                    assert( $user instanceof User, '$grader->users is not a collection of users' );
+                }
+            }
+            $this->game = $game;
+        }
+        public function initiateBots() {
+            foreach ( $this->users as $user ) {
+                $bot = new $this->graderBotClass( $user );
+                $bot->game = $this->game;
+                $this->bots[] = new $this->graderBotClass( $user );
+            }
+
+            $this->botsInitiated = true;
         }
         public function initiate() {
+            assert( $this->botsInitiated, 'Bots should be initiated before grader initiates' );
+
             $this->registeredBots = [];
             $this->registeredUsers = [];
 
@@ -62,6 +83,7 @@
             }
         }
         public function nextRound() {
+            assert( $this->game instanceof Game, '$this->game must be an instance of game when we create a new round' );
             $round = $this->game->getCurrentRound();
 
             foreach ( $this->registeredBots as $bot ) {

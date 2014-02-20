@@ -4,6 +4,7 @@
 
     class GraderSerializer {
         public static function gameRequestParams( $game ) {
+            assert( $game->id > 0 );
             $gameid = $game->id;
             $W = $game->width;
             $H = $game->height;
@@ -20,7 +21,7 @@
             return compact( 'round', 'map' );
         }
         public static function serializeUserList( $users ) {
-            $flattenedUsers = array_map( [ 'GraderSerializer', 'flattenUser' ], $users );
+            $flattenedUsers = array_map( [ 'GraderSerializer', 'flattenUser' ], array_values( $users ) );
 
             return json_encode( $flattenedUsers );
         }
