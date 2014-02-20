@@ -2,7 +2,7 @@
     require_once 'models/creature.php';
 
     class Round extends ActiveRecordBase {
-        public $creatures = [];
+        public $creatures = []; // dictionary from creatureid to creature
         public $id;
         public $game;
         public $errors = []; // dictionary from userid to list of errors
@@ -40,27 +40,24 @@
                 );
                 foreach ( $creatures_info as $i => $creature_info ) {
                     $id = $creature_info[ 'creatureid' ];
-                    try {
-                        $user_info = dbSelectOne(
-                            'creatures',
-                            [ 'userid' ],
-                            compact( 'id' )
-                        );
-                    }
-                    catch ( DBException $e ) {
-                        //unexpected error
-                        throw $e;
-                    }
+                    $user_info = dbSelectOne(
+                        'creatures',
+                        [ 'userid' ],
+                        compact( 'id' )
+                    );
                     $user = new User( $user_info[ 'userid' ] );
-                    $this->creatures[ $i ] = new Creature( $creature_info );
-                    $this->creatures[ $i ]->game = $game;
-                    $this->creatures[ $i ]->round = $this;
-                    $this->creatures[ $i ]->user = $user;
+                    $creature = new Creature( $creature_info );
+                    $creature->game = $game;
+                    $creature->round = $this;
+                    $creature->user = $user;
+                    $this->creatures[ $creature->id ] = $creature;
                 }
             }
         }
 
         protected function create() {
+            assert( $this->game instanceof Game, '$this->game must be an instance of Game when a round is created' );
+
             $gameid = $this->game->id;
             $roundid = $this->id;
             foreach ( $this->creatures as $creature ) {

@@ -81,12 +81,18 @@
 
             ++$this->currentTest->passCount;
         }
-        public function assertEquals( $expected, $actual, $description = '' ) {
+        protected function makeEqualDescription( $expected, $actual, $description = '' ) {
             if ( $description != '' ) {
                 $description .= '. ';
             }
             $description .= "Expected '$expected', found '$actual'.";
-            $this->assertTrue( $expected === $actual, $description );
+            return $description;
+        }
+        public function assertEquals( $expected, $actual, $description = '' ) {
+            $this->assertTrue( $expected === $actual, $this->makeEqualDescription( $expected, $actual, $description ) );
+        }
+        public function assertSame( $expected, $actual, $description = '' ) {
+            $this->assertTrue( $expected == $actual, $this->makeEqualDescription( $expected, $actual, $description ) );
         }
         public function assertFalse( $condition, $description = '' ) {
             $this->assertTrue( !$condition, $description );

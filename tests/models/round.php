@@ -13,8 +13,8 @@
             $this->assertEquals( $round->id, intval( $dbRound->id ), "Round's id must be correctly stored in the database" );
             $this->assertEquals( $round->game->id, intval( $dbRound->game->id ), "Round's gameid must be correctly stored in the database" );
 
-            foreach ( $dbRound->creatures as $i => $dbCreature ) {
-                $creature = $round->creatures[ $i ];
+            foreach ( $dbRound->creatures as $id => $dbCreature ) {
+                $creature = $round->creatures[ $id ];
 
                 $this->assertSame( $creature->id, $dbCreature->id, "Creature's id must be correctly stored in the database" );
                 $this->assertSame( $creature->locationx, $dbCreature->locationx, "Creature's locationx must be correctly stored in the database" );

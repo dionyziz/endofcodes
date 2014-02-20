@@ -7,12 +7,11 @@
     define( 'MAX_HP', 199 );
 
     class Game extends ActiveRecordBase {
-        public $id;
         public $created;
         public $width;
         public $height;
         public $rounds = [];
-        public $users;
+        public $users = []; // dictionary from userid to user
         public $creaturesPerPlayer;
         public $maxHp;
         public $grid = [ [] ];
@@ -28,9 +27,18 @@
                 $this->created = $game_info[ 'created' ];
                 $this->width = $game_info[ 'width' ];
                 $this->height = $game_info[ 'height' ];
-                $rounds = dbSelect( 'roundcreatures', [ 'roundid' ], compact( 'gameid' ) );
-                for ( $i = 0; $i < count( $rounds ); ++$i ) {
-                    $this->rounds[ $i ] = new Round( $this, $i );
+                $data = dbSelectOne( 'roundcreatures', [ 'COUNT(DISTINCT roundid) AS countrounds' ], compact( 'gameid' ) );
+                $countrounds = $data[ 'countrounds' ];
+                if ( $countrounds > 0 ) {
+                    for ( $i = 0; $i < $countrounds; ++$i ) {
+                        $this->rounds[ $i ] = new Round( $this, $i );
+                    }
+                    foreach ( $this->rounds[ 0 ]->creatures as $creature ) {
+                        $userid = $creature->user->id;
+                        if ( !isset( $this->users[ $userid ] ) ) {
+                            $this->users[ $userid ] = new User( $userid );
+                        }
+                    }
                 }
             }
             else {
@@ -58,12 +66,13 @@
             dbUpdate(
                 'games',
                 compact( 'width', 'height' ),
-                compacT( 'id' )
+                compact( 'id' )
             );
         }
 
         public function genesis() {
             assert( $this->attributesInitiated, 'game attributes not initiated before genesis' );
+
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
             $this->rounds[ 0 ]->id = 0;
