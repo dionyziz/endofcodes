@@ -16,12 +16,12 @@
             foreach ( $dbRound->creatures as $i => $dbCreature ) {
                 $creature = $round->creatures[ $i ];
 
-                $this->assertEquals( $creature->id, intval( $dbCreature->id ), "Creature's id must be correctly stored in the database" );
-                $this->assertEquals( $creature->locationx, intval( $dbCreature->locationx ), "Creature's locationx must be correctly stored in the database" );
-                $this->assertEquals( $creature->locationy, intval( $dbCreature->locationy ), "Creature's locationy must be correctly stored in the database" );
-                $this->assertEquals( $creature->hp, intval( $dbCreature->hp ), "Creature's hp must be correctly stored in the database" );
+                $this->assertSame( $creature->id, $dbCreature->id, "Creature's id must be correctly stored in the database" );
+                $this->assertSame( $creature->locationx, $dbCreature->locationx, "Creature's locationx must be correctly stored in the database" );
+                $this->assertSame( $creature->locationy, $dbCreature->locationy, "Creature's locationy must be correctly stored in the database" );
+                $this->assertSame( $creature->hp, $dbCreature->hp, "Creature's hp must be correctly stored in the database" );
                 $this->assertTrue( isset( $dbCreature->user ), "Creature must have a user" );
-                $this->assertEquals( $creature->user->id, intval( $dbCreature->user->id ), "Creature's userid must be correctly stored in the database" );
+                $this->assertSame( $creature->user->id, $dbCreature->user->id, "Creature's userid must be correctly stored in the database" );
             }
         }
         public function testError() {
