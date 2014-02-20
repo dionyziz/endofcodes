@@ -74,27 +74,7 @@
         }
         public function testInitiateUsernameInvalid() {
             $user = $this->buildUser( 'vitsalis' );
-            $bot = new GraderBot( $user );
             $game = $this->buildGame();
-            $bot->game = $game;
-
-            $curlConnectionMock = new CurlConnectionMock();
-            $curlConnectionMock->makeRespondWith( json_encode( [
-                'botname' => 'suprabot',
-                'version' => '0.1.0',
-                'username' => $user->username
-            ] ) );
-            $bot->curlConnectionObject = $curlConnectionMock;
-
-            $caught = false;
-            try {
-                $bot->sendInitiateRequest();
-            }
-            catch ( GraderBotException $e ) {
-                $caught = true;
-            }
-
-            $this->assertFalse( $caught, 'A GraderBotException should not be thrown if the username is correct' );
 
             $bot = new GraderBot( $user );
             $bot->game = $game;
@@ -224,42 +204,48 @@
             $this->assertEquals( 'initiate_invalid_json', $result[ 'errors' ][ 0 ], 'Bot who has invalid json as a response must have a "initiate_invalid_json" error' );
         }
         public function testInitiateRespondWithoutBotname() {
-            $result = $this->initiateWithJsonAndGetErrors( json_encode( [
-                'version' => '0.1.0',
-                'username' => 'vitsalis'
-            ] ) );
-
-            $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response does not have a botname' );
-            $this->assertEquals( 'initiate_botname_not_set', $result[ 'errors' ][ 0 ], 'Bot whose botname is not set must have a "initiate_botname_not_set" error' );
+            $this->assertInitiationThrows(
+                [
+                    'version' => '0.1.0',
+                    'username' => 'vitsalis'
+                ], 
+                'initiate_botname_not_set'
+            );
         }
         public function testInitiateRespondWithoutVersion() {
-            $result = $this->initiateWithJsonAndGetErrors( json_encode( [
-                'botname' => 'suprabot',
-                'username' => 'vitsalis'
-            ] ) );
-
-            $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response does not have a version' );
-            $this->assertEquals( 'initiate_version_not_set', $result[ 'errors' ][ 0 ], 'Bot whose version is not set must have a "initiate_version_not_set" error' );
+            $this->assertInitiationThrows(
+                [
+                    'botname' => 'suprabot',
+                    'username' => 'vitsalis'
+                ], 
+                'initiate_version_not_set'
+            );
         }
         public function testIniatiateRespondWithoutUsername() {
-            $result = $this->initiateWithJsonAndGetErrors( json_encode( [
-                'botname' => 'suprabot',
-                'version' => '0.1.0'
-            ] ) );
-
-            $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response does not have a username' );
-            $this->assertEquals( 'initiate_username_not_set', $result[ 'errors' ][ 0 ], 'Bot whose username is not set must have a "initiate_username_not_set" error' );
+            $this->assertInitiationThrows(
+                [
+                    'botname' => 'suprabot',
+                    'version' => '0.1.0'
+                ], 
+                'initiate_username_not_set'
+            );
         }
         public function testInitiateRespondAdditionalData() {
-            $result = $this->initiateWithJsonAndGetErrors( json_encode( [
-                'botname' => 'suprabot',
-                'version' => '0.1.0',
-                'username' => 'vitsalis',
-                'additional' => 'shit'
-            ] ) );
+            $this->assertInitiationThrows(
+                [
+                    'botname' => 'suprabot',
+                    'version' => '0.1.0',
+                    'username' => 'vitsalis',
+                    'additional' => 'shit'
+                ], 
+                'initiate_additional_data'
+            );
+        }
+        protected function assertInitiationThrows( $array, $error ) {
+            $result = $this->initiateWithJsonAndGetErrors( json_encode( $array ) );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response has additional data' );
-            $this->assertEquals( 'initiate_additional_data', $result[ 'errors' ][ 0 ], 'Bot whose username is not set must have a "initiate_additional_data" error' );
+            $this->assertEquals( $error, $result[ 'errors' ][ 0 ], 'Bot whose username is not set must have a "initiate_additional_data" error' );
         }
         protected function gameRequestWithJsonAndGetErrors( $json ) {
             $game = $this->buildGame();
