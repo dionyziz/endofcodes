@@ -30,6 +30,29 @@
             $this->assertEquals( $game->height, intval( $dbGame->height ), "Game's height must be correctly stored in the database" );
             $this->assertEquals( $game->created, $dbGame->created, "Game's created must be correctly stored in the database" );
         }
+        public function testRetrieveRound() {
+            $game = $this->buildGame();
+            $round = new Round();
+            $round->id = 0;
+            $round->game = $game;
+            $round->creatures = [
+                $this->buildCreature( 1, 0, 0, $game->users[ 1 ] ),
+                $this->buildCreature( 2, 1, 1, $game->users[ 2 ] )
+            ];
+            $round->save();
+            $game->rounds = [ $round ];
+
+            $dbGame = new Game( 1 );
+
+            $this->assertTrue( isset( $dbGame->users ), 'Constructor of game must find the users' );
+            $this->assertEquals( 2, count( $dbGame->users ), 'Game users must be retrieved' );
+
+            $this->assertEquals( $game->users[ 1 ]->id, $dbGame->users[ 1 ]->id, 'Constructor of the game must find the actual users' );
+            $this->assertEquals( $game->users[ 2 ]->id, $dbGame->users[ 2 ]->id, 'Constructor of the game must find the actual users' );
+
+            $this->assertTrue( isset( $dbGame->rounds ), 'Constructor of game must find the rounds' );
+            $this->assertEquals( 1, count( $dbGame->rounds ), 'Game rounds must be retrieved' );
+        }
         public function testInitiation() {
             $game = $this->buildGame();
             $dbGame = new Game( 1 );
@@ -87,16 +110,20 @@
             $game->genesis();
 
             $this->assertTrue( method_exists( $game, "killBot" ), 'Game object must export a killBot function' ); 
-            $game->killBot( $game->users[ 0 ], 'fuck him' );
+            $game->killBot( $game->users[ 1 ], 'fuck him' );
 
             foreach ( $game->rounds[ 0 ]->creatures as $creature ) {
-                if ( $creature->user->id === $game->users[ 0 ]->id ) {
+                if ( $creature->user->id === $game->users[ 1 ]->id ) {
                     $this->assertFalse( $creature->alive, 'killBot must kill all the creatures of a user' );
                     $this->assertEquals( 0, $creature->hp, 'Dead creatures must have 0 hp' );
                     $this->assertEquals( ACTION_NONE, $creature->intent->action, 'Dead creature must have action set to none' );
                     $this->assertEquals( DIRECTION_NONE, $creature->intent->direction, 'Dead creature must have direction set to none' );
                 }
             }
+        }
+        public function testGameIdNonZero() {
+            $game = $this->buildGame();
+            $this->assertEquals( 1, $game->id, 'Game id must be 1 when the first game is created' );
         }
     }
 

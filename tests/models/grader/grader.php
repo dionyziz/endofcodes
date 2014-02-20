@@ -30,13 +30,33 @@
     }
 
     class GraderTest extends UnitTestWithFixtures {
+        public function testLoadGraderFromExistingGame() {
+            $game = new Game();
+            $game->save();
+
+            $round = new Round();
+            $round->id = 0;
+            $round->game = $game;
+            $user = $this->buildUser( 'dionyziz' );
+            $game->users = [ $user ];
+            $round->creatures = [ $this->buildCreature( 1, 0, 0, $user ) ];
+            $round->save();
+            $game->rounds[ 0 ] = $round;
+
+            $grader = new Grader( $game );
+
+            $this->assertTrue( isset( $grader->registeredUsers ), 'Constructor of grader must set the users' );
+            $this->assertEquals( 1, count( $grader->registeredUsers ), 'Constructor of grader must find the correct number of users' );
+            $this->assertEquals( $user->id, $grader->registeredUsers[ 0 ]->id, 'Constructor of grader must find the correct users' );
+        }
         public function testIncludeUsersWithInvalidBots() {
             $game = new Game();
             $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
             $users[ 0 ]->boturl = 'koko';
-            $users[ 1 ]->boturl = 'lala';
-            $grader = new Grader( $users, $game, 'GraderBotMock' );
+            $grader = new Grader( $game, $users );
+            $grader->graderBotClass = 'GraderBotMock';
+            $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
                 $bot->boturlValid = false;
             }
@@ -64,7 +84,9 @@
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
             $users[ 0 ]->boturl = 'localhost/endofcodes/bots/php';
             $users[ 1 ]->boturl = 'localhost/endofcodes/bots/php';
-            $grader = new Grader( $users, $game, 'GraderBotMock' );
+            $grader = new Grader( $game, $users );
+            $grader->graderBotClass = 'GraderBotMock';
+            $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
                 $bot->boturlValid = true;
             }
@@ -83,7 +105,9 @@
             $game = new Game();
             $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $users, $game, 'GraderBotMock' );
+            $grader = new Grader( $game, $users );
+            $grader->graderBotClass = 'GraderBotMock';
+            $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
                 $bot->boturlValid = true;
                 $bot->gameResponseValid = false;
@@ -107,7 +131,9 @@
             $game = new Game();
             $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $users, $game, 'GraderBotMock' );
+            $grader = new Grader( $game, $users );
+            $grader->graderBotClass = 'GraderBotMock';
+            $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
                 $bot->boturlValid = true;
                 $bot->gameResponseValid = true;
@@ -125,7 +151,9 @@
             $game = new Game();
             $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $users, $game, 'GraderBotMock' );
+            $grader = new Grader( $game, $users );
+            $grader->graderBotClass = 'GraderBotMock';
+            $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
                 $bot->boturlValid = true;
                 $bot->gameResponseValid = true;
@@ -151,7 +179,9 @@
             $game = new Game();
             $game->save();
             $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $users, $game, 'GraderBotMock' );
+            $grader = new Grader( $game, $users );
+            $grader->graderBotClass = 'GraderBotMock';
+            $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
                 $bot->boturlValid = true;
                 $bot->gameResponseValid = true;
@@ -173,13 +203,15 @@
             $game->users = $users;
             $game->initiateAttributes();
             $game->id = 1;
+            $game->exists = true;
             $creature1 = $this->buildCreature( 0, 1, 1, $users[ 0 ], $game );
             $creature2 = $this->buildCreature( 1, 2, 2, $users[ 1 ], $game );
             $round = new Round();
             $round->creatures = [ $creature1, $creature2 ];
             $round->game = $game;
             $game->rounds[ 0 ] = $round;
-            $grader = new Grader( $users, $game );
+            $game->users = $users;
+            $grader = new Grader( $game );
             $grader->registeredUsers = $users;
             $bot1 = new GraderBot( $users[ 0 ] );
             $bot1->game = $game;
