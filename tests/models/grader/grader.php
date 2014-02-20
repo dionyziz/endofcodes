@@ -144,14 +144,14 @@
             $this->assertTrue( empty( $error1 ), 'A user with valid game response must not have errors' );
             $this->assertTrue( empty( $error2 ), 'A user with valid game response must not have errors' );
         }
-        public function testNextRoundInvalidResponse() {
+        protected function nextRoundAndGetErrors( $responseValid ) {
             $grader = new Grader( $this->game, $this->users );
             $grader->graderBotClass = 'GraderBotMock';
             $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
                 $bot->boturlValid = true;
                 $bot->gameResponseValid = true;
-                $bot->roundResponseValid = false;
+                $bot->roundResponseValid = $responseValid;
             }
             $grader->initiate();
             $grader->createGame();
@@ -160,33 +160,25 @@
             $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
             $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
 
-            $this->assertTrue( !empty( $error1 ), 'A user with invalid round response must have errors' );
-            $this->assertTrue( !empty( $error2 ), 'A user with invalid round response must have errors' );
+            return compact( 'error1', 'error2' );
+        }
+        public function testNextRoundInvalidResponse() {
+            $errors = $this->nextRoundAndGetErrors( false );
 
-            $this->assertEquals( 1, count( $error1 ), 'A user must get one error if they have an invalid round response' );
-            $this->assertEquals( 1, count( $error2 ), 'A user must get one error if they have an invalid round response' );
+            $this->assertTrue( !empty( $errors[ 'error1' ] ), 'A user with invalid round response must have errors' );
+            $this->assertTrue( !empty( $errors[ 'error2' ] ), 'A user with invalid round response must have errors' );
 
-            $this->assertEquals( 'round_error', $error1[ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
-            $this->assertEquals( 'round_error', $error2[ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
+            $this->assertEquals( 1, count( $errors[ 'error1' ] ), 'A user must get one error if they have an invalid round response' );
+            $this->assertEquals( 1, count( $errors[ 'error2' ] ), 'A user must get one error if they have an invalid round response' );
+
+            $this->assertEquals( 'round_error', $errors[ 'error1' ][ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
+            $this->assertEquals( 'round_error', $errors[ 'error2' ][ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
         }
         public function testNextRoundValidResponse() {
-            $grader = new Grader( $this->game, $this->users );
-            $grader->graderBotClass = 'GraderBotMock';
-            $grader->initiateBots();
-            foreach ( $grader->bots as $bot ) {
-                $bot->boturlValid = true;
-                $bot->gameResponseValid = true;
-                $bot->roundResponseValid = true;
-            }
-            $grader->initiate();
-            $grader->createGame();
-            $grader->nextRound();
+            $errors = $this->nextRoundAndGetErrors( true );
 
-            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
-
-            $this->assertTrue( empty( $error1 ), 'A user with valid round response must not have errors' );
-            $this->assertTrue( empty( $error2 ), 'A user with valid round response must not have errors' );
+            $this->assertTrue( empty( $errors[ 'error1' ] ), 'A user with valid round response must not have errors' );
+            $this->assertTrue( empty( $errors[ 'error2' ] ), 'A user with valid round response must not have errors' );
         }
         public function testRoundResolution() {
             $game = new Game();
