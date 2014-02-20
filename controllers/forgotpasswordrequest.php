@@ -54,7 +54,7 @@
             include 'views/user/passwordrevoke.php';
         }
         public function updateView( $username, $password_empty, $password_invalid, $password_not_matched, $password_token ) {            
-            if ( !empty( $password_empty ) || !empty( $password_not_matched ) || !empty( $password_invalid ) ) {
+            if ( !empty( $password_empty ) && !empty( $password_not_matched ) && !empty( $password_invalid ) ) {
                 include 'views/user/forgot/reset.php'; 
                 return;
             }
@@ -73,10 +73,8 @@
                     throw new HTTPUnauthorizedException();
                 }
             }
-            else {
-                if ( !empty( $_SESSION[ 'user' ] ) ) {
-                    $user = $_SESSION[ 'user' ];
-                }
+            if ( !empty( $_SESSION[ 'user' ] ) ) {
+                $user = $_SESSION[ 'user' ];
             }
             try {
                 $user->revokePasswordCheck( $password_token ); 

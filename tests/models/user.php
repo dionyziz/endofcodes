@@ -181,7 +181,7 @@
                 $expiredSuccess = true;
             }
             $this->assertTrue( $trueSuccess, 'revokePasswordCheck should validate correct tokens' );
-            $this->assertTrue( $falseSuccess, 'revokePasswordCheck should not validate correct tokens' );
+            $this->assertTrue( $falseSuccess, 'revokePasswordCheck should not validate invalid tokens' );
             $this->assertTrue( $emptySuccess, 'revokePasswordCheck should not validate empty tokens' );
             $this->assertTrue( $oldTokenSuccess, 'revokePasswordCheck should not validate with old tokens' );
             $this->assertTrue( $expiredSuccess, 'revokePasswordCheck should not validate when request is expired' );

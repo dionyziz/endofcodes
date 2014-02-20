@@ -15,10 +15,10 @@
         if ( $password_not_matched ) {
             $self->createError( "Your two passwords do not match" );
         }
-        $self->createLabel( 'password', 'password' );
-        $self->createInput( 'password', 'password', 'password' );
+        $self->createLabel( 'password', 'Password' );
+        $self->createInput( 'password', 'password' );
         $self->createLabel( 'password_repeat', 'Password (repeat)' );
-        $self->createInput( 'password', 'password_repeat', 'password_repeat' );
+        $self->createInput( 'password', 'password_repeat' );
         $self->createInput( 'submit', '', '', 'Change password' );
         $self->createInput( 'hidden', 'password_token', '', $password_token );
     } );
