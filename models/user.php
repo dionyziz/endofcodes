@@ -1,10 +1,10 @@
 <?php
-    include_once 'models/encrypt.php';
-    include_once 'models/country.php';
-    include_once 'models/image.php';
+    require_once 'models/encrypt.php';
+    require_once 'models/country.php';
+    require_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' ];
+        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' ];
         public $username;
         public $password;
         public $email;
@@ -14,7 +14,7 @@
         public $dateOfBirth;
         public $boturl;
         protected $dob;
-        protected $tableName = 'users';
+        protected static $tableName = 'users';
 
         public static function findByUsername( $username ) {
             try {
@@ -200,16 +200,6 @@
         public function renewSessionId() {
             $this->generateSessionId();
             $this->save();
-        }
-
-        public function toJson() {
-            return json_encode( $this->jsonSerialize() );
-        }
-
-        public function jsonSerialize() {
-            $username = $this->username;
-            $userid = $this->id;
-            return compact( 'username', 'userid' );
         }
     }
 ?>

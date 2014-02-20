@@ -1,42 +1,34 @@
 <?php
-    include_once 'models/round.php';
+    require_once 'models/round.php';
+    require_once 'models/game.php';
 
     class RoundTest extends UnitTestWithFixtures {
-        protected function buildRound() {
-            $round = new Round();
-            $round->id = 1;
-            $creature1 = new Creature();
-            $creature2 = new Creature();
-            $creature1->locationx = 1;
-            $creature1->locationy = 2;
-            $creature2->locationx = 3;
-            $creature2->locationy = 4;
-            $creature1->hp = 10;
-            $creature2->hp = 11;
-            $creature1->user = $this->buildUser( 'vitsalis' );
-            $creature2->user = $this->buildUser( 'pkakelas' );
-            $creature1->id = 1;
-            $creature2->id = 2;
-            $round->creatures = [ $creature1, $creature2 ];
-            return $round;
+        public function testSaveDb() {
+            $game = $this->buildGame();
+            $game->rounds[ 0 ] = $round = $this->buildRound();
+            $round->game = $game;
+            $round->save();
+            $dbRound = new Round( $game, 1 );
+
+            $this->assertEquals( $round->id, intval( $dbRound->id ), "Round's id must be correctly stored in the database" );
+            $this->assertEquals( $round->game->id, intval( $dbRound->game->id ), "Round's gameid must be correctly stored in the database" );
+
+            foreach ( $dbRound->creatures as $id => $dbCreature ) {
+                $creature = $round->creatures[ $id ];
+
+                $this->assertSame( $creature->id, $dbCreature->id, "Creature's id must be correctly stored in the database" );
+                $this->assertSame( $creature->locationx, $dbCreature->locationx, "Creature's locationx must be correctly stored in the database" );
+                $this->assertSame( $creature->locationy, $dbCreature->locationy, "Creature's locationy must be correctly stored in the database" );
+                $this->assertSame( $creature->hp, $dbCreature->hp, "Creature's hp must be correctly stored in the database" );
+                $this->assertTrue( isset( $dbCreature->user ), "Creature must have a user" );
+                $this->assertSame( $creature->user->id, $dbCreature->user->id, "Creature's userid must be correctly stored in the database" );
+            }
         }
-        public function testJsonSerialize() {
-            $round = $this->buildRound();
+        public function testError() {
+            $round = new Round();
+            $round->error( 1, 'fuck this user' );
 
-            $this->assertTrue( method_exists( $round, 'toJson' ), 'Round object must export a "toJson" function' );
-
-            $json = $round->toJson();
-            $data = json_decode( $json );
-
-            $this->assertTrue( isset( $data->round ), 'roundid must exist in exported JSON' );
-            $this->assertEquals( $round->id, $data->round, 'roundid must be encoded properly to JSON' );
-
-            $this->assertTrue( isset( $data->map ), 'map must exist in exported JSON' );
-            $this->assertTrue( is_array( $data->map ), 'map must be an array in exported JSON' );
-            $this->assertEquals( 2, count( $data->map ), 'map must contain correct number of creatures in exported JSON' );
-
-            $this->assertEquals( 1, $data->map[ 0 ]->creatureid, 'All creatures must exist in exported JSON' );
-            $this->assertEquals( 2, $data->map[ 1 ]->creatureid, 'All creatures must exist in exported JSON' );
+            $this->assertEquals( 'fuck this user', $round->errors[ 1 ][ 0 ], 'error must store the description of the error specfied' );
         }
     }
     return new RoundTest();

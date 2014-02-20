@@ -2,10 +2,10 @@
     class Follow extends ActiveRecordBase {
         public $follower;
         public $followed;
-        protected $attributes = [ 'followerid', 'followedid' ];
+        protected static $attributes = [ 'followerid', 'followedid' ];
         protected $followerid;
         protected $followedid;
-        protected $tableName = 'follows';
+        protected static $tableName = 'follows';
 
         public function __construct( $followerid = false, $followedid = false ) {
             if ( $followerid !== false && $followedid !== false ) {
