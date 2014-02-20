@@ -23,12 +23,12 @@
             $user->delete();
             try {
                 $user = User::findByUsername( 'pkakelas' );
-                $success = 0;
+                $success = false;
             }
             catch ( ModelNotFoundException $e ) {
-                $success = 1;
+                $success = true;
             }
-            $this->assertEquals( 1, $success, 'The user must be deleted when the $user->delete() function runs' );
+            $this->assertTrue( $success, 'The user must be deleted when the $user->delete() function runs' );
         }
         public function testPasswordChange() {
             $user = $this->buildUser( 'pkakelas' );
@@ -135,6 +135,7 @@
             
             $link = $user->createForgotPasswordLink();
             $this->assertTrue( isset( $user->forgotpasswordtoken ), 'CreateForgotPasswordLink must save the token to $user->forgotpasswordtoken' );
+            $this->assertTrue( !empty( $user->forgotpasswordtoken ), '$user->forgotpasswordtokeni must not be empty' );
             $this->assertTrue( isset( $user->forgotpasswordrequestcreated ), 'CreateForgotPasswordLink must save the time it created the link to $user->forgotpasswordrequestcreated' );
         }
         public function testRevokePasswordCheck() {
@@ -143,41 +144,41 @@
             $user->createForgotPasswordLink();
             try {
                 $user->revokePasswordCheck( $user->forgotpasswordtoken );
-                $trueSuccess = 1;
+                $trueSuccess = true;
             } 
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
-               $trueSuccess = 0; 
+               $trueSuccess = false; 
             }
             try {
                 $user->revokePasswordCheck( 'dsafasfjsakf21ekjwlrfhkl321jhl' );
-                $falseSuccess = 0;
+                $falseSuccess = false;
             } 
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
-                $falseSuccess = 1; 
+                $falseSuccess = true; 
             }
             try {
                 $user->revokePasswordCheck( '' );
-                $emptySuccess = 0;
+                $emptySuccess = false;
             } 
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
-               $emptySuccess = 1; 
+                $emptySuccess = true; 
             }
             $oldToken = $user->forgotpasswordtoken;
             $user->createforgotpasswordlink();
             try {
                 $user->revokePasswordCheck( $oldToken );
-                $oldTokenSuccess = 0;
+                $oldTokenSuccess = false;
             } 
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
-               $oldTokenSuccess = 1; 
+                $oldTokenSuccess = true; 
             }
             $user->forgotpasswordrequestcreated = time() - 60 * 24 * 2; 
             try {
                 $user->revokePasswordCheck( $user->forgotpasswordtoken );
-                $expiredSuccess = 0;
+                $expiredSuccess = false;
             }
             catch ( ModelValidationException $e ) {
-                $expiredSuccess = 1;
+                $expiredSuccess = true;
             }
             $this->assertTrue( $trueSuccess, 'revokePasswordCheck should validate correct tokens' );
             $this->assertTrue( $falseSuccess, 'revokePasswordCheck should not validate correct tokens' );
@@ -189,24 +190,24 @@
             $user = $this->buildUser( 'pkakelas' );
             try {
                 $user->passwordValidate( 'Bob and Alice' );
-                $trueSuccess = 1;
+                $trueSuccess = true;
             } 
             catch ( ModelValidationException $e ) {
-                $trueSuccess = 0;
+                $trueSuccess = false;
             } 
             try {
                 $user->passwordValidate( '' );
-                $emptySuccess = 0;
+                $emptySuccess = false;
             }
             catch ( ModelValidationException $e ) {
-                $emptySuccess = 1;
+                $emptySuccess = true;
             } 
             try {
                 $user->passwordValidate( 'Bob' ); 
-                $smallSuccess = 0;
+                $smallSuccess = false;
             }
             catch ( ModelValidationException $e ) {
-                $smallSuccess = 1;
+                $smallSuccess = true;
             } 
             $this->assertTrue( $trueSuccess, 'passwordValidate should validate the default password that we have set' );
             $this->assertTrue( $emptySuccess, 'passwordValidate should not validate empty passwords' );
