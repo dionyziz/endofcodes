@@ -26,15 +26,20 @@
     }
 
     function dbInsert( $table, $set ) {
-        $fields = [];
-        foreach ( $set as $field => $value ) {
-            $fields[] = "$field = :$field";
+        if ( empty( $set ) ) {
+            $setString = ' () VALUES ()';
+        }
+        else {
+            $fields = [];
+            foreach ( $set as $field => $value ) {
+                $fields[] = "$field = :$field";
+            }
+            $setString = ' SET ' . implode( ",", $fields );
         }
         $res = db(
             'INSERT INTO '
             . $table
-            . ' SET '
-            . implode( ",", $fields ),
+            . $setString,
             $set
         );
         return mysql_insert_id();

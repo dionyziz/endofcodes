@@ -61,6 +61,8 @@
         }
 
         protected function create() {
+            assert( $this->game instanceof Game, '$this->game must be an instance of Game when a round is created' );
+
             $gameid = $this->game->id;
             $roundid = $this->id;
             foreach ( $this->creatures as $creature ) {

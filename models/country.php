@@ -2,7 +2,6 @@
     class Country extends ActiveRecordBase {
         protected static $attributes = [ 'shortname', 'name' ];
         public $name;
-        public $id;
         public $shortname;
         protected static $tableName = 'countries';
 

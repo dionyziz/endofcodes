@@ -1,7 +1,7 @@
 <?php
     abstract class ActiveRecordBase {
-        public $id;
-        protected $exists;
+        public $id = 0;
+        public $exists;
 
         public function delete() {
             $id = $this->id;
@@ -23,7 +23,7 @@
                     static::$tableName,
                     $attributes
                 );
-                if ( !isset( $this->id ) ) {
+                if ( $this->id === 0 ) {
                     $this->id = $id;
                 }
             }

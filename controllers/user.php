@@ -1,7 +1,7 @@
 <?php
     class UserController extends ControllerBase {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '',
-                $countryid = '', $day = '', $month = '', $year = '' ) {
+                                $countryid = '', $day = '', $month = '', $year = '' ) {
             require_once 'models/country.php';
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', [ 'password_not_matched' => true ] );

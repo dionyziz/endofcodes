@@ -55,7 +55,8 @@
         protected function buildGame() {
             $game = new Game();
             for ( $i = 1; $i <= 4; ++$i ) {
-                $game->users[] = $this->buildUser( $i );
+                $user = $this->buildUser( 'a' . $i );
+                $game->users[ $user->id ] = $user; 
             }
             $game->save();
             return $game;

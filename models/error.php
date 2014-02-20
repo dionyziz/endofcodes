@@ -27,6 +27,9 @@
         }
 
         public static function findErrorsByGameAndUser( $gameid, $userid ) {
+            assert( $gameid > 0, 'gameid must be a positive number' );
+            assert( $userid > 0, 'userid must be a positive number' );
+
             $errorsArray = dbSelect(
                 'errors',
                 [ 'id' ],

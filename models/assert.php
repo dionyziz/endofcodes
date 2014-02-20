@@ -4,7 +4,7 @@
     assert_options( ASSERT_WARNING, false );
     assert_options( ASSERT_CALLBACK, 'assertFailure' );
 
-    function assertFailure( $script, $line, $_, $message ) {
+    function assertFailure( $script, $line, $_, $message = 'Assertion failed' ) {
         throw new AssertionFailureException( $script, $line, $message );
     }
 
