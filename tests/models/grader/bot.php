@@ -128,7 +128,7 @@
             $result = $this->initiateAndGetErrors( CURLE_COULDNT_CONNECT );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught when curl responds with an error' );
-            $this->assertEquals( 'initiate_could_not_connect', $result[ 'errors' ][ 0 ], 'Bot with url that could not be resolved must have a "initiate_could_not_connect" error' );
+            $this->assertEquals( 'initiate_could_not_connect', $result[ 'errors' ][ 0 ], 'Bot with url that could not be reached must have a "initiate_could_not_connect" error' );
         }
         public function testIniatiateMalformedUrl() {
             $result = $this->initiateAndGetErrors( CURLE_URL_MALFORMAT );
@@ -427,7 +427,7 @@
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response is invalid' );
             $this->assertEquals( 'round_creatureid_not_set', $result[ 'errors' ][ 0 ], 'A "round_creatureid_not_set" error must be recorded when bot responds with creatureid not set' );
         }
-        public function testRoundRespondWithoutaction() {
+        public function testRoundRespondWithoutAction() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
                 'intent' => [
                     [
@@ -560,11 +560,11 @@
 
             $this->assertTrue( isset( $result[ 'response' ] ), 'A bot must respond with a dictionary containing the response key' ); 
             $this->assertTrue( is_array( $result[ 'response' ] ), 'A bot must respond with a collection' );
-            $this->assertEquals( 1, count( $result[ 'response' ] ), 'The collection must have as much objects as specified' );
+            $this->assertEquals( 1, count( $result[ 'response' ] ), 'The collection must have as many objects as specified' );
 
-            $this->assertEquals( $clone->id, $result[ 'response'][ 0 ]->id, 'creatureid must be the same as specified' );
-            $this->assertEquals( $clone->intent->action, $result[ 'response'][ 0 ]->intent->action, 'action must be the same as specified' );
-            $this->assertEquals( $clone->intent->direction, $result[ 'response'][ 0 ]->intent->direction, 'direction must be the same as specified' );
+            $this->assertEquals( $clone->id, $result[ 'response' ][ 0 ]->id, 'creatureid must be the same as specified' );
+            $this->assertEquals( $clone->intent->action, $result[ 'response' ][ 0 ]->intent->action, 'action must be the same as specified' );
+            $this->assertEquals( $clone->intent->direction, $result[ 'response' ][ 0 ]->intent->direction, 'direction must be the same as specified' );
         }
         public function testRoundMoveDifferentUsersCreature() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [
@@ -594,7 +594,7 @@
             $this->assertFalse( $result[ 'caught' ], 'A GraderBotException must not be caught if someone send valid json' );
 
             $this->assertTrue( is_array( $result[ 'response' ] ), 'sendRoundRequest must return a collection' );
-            foreach( $result[ 'response' ] as $creature ) {
+            foreach ( $result[ 'response' ] as $creature ) {
                 $this->assertTrue( is_object( $creature ), 'sendReoundRequest response must be a collection of objects' );
             }
 

@@ -25,36 +25,44 @@
             if ( !$this->roundResponseValid ) {
                 throw new GraderBotException( 'round_error' );
             }
-            return array();
+            return [];
         }
     }
 
     class GraderTest extends UnitTestWithFixtures {
-        public function testLoadGraderFromExistingGame() {
-            $game = new Game();
-            $game->save();
+        protected $users;
+        protected $game;
 
+        public function setUp() {
+            $user1 = $this->buildUser( 'dionyziz' );
+            $user2 = $this->buildUser( 'pkakelas' );
+
+            $this->users = [
+                $user1->id => $user1,
+                $user2->id => $user2
+            ];
+
+            $this->game = new Game();
+            $this->game->save();
+        }
+        public function testLoadGraderFromExistingGame() {
             $round = new Round();
             $round->id = 0;
-            $round->game = $game;
-            $user = $this->buildUser( 'dionyziz' );
-            $game->users = [ $user ];
-            $round->creatures = [ $this->buildCreature( 1, 0, 0, $user ) ];
+            $round->game = $this->game;
+            $user = $this->users[ 1 ];
+            $this->game->users = [ $user->id => $user ];
+            $round->creatures = [ 1 => $this->buildCreature( 1, 0, 0, $user ) ];
             $round->save();
-            $game->rounds[ 0 ] = $round;
+            $this->game->rounds[ 0 ] = $round;
 
-            $grader = new Grader( $game );
+            $grader = new Grader( $this->game );
 
             $this->assertTrue( isset( $grader->registeredUsers ), 'Constructor of grader must set the users' );
             $this->assertEquals( 1, count( $grader->registeredUsers ), 'Constructor of grader must find the correct number of users' );
-            $this->assertEquals( $user->id, $grader->registeredUsers[ 0 ]->id, 'Constructor of grader must find the correct users' );
+            $this->assertEquals( $user->id, $grader->registeredUsers[ 1 ]->id, 'Constructor of grader must find the correct users' );
         }
         public function testIncludeUsersWithInvalidBots() {
-            $game = new Game();
-            $game->save();
-            $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $users[ 0 ]->boturl = 'koko';
-            $grader = new Grader( $game, $users );
+            $grader = new Grader( $this->game, $this->users );
             $grader->graderBotClass = 'GraderBotMock';
             $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
@@ -66,8 +74,8 @@
             $this->assertEquals( 0, count( $grader->registeredBots ), 'The number of registered bots must be the same as the number of valid bots' );
             $this->assertEquals( count( $grader->registeredBots ), count( $grader->registeredUsers ), 'The number of registered users must be the same with the number of registered bots' );
 
-            $error1 = Error::findErrorsByGameAndUser( $game->id, $users[ 0 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $game->id, $users[ 1 ]->id );
+            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
+            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
 
             $this->assertTrue( !empty( $error1 ), 'A user with invalid boturl must have errors' );
             $this->assertTrue( !empty( $error2 ), 'A user with invalid boturl must have errors' );
@@ -79,12 +87,7 @@
             $this->assertEquals( 'initiate_error', $error2[ 0 ]->error, 'A user must get a "initiate_error" error if he has an invalid boturl' );
         }
         public function testIncludeUsersWithValidBots() {
-            $game = new Game();
-            $game->save();
-            $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $users[ 0 ]->boturl = 'localhost/endofcodes/bots/php';
-            $users[ 1 ]->boturl = 'localhost/endofcodes/bots/php';
-            $grader = new Grader( $game, $users );
+            $grader = new Grader( $this->game, $this->users );
             $grader->graderBotClass = 'GraderBotMock';
             $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
@@ -95,17 +98,14 @@
             $this->assertEquals( 2, count( $grader->registeredBots ), 'The number of registered bots must be the same as the number of valid bots' );
             $this->assertEquals( count( $grader->registeredBots ), count( $grader->registeredUsers ), 'The number of registered users must be the same with the number of registered bots' );
 
-            $error1 = Error::findErrorsByGameAndUser( $game->id, $users[ 0 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $game->id, $users[ 1 ]->id );
+            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
+            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
 
             $this->assertTrue( empty( $error1 ), 'A user with valid boturl must not have errors' );
             $this->assertTrue( empty( $error2 ), 'A user with valid boturl must not have errors' );
         }
         public function testCreateGameInvalidResponse() {
-            $game = new Game();
-            $game->save();
-            $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $game, $users );
+            $grader = new Grader( $this->game, $this->users );
             $grader->graderBotClass = 'GraderBotMock';
             $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
@@ -115,8 +115,8 @@
             $grader->initiate();
             $grader->createGame();
 
-            $error1 = Error::findErrorsByGameAndUser( $game->id, $users[ 0 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $game->id, $users[ 1 ]->id );
+            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
+            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
 
             $this->assertTrue( !empty( $error1 ), 'A user with invalid game response must have errors' );
             $this->assertTrue( !empty( $error2 ), 'A user with invalid game response must have errors' );
@@ -128,10 +128,7 @@
             $this->assertEquals( 'game_error', $error2[ 0 ]->error, 'A user must get a "game_error" error if he has an invalid game response' );
         }
         public function testCreateGameValidResponse() {
-            $game = new Game();
-            $game->save();
-            $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $game, $users );
+            $grader = new Grader( $this->game, $this->users );
             $grader->graderBotClass = 'GraderBotMock';
             $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
@@ -141,17 +138,14 @@
             $grader->initiate();
             $grader->createGame();
 
-            $error1 = Error::findErrorsByGameAndUser( $game->id, $users[ 0 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $game->id, $users[ 1 ]->id );
+            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
+            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
 
             $this->assertTrue( empty( $error1 ), 'A user with valid game response must not have errors' );
             $this->assertTrue( empty( $error2 ), 'A user with valid game response must not have errors' );
         }
         public function testNextRoundInvalidResponse() {
-            $game = new Game();
-            $game->save();
-            $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $game, $users );
+            $grader = new Grader( $this->game, $this->users );
             $grader->graderBotClass = 'GraderBotMock';
             $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
@@ -163,8 +157,8 @@
             $grader->createGame();
             $grader->nextRound();
 
-            $error1 = Error::findErrorsByGameAndUser( $game->id, $users[ 0 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $game->id, $users[ 1 ]->id );
+            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
+            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
 
             $this->assertTrue( !empty( $error1 ), 'A user with invalid round response must have errors' );
             $this->assertTrue( !empty( $error2 ), 'A user with invalid round response must have errors' );
@@ -176,10 +170,7 @@
             $this->assertEquals( 'round_error', $error2[ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
         }
         public function testNextRoundValidResponse() {
-            $game = new Game();
-            $game->save();
-            $users = [ $this->buildUser( 'dionyziz' ), $this->buildUser( 'pkakelas' ) ];
-            $grader = new Grader( $game, $users );
+            $grader = new Grader( $this->game, $this->users );
             $grader->graderBotClass = 'GraderBotMock';
             $grader->initiateBots();
             foreach ( $grader->bots as $bot ) {
@@ -191,29 +182,28 @@
             $grader->createGame();
             $grader->nextRound();
 
-            $error1 = Error::findErrorsByGameAndUser( $game->id, $users[ 0 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $game->id, $users[ 1 ]->id );
+            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
+            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
 
             $this->assertTrue( empty( $error1 ), 'A user with valid round response must not have errors' );
             $this->assertTrue( empty( $error2 ), 'A user with valid round response must not have errors' );
         }
         public function testRoundResolution() {
-            $users = [ $this->buildUser( 'vitsalis' ), $this->buildUser( 'dionyziz' ) ];
             $game = new Game();
-            $game->users = $users;
+            $game->users = $this->users;
             $game->initiateAttributes();
             $game->id = 1;
             $game->exists = true;
-            $creature1 = $this->buildCreature( 0, 1, 1, $users[ 0 ], $game );
-            $creature2 = $this->buildCreature( 1, 2, 2, $users[ 1 ], $game );
+            $creature1 = $this->buildCreature( 0, 1, 1, $this->users[ 1 ], $game );
+            $creature2 = $this->buildCreature( 1, 2, 2, $this->users[ 2 ], $game );
             $round = new Round();
             $round->creatures = [ $creature1, $creature2 ];
             $round->game = $game;
             $game->rounds[ 0 ] = $round;
-            $game->users = $users;
+            $game->users = $this->users;
             $grader = new Grader( $game );
-            $grader->registeredUsers = $users;
-            $bot1 = new GraderBot( $users[ 0 ] );
+            $grader->registeredUsers = $this->users;
+            $bot1 = new GraderBot( $this->users[ 1 ] );
             $bot1->game = $game;
             $bot1->curlConnectionObject = new CurlConnectionMock();
             $bot1->curlConnectionObject->makeRespondWith( json_encode( [
@@ -225,7 +215,7 @@
                     ]
                 ]
             ] ) );
-            $bot2 = new GraderBot( $users[ 1 ] );
+            $bot2 = new GraderBot( $this->users[ 2 ] );
             $bot2->game = $game;
             $bot2->curlConnectionObject = new CurlConnectionMock();
             $bot2->curlConnectionObject->makeRespondWith( json_encode( [
