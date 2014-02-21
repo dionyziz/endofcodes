@@ -113,6 +113,8 @@
                     $error->save();
                 }
             }
+
+            go( 'game', 'update', [ 'gameid' => $this->game->id ] );
         }
     }
 ?>

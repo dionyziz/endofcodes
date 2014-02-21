@@ -6,7 +6,7 @@
             $game = new Game();
             $game->save();
             $users = User::findAll();
-            $grader = new Grader( $users, $game );
+            $grader = new Grader( $game, $users );
             $grader->initiateBots();
             $grader->initiate();
             $grader->createGame();
