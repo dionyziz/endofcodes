@@ -186,10 +186,10 @@
             $game->initiateAttributes();
             $game->id = 1;
             $game->exists = true;
-            $creature1 = $this->buildCreature( 0, 1, 1, $this->users[ 1 ], $game );
-            $creature2 = $this->buildCreature( 1, 2, 2, $this->users[ 2 ], $game );
+            $creature1 = $this->buildCreature( 1, 1, 1, $this->users[ 1 ], $game );
+            $creature2 = $this->buildCreature( 2, 2, 2, $this->users[ 2 ], $game );
             $round = new Round();
-            $round->creatures = [ $creature1, $creature2 ];
+            $round->creatures = [ 1 => $creature1, 2 => $creature2 ];
             $round->game = $game;
             $game->rounds[ 0 ] = $round;
             $game->users = $this->users;
@@ -201,7 +201,7 @@
             $bot1->curlConnectionObject->makeRespondWith( json_encode( [
                 'intent' => [
                     [
-                        'creatureid' => 0,
+                        'creatureid' => 1,
                         'action' => 'MOVE',
                         'direction' => 'NORTH'
                     ]
@@ -213,7 +213,7 @@
             $bot2->curlConnectionObject->makeRespondWith( json_encode( [
                 'intent' => [
                     [
-                        'creatureid' => 1,
+                        'creatureid' => 2,
                         'action' => 'MOVE',
                         'direction' => 'NORTH'
                     ]
@@ -229,8 +229,8 @@
             $this->assertTrue( isset( $game->rounds[ 1 ]->creatures ), 'the new round must have creatures' );
             $this->assertTrue( is_array( $game->rounds[ 1 ]->creatures ), 'the new round must have a creatures array' );
 
-            $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
-            $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $newCreature1 = $game->rounds[ 1 ]->creatures[ 1 ];
+            $newCreature2 = $game->rounds[ 1 ]->creatures[ 2 ];
 
             $this->assertEquals( $creature1->id, $newCreature1->id, 'The creature must not change id' );
             $this->assertEquals( $creature2->id, $newCreature2->id, 'The creature must not change id' );
