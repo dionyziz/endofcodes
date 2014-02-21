@@ -1,10 +1,10 @@
 <?php
-    include_once 'models/encrypt.php';
-    include_once 'models/country.php';
-    include_once 'models/image.php';
+    require_once 'models/encrypt.php';
+    require_once 'models/country.php';
+    require_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
+        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
         public $username;
         public $password;
         public $email;
@@ -17,7 +17,7 @@
         public $dateOfBirth;
         public $boturl;
         protected $dob;
-        protected $tableName = 'users';
+        protected static $tableName = 'users';
 
         public static function findByUsername( $username ) {
             try {

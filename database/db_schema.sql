@@ -3,6 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
+<<<<<<< HEAD
 -- Generation Time: Feb 20, 2014 at 10:53 PM
 -- Server version: 5.5.35
 -- PHP Version: 5.5.9-1+sury.org~precise+1
@@ -44,6 +45,20 @@ CREATE TABLE IF NOT EXISTS `creatures` (
   `gameid` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   PRIMARY KEY (`gameid`,`userid`,`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `errors`
+--
+
+CREATE TABLE IF NOT EXISTS `errors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `gameid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `error` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

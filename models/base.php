@@ -1,12 +1,12 @@
 <?php
     abstract class ActiveRecordBase {
-        public $id;
-        protected $exists;
+        public $id = 0;
+        public $exists;
 
         public function delete() {
             $id = $this->id;
             dbDelete(
-                $this->tableName,
+                static::$tableName,
                 compact( "id" )
             );
         }
@@ -14,15 +14,16 @@
         protected function create() {
             $this->onBeforeCreate();
             $attributes = [];
-            foreach ( $this->attributes as $attribute ) {
+            foreach ( static::$attributes as $attribute ) {
                 $attributes[ $attribute ] = $this->$attribute;
             }
+
             try {
                 $id = dbInsert(
-                    $this->tableName,
+                    static::$tableName,
                     $attributes
                 );
-                if ( !isset( $this->id ) ) {
+                if ( $this->id === 0 ) {
                     $this->id = $id;
                 }
             }
@@ -31,6 +32,19 @@
             }
             $this->exists = true;
             $this->onCreate();
+        }
+
+        protected static function arrayToCollection( $array ) {
+            $collection = [];
+            foreach ( $array as $result ) {
+                $collection[] = new static( $result[ 'id' ] );
+            }
+            return $collection;
+        }
+
+        public static function findAll() {
+            $array = dbSelect( static::$tableName );
+            return self::arrayToCollection( $array );
         }
 
         protected function onBeforeCreate() {} // override me

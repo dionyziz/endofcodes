@@ -45,7 +45,7 @@
             }
             $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
             if ( isset( $_COOKIE[ $cookiename ] ) ) {
-                include_once 'models/user.php';
+                require_once 'models/user.php';
                 try {
                     $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
                 }

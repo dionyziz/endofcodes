@@ -1,6 +1,6 @@
 <?php
-    include_once 'models/user.php';
-    include_once 'models/extentions.php';
+    require_once 'models/user.php';
+    require_once 'models/extentions.php';
 
     class Image extends ActiveRecordBase {
         public $tmp_name;
@@ -8,8 +8,8 @@
         public $target_path;
         public $ext;
         public $userid;
-        protected $attributes = [ 'name', 'userid' ];
-        protected $tableName = 'images';
+        protected static $attributes = [ 'name', 'userid' ];
+        protected static $tableName = 'images';
 
         public static function findByUser( $user ) {
             return new Image( $user->avatarid );
