@@ -49,7 +49,6 @@
                         $this->assertEquals( $creature->locationx - 1, $newCreature->locationx, 'A creature must move left by one when moving west' );
                         $this->assertEquals( $creature->locationy, $newCreature->locationy, 'A creature must not move to the y-direction when moving west' );
                         break;
-            $game->initiateAttributes();
                 }
             }
         }
