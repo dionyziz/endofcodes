@@ -10,8 +10,8 @@
             $round->save();
             $dbRound = new Round( $game, 1 );
 
-            $this->assertEquals( $round->id, intval( $dbRound->id ), "Round's id must be correctly stored in the database" );
-            $this->assertEquals( $round->game->id, intval( $dbRound->game->id ), "Round's gameid must be correctly stored in the database" );
+            $this->assertSame( $round->id, $dbRound->id, "Round's id must be correctly stored in the database" );
+            $this->assertSame( $round->game->id, $dbRound->game->id, "Round's gameid must be correctly stored in the database" );
 
             foreach ( $dbRound->creatures as $id => $dbCreature ) {
                 $creature = $round->creatures[ $id ];
