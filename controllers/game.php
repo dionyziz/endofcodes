@@ -23,7 +23,7 @@
             $grader->nextRound();
             $grader->game->nextRound();
         }
-        public function updateView() {
+        public function updateView( $gameid ) {
             require 'views/game/update.php';
         }
     }
