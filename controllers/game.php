@@ -26,6 +26,9 @@
             catch ( WinnerException $e ) {
                 go( 'game', 'view', [ 'id' => $e->winnerid ] );
             }
+            catch ( NextRoundException $e ) {
+                go( 'game', 'update', [ 'gameid' => $e->gameid ] );
+            }
         }
         public function view( $id ) {
             $user = new User( $id );

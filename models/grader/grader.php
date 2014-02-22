@@ -130,7 +130,7 @@
                 }
             }
 
-            go( 'game', 'update', [ 'gameid' => $this->game->id ] );
+            throw new NextRoundException( $this->game->id );
         }
     }
 
@@ -140,6 +140,13 @@
         public function __construct( $id ) {
             $this->winnerid = $id;
             parent::__construct( "Winner's id " . $id );
+        }
+    }
+    class NextRoundException extends Exception {
+        public $gameid;
+        public function __construct( $gameid ) {
+            $this->gameid = $gameid;
+            parent::__construct( "New round for game with id " . $gameid );
         }
     }
 ?>
