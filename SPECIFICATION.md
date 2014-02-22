@@ -1,14 +1,8 @@
-End of Codes
+# End of Codes - Specification
 
-Specification
+**Dionysis Zindros** <[dionyziz@gmail.com](mailto:dionyziz@gmail.com)>
 
-**Dionysis Zindros **<[dionyziz@gmail.com](mailto:dionyziz@gmail.com)>
-
-4 - 29 January 2014
-
-# Table of Contents
-
-[[TOC]]
+4 January - 22 February 2014
 
 # Scope
 
