@@ -4,12 +4,15 @@
     require_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid' ];
+        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
         public $username;
         public $password;
         public $email;
         public $country;
+        public $forgotpasswordrequestcreated;
+        public $forgotpasswordtoken;
         public $image;
+        public $sessionid;
         public $salt;
         public $dateOfBirth;
         public $boturl;
@@ -43,11 +46,22 @@
             return new User( $row[ 'id' ] );
         }
 
+        public static function passwordValidate( $password ) {
+            global $config;
+
+            if ( empty( $password ) ) {
+                throw new ModelValidationException( 'password_empty' );
+            }
+            if ( strlen( $password ) < $config[ 'pass_min_len' ] ) {
+                throw new ModelValidationException( 'password_invalid' );
+            }
+        }
+
         public function __construct( $id = false ) {
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
@@ -58,6 +72,8 @@
                 $this->image = new Image( $user_info[ 'avatarid' ] );
                 $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
+                $this->forgotpasswordtoken = $user_info[ 'forgotpasswordtoken' ];
+                $this->forgotpasswordrequestcreated = $user_info[ 'forgotpasswordrequestcreated' ];
                 $this->exists = true;
             }
         }
@@ -154,6 +170,8 @@
             $id = $this->id;
             $email = $this->email;
             $dob = $this->dob;
+            $forgotpasswordtoken = $this->forgotpasswordtoken;
+            $forgotpasswordrequestcreated = $this->forgotpasswordrequestcreated;
             $sessionid = $this->sessionid;
             $countryid = $this->countryid;
             $avatarid = $this->imageid;
@@ -167,7 +185,7 @@
             try {
                 $res = dbUpdate(
                     'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid" ),
+                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordrequestcreated", "forgotpasswordtoken" ),
                     compact( "id" )
                 );
             }
@@ -200,6 +218,51 @@
         public function renewSessionId() {
             $this->generateSessionId();
             $this->save();
+        }
+
+        public function createForgotPasswordLink() {
+            global $config;
+
+            $bytes = openssl_random_pseudo_bytes( 32 );
+            $value = bin2hex( $bytes );
+            $this->forgotpasswordtoken = $value;
+            $this->forgotpasswordrequestcreated = date( "Y-m-d h:i:s" );
+            $this->save();
+            $email = $this->email;
+            $username = urlencode( $this->username );
+            $link = $config[ 'base' ] . "/forgotpasswordrequest/update?username=$username&password_token=$value";
+            $this->mailFromExternalView( $email, "views/user/forgot/mail.php", 'Password Reset', compact( "username", "link" ) );
+        }
+        
+        public function mailFromExternalView( $email, $extView, $subject = '', $vars = [] ) {
+            global $config;
+
+            if ( !file_exists( $extView ) ) {
+                throw new ModelNotFoundException();
+            }
+            extract( $vars );
+            ob_start();
+            include $extView;
+            $data = ob_get_clean();
+            $headers = "From:" . $config[ 'email' ];
+            mail( $email, $subject, $data, $headers );
+        }
+
+        public function revokePasswordCheck( $passwordToken ) {
+            global $config;
+
+            if ( $passwordToken != $this->forgotpasswordtoken ) {
+                throw new ForgotPasswordModelInvalidTokenException();
+            }
+            if ( empty( $passwordToken ) ) {
+                throw new ForgotPasswordModelInvalidTokenException();
+            }
+            $datetime = strtotime( $this->forgotpasswordrequestcreated );
+            $now = time();
+            $period = $now - $datetime;
+            if ( $period > $config[ 'forgot_password_exp_time' ] ) {
+                throw new ModelValidationException( 'link_expired' );
+            } 
         }
     }
 ?>
