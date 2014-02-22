@@ -242,7 +242,7 @@
             }
             extract( $vars );
             ob_start();
-            include( $extView );
+            include $extView;
             $data = ob_get_clean();
             $headers = "From:" . $config[ 'email' ];
             mail( $email, $subject, $data, $headers );
