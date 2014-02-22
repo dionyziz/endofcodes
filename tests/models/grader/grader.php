@@ -155,7 +155,11 @@
             }
             $grader->initiate();
             $grader->createGame();
-            $grader->nextRound();
+            try {
+                $grader->nextRound();
+            }
+            catch ( NextRoundException $e ) {
+            }
 
             $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
             $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
@@ -221,7 +225,11 @@
             ] ) );
 
             $grader->registeredBots = [ $bot1, $bot2 ];
-            $grader->nextRound();
+            try {
+                $grader->nextRound();
+            }
+            catch ( NextRoundException $e ) {
+            }
 
             $this->assertTrue( isset( $game->rounds[ 1 ] ), 'A new round must be created after nextRound is called' );
             $this->assertTrue( is_object( $game->rounds[ 1 ] ), 'The new round must be an object' );
@@ -240,6 +248,19 @@
 
             $this->assertEquals( 2, $newCreature2->locationx, 'A creature must move in x axis if it is specified' );
             $this->assertEquals( 3, $newCreature2->locationy, 'A creature must move in y axis if it is specified' );
+        }
+        public function testFindBotsFromGame() {
+            $game = new Game();
+            $game->save();
+            $game->users = [ $this->buildUser( 'vitsalis' ) ];
+            $game->rounds[ 0 ] = new Round();
+            $grader = new Grader( $game );
+
+            $this->assertTrue( isset( $grader->registeredUsers ), "Grader must get it's users from the game" );
+            $this->assertTrue( isset( $grader->registeredBots ), "Grader must get it's bots from the game" );
+
+            $this->assertEquals( $game->users[ 0 ]->id, $grader->registeredUsers[ 0 ]->id, 'Grader must get valid users from the game' );
+            $this->assertEquals( $game->users[ 0 ]->id, $grader->registeredBots[ 0 ]->user->id, 'Grader must get valid bots from the game' );
         }
     }
     return new GraderTest();
