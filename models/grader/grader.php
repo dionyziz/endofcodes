@@ -21,6 +21,11 @@
                 assert( $users === false, 'game already has users since genesis has run' );
                 assert( isset( $game->users ), 'game must have users' );
                 $this->registeredUsers = $game->users;
+                foreach ( $game->users as $user ) {
+                    $bot = new GraderBot( $user );
+                    $bot->game = $game;
+                    $this->registeredBots[] = $bot;
+                }
             }
             else {
                 // new game
@@ -86,6 +91,17 @@
             assert( $this->game instanceof Game, '$this->game must be an instance of game when we create a new round' );
             $round = $this->game->getCurrentRound();
 
+            $usersAlive = [];
+            foreach ( $round->creatures as $creature ) {
+                if ( $creature->alive ) {
+                    $usersAlive[ $creature->user->id ] = $creature->user;
+                }
+            }
+
+            if ( count( $usersAlive ) === 1 ) {
+                throw new WinnerException( end( $usersAlive )->id );
+            }
+
             foreach ( $this->registeredBots as $bot ) {
                 try {
                     $creatureCollection = $bot->sendRoundRequest( $round );
@@ -115,6 +131,15 @@
             }
 
             go( 'game', 'update', [ 'gameid' => $this->game->id ] );
+        }
+    }
+
+    class WinnerException extends Exception {
+        public $winnerid;
+
+        public function __construct( $id ) {
+            $this->winnerid = $id;
+            parent::__construct( "Winner's id " . $id );
         }
     }
 ?>

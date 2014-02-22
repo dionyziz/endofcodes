@@ -11,7 +11,7 @@
             $grader->initiate();
             $grader->createGame();
 
-            require 'views/game/view.php';
+            go( 'game', 'update', [ 'gameid' => $game->id ] );
         }
         public function createView() {
             require 'views/game/create.php';
@@ -20,8 +20,16 @@
             $game = new Game( $gameid );
 
             $grader = new Grader( $game );
-            $grader->nextRound();
-            $grader->game->nextRound();
+            try {
+                $grader->nextRound();
+            }
+            catch ( WinnerException $e ) {
+                go( 'game', 'view', [ 'id' => $e->winnerid ] );
+            }
+        }
+        public function view( $id ) {
+            $user = new User( $id );
+            require 'views/game/view.php';
         }
         public function updateView( $gameid ) {
             require 'views/game/update.php';
