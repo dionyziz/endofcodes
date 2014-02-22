@@ -133,7 +133,7 @@
                 $trueSuccess = true;
             } 
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
-               $trueSuccess = false; 
+                $trueSuccess = false; 
             }
             try {
                 $user->revokePasswordCheck( 'dsafasfjsakf21ekjwlrfhkl321jhl' );

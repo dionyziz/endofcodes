@@ -242,7 +242,7 @@
             }
             extract( $vars );
             ob_start();
-            $data = include( $extView );
+            include( $extView );
             $data = ob_get_clean();
             $headers = "From:" . $config[ 'email' ];
             mail( $email, $subject, $data, $headers );
@@ -251,29 +251,18 @@
         public function revokePasswordCheck( $passwordToken ) {
             global $config;
 
-            if ( $passwordToken == $this->forgotpasswordtoken ) {
-                if ( empty( $passwordToken ) ) {
-                    throw new ForgotPasswordModelInvalidTokenException();
-                }
-                $datetime = strtotime( $this->forgotpasswordrequestcreated );
-                $now = time();
-                $period = $now - $datetime;
-                if ( $period > $config[ 'forgot_password_exp_time' ] ) {
-                    throw new ModelValidationException( 'link_expired' );
-                } 
-                return;
+            if ( $passwordToken != $this->forgotpasswordtoken ) {
+                throw new ForgotPasswordModelInvalidTokenException();
             }
-            throw new ForgotPasswordModelInvalidTokenException();
-        }
-
-        public function toJson() {
-            return json_encode( $this->jsonSerialize() );
-        }
-
-        public function jsonSerialize() {
-            $username = $this->username;
-            $userid = $this->id;
-            return compact( 'username', 'userid' );
+            if ( empty( $passwordToken ) ) {
+                throw new ForgotPasswordModelInvalidTokenException();
+            }
+            $datetime = strtotime( $this->forgotpasswordrequestcreated );
+            $now = time();
+            $period = $now - $datetime;
+            if ( $period > $config[ 'forgot_password_exp_time' ] ) {
+                throw new ModelValidationException( 'link_expired' );
+            } 
         }
     }
 ?>
