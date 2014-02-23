@@ -77,7 +77,19 @@
                 for ( $j = 0; $j < $game->height; ++$j ) {
                     if ( isset( $game->grid[ $i ][ $j ] ) ) {
                         $creature = $game->grid[ $i ][ $j ];
+                        $caught = false;
+                        try {
+                            $dbCreature = new Creature( $creature->id, $creature->user->id, $creature->game->id );
+                        }
+                        catch ( ModelNotFoundException $e ) {
+                            $caught = true;
+                        }
+                        $this->assertFalse( $caught, 'The creature must be created in the database after genesis' );
+                        $this->assertSame( $creature->id, $dbCreature->id, 'Id must be correctly stored in the database' );
+                        $this->assertSame( $creature->game->id, $dbCreature->game->id, 'gameid must be correctly stored in the database' );
+                        $this->assertSame( $creature->user->id, $dbCreature->user->id, 'userid must be correctly stored in the database' );
                         ++$userCountCreatures[ $creature->user->id ];
+                        $this->assertTrue( $creature->id >= 1, "Creatures ids must start from 1" );
                         $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
                         $this->assertTrue( $creature->locationy >= 0, "A creature's y coordinate must be non-negative" );
                         $this->assertTrue( $creature->locationx < $game->width, "A creature's x coordinate must be inside the grid" );

@@ -15,8 +15,9 @@
         protected static $attributes = [ 'id', 'gameid', 'userid' ];
         protected static $tableName = 'creatures';
 
-        public function __construct( $creature_info = [] ) {
-            if ( !empty( $creature_info ) ) {
+        public function __construct( $a = false, $b = false, $c = false ) {
+            if ( is_array( $a ) ) {
+                $creature_info = $a;
                 $this->exists = true;
                 $this->id = $creature_info[ 'creatureid' ];
                 $this->locationx = $creature_info[ 'locationx' ];
@@ -27,6 +28,20 @@
                 $direction = directionStringToConst( $creature_info[ 'direction' ] );
                 $this->intent = new Intent( $action, $direction );
                 $this->intent->creature = $this;
+            }
+            else if ( $b !== false && $c !== false ) {
+                $id = $a;
+                $userid = $b;
+                $gameid = $c;
+                try {
+                    $creature_info = dbSelectOne( 'creatures', [ 'id' ], compact( 'id', 'userid', 'gameid' ) );
+                    $this->id = $a;
+                    $this->user = new User( $userid );
+                    $this->game = new Game( $gameid );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
             }
             else {
                 $this->intent = new Intent();
