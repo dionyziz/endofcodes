@@ -103,6 +103,7 @@
             $dbUser = new User( 1 );
             $this->assertEquals( $user->username, $dbUser->username, "User's username must be correctly stored in the database" );
             $this->assertEquals( $user->email, $dbUser->email, "User's email must be correctly stored in the database" );
+            $this->assertEquals( $user->boturl, $dbUser->boturl, "User's boturl must be correctly stored in the database" );
         }
         public function testFindByUsername() {
             $user = $this->buildUser( 'pkakelas' );
