@@ -45,8 +45,8 @@
                     [ 'type' => 'primary', 'field' => [ 'id' ] ]
                 ]
             );
-            $emptySuccess = false;
             $trueSuccess = true;
+            $emptySuccess = false;
             $noTableSuccess = false;
             try {
                 Migration::addField( 'testTable', 'testField', 'int(11) NOT NULL' ); 
@@ -66,6 +66,7 @@
             catch ( MigrationException $e ) {
                 $noTableSuccess = true; 
             }
+            Migration::dropField( 'testTable', 'testField' );
             ob_get_clean();
             $this->assertTrue( $trueSuccess, 'createField must add a field when called' );
             $this->assertTrue( $emptySuccess, 'createField must not create a field when fieldname is empty' );
