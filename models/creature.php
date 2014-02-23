@@ -29,7 +29,7 @@
                 $this->intent = new Intent( $action, $direction );
                 $this->intent->creature = $this;
             }
-            else if ( $b !== false && $c !== false ) {
+            else if ( $a !== false && $b !== false && $c !== false ) {
                 $id = $a;
                 $userid = $b;
                 $gameid = $c;
