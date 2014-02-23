@@ -1,20 +1,31 @@
 <?php
     abstract class Migration {
         protected static function migrate( $sql ) {
-            include_once '../../config/config-local.php';
-            include_once '../../models/database.php';
-            include_once '../../models/db.php';
+            $env = getEnv( 'ENVIRONMENT' );
+
+            if ( $env === false ) { 
+                $pref = "";
+                $env = 'test';
+            }
+            else {
+                $pref = "../../";
+            }
+
+            include_once $pref . 'config/config-local.php';
+            include_once $pref . 'models/database.php';
+            include_once $pref . 'models/db.php';
 
             global $config;
 
-            $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ]; 
+            $config = getConfig()[ $env ]; 
+            
             dbInit();
 
             try {
                 $res = db( $sql );
             }
             catch ( DBException $e ) {
-                die( "Migration failed. SQL query died with the following error: " . mysql_error() . "\n" );
+                throw new MigrationException( $e );
             }
             echo "Migration successful.\n";
         } 
@@ -23,7 +34,7 @@
             $sql = "ALTER TABLE
                         $table
                     ADD COLUMN
-                        `field` $description;";
+                        `$field` $description;";
             self::migrate( $sql );              
         }
     
@@ -68,14 +79,16 @@
 
 	    public static function createTable( $tableName, $fields = [], $keys = [] ) {
 		    foreach ( $fields as $field => $description ) {
-			    $attributes[] = "$field $description";
+                if ( !empty( $field ) || !empty( $description ) ) {
+                    $attributes[] = "$field $description";
+                }
 		    }
             if ( !empty( $keys ) ) {
                 foreach ( $keys as $key ) {
                     if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' || $key[ 'type' ] == 'foreign' ) {
                         $type = strtoupper( $key[ 'type' ] );
                         foreach ( $key[ 'field' ] as $field ) {
-                            $args[] = "$type KEY $field";
+                            $args[] = "$type KEY ( $field )";
                         }
                     }
                 }

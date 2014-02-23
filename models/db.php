@@ -4,7 +4,13 @@
             parent::__construct( 'Database error: ' . $error );
         }
     }
-
+    
+    class MigrationException extends Exception {
+        public function __construct( $error ) {
+            parent::__construct( 'Database error: ' . $error );
+        }
+    }
+    
     function db( $sql, $bind = [] ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
