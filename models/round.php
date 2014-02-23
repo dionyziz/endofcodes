@@ -33,18 +33,28 @@
                 $this->game = $game;
                 $gameid = $game->id;
                 $roundid = $id;
-                $creatures_info = dbSelect(
-                    'roundcreatures',
-                    [ 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ],
-                    compact( 'roundid', 'gameid' )
-                );
+                try {
+                    $creatures_info = dbSelect(
+                        'roundcreatures',
+                        [ 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ],
+                        compact( 'roundid', 'gameid' )
+                    );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 foreach ( $creatures_info as $i => $creature_info ) {
                     $id = $creature_info[ 'creatureid' ];
-                    $user_info = dbSelectOne(
-                        'creatures',
-                        [ 'userid' ],
-                        compact( 'id', 'gameid' )
-                    );
+                    try {
+                        $user_info = dbSelectOne(
+                            'creatures',
+                            [ 'userid' ],
+                            compact( 'id', 'gameid' )
+                        );
+                    }
+                    catch ( DBException $e ) {
+                        throw new ModelNotFoundException();
+                    }
                     $user = new User( $user_info[ 'userid' ] );
                     $creature = new Creature( $creature_info );
                     $creature->game = $game;
