@@ -166,32 +166,8 @@
             }
         }
 
-        protected function update() {
-            $id = $this->id;
-            $email = $this->email;
-            $dob = $this->dob;
-            $forgotpasswordtoken = $this->forgotpasswordtoken;
-            $forgotpasswordrequestcreated = $this->forgotpasswordrequestcreated;
-            $sessionid = $this->sessionid;
-            $countryid = $this->countryid;
-            $avatarid = $this->imageid;
-            if ( isset( $this->password ) ) {
-                $password = $this->password;
-            }
-            if ( isset( $this->salt ) ) {
-                $salt = $this->salt;
-            }
-
-            try {
-                $res = dbUpdate(
-                    'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordrequestcreated", "forgotpasswordtoken" ),
-                    compact( "id" )
-                );
-            }
-            catch ( DBException $e ) {
-                throw new ModelValidationException( 'email_used' );
-            }
+        protected function onUpdateError( $e ) {
+            throw new ModelValidationException( 'email_used' );
         }
 
         protected function generateSessionId() {
