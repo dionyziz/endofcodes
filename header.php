@@ -6,5 +6,5 @@
     ini_set( 'display_errors', '1' );
     date_default_timezone_set( "Europe/Athens" );
     require_once 'models/assert.php';
-    ini_set('max_execution_time', 60);
+    ini_set( 'max_execution_time', 60 );
 ?>
