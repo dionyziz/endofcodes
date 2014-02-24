@@ -21,14 +21,13 @@
 
             $grader = new Grader( $game );
             try {
-                $grader->nextRound();
+                $gameid = $grader->nextRound();
             }
             catch ( WinnerException $e ) {
                 go( 'game', 'view', [ 'id' => $e->winnerid ] );
             }
-            catch ( NextRoundException $e ) {
-                go( 'game', 'update', [ 'gameid' => $e->gameid ] );
-            }
+
+            go( 'game', 'update', compact( 'gameid' ) );
         }
         public function view( $id ) {
             $user = new User( $id );
