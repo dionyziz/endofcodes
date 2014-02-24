@@ -379,7 +379,7 @@
             $bot->sendRoundRequest( $round );
             $data = GraderSerializer::roundRequestParams( $round );
 
-            $this->assertEquals( $botbase . "round", $curlConnectionMock->url, 'RoundRequest must send a request to the URL {{botbase}}/game/{{gameid}}/round' ); 
+            $this->assertEquals( $botbase . "/round", $curlConnectionMock->url, 'RoundRequest must send a request to the URL {{botbase}}/game/{{gameid}}/round' ); 
             $this->assertEquals( 'POST', $curlConnectionMock->requestMethod, 'RoundRequest must be a POST request' );
             $this->assertTrue( $curlConnectionMock->executed, 'RoundRequest must execute curl process' );
 
