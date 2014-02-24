@@ -7,7 +7,8 @@
         public $name;
         public $target_path;
         public $ext;
-        public $userid;
+        public $user;
+        protected $userid;
         protected static $attributes = [ 'name', 'userid' ];
         protected static $tableName = 'images';
 
@@ -30,6 +31,7 @@
 
         protected function onBeforeSave() {
             $this->ext = Extention::get( $this->name );
+            $this->userid = $this->user->id;
             $this->name = basename( $this->name );
             if ( !Extention::valid( $this->ext ) ) {
                 throw new ModelValidationException( 'image_invalid' );

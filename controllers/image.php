@@ -7,12 +7,13 @@
                 throw new HTTPUnauthorizedException();
             }
             $user = $_SESSION[ 'user' ];
-            $user->image = new Image();
-            $user->image->tmp_name = $image[ 'tmp_name' ];
-            $user->image->name = $image[ 'name' ];
-            $user->image->userid = $user->id;
+            $userImage = new Image();
+            $userImage->tmp_name = $image[ 'tmp_name' ];
+            $userImage->name = $image[ 'name' ];
+            $userImage->user = $user;
+            $user->image = $userImage;
             try {
-                $user->image->save();
+                $userImage->save();
                 $user->save();
             }
             catch ( ModelValidationException $e ) {
