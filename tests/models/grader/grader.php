@@ -262,7 +262,7 @@
             $game = $this->buildGameWithUserAndCreature();
             $grader = new Grader( $game );
 
-            $this->assertTrue( isset( $grader->registeredUsers ), "Grader must get it's users from the game" );
+            $this->assertTrue( isset( $grader->registeredUsers ), "Grader must get its users from the game" );
             $this->assertTrue( isset( $grader->registeredBots ), "Grader must get its bots from the game" );
 
             $this->assertEquals( $game->users[ 1 ]->id, $grader->registeredUsers[ 1 ]->id, 'Grader must get valid users from the game' );
