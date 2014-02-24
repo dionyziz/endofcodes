@@ -2,7 +2,7 @@ End of Codes
 
 Specification
 
-**Dionysis Zindros **<[dionyziz@gmail.com](mailto:dionyziz@gmail.com)>
+**Dionysis Zindros** <[dionyziz@gmail.com](mailto:dionyziz@gmail.com)>
 
 4 - 29 January 2014
 
