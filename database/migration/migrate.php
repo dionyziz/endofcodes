@@ -86,9 +86,16 @@
             if ( !empty( $keys ) ) {
                 foreach ( $keys as $key ) {
                     if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' || $key[ 'type' ] == 'foreign' ) {
-                        $type = strtoupper( $key[ 'type' ] );
-                        foreach ( $key[ 'field' ] as $field ) {
-                            $args[] = "$type KEY ( $field )";
+                        if ( isset( $key[ 'name' ] ) ) {
+                            $fields = implode( ',', $key[ 'field' ] );
+                            $name = $key[ 'name' ];
+                            $args[] = "CONSTRAINT $name PRIMARY KEY ( $fields )"; 
+                        }
+                        else {
+                            $type = strtoupper( $key[ 'type' ] );
+                            foreach ( $key[ 'field' ] as $field ) {
+                                $args[] = "$type KEY ( $field )";
+                            }
                         }
                     }
                 }
