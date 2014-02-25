@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 ?>
 <div id="steps">
     <div div="step1" class="steps">
@@ -101,11 +101,11 @@
         $self->createSelect( 'year', '', $years_select_array );
         $countries_select_array = [ [ 'content' => 'Select Country' ] ];
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country[ 'name' ] ];
+            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
         }
         $self->createSelect( 'countryid', '', $countries_select_array );
         $self->createInput( 'submit', '', '', 'Register' );
     } );
 
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

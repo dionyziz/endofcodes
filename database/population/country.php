@@ -1,8 +1,8 @@
 <?php
-    include_once '../../config/config-local.php';
-    include_once '../../models/database.php';
-    include_once '../../models/db.php';
-    include_once 'countries_array.php';
+    require_once '../../config/config-local.php';
+    require_once '../../models/database.php';
+    require_once '../../models/db.php';
+    require_once 'countries_array.php';
 
     global $config;
 

@@ -1,5 +1,5 @@
 <?php
-    include_once 'migrate.php';
+    require_once 'migrate.php';
 
     Migration::alterField ( 
         'roundcreatures',

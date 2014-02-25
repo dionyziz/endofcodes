@@ -1,15 +1,16 @@
 <?php
-    include_once 'models/user.php';
-    include_once 'models/extentions.php';
+    require_once 'models/user.php';
+    require_once 'models/extentions.php';
 
     class Image extends ActiveRecordBase {
         public $tmp_name;
         public $name;
         public $target_path;
         public $ext;
-        public $userid;
-        protected $attributes = [ 'name', 'userid' ];
-        protected $tableName = 'images';
+        public $user;
+        protected $userid;
+        protected static $attributes = [ 'name', 'userid' ];
+        protected static $tableName = 'images';
 
         public static function findByUser( $user ) {
             return new Image( $user->avatarid );
@@ -30,6 +31,7 @@
 
         protected function onBeforeSave() {
             $this->ext = Extention::get( $this->name );
+            $this->userid = $this->user->id;
             $this->name = basename( $this->name );
             if ( !Extention::valid( $this->ext ) ) {
                 throw new ModelValidationException( 'image_invalid' );

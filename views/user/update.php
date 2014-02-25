@@ -1,5 +1,5 @@
 <?php
-    include 'views/header.php';
+    require 'views/header.php';
 
     $form = new Form( 'user', 'update' );
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong,
@@ -32,7 +32,7 @@
         ?><p>Change country</p><?php
         $countries_select_array = [ [ 'content' => 'Select Country' ] ];
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country[ 'name' ] ];
+            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
         }
         $self->createSelect( 'countryid', '', $countries_select_array );
         $self->createInput( 'submit', '', '', 'Save settings' );
@@ -53,5 +53,5 @@
         $self->createInput( 'submit', '', '', 'Delete your account' );
     } );
 
-    include 'views/footer.php';
+    require 'views/footer.php';
 ?>

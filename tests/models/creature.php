@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/creature.php';
+    require_once 'models/creature.php';
 
     class CreatureTest extends UnitTestWithFixtures {
         protected function buildCreature() {

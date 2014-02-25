@@ -7,17 +7,17 @@
     define( 'MAX_HP', 199 );
 
     class Game extends ActiveRecordBase {
-        public $id;
         public $created;
         public $width;
         public $height;
         public $rounds = [];
-        public $users;
+        public $users = []; // dictionary from userid to user
         public $creaturesPerPlayer;
         public $maxHp;
         public $grid = [ [] ];
-        protected $tableName = 'games';
-        protected $attributes = [ 'width', 'height', 'created' ];
+        public $attributesInitiated = false;
+        protected static $tableName = 'games';
+        protected static $attributes = [ 'width', 'height', 'created' ];
 
         public function __construct( $id = false ) {
             if ( $id ) {
@@ -27,27 +27,55 @@
                 $this->created = $game_info[ 'created' ];
                 $this->width = $game_info[ 'width' ];
                 $this->height = $game_info[ 'height' ];
-                $rounds = dbSelect( 'roundcreatures', [ 'roundid' ], compact( 'gameid' ) );
-                for ( $i = 0; $i < count( $rounds ); ++$i ) {
-                    $this->rounds[ $i ] = new Round( $this, $i );
+                $data = dbSelectOne( 'roundcreatures', [ 'COUNT(DISTINCT roundid) AS countrounds' ], compact( 'gameid' ) );
+                $countrounds = $data[ 'countrounds' ];
+                if ( $countrounds > 0 ) {
+                    for ( $i = 0; $i < $countrounds; ++$i ) {
+                        $this->rounds[ $i ] = new Round( $this, $i );
+                    }
+                    foreach ( $this->rounds[ 0 ]->creatures as $creature ) {
+                        $userid = $creature->user->id;
+                        if ( !isset( $this->users[ $userid ] ) ) {
+                            $this->users[ $userid ] = new User( $userid );
+                        }
+                    }
                 }
             }
             else {
                 $this->rounds = [];
+                $this->width = 0;
+                $this->height = 0;
+                $this->created = date( 'Y-m-d H:i:s' );
             }
         }
 
-        protected function onBeforeCreate() {
+        public function initiateAttributes() {
             $this->creaturesPerPlayer = rand( MIN_CREATURES, MAX_CREATURES );
             $multiply = $this->creaturesPerPlayer * count( $this->users );
             $this->width = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->height = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
             $this->maxHp = rand( MIN_HP, MAX_HP );
-            $this->created = date( 'Y-m-d H:i:s' );
+            $this->attributesInitiated = true;
+        }
+
+        protected function update() {
+            $id = $this->id;
+            $width = $this->width;
+            $height = $this->height;
+
+            dbUpdate(
+                'games',
+                compact( 'width', 'height' ),
+                compact( 'id' )
+            );
         }
 
         public function genesis() {
+            assert( $this->attributesInitiated, 'game attributes not initiated before genesis' );
+
             $this->rounds[ 0 ] = new Round();
+            $this->rounds[ 0 ]->game = $this;
+            $this->rounds[ 0 ]->id = 0;
             $id = 0;
             foreach ( $this->users as $user ) {
                 for ( $j = 0; $j < $this->creaturesPerPlayer; ++$j, ++$id ) {
@@ -74,25 +102,19 @@
             }
         }
 
-        public function botError( $round, $user, $error ) {
-            if ( !isset( $round->errors[ $user->id ] ) ) {
-                $round->errors[ $user->id ] = [];
-            }
-            $round->errors[ $user->id ][] = $error;
-        }
-
-        protected function killBot( $user, $error ) {
+        public function killBot( $user, $description ) {
             $roundid = count( $this->rounds ) - 1;
             foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
                     $creature->kill();
                 }
             }
-            $this->botError( $this->rounds[ $roundid ], $user, $error );
+
+            $this->getCurrentRound()->error( $user->id, $description );
         }
 
         public function nextRound() {
-            include_once 'models/resolution.php';
+            require_once 'models/resolution.php';
             $roundid = count( $this->rounds );
             $this->rounds[ $roundid ] = new Round( $this->rounds[ $roundid - 1 ] );
             $currentRound = $this->rounds[ $roundid ];
@@ -115,7 +137,15 @@
             foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->intent->action === ACTION_MOVE ) {
                     if ( $creature->alive ) {
-                        creatureMove( $creature );
+                        try {
+                            creatureMove( $creature );
+                        }
+                        catch ( CreatureOutOfBoundsException $e ) {
+                            $this->killBot(
+                                $creature->user,
+                                "Tried to move creature $creature->id out of map bounds."
+                            );
+                        }
                     }
                     else {
                         $roundNumber = count( $this->rounds ) - 1;
@@ -128,6 +158,7 @@
                     }
                 }
             }
+
             foreach ( $currentRound->creatures as $creature ) {
                 if ( $creature->hp <= 0 ) {
                     $creature->alive = false;
@@ -166,25 +197,14 @@
                 }
             }
         }
-
-        public function toJson() {
-            return json_encode( $this->jsonSerialize() );
-        }
-
-        public function jsonSerialize() {
-            $gameid = $this->id;
-            $W = $this->width;
-            $H = $this->height;
-            $M = $this->creaturesPerPlayer;
-            $MAX_HP = $this->maxHp;
-            $players = [];
-            foreach ( $this->users as $user ) {
-                $players[] = $user->jsonSerialize();
-            }
-            return compact( 'gameid', 'W', 'H', 'M', 'MAX_HP', 'players' );
+        public function getCurrentRound() {
+            return end( $this->rounds );
         }
     }
 
-    class GameException extends Exception {}
-    class CreatureOutOfBoundsException extends GameException {}
+    class GameException extends Exception {
+        public function __construct( $description ) {
+            parent::__construct( "Game error: $description" );
+        }
+    }
 ?>

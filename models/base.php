@@ -1,12 +1,12 @@
 <?php
     abstract class ActiveRecordBase {
-        public $id;
-        protected $exists;
+        public $id = 0;
+        public $exists;
 
         public function delete() {
             $id = $this->id;
             dbDelete(
-                $this->tableName,
+                static::$tableName,
                 compact( "id" )
             );
         }
@@ -14,15 +14,16 @@
         protected function create() {
             $this->onBeforeCreate();
             $attributes = [];
-            foreach ( $this->attributes as $attribute ) {
+            foreach ( static::$attributes as $attribute ) {
                 $attributes[ $attribute ] = $this->$attribute;
             }
+
             try {
                 $id = dbInsert(
-                    $this->tableName,
+                    static::$tableName,
                     $attributes
                 );
-                if ( !isset( $this->id ) ) {
+                if ( $this->id === 0 ) {
                     $this->id = $id;
                 }
             }
@@ -31,6 +32,19 @@
             }
             $this->exists = true;
             $this->onCreate();
+        }
+
+        protected static function arrayToCollection( $array ) {
+            $collection = [];
+            foreach ( $array as $result ) {
+                $collection[] = new static( $result[ 'id' ] );
+            }
+            return $collection;
+        }
+
+        public static function findAll() {
+            $array = dbSelect( static::$tableName );
+            return self::arrayToCollection( $array );
         }
 
         protected function onBeforeCreate() {} // override me
@@ -50,19 +64,37 @@
             $this->onSave();
         }
     }
+    
+    class ModelException extends Exception {
+        public function __construct( $description, $error = "" ) {
+            if ( !empty( $error ) ) {
+                $args = $description . ':' . $error; 
+                parent::__construct( $args );
+            }
+            else {
+                parent::__construct( $description );
+            }
+        }
+    }
 
-    class ModelNotFoundException extends Exception {
+    class ModelNotFoundException extends ModelException {
         public function __construct() {
             parent::__construct( 'Model not found' );
         }
     }
-
-    class ModelValidationException extends Exception {
+    
+    class ModelValidationException extends ModelException {
         public $error;
 
         public function __construct( $error = "" ) {
-            parent::__construct( "Model validation error: " . $error );
+            parent::__construct( "Model validation error", $error );
             $this->error = $error;
+        }
+    }
+
+    class ForgotPasswordModelInvalidTokenException extends ModelException {
+        public function __construct() {
+            parent::__construct( 'Invalid Token' );
         }
     }
 ?>

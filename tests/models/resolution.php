@@ -1,9 +1,9 @@
 <?php
-    include_once 'models/game.php';
-    include_once 'models/creature.php';
-    include_once 'models/round.php';
-    include_once 'models/intent.php';
-    include_once 'models/user.php';
+    require_once 'models/game.php';
+    require_once 'models/creature.php';
+    require_once 'models/round.php';
+    require_once 'models/intent.php';
+    require_once 'models/user.php';
 
     class ResolutionTest extends UnitTestWithFixtures {
         protected function buildGameWithUsers( $userCount ) {
@@ -207,7 +207,6 @@
             $game->nextRound();
             $newCreature1 = $game->rounds[ 1 ]->creatures[ 0 ];
             $newCreature2 = $game->rounds[ 1 ]->creatures[ 1 ];
-            $this->assertEquals( 10, $newCreature2->hp, 'A creature that is being attacked by a creature with the same user must not lose hp' );
             $this->assertEquals( 1, count( $game->rounds[ 1 ]->errors[ $creature1->user->id ] ), 'A user that tries to attack a creature of his own must get an error' );
         }
         public function testKillBot() {

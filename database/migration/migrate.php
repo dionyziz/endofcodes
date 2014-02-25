@@ -32,31 +32,31 @@
     
         public static function addField( $table, $field, $description ) {
             $sql = "ALTER TABLE
-                        $table
+                    $table
                     ADD COLUMN
-                        `$field` $description;";
-            self::migrate( $sql );              
+                    `$field` $description;";
+            self::migrate( $sql ); 
         }
-    
+ 
         public static function alterField( $table, $oldName, $newName, $description ) {
             $sql = "ALTER TABLE
-                        $table
+                    $table
                     CHANGE
-                        `$oldName` `$newName` $description;";
+                    `$oldName` `$newName` $description;";
             self::migrate( $sql );
         }
     
         public static function dropField( $table, $field ) {
             $sql = "ALTER TABLE
-                        $table
+                    $table
                     DROP COLUMN
-                        $field;";
+                    $field;";
             self::migrate( $sql );
         }
 
         public static function dropPrimaryKey( $table ) {
             $sql = "ALTER TABLE
-                        $table
+                    $table
                     DROP PRIMARY KEY;";
             self::migrate( $sql );
         } 
@@ -64,16 +64,16 @@
         public static function addPrimaryKey( $table, $name, $columns = [] ) {
             $columns = implode( ',', $columns );
             $sql = "ALTER TABLE
-                        $table 
+                    $table 
                     ADD CONSTRAINT $name PRIMARY KEY ( $columns );";
             self::migrate( $sql );
         }
 
         public static function dropIndex( $table, $name ) {
             $sql = "ALTER TABLE
-                        $table
+                    $table
                     DROP INDEX
-                        $name;";
+                    $name;";
             self::migrate( $sql );
         }
 

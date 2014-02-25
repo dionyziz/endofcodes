@@ -1,6 +1,6 @@
 <?php
-    include_once 'models/user.php';
-    include_once 'models/country.php';
+    require_once 'models/user.php';
+    require_once 'models/country.php';
 
     class UserTest extends UnitTestWithFixtures {
         public function testCreate() {
@@ -23,12 +23,12 @@
             $user->delete();
             try {
                 $user = User::findByUsername( 'pkakelas' );
-                $success = 0;
+                $success = false;
             }
             catch ( ModelNotFoundException $e ) {
-                $success = 1;
+                $success = true;
             }
-            $this->assertEquals( 1, $success, 'The user must be deleted when the $user->delete() function runs' );
+            $this->assertTrue( $success, 'The user must be deleted when the $user->delete() function runs' );
         }
         public function testPasswordChange() {
             $user = $this->buildUser( 'pkakelas' );
@@ -109,26 +109,95 @@
             $dbUser = User::findByUsername( 'pkakelas' );
             $this->assertEquals( $user->id, intval( $dbUser->id ), "findByUsername must find the correct user" );
         }
-        public function testJsonSerialize() {
-            $user = $this->buildUser( 'pkakelas' );
-
-            $this->assertTrue( method_exists( $user, 'toJson' ), 'User object must export a "toJson" function' );
-
-            $json = $user->toJson();
-            $data = json_decode( $json );
-
-            $this->assertTrue( isset( $data->username ), 'username must exist in exported JSON' ); 
-            $this->assertEquals( $user->username, $data->username, 'username must be encoded properly to JSON' );
-
-            $this->assertTrue( isset( $data->userid ), 'userid must exist in exported JSON' ); 
-            $this->assertEquals( $user->id, $data->userid, 'userid must be encoded properly to JSON' );
-        }
         public function testAuthenticationAfterRenewSessionId() {
             $user = $this->buildUser( 'pkakelas' );
 
             $user->renewSessionId();
             $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
             $this->assertTrue( $passwordSuccess, 'Password must not be changed after "renewSessionId" is run' );
+        }
+        public function testCreateForgotPasswordLink() {
+            $user = $this->buildUser( 'pkakelas' );
+            
+            $link = $user->createForgotPasswordLink();
+            $this->assertTrue( isset( $user->forgotpasswordtoken ), 'CreateForgotPasswordLink must save the token to $user->forgotpasswordtoken' );
+            $this->assertTrue( !empty( $user->forgotpasswordtoken ), '$user->forgotpasswordtokeni must not be empty' );
+            $this->assertTrue( isset( $user->forgotpasswordrequestcreated ), 'CreateForgotPasswordLink must save the time it created the link to $user->forgotpasswordrequestcreated' );
+        }
+        public function testRevokePasswordCheck() {
+            $user = $this->buildUser( 'pkakelas' );
+            
+            $user->createForgotPasswordLink();
+            try {
+                $user->revokePasswordCheck( $user->forgotpasswordtoken );
+                $trueSuccess = true;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+                $trueSuccess = false; 
+            }
+            try {
+                $user->revokePasswordCheck( 'dsafasfjsakf21ekjwlrfhkl321jhl' );
+                $falseSuccess = false;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+                $falseSuccess = true; 
+            }
+            try {
+                $user->revokePasswordCheck( '' );
+                $emptySuccess = false;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+                $emptySuccess = true; 
+            }
+            $oldToken = $user->forgotpasswordtoken;
+            $user->createforgotpasswordlink();
+            try {
+                $user->revokePasswordCheck( $oldToken );
+                $oldTokenSuccess = false;
+            } 
+            catch ( ForgotPasswordModelInvalidTokenException $e ) {
+                $oldTokenSuccess = true; 
+            }
+            $user->forgotpasswordrequestcreated = time() - 60 * 24 * 2; 
+            try {
+                $user->revokePasswordCheck( $user->forgotpasswordtoken );
+                $expiredSuccess = false;
+            }
+            catch ( ModelValidationException $e ) {
+                $expiredSuccess = true;
+            }
+            $this->assertTrue( $trueSuccess, 'revokePasswordCheck should validate correct tokens' );
+            $this->assertTrue( $falseSuccess, 'revokePasswordCheck should not validate invalid tokens' );
+            $this->assertTrue( $emptySuccess, 'revokePasswordCheck should not validate empty tokens' );
+            $this->assertTrue( $oldTokenSuccess, 'revokePasswordCheck should not validate with old tokens' );
+            $this->assertTrue( $expiredSuccess, 'revokePasswordCheck should not validate when request is expired' );
+        }
+        public function testPasswordValidate() {
+            $user = $this->buildUser( 'pkakelas' );
+            try {
+                $user->passwordValidate( 'Bob and Alice' );
+                $trueSuccess = true;
+            } 
+            catch ( ModelValidationException $e ) {
+                $trueSuccess = false;
+            } 
+            try {
+                $user->passwordValidate( '' );
+                $emptySuccess = false;
+            }
+            catch ( ModelValidationException $e ) {
+                $emptySuccess = true;
+            } 
+            try {
+                $user->passwordValidate( 'Bob' ); 
+                $smallSuccess = false;
+            }
+            catch ( ModelValidationException $e ) {
+                $smallSuccess = true;
+            } 
+            $this->assertTrue( $trueSuccess, 'passwordValidate should validate the default password that we have set' );
+            $this->assertTrue( $emptySuccess, 'passwordValidate should not validate empty passwords' );
+            $this->assertTrue( $smallSuccess, 'passwordValidate should not validate too small passwords' );
         }
     }
 

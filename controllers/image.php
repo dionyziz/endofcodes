@@ -1,18 +1,19 @@
 <?php
     class ImageController extends ControllerBase {
         public function create( $image ) {
-            include_once 'models/image.php';
-            include_once 'models/extentions.php';
+            require_once 'models/image.php';
+            require_once 'models/extentions.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = $_SESSION[ 'user' ];
-            $user->image = new Image();
-            $user->image->tmp_name = $image[ 'tmp_name' ];
-            $user->image->name = $image[ 'name' ];
-            $user->image->userid = $user->id;
+            $userImage = new Image();
+            $userImage->tmp_name = $image[ 'tmp_name' ];
+            $userImage->name = $image[ 'name' ];
+            $userImage->user = $user;
+            $user->image = $userImage;
             try {
-                $user->image->save();
+                $userImage->save();
                 $user->save();
             }
             catch ( ModelValidationException $e ) {

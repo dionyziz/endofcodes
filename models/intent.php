@@ -14,7 +14,7 @@
             'NORTH' => DIRECTION_NORTH,
             'EAST' => DIRECTION_EAST,
             'SOUTH' => DIRECTION_SOUTH,
-            'WEST' => DIRECTION_wEST
+            'WEST' => DIRECTION_WEST
         ];
         if ( isset( $directionMap[ $direction ] ) ) {
             return $directionMap[ $direction ];

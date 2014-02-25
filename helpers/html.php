@@ -1,5 +1,5 @@
 <?php
-    include_once 'models/formtoken.php';
+    require_once 'models/formtoken.php';
     class Form {
         protected $resource;
         protected $method;
@@ -77,6 +77,10 @@
                     ?>checked="yes"<?php
                 }
             ?> /></p><?php
+        }
+
+        public function createSubmit( $value ) {
+            $this->createInput( 'submit', '', '', $value );
         }
 
         public function createSelect( $name = '', $id = '', $option_array ) {
