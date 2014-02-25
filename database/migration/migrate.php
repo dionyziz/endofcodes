@@ -1,6 +1,7 @@
 <?php
     abstract class Migration {
         protected static function migrate( $sql ) {
+            global $config;
             $env = getEnv( 'ENVIRONMENT' );
 
             if ( $env === false ) { 
@@ -15,10 +16,8 @@
             include_once $pref . 'models/database.php';
             include_once $pref . 'models/db.php';
 
-            global $config;
 
             $config = getConfig()[ $env ]; 
-            
             dbInit();
 
             try {
@@ -34,7 +33,7 @@
             $sql = "ALTER TABLE
                     $table
                     ADD COLUMN
-                    `$field` $description;";
+                    $field $description;";
             self::migrate( $sql ); 
         }
  
@@ -42,7 +41,7 @@
             $sql = "ALTER TABLE
                     $table
                     CHANGE
-                    `$oldName` `$newName` $description;";
+                    $oldName $newName $description;";
             self::migrate( $sql );
         }
     
@@ -64,7 +63,7 @@
         public static function addPrimaryKey( $table, $name, $columns = [] ) {
             $columns = implode( ',', $columns );
             $sql = "ALTER TABLE
-                    $table 
+                    $table
                     ADD CONSTRAINT $name PRIMARY KEY ( $columns );";
             self::migrate( $sql );
         }

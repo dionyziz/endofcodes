@@ -36,19 +36,10 @@
         }
         public function testCreateField() {
             ob_start();
-            Migration::createTable( 
-                'testTable', 
-                [
-                    'id' => 'int(11) NOT NULL AUTO_INCREMENT'
-                ],
-                [   
-                    [ 'type' => 'primary', 'field' => [ 'id' ] ]
-                ]
-            );
             $trueSuccess = true;
             $emptySuccess = $noTableSuccess = false;
             try {
-                Migration::addField( 'testTable', 'testField', 'int(11) NOT NULL' ); 
+                Migration::addField( 'testTable', 'test1', 'int(11) NOT NULL' ); 
             }
             catch ( MigrationException $e ) {
                 $trueSuccess = false; 
@@ -65,7 +56,7 @@
             catch ( MigrationException $e ) {
                 $noTableSuccess = true; 
             }
-            Migration::dropField( 'testTable', 'testField' );
+            Migration::dropField( 'testTable', 'test1' );
             ob_get_clean();
             $this->assertTrue( $trueSuccess, 'createField must add a field when called' );
             $this->assertTrue( $emptySuccess, 'createField must not create a field when fieldname is empty' );
@@ -75,13 +66,13 @@
             ob_start();
             Migration::addField( 
                 'testTable', 
-                'field',
+                'test2',
                 'int(11) NOT NULL'
             );
             $trueSuccess = true;
             $syntaxSuccess = $noTableSuccess = false;
             try {
-                Migration::alterField( 'testTable', 'field', 'testfield', 'int(11) NOT NULL' );
+                Migration::alterField( 'testTable', 'test2', 'testnew2', 'int(11) NOT NULL' );
             }
             catch ( MigrationException $e ) {
                 $trueSuccess = false;
@@ -99,6 +90,7 @@
                 $noTableSuccess = true;
             }
             ob_get_clean();
+            Migration::dropField( 'testTable', 'testnew2' );
             $this->assertTrue( $trueSuccess, 'alterField must alter a field when called' );
             $this->assertTrue( $syntaxSuccess, 'alterField must not create a field when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'alterField must return an error when table not exists' );
@@ -107,7 +99,7 @@
             ob_start();
             Migration::addField( 
                 'testTable', 
-                'field',
+                'test3',
                 'int(11) NOT NULL'
             );
             $trueSuccess = true;
@@ -119,13 +111,13 @@
                 $syntaxSuccess = true;
             }
             try {
-                Migration::dropField( 'table', 'field' );
+                Migration::dropField( 'table', 'test3' );
             }
             catch ( MigrationException $e ) {
                 $noTableSuccess = true;
             }
             try {
-                Migration::dropField( 'testTable', 'field' );
+                Migration::dropField( 'testTable', 'test3' );
             }
             catch ( MigrationException $e ) {
                 $trueSuccess = false; 
