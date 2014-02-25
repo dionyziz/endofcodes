@@ -89,8 +89,8 @@
             catch ( MigrationException $e ) {
                 $noTableSuccess = true;
             }
-            ob_get_clean();
             Migration::dropField( 'testTable', 'testnew2' );
+            ob_get_clean();
             $this->assertTrue( $trueSuccess, 'alterField must alter a field when called' );
             $this->assertTrue( $syntaxSuccess, 'alterField must not create a field when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'alterField must return an error when table not exists' );

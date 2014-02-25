@@ -26,11 +26,20 @@
             catch ( DBException $e ) {
                 throw new MigrationException( $e );
             }
-            echo "Migration successful.\n";
         } 
-    
+        
+        public static function run( $sql ) {
+            try {
+                self::migrate( $sql );
+            }
+            catch ( MigrationException $e ) {
+                throw $e;
+            }
+            echo "Migration successful.\n"; 
+        }
+
         public static function addField( $table, $field, $description ) {
-            self::migrate( "ALTER TABLE
+            self::run( "ALTER TABLE
                 $table
                 ADD COLUMN
                 $field $description;"
@@ -38,7 +47,7 @@
         }
  
         public static function alterField( $table, $oldName, $newName, $description ) {
-            self::migrate(
+            self::run(
                 "ALTER TABLE
                 $table
                 CHANGE
@@ -47,7 +56,7 @@
         }
     
         public static function dropField( $table, $field ) {
-            self::migrate(
+            self::run(
                 "ALTER TABLE
                 $table
                 DROP COLUMN
@@ -56,7 +65,7 @@
         }
 
         public static function dropPrimaryKey( $table ) {
-            self::migrate(
+            self::run(
                 "ALTER TABLE
                 $table
                 DROP PRIMARY KEY;"
@@ -65,7 +74,7 @@
 
         public static function addPrimaryKey( $table, $name, $columns = [] ) {
             $columns = implode( ',', $columns );
-            self::migrate(
+            self::run(
                 "ALTER TABLE
                 $table
                 ADD CONSTRAINT $name PRIMARY KEY ( $columns );"
@@ -73,7 +82,7 @@
         }
 
         public static function dropIndex( $table, $name ) {
-            self::migrate(
+            self::run(
                 "ALTER TABLE
                 $table
                 DROP INDEX
@@ -106,7 +115,7 @@
                 $attributes = array_merge( $attributes, $args );
             } 
             $attributes = implode( ',', $attributes );
-            self::migrate(
+            self::run(
                 "CREATE TABLE IF NOT EXISTS
                 $tableName (
                     $attributes
