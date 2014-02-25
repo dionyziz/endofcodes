@@ -20,6 +20,15 @@
 
             $this->assertEquals( 1, $model->id, 'The first model must have an id of 1' );
         }
+        public function testUpdate() {
+            $model = new Model();
+            $model->save();
+
+            $model->id = 10;
+            $model->save();
+
+            $this->assertEquals( 10, $model->id, 'Id must be updated' );
+        }
         public function tearDown() {
             db( 'DROP TABLE models' );
         }
