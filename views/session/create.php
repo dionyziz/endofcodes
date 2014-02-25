@@ -25,13 +25,13 @@
         $self->createInput( 'password', 'password', 'password' );
         $self->createLabel( 'persistent', 'Remember me' );
         $self->createInput( 'checkbox', 'persistent', 'persistent', '', true );
-        ?><p><a href="">Forgot password?</a></p><?php
+        ?><p><a href="forgotpasswordrequest/create">Forgot password?</a></p><?php
         $self->createInput( 'submit', '', '', 'Login' );
     } );
 ?>
 </div>
 
-<p><a href="index.php?resource=user&amp;method=create">Don't have an account?</a></p>
+<p><a href="user/create">Don't have an account?</a></p>
 
 <?php
     require 'views/footer.php';
