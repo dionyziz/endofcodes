@@ -11,12 +11,20 @@
             );
         }
 
-        protected function create() {
-            $this->onBeforeCreate();
+        protected function findAttributes() {
             $attributes = [];
             foreach ( static::$attributes as $attribute ) {
-                $attributes[ $attribute ] = $this->$attribute;
+                if ( isset( $this->$attribute ) ) {
+                    $attributes[ $attribute ] = $this->$attribute;
+                }
             }
+
+            return $attributes;
+        }
+
+        protected function create() {
+            $this->onBeforeCreate();
+            $attributes = $this->findAttributes();
 
             try {
                 $id = dbInsert(
@@ -34,6 +42,25 @@
             $this->onCreate();
         }
 
+        protected function update() {
+            $this->onBeforeUpdate();
+            $attributes = $this->findAttributes();
+            $id = $this->id;
+
+            try {
+                dbUpdate(
+                    static::$tableName,
+                    $attributes,
+                    compact( 'id' )
+                );
+            }
+            catch ( DBException $e ) {
+                $this->onUpdateError( $e );
+            }
+
+            $this->onUpdate();
+        }
+
         protected static function arrayToCollection( $array ) {
             $collection = [];
             foreach ( $array as $result ) {
@@ -47,12 +74,6 @@
             return self::arrayToCollection( $array );
         }
 
-        protected function onBeforeCreate() {} // override me
-        protected function onCreate() {} // override me
-        protected function onCreateError( $e ) {} // override me
-        protected function onBeforeSave() {} // override me
-        protected function onSave() {} // override me
-
         public function save() {
             $this->onBeforeSave();
             if ( $this->exists ) {
@@ -63,6 +84,15 @@
             }
             $this->onSave();
         }
+
+        protected function onBeforeCreate() {} // override me
+        protected function onCreate() {} // override me
+        protected function onCreateError( $e ) {} // override me
+        protected function onBeforeUpdate() {} // override me
+        protected function onUpdate() {} // override me
+        protected function onUpdateError( $e ) {} // override me
+        protected function onBeforeSave() {} // override me
+        protected function onSave() {} // override me
     }
     
     class ModelException extends Exception {
