@@ -40,16 +40,11 @@
                 );
                 foreach ( $creatures_info as $i => $creature_info ) {
                     $id = $creature_info[ 'creatureid' ];
-                    try {
-                        $user_info = dbSelectOne(
-                            'creatures',
-                            [ 'userid' ],
-                            compact( 'id', 'gameid' )
-                        );
-                    }
-                    catch ( DBException $e ) {
-                        throw new ModelNotFoundException();
-                    }
+                    $user_info = dbSelectOne(
+                        'creatures',
+                        [ 'userid' ],
+                        compact( 'id', 'gameid' )
+                    );
                     $user = new User( $user_info[ 'userid' ] );
                     $creature = new Creature( $creature_info );
                     $creature->game = $game;
