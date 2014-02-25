@@ -39,35 +39,36 @@
         }
 
         public static function addField( $table, $field, $description ) {
-            self::run( "ALTER TABLE
-                $table
+            self::run( 
+                "ALTER TABLE
+                    $table
                 ADD COLUMN
-                $field $description;"
+                    $field $description;"
             );
         }
  
         public static function alterField( $table, $oldName, $newName, $description ) {
             self::run(
                 "ALTER TABLE
-                $table
+                    $table
                 CHANGE
-                $oldName $newName $description;"
+                    $oldName $newName $description;"
             );
         }
     
         public static function dropField( $table, $field ) {
             self::run(
                 "ALTER TABLE
-                $table
+                    $table
                 DROP COLUMN
-                $field;"
+                    $field;"
             );
         }
 
         public static function dropPrimaryKey( $table ) {
             self::run(
                 "ALTER TABLE
-                $table
+                    $table
                 DROP PRIMARY KEY;"
             );
         } 
@@ -76,7 +77,7 @@
             $columns = implode( ',', $columns );
             self::run(
                 "ALTER TABLE
-                $table
+                    $table
                 ADD CONSTRAINT $name PRIMARY KEY ( $columns );"
             );
         }
@@ -84,9 +85,9 @@
         public static function dropIndex( $table, $name ) {
             self::run(
                 "ALTER TABLE
-                $table
+                    $table
                 DROP INDEX
-                $name;"
+                    $name;"
             );
         }
 
@@ -117,9 +118,9 @@
             $attributes = implode( ',', $attributes );
             self::run(
                 "CREATE TABLE IF NOT EXISTS
-                $tableName (
-                    $attributes
-                )
+                    $tableName (
+                        $attributes
+                    )
                 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
             );
 	    }
