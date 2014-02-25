@@ -139,7 +139,7 @@
     
     class MigrationException extends Exception {
         public function __construct( $error ) {
-            parent::__construct( 'Database error: ' . $error );
+            parent::__construct( 'Migration error: ' . $error );
         }
     }
 ?>
