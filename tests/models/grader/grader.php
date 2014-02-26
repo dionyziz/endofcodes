@@ -155,11 +155,7 @@
             }
             $grader->initiate();
             $grader->createGame();
-            try {
-                $grader->nextRound();
-            }
-            catch ( NextRoundException $e ) {
-            }
+            $grader->nextRound();
 
             $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
             $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
@@ -225,11 +221,7 @@
             ] ) );
 
             $grader->registeredBots = [ $bot1, $bot2 ];
-            try {
-                $grader->nextRound();
-            }
-            catch ( NextRoundException $e ) {
-            }
+            $grader->nextRound();
 
             $this->assertTrue( isset( $game->rounds[ 1 ] ), 'A new round must be created after nextRound is called' );
             $this->assertTrue( is_object( $game->rounds[ 1 ] ), 'The new round must be an object' );
