@@ -16,11 +16,11 @@ It will also be used as a base for the development of the project.
 
 # Engineering team
 
-The project will be implemented by an engineering team led by **Dionysis Zindros**, software engineer at Twitter, and two programmers **Vitalis Salis **and **Dimitris Lamprinos**, software engineering students.
+The project will be implemented by an engineering team led by **Dionysis Zindros**, software engineer at Twitter, and two programmers **Vitalis Salis** and **Dimitris Lamprinos**, software engineering students.
 
 # Workflow
 
-The game consists of two different end-points. The core of the game is the **grader end-point **which allows players to actually play the game through a RESTful API. The game also exhibits a **web app **in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
+The game consists of two different end-points. The core of the game is the **grader end-point** which allows players to actually play the game through a RESTful API. The game also exhibits a **web app** in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
 
 # Rules of the game
 
@@ -34,7 +34,7 @@ Each game is associated with a unique **gameid**. The gameid is a positive integ
 
 ## Game map
 
-Each game is played on a **2D WxH **grid where W and H are integers. The coordinates of the game are two **zero-based integers **in the form (x, y).
+Each game is played on a **2D WxH** grid where W and H are integers. The coordinates of the game are two **zero-based integers** in the form (x, y).
 
 A pair (x, y) is called a **map location** if:
 
@@ -174,7 +174,7 @@ It is possible that noone is the winner of a particular game. This can happen if
 
 # Bot API
 
-The **Bot API **is a RESTful HTTP API that the bots use to communicate with the grader. Each bot is implemented as an Internet-accesssible HTTP server with an end-point that is used to communicate with the grader. The grader performs HTTP requests to the bot, at its discretion, to inquire about the bot’s intents, and to inform the bot about the world state.
+The **Bot API** is a RESTful HTTP API that the bots use to communicate with the grader. Each bot is implemented as an Internet-accesssible HTTP server with an end-point that is used to communicate with the grader. The grader performs HTTP requests to the bot, at its discretion, to inquire about the bot’s intents, and to inform the bot about the world state.
 
 The bots run on the programmers’ machines. This is intentional, allowing programmers to cooperate behind-the-scenes, scale their hardware, or compete using methods other than simply improving their artificial intelligence code.
 
@@ -302,7 +302,7 @@ The HTTP POST request contains the following variables:
 
 The map array is an array that contains a list of creatures. Each creature is a dictionary with the following keys:
 
-1. **creature****id**: Integer; the id of the creature; must be unique across creatures within an individual game
+1. **creatureid**: Integer; the id of the creature; must be unique across creatures within an individual game
 
 2. **userid**: Integer; the userid of the owner of the creature
 
