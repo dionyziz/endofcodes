@@ -61,11 +61,12 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
                 }
+                $this->boturl = $user_info[ 'boturl' ];
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );

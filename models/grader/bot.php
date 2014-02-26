@@ -117,7 +117,7 @@
         public function sendRoundRequest( Round $round ) {
             $gameid = $round->game->id;
             try {
-                $ch = $this->httpRequest( "game/$gameid/round", 'create', GraderSerializer::roundRequestParams( $round ) );
+                $ch = $this->httpRequest( "round", 'create', GraderSerializer::roundRequestParams( $round ) );
             }
             catch ( CurlException $e ) {
                 $this->reportError( $e->error );

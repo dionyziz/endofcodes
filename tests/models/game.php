@@ -67,6 +67,17 @@
             $game->genesis();
             $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
+
+            $caught = false;
+            try {
+                $round = new Round( $game, 0 );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+
+            $this->assertFalse( $caught, 'A round must be created in the database after genesis' );
+
             $userCountCreatures = [];
             // start from 1 because user's id starts from 1
             for ( $i = 1; $i <= count( $game->users ); ++$i ) {
@@ -77,7 +88,16 @@
                 for ( $j = 0; $j < $game->height; ++$j ) {
                     if ( isset( $game->grid[ $i ][ $j ] ) ) {
                         $creature = $game->grid[ $i ][ $j ];
+                        $caught = false;
+                        try {
+                            $dbCreature = new Creature( $creature->id, $creature->user->id, $creature->game->id );
+                        }
+                        catch ( ModelNotFoundException $e ) {
+                            $caught = true;
+                        }
+                        $this->assertFalse( $caught, 'The creature must be created in the database after genesis' );
                         ++$userCountCreatures[ $creature->user->id ];
+                        $this->assertTrue( $creature->id >= 1, "Creatures ids must start from 1" );
                         $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
                         $this->assertTrue( $creature->locationy >= 0, "A creature's y coordinate must be non-negative" );
                         $this->assertTrue( $creature->locationx < $game->width, "A creature's x coordinate must be inside the grid" );

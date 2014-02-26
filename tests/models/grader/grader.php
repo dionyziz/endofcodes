@@ -241,6 +241,41 @@
             $this->assertEquals( 2, $newCreature2->locationx, 'A creature must move in x axis if it is specified' );
             $this->assertEquals( 3, $newCreature2->locationy, 'A creature must move in y axis if it is specified' );
         }
+        protected function buildGameWithUserAndCreature() {
+            $game = new Game();
+            $game->save();
+            $game->users = [ 1 => $this->buildUser( 'vitsalis' ) ];
+            $game->rounds[ 0 ] = new Round();
+            $game->rounds[ 0 ]->creatures = [ 1 => $this->buildCreature( 1, 1, 1, $game->users[ 1 ] ) ];
+
+            return $game;
+        }
+        public function testFindBotsFromGame() {
+            $game = $this->buildGameWithUserAndCreature();
+            $grader = new Grader( $game );
+
+            $this->assertTrue( isset( $grader->registeredUsers ), "Grader must get its users from the game" );
+            $this->assertTrue( isset( $grader->registeredBots ), "Grader must get its bots from the game" );
+
+            $this->assertEquals( $game->users[ 1 ]->id, $grader->registeredUsers[ 1 ]->id, 'Grader must get valid users from the game' );
+            $this->assertEquals( $game->users[ 1 ]->id, $grader->registeredBots[ 0 ]->user->id, 'Grader must get valid bots from the game' );
+        }
+        public function testFindWinner() {
+            $game = $this->buildGameWithUserAndCreature();
+            $grader = new Grader( $game );
+
+            $caught = false;
+            try {
+                $grader->nextRound();
+            }
+            catch ( WinnerException $e ) {
+                $caught = true;
+                $winnerid = $e->winnerid;
+            }
+
+            $this->assertTrue( $caught, 'A WinnerException must be caught if there is only one user with alive creatures on a round' );
+            $this->assertEquals( $grader->registeredUsers[ 1 ]->id, $winnerid, 'The winner must be the one whose creatures are still alive' );
+        }
     }
     return new GraderTest();
 ?>
