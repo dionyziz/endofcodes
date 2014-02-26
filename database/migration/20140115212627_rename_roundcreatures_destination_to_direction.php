@@ -1,10 +1,10 @@
 <?php
     require_once 'migrate.php';
 
-    Migration::addField( 
+    Migration::alterField( 
         'roundcreatures', 
         'destination', 
         'direction', 
-        'NUM("NONE","NORTH","EAST","SOUTH","WEST") COLLATE utf8_unicode_ci NOT NULL'
+        'ENUM("NONE","NORTH","EAST","SOUTH","WEST") COLLATE utf8_unicode_ci NOT NULL'
     );
 ?>

@@ -1,6 +1,6 @@
 <?php
     require_once 'migrate.php';
-	
+
     Migration::createTable( 
 		'users', 
         [

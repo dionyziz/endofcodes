@@ -91,12 +91,12 @@
             );
         }
 
-	    public static function createTable( $tableName, $fields = [], $keys = [] ) {
-		    foreach ( $fields as $field => $description ) {
+        public static function createTable( $tableName, $fields = [], $keys = [] ) {
+            foreach ( $fields as $field => $description ) {
                 if ( !empty( $field ) || !empty( $description ) ) {
                     $attributes[] = "$field $description";
                 }
-		    }
+            }
             if ( !empty( $keys ) ) {
                 foreach ( $keys as $key ) {
                     if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' || $key[ 'type' ] == 'foreign' ) {
@@ -107,9 +107,7 @@
                         }
                         else {
                             $type = strtoupper( $key[ 'type' ] );
-                            foreach ( $key[ 'field' ] as $field ) {
-                                $args[] = "$type KEY ( $field )";
-                            }
+                            $args[] = "$type KEY(" . implode( ",", $key[ 'field' ] ) . ")";
                         }
                     }
                 }
@@ -123,6 +121,6 @@
                     )
                 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;"
             );
-	    }
+        }
     }
 ?>
