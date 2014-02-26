@@ -129,8 +129,6 @@
                     $error->save();
                 }
             }
-
-            return $this->game->id;
         }
     }
 

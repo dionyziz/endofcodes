@@ -21,7 +21,7 @@
 
             $grader = new Grader( $game );
             try {
-                $gameid = $grader->nextRound();
+                $grader->nextRound();
             }
             catch ( WinnerException $e ) {
                 go( 'game', 'view', [ 'id' => $e->winnerid ] );
