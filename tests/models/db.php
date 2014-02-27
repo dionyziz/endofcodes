@@ -20,6 +20,17 @@
 
             $this->assertFalse( $caught, "A DBException must not be caught if the fields parameter is empty" );
         }
+        public function testDbSelectNoFields() {
+            $caught = false;
+            try {
+                dbSelect( 'models' );
+            }
+            catch ( DBException $e ) {
+                $caught = true;
+            }
+
+            $this->assertFalse( $caught, "A DBException must not be caught if the only parameter we got is table" );
+        }
         public function tearDown() {
             db( 'DROP TABLE models' );
         }

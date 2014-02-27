@@ -214,6 +214,15 @@
             $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
             $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 2 ][ 0 ]->id, 'The ratings must contain the valid players' );
         }
+        public function testGetLastGame() {
+            $game = new Game();
+            $game->save();
+
+            $dbGame = Game::getLastGame();
+
+            $this->assertSame( $game->id, $dbGame->id, "The gameid that getLastGame returns must be the same as the last game's id" );
+            $this->assertEquals( $game->created, $dbGame->created, "The game created that getLastGame returns must be the same as the last game's created" );
+        }
     }
 
     return new GameTest();

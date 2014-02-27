@@ -30,6 +30,12 @@
             return new Game( $game[ 'id' ] );
         }
 
+        public static function getLastGame() {
+            $game = dbSelect( 'games', [ 'id' ], [], 'created ASC', 1 );
+
+            return new Game( $game[ 0 ][ 'id' ] );
+        }
+
         public function __construct( $id = false ) {
             if ( $id ) {
                 $this->exists = true;

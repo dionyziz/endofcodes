@@ -60,14 +60,20 @@
         return mysql_affected_rows();
     }
 
-    function dbSelect( $table, $select = [ "*" ], $where = [] ) {
+    function dbSelect( $table, $select = [ "*" ], $where = [], $orderBy = false, $limit = false ) {
         $fields = [];
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
         $sql =  'SELECT ' . implode( ",", $select ) . ' FROM ' . $table;
         if ( !empty( $where ) ) {
-            $sql = $sql . ' WHERE ' . implode( " AND ", $fields );
+            $sql .= ' WHERE ' . implode( " AND ", $fields );
+        }
+        if ( $orderBy !== false ) {
+            $sql .= ' ORDER BY ' . $orderBy;
+        }
+        if ( $limit !== false ) {
+            $sql .= ' LIMIT ' . $limit;
         }
         return dbArray(
             $sql,
