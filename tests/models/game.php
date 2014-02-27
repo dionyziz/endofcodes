@@ -146,6 +146,74 @@
 
             $this->assertEquals( 1, $game->id, 'Game id must be 1 when the first game is created' );
         }
+        public function testFindByDatetime() {
+            $game = $this->buildGame();
+            $datetime = $game->created;
+            $game->initiateAttributes();
+            $game->save();
+            $dbGame = Game::findByDatetime( $datetime );
+
+            $this->assertSame( $game->id, $dbGame->id, 'gameid must be the same during creation' );
+            $this->assertSame( $game->height, $dbGame->height, 'game height must be the same during creation' );
+            $this->assertSame( $game->width, $dbGame->width, 'game width must be the same during creation' );
+            $this->assertEquals( $game->created, $dbGame->created, 'game created must be the same during creation' );
+        }
+        protected function buildGameWithRoundAndCreatures() {
+            $user1 = $this->buildUser( 'vitsalis' );
+            $user2 = $this->buildUser( 'vitsalissister' );
+            $user3 = $this->buildUser( 'vitsalissisterssecondcousin' );
+
+            $creature1 = $this->buildCreature( 1, 1, 1, $user1 );
+            $creature2 = $this->buildCreature( 2, 2, 2, $user2 );
+            $creature3 = $this->buildCreature( 3, 3, 3, $user3 );
+
+            $round1 = new Round();
+            $round1->id = 0;
+            $round1->creatures = [ 1 => $creature1, 2 => $creature2, 3 => $creature3 ];
+
+            $creature2Clone = clone $creature2;
+            $creature3Clone = clone $creature3;
+            $creature2Clone->alive = false;
+            $creature3Clone->alive = false;
+            $round2 = new Round();
+            $round2->id = 1;
+            $round2->creatures = [ 1 => $creature1, 2 => $creature2Clone, 3 => $creature3Clone ];
+
+            $game = new Game();
+            $game->users = [ 1 => $user1, 2 => $user2, 3 => $user3 ];
+            $game->rounds = [ 0 => $round1, 1 => $round2 ];
+
+            return $game;
+        }
+        public function testGetGlobalRatings() {
+            $game = $this->buildGameWithRoundAndCreatures();
+
+            $ratings = $game->getGlobalRatings();
+
+            $this->assertEquals( 1, count( $ratings[ 1 ] ), 'Only one player must be in the first place' );
+            $this->assertEquals( 2, count( $ratings[ 2 ] ), 'All the players that were defeated on the last round must go to the second place' );
+
+            $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 2 ]->id, $ratings[ 2 ][ 0 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 2 ][ 1 ]->id, 'The ratings must contain the valid players' );
+        }
+        public function testGetCountryRatings() {
+            $game = $this->buildGameWithRoundAndCreatures();
+            $country1 = $this->buildCountry( 'mycountry1', 'niceshortnamebrah' );
+            $country2 = $this->buildCountry( 'notcountry1', 'thanks' );
+
+            $game->users[ 1 ]->country = $country1;
+            $game->users[ 2 ]->country = $country2;
+            $game->users[ 3 ]->country = $country1;
+
+            $ratings = $game->getCountryRatings( $country1 );
+
+            $this->assertEquals( 1, count( $ratings[ 1 ] ), 'Only one player must be in the first place' );
+            $this->assertEquals( 1, count( $ratings[ 2 ] ), 'All the players that were defeated on the last round must go to the second place' );
+
+            $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 2 ][ 0 ]->id, 'The ratings must contain the valid players' );
+        }
     }
 
     return new GameTest();

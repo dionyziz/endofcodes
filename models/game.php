@@ -19,6 +19,17 @@
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
+        public static function findByDatetime( $datetime ) {
+            $created = $datetime;
+            try {
+                $game = dbSelectOne( 'games', [ 'id' ], compact( 'created' ) );
+            }
+            catch ( DBException $e ) {
+                throw new ModelNotFoundException();
+            }
+            return new Game( $game[ 'id' ] );
+        }
+
         public function __construct( $id = false ) {
             if ( $id ) {
                 $this->exists = true;
@@ -58,16 +69,40 @@
             $this->attributesInitiated = true;
         }
 
-        protected function update() {
-            $id = $this->id;
-            $width = $this->width;
-            $height = $this->height;
+        public function getGlobalRatings() {
+            $ratings = [];
+            $found = [];
 
-            dbUpdate(
-                'games',
-                compact( 'width', 'height' ),
-                compact( 'id' )
-            );
+            for ( $i = count( $this->rounds ) - 1, $position = 0; $i >= 0; --$i ) {
+                $newUsers = [];
+                foreach ( $this->rounds[ $i ]->creatures as $creature ) {
+                    if ( $creature->alive && !isset( $found[ $creature->user->id ] ) ) {
+                        $newUsers[] = $creature->user;
+                        $found[ $creature->user->id ] = true;
+                    }
+                }
+                if ( !empty( $newUsers ) ) {
+                    ++$position;
+                    $ratings[ $position ] = $newUsers;
+                }
+            }
+            return $ratings;
+        }
+
+        public function getCountryRatings( $country ) {
+            $ratings = $this->getGlobalRatings();
+            $countryRatings = [];
+
+            foreach ( $ratings as $position => $users ) {
+                $validUsers = [];
+                foreach ( $users as $user ) {
+                    if ( $user->country->id === $country->id ) {
+                        $validUsers[] = $user;
+                    }
+                }
+                $countryRatings[ $position ] = $validUsers;
+            }
+            return $countryRatings;
         }
 
         public function genesis() {
