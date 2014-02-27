@@ -16,11 +16,11 @@ It will also be used as a base for the development of the project.
 
 # Engineering team
 
-The project will be implemented by an engineering team led by **Dionysis Zindros**, software engineer at Twitter, and two programmers **Vitalis Salis** and **Dimitris Lamprinos**, software engineering students.
+The project will be implemented by an engineering team led by **Dionysis Zindros**, software engineering student at the National Technical University of Athens, and two programmers **Vitalis Salis** and **Dimitris Lamprinos**, software engineering students.
 
 # Workflow
 
-The game consists of two different end-points. The core of the game is the **grader end-point** which allows players to actually play the game through a RESTful API. The game also exhibits a **web app** in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
+The game consists of two different end-points. The core of the game is the **grader app** which allows players to actually play the game through a RESTful API. The game also exhibits a **web app** in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
 
 # Rules of the game
 
@@ -46,7 +46,7 @@ x, y ∈ ℕ
 
 A map location (x’, y’) is called a **neighbouring map location** to (x, y) if (x’, y’) is a map location and:
 
-(x’ = x ∧ |y’ - y| = 1) ∨ (y’ = y ∧ |x’ - x| = 1) (NOTE:  ∧ denotes the logical and operator and ∨ denotes the logical or operator)
+(x’ = x ∧ |y’ - y| = 1) ∨ (y’ = y ∧ |x’ - x| = 1) (NOTE:  ∧ denotes the logical *and* operator and ∨ denotes the logical *or* operator)
 
 ## Players
 
@@ -72,17 +72,15 @@ Each creature is associated with a **creatureid**, a unique positive integer tha
 
 ## Rounds
 
-teger, until the final round, which determines the result of the game. Rounds do not have duration; they are instances of the world in a specific configuration.
-
-The game is **round-based**. The game begins with round 0, the **genesis round**. Each round is numbered after a next consequent in
+The game is round-based. The game begins with round 0, the genesis round. Each round is numbered after a next consequent integer, until the final round, which determines the result of the game. Rounds do not have duration; they are instances of the world in a specific configuration.
 
 ## Hit points
 
-Creatures have hit points. A creature’s hit points is a non-negative number from 0 up to a maximum number **MAX_HP**. Creatures with positive hit points are alive. Creatures with 0 hit points are dead. Once a creature is dead, it cannot be revived. A dead creature’s position does not matter. While alive creatures reserve their position and only one alive creature exists in a certain location, dead creatures do not reserve a position; they can be imagined to exist beyond the game board.
+Creatures have hit points. A creature’s hit points is a non-negative integer from 0 up to a maximum number **MAX_HP**. Creatures with positive hit points are alive. Creatures with 0 hit points are dead. Once a creature is dead, it cannot be revived. A dead creature’s position does not matter. While alive creatures reserve their position and only one alive creature exists in a certain location, dead creatures do not reserve a position; they can be imagined to exist beyond the game board.
 
 ## Grader
 
-The game is overseen by a program called **grader**. The grader sets the game up, communicates with the bots, determines the configuration of each round, determines the outcome of the game, and tears down the game. Furthermore, the grader is responsible for enforcing game rules. As the grader is the de facto rules arbitrator, the source code of the grader is open source and can be used as a reference to the game rules. The de jure rules of the documentation are only incidental and derived from the grader’s source code, which is the normative source.
+The game is overseen by a program called the **grader**. The grader sets the game up, communicates with the bots, determines the configuration of each round, determines the outcome of the game, and tears down the game. Furthermore, the grader is responsible for enforcing game rules. As the grader is the *de facto* rules arbitrator, the source code of the grader is open source and can be used as a reference to the game rules. The *de jure* rules of the documentation are only incidental and derived from the grader’s source code, which is the normative source.
 
 ## Initiation
 
@@ -96,15 +94,15 @@ The numbers M, W, H, MAX_HP are determined as follows:
 
 M ⇜ [100, 200[ ∩ ℕ
 
-W ⇜ ]3NM, 4NM[ ∩ ℕ
+W ⇜ ]√(3NM), √(4NM)[ ∩ ℕ
 
-H ⇜ ]3NM, 4NM[ ∩ ℕ
+H ⇜ ]√(3NM), √(4NM)[ ∩ ℕ
 
 MAX_HP ⇜ [100, 200[ ∩ ℕ
 
 MAX_HP is the same for all creatures. The initial HP for all creatures is set to MAX_HP.
 
-Subsequently, the grader automatically creates the genesis round of the game. This is done by creating M creatures per bot and placing them on the map in random locations as follows. For each player i from 1 to N, for each creature j from 1 to M, the creature j of player i is positioned uniformly at random at an x coordinate from 0 to W - 1 and at a y coordinate from 0 to H - 1, as long at that coordinate is not already in use; if the coordinate is already in use, a different coordinate is chosen at random until an empty one is found.
+Subsequently, the grader automatically creates the genesis round of the game. This is done by creating M creatures per bot and placing them on the map in random locations as follows. For each player i from 1 to N, for each creature j from 1 to M, the creature j of player i is positioned uniformly at random at an (x, y) coordinate from the coordinates that are not already taken; that position is subsequently marked as taken.
 
 The configuration of the world on the genesis round is predetermined by the grader.
 
@@ -114,7 +112,7 @@ The grader shares the full state of the world with all players at the completion
 
 ## Intents
 
-Upon the completion of every round, and as long as there are more than two creatures belonging to different players alive, the grader informs each player about the current full state of the world and inquires each player about what they want to do. This phase is called the commit phase.
+Upon the completion of every round, and as long as there are more than two creatures belonging to different players alive, the grader informs each player about the current full state of the world and inquires each player about what they want to do. This phase is called the **commit phase**.
 
 Each player decides what they want to do with each of their alive creatures. This signifies an intent for each alive creature, for each player. Players are not able to specify intents for dead creatures. The intent can be one of the following:
 
@@ -124,7 +122,7 @@ Each player decides what they want to do with each of their alive creatures. Thi
 
 * **Idle**: The player intents for the creature to remain where it is, doing nothing.
 
-Each player commits to an intent for each of their creatures without being able to see the intents committed by other players.
+Each player commits to an intent for each of their creatures without being able to see the intents committed by other players. When all players have committed their moves, the game advances to the next round.
 
 ## Resolution
 
@@ -132,7 +130,9 @@ Each subsequent round configuration is determined through a process called **res
 
 The resolution algorithm has the purpose of ensuring that the order in which creatures’ intents are examined does not affect the game results. It is desired that the following invariant remains true:
 
-The resolution of round T + 1 is independent on the order in which creatures intents are satisfied.
+*The resolution of round T + 1 is independent on the order in which creatures intents are satisfied.*
+
+The resolution algorithm also ensures that the map remains consistent.
 
 Here is the resolution algorithm:
 
@@ -166,11 +166,19 @@ Here is the resolution algorithm:
 
 Steps 4 and 5 ensure that the map is in consistent condition after the resolution phase is completed. The proof of correctness from resolution follows directly from the inductive assumption that round T is consistent, and step 4a is based on round T locations. Clearly the gensis round is consistent. Step 3 ensures that dead creatures do not take up any space during the resolution phase.
 
+The order in which creatures are examined does not matter, as making a creature move or attack only depends on what happened in the previous round, not the upcoming round. The fact that all creatures that cause map inconsistencies are moved back to their original location ensures that all creatures are treated equally regardless of order.
+
 ## Conclusion
 
-After the resolution phase is completed, the game is checked for winning conditions. If only creatures owned by a particular user are alive on the map, the particular user is pronounced the winner.
+After the resolution phase is completed, the game is checked for **winning conditions**. If only creatures owned by a particular user are alive on the map, the particular user is pronounced the winner.
 
 It is possible that noone is the winner of a particular game. This can happen if all creatures remaining in the last round are killed simultaneously.
+
+At this point, the ranking within the game is determined as follows: The player ranking last in the particular game is the player whose last alive creature died first. The player ranking first is the player whose last alive creature died last. Intermediate rankings are taken by players whose last alive creature died at an intermediate round. It is possible that two players are ranked the same in a game if their last creature died in the same round.
+
+A player is deemed **alive** during a round if at least one of their creatures is alive at that round; otherwise the player is **dead** during a particular round. As creatures cannot be revived, players cannot be revived. We will say that a player **dies** during the first round in which he is dead.
+
+The ranking number of each player is the number of alive players during the round he died. The exception is the winner; if we have a winner, the winner is ranked #1; if we have a draw, all players that died in the last round are all ranked #1.
 
 # Bot API
 
@@ -182,11 +190,11 @@ Each bot has a root end-point which is an http or https URL and can be any valid
 
 Note that it is the grader that is making HTTP requests to each individual bot, not the other way around. The grader is the HTTP client and the bots are the HTTP server.
 
-A bot can misbehave in many ways. We aim to help the programmers by logging the incorrect behavior of bots. This incorrect behavior is then reported in the bot settings page of the web application. Bots that behave incorrectly must be disconnected immediately from the game and all their creatures killed for the particular game. No incorrect responses by the bots is tolerated. The protocol must be followed by the bots to the letter.
+A bot can misbehave in many ways. We aim to help the programmers by logging the incorrect behavior of bots. This incorrect behavior is then reported in the bot settings page of the web application. Bots that behave incorrectly must be disconnected immediately from the game and all their creatures killed for the particular game. No incorrect responses by the bots is tolerated. The protocol must be followed by the bots to the letter. This is to ensure that the grader is simple and doesn't have to take into account fixing the mistakes of bots; in addition, it will help with forward compatibility, as bots will not rely on specific potentially undefined behavior of the grader.
 
-Before the bot is able to play, the following **sanity checks** are performed by the grader. These events are logged and reported as successful or errorneous:
+Before the bot is able to play, the following **sanity checks** are performed by the grader. These events are logged and reported as successful or erroneous:
 
-1. The bot hostname was resolved.
+1. The bot hostname resolves.
 
 2. The bot IP is accessible in the network.
 
@@ -200,7 +208,7 @@ Before the bot is able to play, the following **sanity checks** are performed by
 
 7. The username reported by the bot is associated with the user who is using the bot URL.
 
-Each request from the grader to the bot uses either HTTP GET or HTTP POST. The requests are made on the bot base URL and contain an appended request URI which is in the form "resource" where resource is the name of a REST resource. When performing an HTTP GET request, a resource can be a named item, in which case the individual resource is retrieved, or a generic resource type name, in which the listing of all named resource of the particular type are retrieved. When performing an HTTP POST request, an additional “method” HTTP POST variable is included, which can take the following values:
+Each request from the grader to the bot uses either HTTP GET or HTTP POST. The requests are made on the bot base URL and contain an appended request URI which is in the form "resource" where resource is the name of a REST resource. A resource or resource type can be identified by the URL or through the HTTP variables passed; this distinction is made clear in the documented API calls below and exists to ease the development of bots. When performing an HTTP GET request, a resource can be a named item, in which case the individual resource is retrieved, or a generic resource type name, in which the listing of all named resources of the particular type are retrieved. When performing an HTTP POST request, an additional “method” HTTP POST variable is included, which can take the following values:
 
 1. create
 
@@ -212,7 +220,7 @@ When the method is *create*, the request is made to a generic resource type, of 
 
 All requests are authenticated and authorized by the grader. The authentication is URL-based. If the bot desires to do strong authentication, it must switch to HTTPS. It is recommended that HTTPS is used by all bots.
 
-The grader authenticates itself to the bot using an API key, which is displayed to the bot programmer in the web interface available for bot configuration. The API key is included in all requests and has the name "api_key" and the value displayed in the web interface of the grader. The api key is unique for each bot. The bot must verify that the api key is correct to avoid impostors who may be trying to  deduce one’s strategy beyond the history of available games. The api_key is sent as an HTTP GET variable for GET requests and as an HTTP POST variable for POST requests.
+The grader authenticates itself to the bot using an API key, which is displayed to the bot programmer in the web interface available for bot configuration. The API key is included in all requests and has the name "api_key" and the value displayed in the web interface of the grader. The api key is unique for each bot. The bot can verify that the api key is correct to avoid impostors who may be trying to  deduce one’s strategy beyond the history of available games. The api_key is sent as an HTTP GET variable for GET requests and as an HTTP POST variable for POST requests.
 
 The grader identifies itself using the following User-agent:
 
@@ -242,7 +250,7 @@ The following general errors are logged and reported:
 
 The request may also contain JSON in the POST data. This is true for any non-scalar data structure sent from the grader to the bots. These pieces of JSON are again dictionaries, which contain keys specific to the particular request.
 
-Each bot must be aware of the username of the programmer which it is configured to play for. This user id is displayed in the bot configuration page, along with the api_key.
+Each bot must be aware of the username of the programmer which it is configured to play for. This helps ensure that the bot is playing for its rightful owner. 
 
 ## Initiation
 
@@ -288,17 +296,17 @@ The bot must respond with an empty JSON array to this request. Subsequently, the
 
 ## Round
 
-When each round is completed, the grader collects the round configuration and communicates it to each bot. The bot responds with the intent for the next round. This request is a create request sent to the following URL:
+When each round is completed, the grader collects the round configuration and communicates it to each bot. The bot responds with the intent for each of its creatures for the next round. This request is a create request sent to the following URL:
 
-{{botbase}}/game/{{gameid}}/round
-
-Where {{gameid}} indicates the gameid of the game as it was communicated during the initiation phase.
+{{botbase}}/round
 
 The HTTP POST request contains the following variables:
 
 1. **round**: Integer; the number of the round; 0 for genesis.
 
 2. **map**: Array; a list of creature objects, as seen during the round that was just completed.
+
+3. **gameid**: Integer; indicates the gameid of the game as it was communicated during the initiation phase.
 
 The map array is an array that contains a list of creatures. Each creature is a dictionary with the following keys:
 
@@ -328,13 +336,13 @@ An intent object contains the following keys:
 
 3. **direction**: String, one of "north", “east”, “south”, or “west”.
 
-No entries need to be sent for idle intents. The grader subsequently accepts the commit and performs the resolution phase to evaluate the configuration of the next round and makes an additional round create request until the game is completed.
+No entries need to be sent for idle intents. The grader subsequently accepts the commit and performs the resolution phase to evaluate the configuration of the next round and continues making round create requests until the game is completed.
 
 Attempts to manipulate creatures not belonging to their owner are reported as errors. Incorrect desire or direction strings are reported as errors. Attempts to manipulate dead creatures are reported as errors.
 
 After a winner is determined, or we have a draw, a last round create request is sent by the grader, with the last round of the map communicated to the bot. This last request contains alive creatures owned by at most one player; this signifies that the round is the last one.
 
-The bot must respond to the last round with an empty array of intents. Any response deviating from this is reported as an error.
+The bot must respond to the last round with an empty array of intents. However, deviations from this response do not affect the game result, as the game is now finished, so they are not reported or logged.
 
 # Web interface
 
