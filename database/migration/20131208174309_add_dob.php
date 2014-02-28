@@ -1,5 +1,5 @@
 <?php
-    require 'migrate.php';
+    require_once 'migrate.php';
 
-    Migration::addField( 'users', 'dob', 'NOT NULL' );
+    Migration::addField( 'users', 'dob', 'date NOT NULL' );
 ?>

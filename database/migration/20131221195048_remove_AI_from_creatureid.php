@@ -1,5 +1,5 @@
 <?php
     require 'migrate.php';
 
-    Migration::renameField( 'creatures', 'id', 'id', 'int(11) NOT NULL' );
+    Migration::alterField( 'creatures', 'id', 'id', 'int(11) NOT NULL' );
 ?>

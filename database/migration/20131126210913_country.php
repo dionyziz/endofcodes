@@ -2,7 +2,7 @@
     require_once 'migrate.php';
 
  	Migration::createTable(
-		'data', 
+		'countries', 
 		[
 			'country' => 'text COLLATE utf8_unicode_ci NOT NULL',
 			'shortname' => 'text COLLATE utf8_unicode_ci NOT NULL'
