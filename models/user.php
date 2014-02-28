@@ -61,11 +61,12 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
                 }
+                $this->boturl = $user_info[ 'boturl' ];
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
@@ -131,6 +132,9 @@
             else {
                 $this->imageid = 0;
             }
+            if ( !isset( $this->boturl ) ) {
+                $this->boturl = '';
+            }
         }
 
         protected function onBeforeCreate() {
@@ -166,32 +170,8 @@
             }
         }
 
-        protected function update() {
-            $id = $this->id;
-            $email = $this->email;
-            $dob = $this->dob;
-            $forgotpasswordtoken = $this->forgotpasswordtoken;
-            $forgotpasswordrequestcreated = $this->forgotpasswordrequestcreated;
-            $sessionid = $this->sessionid;
-            $countryid = $this->countryid;
-            $avatarid = $this->imageid;
-            if ( isset( $this->password ) ) {
-                $password = $this->password;
-            }
-            if ( isset( $this->salt ) ) {
-                $salt = $this->salt;
-            }
-
-            try {
-                $res = dbUpdate(
-                    'users',
-                    compact( "email", "password", "salt", "countryid", "avatarid", "dob", "sessionid", "forgotpasswordrequestcreated", "forgotpasswordtoken" ),
-                    compact( "id" )
-                );
-            }
-            catch ( DBException $e ) {
-                throw new ModelValidationException( 'email_used' );
-            }
+        protected function onUpdateError( $e ) {
+            throw new ModelValidationException( 'email_used' );
         }
 
         protected function generateSessionId() {

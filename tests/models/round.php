@@ -8,7 +8,15 @@
             $game->rounds[ 0 ] = $round = $this->buildRound();
             $round->game = $game;
             $round->save();
-            $dbRound = new Round( $game, 1 );
+            $caught = false;
+            try {
+                $dbRound = new Round( $game, 1 );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+
+            $this->assertFalse( $caught, 'A round must be stored in the database' );
 
             $this->assertSame( $round->id, $dbRound->id, "Round's id must be correctly stored in the database" );
             $this->assertSame( $round->game->id, $dbRound->game->id, "Round's gameid must be correctly stored in the database" );

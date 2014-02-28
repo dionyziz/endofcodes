@@ -9,6 +9,9 @@
             $creature->locationx = 1;
             $creature->locationy = 2;
             $creature->hp = 10;
+            $game = new Game();
+            $game->save();
+            $creature->game = $game;
 
             return $creature;
         }
@@ -29,6 +32,23 @@
             $this->assertEquals( $creature->locationx, $data->x, 'x must be encoded properly to JSON' );
             $this->assertEquals( $creature->locationy, $data->y, 'y must be encoded properly to JSON' );
             $this->assertEquals( $creature->id, $data->creatureid, 'creatureid must be encoded properly to JSON' );
+        }
+        public function testSaveCreatureDb() {
+            $creature = $this->buildCreature();
+            $creature->save();
+            $caught = false;
+            try {
+                $dbCreature = new Creature( $creature->id, $creature->user->id, $creature->game->id );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+
+            $this->assertFalse( $caught, 'A creature must be stored in the database' );
+
+            $this->assertSame( $creature->id, $dbCreature->id, 'A creatures id must be correctly stored in the database' );
+            $this->assertSame( $creature->user->id, $dbCreature->user->id, 'A creatures userid must be correctly stored in the database' );
+            $this->assertSame( $creature->game->id, $dbCreature->game->id, 'A creatures gameid must be correctly stored in the database' );
         }
     }
     return new CreatureTest();

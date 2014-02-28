@@ -76,7 +76,7 @@
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
             $this->rounds[ 0 ]->id = 0;
-            $id = 0;
+            $id = 1;
             foreach ( $this->users as $user ) {
                 for ( $j = 0; $j < $this->creaturesPerPlayer; ++$j, ++$id ) {
                     $creature = new Creature();
@@ -87,6 +87,7 @@
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
                     $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
+                    $creature->save();
                     while ( 1 ) {
                         $x = rand( 0, $this->width - 1 );
                         $y = rand( 0, $this->height - 1 );
@@ -100,6 +101,7 @@
                     $this->rounds[ 0 ]->creatures[] = $creature;
                 }
             }
+            $this->rounds[ 0 ]->save();
         }
 
         public function killBot( $user, $description ) {
@@ -196,7 +198,9 @@
                     }
                 }
             }
+            $this->rounds[ $roundid ]->save();
         }
+
         public function getCurrentRound() {
             return end( $this->rounds );
         }

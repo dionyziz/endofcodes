@@ -43,7 +43,7 @@
                     $user_info = dbSelectOne(
                         'creatures',
                         [ 'userid' ],
-                        compact( 'id' )
+                        compact( 'id', 'gameid' )
                     );
                     $user = new User( $user_info[ 'userid' ] );
                     $creature = new Creature( $creature_info );
@@ -80,6 +80,14 @@
                         'creatureid'
                     )
                 );
+            }
+        }
+
+        public function onBeforeSave() {
+            foreach ( $this->creatures as $creature ) {
+                if ( !isset( $creature->hp ) ) {
+                    $creature->hp = 0;
+                }
             }
         }
     }
