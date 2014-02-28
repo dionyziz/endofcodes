@@ -127,26 +127,7 @@
             $this->assertTrue( $syntaxSuccess, 'dropField must return an error when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'dropField must return an error when table not exists' );
         }
-        public static function testMigrations() {
-            include 'database/helpers/listing.php';
-            $created = true;
-            $config[ 'db' ][ 'dbname' ] = 'migrations'; 
-            try {
-                Migration::migrate( 'CREATE DATABASE migrations' );
-            }
-            catch ( DBException $e ) {
-                $created = false;
-            }
-            $names = listing( 'database/migration/' );
-            foreach ( $names as $name ) {
-                try {
-                    include "database/migration/$name";
-                }
-                catch ( MigrationException $e ) {
-                    $success = false;
-                }
-            }          
-        }
     }
+
     return new MigrationsTest();
 ?>

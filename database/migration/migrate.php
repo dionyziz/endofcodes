@@ -92,12 +92,14 @@
         }
 
         public static function createTable( $tableName, $fields = [], $keys = [] ) {
+            $attributes = [];
             foreach ( $fields as $field => $description ) {
                 if ( !empty( $field ) || !empty( $description ) ) {
                     $attributes[] = "$field $description";
                 }
             }
             if ( !empty( $keys ) ) {
+                $args = [];
                 foreach ( $keys as $key ) {
                     if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' || $key[ 'type' ] == 'foreign' ) {
                         if ( isset( $key[ 'name' ] ) ) {
@@ -109,6 +111,16 @@
                             $type = strtoupper( $key[ 'type' ] );
                             $args[] = "$type KEY(" . implode( ",", $key[ 'field' ] ) . ")";
                         }
+                    }
+                }
+                if ( $key[ 'type' ] == 'index' ) {
+                    if ( isset( $key[ 'name' ] ) ) {
+                        $fields = implode( ',', $key[ 'field' ] );
+                        $name = $key[ 'name' ];
+                        $args[] = "CREATE INDEX $name ( $fields )"; 
+                    }
+                    else {
+                        $args[] = "INDEX (" . implode( ",", $key[ 'field' ] ) . ")";
                     }
                 }
                 $attributes = array_merge( $attributes, $args );
