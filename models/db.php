@@ -73,6 +73,7 @@
             $sql .= ' ORDER BY ' . $orderBy;
         }
         if ( $limit !== false ) {
+            assert( $limit > 0, 'limit must be a positive integer' );
             $sql .= ' LIMIT ' . $limit;
         }
         return dbArray(
