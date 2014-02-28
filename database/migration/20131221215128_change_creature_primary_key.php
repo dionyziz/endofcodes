@@ -1,6 +1,6 @@
 <?php
-    require 'migrate.php';
+    require_once 'migrate.php';
 
     Migration::dropPrimaryKey( 'creatures' ); 
-    Migration::addPrimaryKey( 'pk_creatures', [ 'gameid', 'userid', 'id' ] ); 
+    Migration::addPrimaryKey( 'creatures', 'pk_creatures', [ 'gameid', 'userid', 'id' ] ); 
 ?>

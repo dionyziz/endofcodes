@@ -1,5 +1,5 @@
 <?php
-    require 'migrate.php';
+    require_once 'migrate.php';
 
     Migration::createTable(
         'games',
@@ -19,7 +19,7 @@
         [ 
             'id' => 'int(11) NOT NULL AUTO_INCREMENT', 
             'gameid' => 'int(11) NOT NULL',
-            'userid' => 'int(11) NOT NULL',
+            'userid' => 'int(11) NOT NULL'
         ],
         [ 
             [ 'type' => 'primary', 'field' => [ 'id' ] ]
@@ -29,12 +29,11 @@
     Migration::createTable(
         'gameusers',
         [ 
-            'id' => 'int(11) NOT NULL AUTO_INCREMENT', 
             'userid' => 'int(11) NOT NULL',
-            'gameid' => 'int(11) NOT NULL',
+            'gameid' => 'int(11) NOT NULL'
         ],
         [ 
-            [ 'type' => 'unique', 'field' => [ 'userid', 'gameid' ] ]
+            [ 'type' => 'unique', 'field' => [ 'userid', 'gameid' ], 'name' => 'uc_gameusers' ]
         ]
     );
 
@@ -48,7 +47,7 @@
             'locationx' => 'int(11)',
             'locationy' => 'int(11)',
             'hp' => 'int(3)',
-            'locationy' => 'int(11)',
+            'locationy' => 'int(11)'
         ],
         [ 
             [ 'type' => 'unique', 'field' => [ 'roundid', 'gameid', 'creatureid' ] ]
