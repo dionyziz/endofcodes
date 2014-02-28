@@ -23,7 +23,7 @@
                 $trueSuccess = false; 
             }
             $tables = dbListTables(); 
-            if ( !in_array( testTable, $tables ) ) {
+            if ( !in_array( 'testTable', $tables ) ) {
                 $trueSuccess = false; 
             }
             try { 
@@ -135,11 +135,9 @@
             catch ( MigrationException $e ) {
                 $trueSuccess = false; 
             }
-            try {
-                dbInsert( 'testTable', [ 'test3' => 1 ] );
-                $trueSuccess = false;
-            }
-            catch ( DBException $e ) {
+            $fields = dbListFields( 'testTable' );
+            if ( in_array( 'test3', $fields ) ) {
+                $trueSuccess = false; 
             }
             $this->assertTrue( $trueSuccess, 'dropField must drop a field when called' );
             $this->assertTrue( $syntaxSuccess, 'dropField must return an error when an attribute is missing' );

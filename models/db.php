@@ -131,6 +131,10 @@
         return array_map( 'array_shift', dbArray( 'SHOW TABLES' ) );
     }
 
+    function dbListFields( $table ) {
+        return array_map( 'array_shift', dbArray( "SHOW COLUMNS FROM $table" ) );
+    }  
+
     class DBException extends Exception {
         public function __construct( $error ) {
             parent::__construct( 'Database error: ' . $error );
