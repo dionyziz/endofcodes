@@ -86,11 +86,9 @@
             catch ( MigrationException $e ) {
                 $trueSuccess = false;
             }
-            try {
-                dbInsert( 'testTable', [ 'testnew2' => 1 ] );
-            }
-            catch ( DBException $e ) {
-                $trueSuccess = false;
+            $fields = dbListFields( 'testTable' );
+            if ( in_array( 'test2', $fields ) ) {
+                $trueSuccess = false; 
             }
             try {
                 Migration::alterField( 'testTable', 'testfield', 'int(11) NOT NULL AUTO_INCREMENT' );
