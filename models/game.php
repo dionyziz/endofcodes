@@ -31,7 +31,7 @@
         }
 
         public static function getLastGame() {
-            $game = dbSelect( 'games', [ 'id' ], [], 'created ASC', 1 );
+            $game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 );
 
             return new Game( $game[ 0 ][ 'id' ] );
         }
