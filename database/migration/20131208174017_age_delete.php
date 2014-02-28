@@ -1,5 +1,5 @@
 <?php
-    require 'migrate.php';
+    require_once 'migrate.php';
 
     Migration::dropField( 'users', 'age' );
 ?>

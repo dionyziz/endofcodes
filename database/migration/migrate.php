@@ -2,6 +2,7 @@
     abstract class Migration {
         protected static function migrate( $sql ) {
             global $config;
+
             $env = getEnv( 'ENVIRONMENT' );
 
             if ( $env === false ) { 
@@ -12,9 +13,9 @@
                 $pref = "../../";
             }
 
-            include_once $pref . 'config/config-local.php';
-            include_once $pref . 'models/database.php';
-            include_once $pref . 'models/db.php';
+            require_once $pref . 'config/config-local.php';
+            require_once $pref . 'models/database.php';
+            require_once $pref . 'models/db.php';
 
 
             $config = getConfig()[ $env ]; 
@@ -65,6 +66,13 @@
             );
         }
 
+        public static function dropTable( $table ) {
+            self::run(
+                "DROP TABLE 
+                    $table;"
+            ); 
+        }
+
         public static function dropPrimaryKey( $table ) {
             self::run(
                 "ALTER TABLE
@@ -102,14 +110,16 @@
                 $args = [];
                 foreach ( $keys as $key ) {
                     if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' || $key[ 'type' ] == 'foreign' ) {
+                        $type = strtoupper( $key[ 'type' ] );
                         if ( isset( $key[ 'name' ] ) ) {
                             $fields = implode( ',', $key[ 'field' ] );
                             $name = $key[ 'name' ];
-                            $args[] = "CONSTRAINT $name PRIMARY KEY ( $fields )"; 
+                            $args[] = "CONSTRAINT $name $type KEY ( $fields )"; 
                         }
                         else {
-                            $type = strtoupper( $key[ 'type' ] );
-                            $args[] = "$type KEY(" . implode( ",", $key[ 'field' ] ) . ")";
+                            foreach ( $key[ 'field' ] as $field ) {
+                                $args[] = "$type KEY( $field )";
+                            }
                         }
                     }
                 }
@@ -117,10 +127,12 @@
                     if ( isset( $key[ 'name' ] ) ) {
                         $fields = implode( ',', $key[ 'field' ] );
                         $name = $key[ 'name' ];
-                        $args[] = "CREATE INDEX $name ( $fields )"; 
+                        $args[] = "INDEX $name ( $fields )"; 
                     }
                     else {
-                        $args[] = "INDEX (" . implode( ",", $key[ 'field' ] ) . ")";
+                        foreach ( $key[ 'field' ] as $field ) {
+                            $args[] = "INDEX( $field )";
+                        }
                     }
                 }
                 $attributes = array_merge( $attributes, $args );

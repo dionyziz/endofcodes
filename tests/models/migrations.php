@@ -1,22 +1,29 @@
 <?php
-    include_once 'database/migration/migrate.php';
+    require_once 'database/migration/migrate.php';
 
     class MigrationsTest extends UnitTestWithFixtures {
+        protected function createTable() {
+            Migration::createTable( 
+                'testTable', 
+                [
+                    'id' => 'int(11) NOT NULL AUTO_INCREMENT'
+                ],
+                [   
+                    [ 'type' => 'primary', 'field' => [ 'id' ] ]
+                ]
+            );
+        }
         public function testCreateTable() {
             $emptySuccess = false;
-            $trueSuccess =true;
+            $trueSuccess = true;
             try { 
-                Migration::createTable( 
-                    'testTable', 
-                    [
-                        'id' => 'int(11) NOT NULL AUTO_INCREMENT'
-                    ],
-                    [   
-                        [ 'type' => 'primary', 'field' => [ 'id' ] ]
-                    ]
-                );
+                $this->createTable();
             }
             catch ( MigrationException $e ) {
+                $trueSuccess = false; 
+            }
+            $tables = dbListTables(); 
+            if ( !in_array( testTable, $tables ) ) {
                 $trueSuccess = false; 
             }
             try { 
@@ -33,6 +40,7 @@
             $this->assertTrue( $emptySuccess, 'createTable must not create a table when field are empty' );
         }
         public function testCreateField() {
+            $this->createTable();
             $trueSuccess = true;
             $emptySuccess = $noTableSuccess = false;
             try {
@@ -40,6 +48,12 @@
             }
             catch ( MigrationException $e ) {
                 $trueSuccess = false; 
+            }
+            try {
+                dbInsert( 'testTable', [ 'test1' => 1 ] );
+            }
+            catch ( DBException $e ) {
+                $trueSuccess = false;
             }
             try {
                 Migration::addField( 'testTable' ); 
@@ -53,12 +67,12 @@
             catch ( MigrationException $e ) {
                 $noTableSuccess = true; 
             }
-            Migration::dropField( 'testTable', 'test1' );
             $this->assertTrue( $trueSuccess, 'createField must add a field when called' );
             $this->assertTrue( $emptySuccess, 'createField must not create a field when fieldname is empty' );
             $this->assertTrue( $noTableSuccess, 'createField must return an error when table not exists' );
         }
         public function testAlterField() {
+            $this->createTable();
             Migration::addField( 
                 'testTable', 
                 'test2',
@@ -73,6 +87,12 @@
                 $trueSuccess = false;
             }
             try {
+                dbInsert( 'testTable', [ 'testnew2' => 1 ] );
+            }
+            catch ( DBException $e ) {
+                $trueSuccess = false;
+            }
+            try {
                 Migration::alterField( 'testTable', 'testfield', 'int(11) NOT NULL AUTO_INCREMENT' );
             }
             catch ( MigrationException $e ) {
@@ -84,12 +104,12 @@
             catch ( MigrationException $e ) {
                 $noTableSuccess = true;
             }
-            Migration::dropField( 'testTable', 'testnew2' );
             $this->assertTrue( $trueSuccess, 'alterField must alter a field when called' );
             $this->assertTrue( $syntaxSuccess, 'alterField must not create a field when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'alterField must return an error when table not exists' );
         }
         public function testDropField() {
+            $this->createTable();
             Migration::addField( 
                 'testTable', 
                 'test3',
@@ -115,9 +135,18 @@
             catch ( MigrationException $e ) {
                 $trueSuccess = false; 
             }
+            try {
+                dbInsert( 'testTable', [ 'test3' => 1 ] );
+                $trueSuccess = false;
+            }
+            catch ( DBException $e ) {
+            }
             $this->assertTrue( $trueSuccess, 'dropField must drop a field when called' );
             $this->assertTrue( $syntaxSuccess, 'dropField must return an error when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'dropField must return an error when table not exists' );
+        }
+        public function tearDown() {
+            Migration::dropTable( 'testTable' );
         }
     }
 
