@@ -215,7 +215,7 @@
             $creature2 = new Creature();
             $creature2->id = 1;
             $creature2->user = $game->users[ 0 ];
-            $creature2->locationx = $creature1->locationy = 8;
+            $creature2->locationx = $creature2->locationy = 8;
             $creature2->hp = 10;
             $creature2->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
             $creature2->game = $game;
