@@ -3,7 +3,6 @@
 
     class MigrationsTest extends UnitTestWithFixtures {
         public function testCreateTable() {
-            ob_start();
             $emptySuccess = false;
             $trueSuccess =true;
             try { 
@@ -30,12 +29,10 @@
             catch ( MigrationException $e ) {
                 $emptySuccess = true; 
             }
-            ob_get_clean();
             $this->assertTrue( $trueSuccess, 'createTable must create a table when called' );
             $this->assertTrue( $emptySuccess, 'createTable must not create a table when field are empty' );
         }
         public function testCreateField() {
-            ob_start();
             $trueSuccess = true;
             $emptySuccess = $noTableSuccess = false;
             try {
@@ -57,13 +54,11 @@
                 $noTableSuccess = true; 
             }
             Migration::dropField( 'testTable', 'test1' );
-            ob_get_clean();
             $this->assertTrue( $trueSuccess, 'createField must add a field when called' );
             $this->assertTrue( $emptySuccess, 'createField must not create a field when fieldname is empty' );
             $this->assertTrue( $noTableSuccess, 'createField must return an error when table not exists' );
         }
         public function testAlterField() {
-            ob_start();
             Migration::addField( 
                 'testTable', 
                 'test2',
@@ -90,13 +85,11 @@
                 $noTableSuccess = true;
             }
             Migration::dropField( 'testTable', 'testnew2' );
-            ob_get_clean();
             $this->assertTrue( $trueSuccess, 'alterField must alter a field when called' );
             $this->assertTrue( $syntaxSuccess, 'alterField must not create a field when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'alterField must return an error when table not exists' );
         }
         public function testDropField() {
-            ob_start();
             Migration::addField( 
                 'testTable', 
                 'test3',
@@ -122,7 +115,6 @@
             catch ( MigrationException $e ) {
                 $trueSuccess = false; 
             }
-            ob_get_clean();
             $this->assertTrue( $trueSuccess, 'dropField must drop a field when called' );
             $this->assertTrue( $syntaxSuccess, 'dropField must return an error when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'dropField must return an error when table not exists' );
