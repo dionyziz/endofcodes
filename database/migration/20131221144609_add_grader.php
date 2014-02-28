@@ -50,7 +50,7 @@
             'locationy' => 'int(11)'
         ],
         [ 
-            [ 'type' => 'unique', 'field' => [ 'roundid', 'gameid', 'creatureid' ] ]
+            [ 'type' => 'unique', 'field' => [ 'roundid', 'gameid', 'creatureid' ], 'name' => 'uc_roundcreatures' ]
         ]
     );
 ?>
