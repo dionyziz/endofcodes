@@ -82,5 +82,13 @@
                 );
             }
         }
+
+        public function onBeforeSave() {
+            foreach ( $this->creatures as $creature ) {
+                if ( !isset( $creature->hp ) ) {
+                    $creature->hp = 0;
+                }
+            }
+        }
     }
 ?>
