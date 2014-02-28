@@ -1,6 +1,10 @@
 <?php
     require 'views/header.php';
-
+    
+    if( isset( $valid_bot ) ) {
+        ?><p>Your bot is set up to play the next game</p><?php
+    }
+    ?><p><a href='bot/update'>Configure Bot.</a></p><?php
     $form = new Form( 'user', 'update' );
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong,
             $password_new_not_matched, $password_new_small, $countries, $user ) {
