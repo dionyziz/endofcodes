@@ -97,7 +97,7 @@
             return $ratings;
         }
 
-        public function getCountryRatings( $country ) {
+        public function getCountryRatings( Country $country ) {
             $ratings = $this->getGlobalRatings();
             $countryRatings = [];
 
