@@ -20,12 +20,12 @@
                 //        break; 
                 //    case 'initiate_could_not_connect':
                 //        $error = $bot_unreachable;
-                //       break;
+                //        break;
                 //    case 'initiate_invalid_json': 
                 //        $error = $invalid_json;
                 //        break; 
                 //    case 'initiate_username_mismatch':
-                //       $error = $username_mismatch;
+                //        $error = $username_mismatch;
                 //        break;
                 //} 
                 $error = str_replace( "initiate_","",$url );

@@ -1,6 +1,6 @@
 <?php
     require 'views/header.php';?>
-    
+
     <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
     if ( $bot_success ) {
         ?><p class='error'>Your bot is correctly configured <img src='static/images/check.png' /></p><?php
@@ -45,4 +45,3 @@
 
     require 'views/footer.php';
 ?>
-    

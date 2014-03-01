@@ -1,6 +1,6 @@
 <?php
     require 'views/header.php';
-    
+
     if( isset( $valid_bot ) ) {
         ?><p>Your bot is set up to play the next game</p><?php
     }
