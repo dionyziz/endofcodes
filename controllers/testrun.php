@@ -14,6 +14,7 @@
             }
 
             $unittests = [];
+            $failed = false;
             foreach ( $tests as $test ) {
                 $path = 'tests/' . $test . '.php';
                 if ( !file_exists( $path ) ) {
@@ -21,10 +22,20 @@
                 }
                 $unittest = require_once $path;
                 $unittest->run();
+                foreach ( $unittest->tests as $test ) {
+                    if ( !$test->success ) {
+                        $failed = true;
+                    }
+                }
 
                 $unittests[] = $unittest;
             }
             require_once 'views/testrun/results.php';
+
+            if ( $failed ) {
+                return 1;
+            }
+            return 0;
         }
 
         public function createView() {

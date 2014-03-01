@@ -1,0 +1,26 @@
+#!/usr/bin/php
+<?php
+    require_once 'header.php';
+
+    if ( $argc < 2 ) {
+        die( "Usage: run resource method [args]\n" );
+    }
+    $_ = array_shift( $argv );
+    $resource = array_shift( $argv );
+    $method = array_shift( $argv );
+    $controller = controllerBase::findController( $resource );
+    $controller->trusted = true;
+    $controller->outputFormat = 'text';
+
+    foreach ( $argv as $arg ) {
+        list( $key, $value ) = explode( '=', $arg, 2 );
+        $vars[ $key ] = $value;
+    }
+
+    try {
+        exit( $controller->dispatch( [ 'method' => $method ], $vars, [], 'POST' ) );
+    }
+    catch ( NotImplemented $e ) {
+        die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() . "\n" );
+    }
+?>
