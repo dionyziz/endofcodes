@@ -118,7 +118,7 @@
                         }
                         else {
                             foreach ( $key[ 'field' ] as $field ) {
-                                $args[] = "$type KEY( $field )";
+                                $args[] = "$type KEY ( $field )";
                             }
                         }
                     }
@@ -131,7 +131,7 @@
                     }
                     else {
                         foreach ( $key[ 'field' ] as $field ) {
-                            $args[] = "INDEX( $field )";
+                            $args[] = "INDEX ( $field )";
                         }
                     }
                 }
