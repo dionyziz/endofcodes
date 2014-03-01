@@ -1,9 +1,12 @@
 <?php
+    echo "\n\n";
+    echo "================\n";
     echo pluralize( count( $unittests ), 'unit test' ) . "\n";
     echo "================\n\n";
 ?>
 <?php
     foreach ( $unittests as $unittest ) {
+        echo "\n";
         ?>## Unit test: <?php
         echo $unittest->testName;
         ?>, with <?php
