@@ -3,7 +3,7 @@
         protected $environment = 'test';
 
         public function create( $name, $all = false ) {
-            set_time_limit( 200 );
+            set_time_limit( 360 );
 
             require_once 'models/test/base.php';
             require_once 'models/test/withfixtures.php';
