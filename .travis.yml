@@ -4,3 +4,6 @@ php:
 script: php run testrun create name=models/country
 before_script:
     - mysql -e 'create database endofcodes_test;'
+    - cd database/migrations
+    - for i in `find .|grep -v ^.$|grep -v migrate.php`; do ENVIRONMENT=test DB_NAME=travis DB_PASSWORD='' php $i; done
+    - cd ../..
