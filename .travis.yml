@@ -2,3 +2,5 @@ language: php
 php:
     - 5.5
 script: php run testrun create name=models/country
+before_script:
+    - mysql -e 'create database endofcodes_test;'

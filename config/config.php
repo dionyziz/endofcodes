@@ -34,10 +34,10 @@
             ],
             'test' => [
                 'db' => [
-                    'host' => 'sample_host',
-                    'user' => 'sample_user',
-                    'pass' => 'sample_pass',
-                    'dbname' => 'sample_dbname'
+                    'host' => 'localhost',
+                    'user' => 'travis',
+                    'pass' => '',
+                    'dbname' => 'endofcodes_test'
                 ],
                 'files' => [
                     'avatar_extentions' => [ 'jpg', 'png', 'jpeg' ],
