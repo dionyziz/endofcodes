@@ -19,17 +19,6 @@
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
-        public static function findByDatetime( $datetime ) {
-            $created = $datetime;
-            try {
-                $game = dbSelectOne( 'games', [ 'id' ], compact( 'created' ) );
-            }
-            catch ( DBException $e ) {
-                throw new ModelNotFoundException();
-            }
-            return new Game( $game[ 'id' ] );
-        }
-
         public static function getLastGame() {
             $game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 );
 
