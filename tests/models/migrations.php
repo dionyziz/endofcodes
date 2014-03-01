@@ -49,11 +49,9 @@
             catch ( MigrationException $e ) {
                 $trueSuccess = false; 
             }
-            try {
-                dbInsert( 'testTable', [ 'test1' => 1 ] );
-            }
-            catch ( DBException $e ) {
-                $trueSuccess = false;
+            $fields = dbListFields( 'testTable' );
+            if ( !in_array( 'test1', $fields ) ) {
+                $trueSuccess = false; 
             }
             try {
                 Migration::addField( 'testTable' ); 

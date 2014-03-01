@@ -109,7 +109,7 @@
             if ( !empty( $keys ) ) {
                 $args = [];
                 foreach ( $keys as $key ) {
-                    if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' || $key[ 'type' ] == 'foreign' ) {
+                    if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' ) {
                         $type = strtoupper( $key[ 'type' ] );
                         if ( isset( $key[ 'name' ] ) ) {
                             $fields = implode( ',', $key[ 'field' ] );
