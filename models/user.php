@@ -132,6 +132,9 @@
             else {
                 $this->imageid = 0;
             }
+            if ( !isset( $this->boturl ) ) {
+                $this->boturl = '';
+            }
         }
 
         protected function onBeforeCreate() {
