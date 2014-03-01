@@ -1,6 +1,11 @@
 <?php
     function migrate( $sql_array = [] ) {
-        require_once '../../config/config-local.php';
+        if ( file_exists( '../../config/config-local.php' ) ) {
+            require_once '../../config/config-local.php';
+        }
+        else {
+            require_once '../../config/config.php';
+        }
         require_once '../../models/database.php';
         require_once '../../models/db.php';
 
