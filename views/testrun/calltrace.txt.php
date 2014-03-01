@@ -25,7 +25,7 @@
             if ( substr( $file, 0, strlen( $config[ 'root' ] ) ) == $config[ 'root' ] ) {
                 $file = substr( $file, strlen( $config[ 'root' ] ) );
             }
-            echo str_pad( $file, $columnWidth );
+            echo str_pad( substr( $file, -$columnWidth, $columnWidth ), $columnWidth );
         }
         else {
             echo str_repeat( " ", $columnWidth );
