@@ -2,7 +2,7 @@
 
 **Dionysis Zindros** <[dionyziz@gmail.com](mailto:dionyziz@gmail.com)>
 
-4 January - 22 February 2014
+4 January - 1 March 2014
 
 # Scope
 
@@ -250,7 +250,7 @@ The following general errors are logged and reported:
 
 The request may also contain JSON in the POST data. This is true for any non-scalar data structure sent from the grader to the bots. These pieces of JSON are again dictionaries, which contain keys specific to the particular request.
 
-Each bot must be aware of the username of the programmer which it is configured to play for. This helps ensure that the bot is playing for its rightful owner. 
+Each bot must be aware of the username of the programmer which it is configured to play for. This helps ensure that the bot is playing for its rightful owner.
 
 ## Initiation
 
