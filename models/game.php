@@ -90,7 +90,7 @@
                     }
                 }
                 if ( !empty( $newUsers ) ) {
-                    ++$position;
+                    $position += count( $newUsers );
                     $ratings[ $position ] = $newUsers;
                 }
             }

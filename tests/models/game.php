@@ -190,12 +190,17 @@
 
             $ratings = $game->getGlobalRatings();
 
+            $this->assertTrue( isset( $ratings[ 1 ] ), 'If there is a winner he must occupy position 1' );
             $this->assertEquals( 1, count( $ratings[ 1 ] ), 'Only one player must be in the first place' );
-            $this->assertEquals( 2, count( $ratings[ 2 ] ), 'All the players that were defeated on the last round must go to the second place' );
+
+            $this->assertFalse( isset( $ratings[ 2 ] ), 'If there are no players in the second position $ratings[ 2 ] must not be set' );
+
+            $this->assertTrue( isset( $ratings[ 3 ] ), 'If there are players in the third position they must occupy $ratings[ 3 ]' );
+            $this->assertEquals( 2, count( $ratings[ 3 ] ), 'All the players that were defeated on the last round must go to the second place' );
 
             $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
-            $this->assertEquals( $game->users[ 2 ]->id, $ratings[ 2 ][ 0 ]->id, 'The ratings must contain the valid players' );
-            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 2 ][ 1 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 2 ]->id, $ratings[ 3 ][ 0 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 3 ][ 1 ]->id, 'The ratings must contain the valid players' );
         }
         public function testGetCountryRatings() {
             $game = $this->buildGameWithRoundAndCreatures();
@@ -209,10 +214,10 @@
             $ratings = $game->getCountryRatings( $country1 );
 
             $this->assertEquals( 1, count( $ratings[ 1 ] ), 'Only one player must be in the first place' );
-            $this->assertEquals( 1, count( $ratings[ 2 ] ), 'All the players that were defeated on the last round must go to the second place' );
+            $this->assertEquals( 1, count( $ratings[ 3 ] ), 'All the players that were defeated on the last round must go to the second place' );
 
             $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
-            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 2 ][ 0 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 3 ][ 0 ]->id, 'The ratings must contain the valid players' );
         }
         public function testGetLastGame() {
             $game1 = new Game();
