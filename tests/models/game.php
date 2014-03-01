@@ -173,7 +173,6 @@
 
             $creature2Clone = clone $creature2;
             $creature3Clone = clone $creature3;
-            $creature2Clone->alive = false;
             $creature3Clone->alive = false;
             $round2 = new Round();
             $round2->id = 1;
@@ -191,16 +190,16 @@
             $ratings = $game->getGlobalRatings();
 
             $this->assertTrue( isset( $ratings[ 1 ] ), 'If there is a winner he must occupy position 1' );
-            $this->assertEquals( 1, count( $ratings[ 1 ] ), 'Only one player must be in the first place' );
+            $this->assertEquals( 2, count( $ratings[ 1 ] ), 'If there is a draw both winners must be in the first place' );
 
-            $this->assertFalse( isset( $ratings[ 2 ] ), 'If there are no players in the second position $ratings[ 2 ] must not be set' );
+            $this->assertFalse( isset( $ratings[ 2 ] ), 'If there was a draw in the first place $ratings[ 2 ] must not be set' );
 
-            $this->assertTrue( isset( $ratings[ 3 ] ), 'If there are players in the third position they must occupy $ratings[ 3 ]' );
-            $this->assertEquals( 2, count( $ratings[ 3 ] ), 'All the players that were defeated on the last round must go to the second place' );
+            $this->assertTrue( isset( $ratings[ 3 ] ), 'If there are players in the third position $ratings[ 3 ] must be set' );
+            $this->assertEquals( 1, count( $ratings[ 3 ] ), 'If there are 3 users and the 2 of them had a draw in the first place the last one must be in the third place' );
 
             $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
-            $this->assertEquals( $game->users[ 2 ]->id, $ratings[ 3 ][ 0 ]->id, 'The ratings must contain the valid players' );
-            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 3 ][ 1 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 2 ]->id, $ratings[ 1 ][ 1 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 3 ][ 0 ]->id, 'The ratings must contain the valid players' );
         }
         public function testGetCountryRatings() {
             $game = $this->buildGameWithRoundAndCreatures();

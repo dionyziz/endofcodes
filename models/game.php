@@ -79,8 +79,9 @@
                     }
                 }
                 if ( !empty( $newUsers ) ) {
-                    $position += count( $newUsers );
+                    $position += 1;
                     $ratings[ $position ] = $newUsers;
+                    $position += count( $newUsers ) - 1;
                 }
             }
             return $ratings;
