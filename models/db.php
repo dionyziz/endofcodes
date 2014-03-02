@@ -38,34 +38,23 @@
             $setString = ' () VALUES ()';
         }
         else {
-            $keys = '(';
             $firstRow = $rows[ 0 ];
-            if ( count( $firstRow ) ) {
-                $fields = [];
-                foreach ( $firstRow as $field => $value ) {
-                    $keys .= "$field,";
-                }
-                $keys = substr( $keys, 0, strlen( $keys ) - 1 );
-            }
-            $keys .= ')';
-            $values = ' VALUES ';
+            $keys = '(' . implode( ',', array_keys( $firstRow ) ) . ')';
+            $values = [];
             $i = 0;
             $bind = [];
             foreach ( $rows as $row ) {
-                $valuePlaceHolders = '(';
-                ++$i;
+                $valuePlaceHolders = [];
                 if ( count( $row ) ) {
                     foreach ( $row as $key => $value ) {
-                        $valuePlaceHolders .= ":$key$i,";
-                        $bind[ "$key$i" ] = $value;
+                        ++$i;
+                        $valuePlaceHolders[] = ":value$i";
+                        $bind[ "value$i" ] = $value;
                     }
-                    $valuePlaceHolders = substr( $valuePlaceHolders, 0, strlen( $valuePlaceHolders ) - 1 );
                 }
-                $valuePlaceHolders .= ')';
-                $values .= "$valuePlaceHolders,";
+                $values[] = "(" . implode( ",", $valuePlaceHolders ) . ")";
             }
-            $values = substr( $values, 0, strlen( $values ) - 1 );
-            $setString = $keys . $values;
+            $setString = $keys . ' VALUES ' . implode( ",", $values );
         }
         $res = db(
             'INSERT INTO '
@@ -101,32 +90,21 @@
         $bind = [];
         if ( !empty( $wheres ) ) {
             $firstWhere = $wheres[ 0 ];
-            $keys = '(';
-            if ( count( $firstWhere ) ) {
-                foreach ( $firstWhere as $key => $value ) {
-                    $keys .= "$key,";
-                }
-                $keys = substr( $keys, 0, strlen( $keys ) - 1 );
-            }
-            $keys .= ')';
-            $in = ' IN (';
+            $keys = '(' . implode( ',', array_keys( $firstWhere ) ) . ')';
+            $in = [];
             $i = 0;
             foreach ( $wheres as $where ) {
-                ++$i;
-                $inHolder = '(';
+                $inHolder = [];
                 if ( count( $where ) ) {
                     foreach ( $where as $key => $value ) {
-                        $inHolder .= ":$key$i,";
-                        $bind[ "$key$i" ] = $value;
+                        ++$i;
+                        $inHolder[] = ":value$i";
+                        $bind[ "value$i" ] = $value;
                     }
-                    $inHolder = substr( $inHolder, 0, strlen( $inHolder ) - 1 );
                 }
-                $inHolder .= '),';
-                $in .= $inHolder;
+                $in[] = '(' . implode( ",", $inHolder ) . ')';
             }
-            $in = substr( $in, 0, strlen( $in ) - 1 );
-            $in .= ')';
-            $sql = $sql . ' WHERE ' . $keys . $in;
+            $sql = $sql . ' WHERE ' . $keys . ' IN ( ' . implode( ",", $in ) . ')';
         }
         return dbArray(
             $sql,

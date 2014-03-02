@@ -26,6 +26,22 @@
             dbInsertMulti( 'creatures', $rows );
         }
 
+        public static function selectUseridMulti( $creatures ) {
+            $wheres = [];
+            foreach ( $creatures as $creature ) {
+                $id = $creature->id;
+                $gameid = $creature->game->id;
+                $wheres[] = compact( 'id', 'gameid' );
+            }
+            try {
+                $rows = dbSelectMulti( 'creatures', [ 'userid' ], $wheres );
+            }
+            catch ( DBException $e ) {
+                throw new ModelNotFoundException();
+            }
+            return $rows;
+        }
+
         public function __construct( $a = false, $b = false, $c = false ) {
             if ( is_array( $a ) ) {
                 $creature_info = $a;
