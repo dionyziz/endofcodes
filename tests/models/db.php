@@ -77,11 +77,11 @@
             $this->assertSame( 42, $rows[ 0 ][ 'c' ], 'dbSelect must return the data that exists in the database' );
 
             $row = dbSelectOne( 'test_models', [ 'a', 'c' ] );
-            $this->assertTrue( isset( $rows[ 0 ][ 'a' ] ), 'dbSelectOne must return all columns that have been requested' );
-            $this->assertSame( 'test', $rows[ 0 ][ 'a' ], 'dbSelectOne must return the data that exists in the database' );
-            $this->assertFalse( isset( $rows[ 0 ][ 'b' ] ), 'dbSelectOne must not return columns that have not been requested' );
-            $this->assertTrue( isset( $rows[ 0 ][ 'c' ] ), 'dbSelectOne must return all columns that have been requested' );
-            $this->assertSame( 42, $rows[ 0 ][ 'c' ], 'dbSelectOne must return the data that exists in the database' );
+            $this->assertTrue( isset( $row[ 'a' ] ), 'dbSelectOne must return all columns that have been requested' );
+            $this->assertSame( 'test', $row[ 'a' ], 'dbSelectOne must return the data that exists in the database' );
+            $this->assertFalse( isset( $row[ 'b' ] ), 'dbSelectOne must not return columns that have not been requested' );
+            $this->assertTrue( isset( $row[ 'c' ] ), 'dbSelectOne must return all columns that have been requested' );
+            $this->assertSame( 42, $row[ 'c' ], 'dbSelectOne must return the data that exists in the database' );
 
             dbInsert( 'test_models', [] );
             $this->assertThrows( function() {
