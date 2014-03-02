@@ -6,7 +6,6 @@
     require_once 'models/user.php';
 
     class GameTest extends UnitTestWithFixtures {
-    /*
         public function testInit() {
             $game = new Game();
             for ( $i = 1; $i <= 4; ++$i ) {
@@ -124,13 +123,13 @@
                     $grid[ $creature->locationx ][ $creature->locationy ] = true;
                 }
             }
-        }*/
+        }
         public function testKillBot() {
             $game = $this->buildGame();
             $game->initiateAttributes();
             $game->genesis();
 
-            /*$this->assertTrue( method_exists( $game, "killBot" ), 'Game object must export a killBot function' ); 
+            $this->assertTrue( method_exists( $game, "killBot" ), 'Game object must export a killBot function' ); 
             $game->killBot( $game->users[ 1 ], 'fuck him' );
 
             foreach ( $game->rounds[ 0 ]->creatures as $creature ) {
@@ -140,13 +139,13 @@
                     $this->assertEquals( ACTION_NONE, $creature->intent->action, 'Dead creature must have action set to none' );
                     $this->assertEquals( DIRECTION_NONE, $creature->intent->direction, 'Dead creature must have direction set to none' );
                 }
-            }*/
-        }/*
+            }
+        }
         public function testGameIdNonZero() {
             $game = $this->buildGame();
 
             $this->assertEquals( 1, $game->id, 'Game id must be 1 when the first game is created' );
-        }*/
+        }
     }
 
     return new GameTest();
