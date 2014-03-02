@@ -70,7 +70,7 @@
             $ratings = [];
             $found = [];
 
-            for ( $i = count( $this->rounds ) - 1, $position = 0; $i >= 0; --$i ) {
+            for ( $i = count( $this->rounds ) - 1, $position = 1; $i >= 0; --$i ) {
                 $newUsers = [];
                 foreach ( $this->rounds[ $i ]->creatures as $creature ) {
                     if ( $creature->alive && !isset( $found[ $creature->user->id ] ) ) {
@@ -79,9 +79,8 @@
                     }
                 }
                 if ( !empty( $newUsers ) ) {
-                    $position += 1;
                     $ratings[ $position ] = $newUsers;
-                    $position += count( $newUsers ) - 1;
+                    $position += count( $newUsers );
                 }
             }
             return $ratings;
