@@ -102,12 +102,13 @@
             }
             $caught = false;
             try {
-                Creature::selectUseridMulti( $creatures );
+                $creatures = Creature::selectUseridMulti( $creatures );
             }
             catch ( ModelNotFoundException $e ) {
                 $caught = true;
             }
-            $this->assertFalse( $caught, 'All the creatures must be stored in the database' );
+            $this->assertFalse( $caught, 'An Exception should not be caught when we try to find the creatures after genesis' );
+            $this->assertEquals( $creatureCount, count( $creatures ), 'All the creatures must be stored in the database' );
             $this->assertEquals(
                 count( $game->users ) * $game->creaturesPerPlayer,
                 $creatureCount,
