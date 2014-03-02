@@ -48,7 +48,7 @@
                 $keys = substr( $keys, 0, strlen( $keys ) - 1 );
             }
             $keys .= ')';
-            $values = 'VALUES ';
+            $values = ' VALUES ';
             $i = 0;
             $bind = [];
             foreach ( $rows as $row ) {
@@ -90,17 +90,47 @@
     }
 
     function dbSelect( $table, $select = [ "*" ], $where = [] ) {
-        $fields = [];
-        foreach ( $where as $field => $value ) {
-            $fields[] = "$field = :$field";
+        if ( empty( $where ) ) {
+            return dbSelectMulti( $table, $select );
         }
+        return dbSelectMulti( $table, $select, [ $where ] );
+    }
+
+    function dbSelectMulti( $table, $select = [ "*" ], $wheres = [] ) {
         $sql =  'SELECT ' . implode( ",", $select ) . ' FROM ' . $table;
-        if ( !empty( $where ) ) {
-            $sql = $sql . ' WHERE ' . implode( " AND ", $fields );
+        $bind = [];
+        if ( !empty( $wheres ) ) {
+            $firstWhere = $wheres[ 0 ];
+            $keys = '(';
+            if ( count( $firstWhere ) ) {
+                foreach ( $firstWhere as $key => $value ) {
+                    $keys .= "$key,";
+                }
+                $keys = substr( $keys, 0, strlen( $keys ) - 1 );
+            }
+            $keys .= ')';
+            $in = ' IN (';
+            $i = 0;
+            foreach ( $wheres as $where ) {
+                ++$i;
+                $inHolder = '(';
+                if ( count( $where ) ) {
+                    foreach ( $where as $key => $value ) {
+                        $inHolder .= ":$key$i,";
+                        $bind[ "$key$i" ] = $value;
+                    }
+                    $inHolder = substr( $inHolder, 0, strlen( $inHolder ) - 1 );
+                }
+                $inHolder .= '),';
+                $in .= $inHolder;
+            }
+            $in = substr( $in, 0, strlen( $in ) - 1 );
+            $in .= ')';
+            $sql = $sql . ' WHERE ' . $keys . $in;
         }
         return dbArray(
             $sql,
-            $where
+            $bind
         );
     }
 

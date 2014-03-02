@@ -19,8 +19,8 @@
             $rows = [];
             foreach ( $creatures as $creature ) {
                 $id = $creature->id;
-                $gameid = $creature->gameid;
-                $userid = $creature->userid;
+                $gameid = $creature->game->id;
+                $userid = $creature->user->id;
                 $rows[] = compact( 'id', 'gameid', 'userid' );
             }
             dbInsertMulti( 'creatures', $rows );

@@ -89,6 +89,7 @@
                     if ( isset( $game->grid[ $i ][ $j ] ) ) {
                         $creature = $game->grid[ $i ][ $j ];
                         $caught = false;
+
                         try {
                             $dbCreature = new Creature( $creature->id, $creature->user->id, $creature->game->id );
                         }

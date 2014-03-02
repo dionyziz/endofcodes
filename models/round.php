@@ -58,6 +58,7 @@
         protected function create() {
             assert( $this->game instanceof Game, '$this->game must be an instance of Game when a round is created' );
 
+            $rows = [];
             $gameid = $this->game->id;
             $roundid = $this->id;
             foreach ( $this->creatures as $creature ) {
@@ -67,20 +68,10 @@
                 $direction = directionConstToString( $creature->intent->direction );
                 $action = actionConstToString( $creature->intent->action );
                 $creatureid = $creature->id;
-                dbInsert(
-                    'roundcreatures',
-                    compact(
-                        'gameid',
-                        'roundid',
-                        'locationx',
-                        'locationy',
-                        'hp',
-                        'action',
-                        'direction',
-                        'creatureid'
-                    )
-                );
+                $rows[] = compact( 'gameid', 'roundid', 'locationx', 'locationy', 'hp', 'action', 'direction', 'creatureid' );
             }
+
+            dbInsertMulti( 'roundcreatures', $rows );
         }
 
         public function onBeforeSave() {

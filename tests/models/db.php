@@ -124,6 +124,34 @@
                 dbSelectOne( 'test_models' );
             }, 'DBException', 'dbSelectOne must throw an exception if no rows are found' );
         }
+        public function testSelectMulti() {
+            dbInsertMulti( 'test_models', [
+                [
+                    'a' => 'test1', 'b' => 1, 'c' => 2
+                ],
+                [
+                    'a' => 'test2', 'b' => 3, 'c' => 4
+                ]
+            ] );
+            $rows = dbSelectMulti( 'test_models', [ 'a', 'b', 'c' ], [
+                [
+                    'a' => 'test1', 'b' => 1, 'c' => 2
+                ],
+                [
+                    'a' => 'test2', 'b' => 3, 'c' => 4
+                ]
+            ] );
+
+            $this->assertEquals( 2, count( $rows ), 'dbSelect must find the rows inserted' );
+            $row1 = $rows[ 0 ];
+            $this->assertEquals( 'test1', $row1[ 'a' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 1, $row1[ 'b' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 2, $row1[ 'c' ], 'dbInsertMulti must insert the data specified' );
+            $row2 = $rows[ 1 ];
+            $this->assertEquals( 'test2', $row2[ 'a' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 3, $row2[ 'b' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 4, $row2[ 'c' ], 'dbInsertMulti must insert the data specified' );
+        }
         public function testUpdate() {
             dbInsert( 'test_models', [
                 'a' => 'test',
