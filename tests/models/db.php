@@ -11,16 +11,6 @@
                         PRIMARY KEY (id)
                     )'
             );
-            db(
-                'CREATE TABLE IF NOT EXISTS
-                    test_multi (
-                        id INT(4) NOT NULL AUTO_INCREMENT,
-                        c varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-                        b INT(4) NOT NULL DEFAULT 0,
-                        a INT(4) NOT NULL DEFAULT 0,
-                        PRIMARY KEY (id)
-                    )'
-            );
         }
         public function testDb() {
             $res = db( 'SELECT 1 AS one' );
@@ -48,7 +38,7 @@
             $rows = dbSelect( 'test_models', [ 'id', 'a', 'b', 'c' ] );
             $this->assertEquals( 1, count( $rows ), 'dbInsert must insert exactly one row' );
             $row = $rows[ 0 ];
-            $this->assertEquals( 'test', $row[ 'a' ], 'dbInsert must insert the data specified' );
+            $this->assertSame( 'test', $row[ 'a' ], 'dbInsert must insert the data specified' );
             $this->assertSame( 17, $row[ 'b' ], 'dbInsert must insert the data specified' );
             $this->assertSame( 42, $row[ 'c' ], 'dbInsert must insert the data specified' );
             $this->assertSame( 1, $row[ 'id' ], 'dbInsert must allow the DBMS to specify the auto-increment value freely' );;
@@ -63,7 +53,7 @@
                 ]
             ] );
             $rows = dbSelect( 'test_models', [ 'id', 'a', 'b', 'c' ] );
-            $this->assertEquals( 2, count( $rows ), 'dbInsertMulti must insert excactly two rows' );
+            $this->assertEquals( 2, count( $rows ), 'dbInsertMulti must insert exactly two rows' );
             $row1 = $rows[ 0 ];
             $this->assertEquals( 'test1', $row1[ 'a' ], 'dbInsertMulti must insert the data specified' );
             $this->assertSame( 1, $row1[ 'b' ], 'dbInsertMulti must insert the data specified' );
