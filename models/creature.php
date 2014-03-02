@@ -15,6 +15,17 @@
         protected static $attributes = [ 'id', 'gameid', 'userid' ];
         protected static $tableName = 'creatures';
 
+        public static function saveMulti( $creatures ) {
+            $rows = [];
+            foreach ( $creatures as $creature ) {
+                $id = $creature->id;
+                $gameid = $creature->gameid;
+                $userid = $creature->userid;
+                $rows[] = compact( 'id', 'gameid', 'userid' );
+            }
+            dbInsertMulti( 'creatures', $rows );
+        }
+
         public function __construct( $a = false, $b = false, $c = false ) {
             if ( is_array( $a ) ) {
                 $creature_info = $a;

@@ -25,22 +25,53 @@
         return $res;
     }
 
-    function dbInsert( $table, $set ) {
-        if ( empty( $set ) ) {
+    function dbInsert( $table, $row ) {
+        return dbInsertMulti( $table, [ $row ] );
+    }
+
+    function dbInsertMulti( $table, $rows ) {
+        if ( empty( $rows ) ) {
+            // nothing to do here
+            return;
+        }
+        if ( empty( $rows ) ) {
             $setString = ' () VALUES ()';
         }
         else {
-            $fields = [];
-            foreach ( $set as $field => $value ) {
-                $fields[] = "$field = :$field";
+            $keys = '(';
+            $firstRow = $rows[ 0 ];
+            if ( count( $firstRow ) ) {
+                $fields = [];
+                foreach ( $firstRow as $field => $value ) {
+                    $keys .= "$field,";
+                }
+                $keys = substr( $keys, 0, strlen( $keys ) - 1 );
             }
-            $setString = ' SET ' . implode( ",", $fields );
+            $keys .= ')';
+            $values = 'VALUES ';
+            $i = 0;
+            $bind = [];
+            foreach ( $rows as $row ) {
+                $valuePlaceHolders = '(';
+                ++$i;
+                if ( count( $row ) ) {
+                    foreach ( $row as $key => $value ) {
+                        $valuePlaceHolders .= ":$key$i,";
+                        $bind[ "$key$i" ] = $value;
+                    }
+                    $valuePlaceHolders = substr( $valuePlaceHolders, 0, strlen( $valuePlaceHolders ) - 1 );
+                }
+                $valuePlaceHolders .= ')';
+                $values .= "$valuePlaceHolders,";
+            }
+            $values = substr( $values, 0, strlen( $values ) - 1 );
+            $setString = $keys . $values;
         }
         $res = db(
             'INSERT INTO '
             . $table
             . $setString,
-            $set
+            $bind
         );
         return mysql_insert_id();
     }
