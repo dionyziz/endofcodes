@@ -134,13 +134,13 @@
 
             $this->assertEquals( 2, count( $rows ), 'dbSelect must find the rows inserted' );
             $row1 = $rows[ 0 ];
-            $this->assertEquals( 'test1', $row1[ 'a' ], 'dbInsertMulti must insert the data specified' );
-            $this->assertSame( 1, $row1[ 'b' ], 'dbInsertMulti must insert the data specified' );
-            $this->assertSame( 2, $row1[ 'c' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertEquals( 'test1', $row1[ 'a' ], 'dbSelectMulti must select the data specified' );
+            $this->assertSame( 1, $row1[ 'b' ], 'dbSelectMulti must select the data specified' );
+            $this->assertSame( 2, $row1[ 'c' ], 'dbSelectMulti must select the data specified' );
             $row2 = $rows[ 1 ];
-            $this->assertEquals( 'test2', $row2[ 'a' ], 'dbInsertMulti must insert the data specified' );
-            $this->assertSame( 3, $row2[ 'b' ], 'dbInsertMulti must insert the data specified' );
-            $this->assertSame( 4, $row2[ 'c' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertEquals( 'test2', $row2[ 'a' ], 'dbSelectMulti must select the data specified' );
+            $this->assertSame( 3, $row2[ 'b' ], 'dbSelectMulti must select the data specified' );
+            $this->assertSame( 4, $row2[ 'c' ], 'dbSelectMulti must select the data specified' );
         }
         public function testUpdate() {
             dbInsert( 'test_models', [
