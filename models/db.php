@@ -45,18 +45,16 @@
         return mysql_insert_id();
     }
 
-    function dbDelete( $table, $where ) {
+    function dbDelete( $table, Array $where = [] ) {
         $fields = [];
         foreach ( $where as $field => $value ) {
             $fields[] = "$field = :$field";
         }
-        db(
-            'DELETE FROM '
-            . $table
-            . ' WHERE '
-            . implode( " AND ", $fields ),
-            $where
-        );
+        $sql = 'DELETE FROM ' . $table;
+        if ( count( $where ) ) {
+            $sql .= ' WHERE ' . implode( " AND ", $fields );
+        }
+        db( $sql, $where );
         return mysql_affected_rows();
     }
 
@@ -86,7 +84,12 @@
         return $array[ 0 ];
     }
 
-    function dbUpdate( $table, $set, $where ) {
+    function dbUpdate( $table, Array $set = [], Array $where = [] ) {
+        if ( empty( $set ) ) {
+            // nothing to do
+            return;
+        }
+
         $wfields = [];
         $wreplace = [];
         foreach ( $where as $field => $value ) {
@@ -99,15 +102,13 @@
             $sfields[] = "$field = :set_$field";
             $sreplace[ 'set_' . $field ] = $value;
         }
-        db(
-            'UPDATE '
-            . $table
-            . ' SET '
-            . implode( ",", $sfields )
-            . ' WHERE '
-            . implode( " AND ", $wfields ),
-            array_merge( $wreplace, $sreplace )
-        );
+        $sql = 'UPDATE ' . $table;
+        $sql .= ' SET ' . implode( ",", $sfields );
+        if ( !empty( $where ) ) {
+            $sql .= ' WHERE ' . implode( " AND ", $wfields );
+        }
+        db( $sql, array_merge( $wreplace, $sreplace ) );
+
         return mysql_affected_rows();
     }
 
