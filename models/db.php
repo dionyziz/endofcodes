@@ -25,22 +25,42 @@
         return $res;
     }
 
-    function dbInsert( $table, $set ) {
-        if ( empty( $set ) ) {
+    function dbInsert( $table, $row ) {
+        return dbInsertMulti( $table, [ $row ] );
+    }
+
+    function dbInsertMulti( $table, $rows ) {
+        if ( empty( $rows ) ) {
+            // nothing to do here
+            return;
+        }
+        if ( empty( $rows ) ) {
             $setString = ' () VALUES ()';
         }
         else {
-            $fields = [];
-            foreach ( $set as $field => $value ) {
-                $fields[] = "$field = :$field";
+            $firstRow = $rows[ 0 ];
+            $keys = '(' . implode( ',', array_keys( $firstRow ) ) . ')';
+            $values = [];
+            $i = 0;
+            $bind = [];
+            foreach ( $rows as $row ) {
+                $valuePlaceHolders = [];
+                if ( count( $row ) ) {
+                    foreach ( $row as $key => $value ) {
+                        ++$i;
+                        $valuePlaceHolders[] = ":value$i";
+                        $bind[ "value$i" ] = $value;
+                    }
+                }
+                $values[] = "(" . implode( ",", $valuePlaceHolders ) . ")";
             }
-            $setString = ' SET ' . implode( ",", $fields );
+            $setString = $keys . ' VALUES ' . implode( ",", $values );
         }
         $res = db(
             'INSERT INTO '
             . $table
             . $setString,
-            $set
+            $bind
         );
         return mysql_insert_id();
     }
@@ -59,17 +79,36 @@
     }
 
     function dbSelect( $table, $select = [ "*" ], $where = [] ) {
-        $fields = [];
-        foreach ( $where as $field => $value ) {
-            $fields[] = "$field = :$field";
+        if ( empty( $where ) ) {
+            return dbSelectMulti( $table, $select );
         }
+        return dbSelectMulti( $table, $select, [ $where ] );
+    }
+
+    function dbSelectMulti( $table, $select = [ "*" ], $wheres = [] ) {
         $sql =  'SELECT ' . implode( ",", $select ) . ' FROM ' . $table;
-        if ( !empty( $where ) ) {
-            $sql = $sql . ' WHERE ' . implode( " AND ", $fields );
+        $bind = [];
+        if ( !empty( $wheres ) ) {
+            $firstWhere = $wheres[ 0 ];
+            $keys = '(' . implode( ',', array_keys( $firstWhere ) ) . ')';
+            $in = [];
+            $i = 0;
+            foreach ( $wheres as $where ) {
+                $inHolder = [];
+                if ( count( $where ) ) {
+                    foreach ( $where as $key => $value ) {
+                        ++$i;
+                        $inHolder[] = ":value$i";
+                        $bind[ "value$i" ] = $value;
+                    }
+                }
+                $in[] = '(' . implode( ",", $inHolder ) . ')';
+            }
+            $sql = $sql . ' WHERE ' . $keys . ' IN ( ' . implode( ",", $in ) . ')';
         }
         return dbArray(
             $sql,
-            $where
+            $bind
         );
     }
 
