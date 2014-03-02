@@ -48,10 +48,30 @@
             $rows = dbSelect( 'test_models', [ 'id', 'a', 'b', 'c' ] );
             $this->assertEquals( 1, count( $rows ), 'dbInsert must insert exactly one row' );
             $row = $rows[ 0 ];
-            $this->assertSame( 'test', $row[ 'a' ], 'dbInsert must insert the data specified' );
+            $this->assertEquals( 'test', $row[ 'a' ], 'dbInsert must insert the data specified' );
             $this->assertSame( 17, $row[ 'b' ], 'dbInsert must insert the data specified' );
             $this->assertSame( 42, $row[ 'c' ], 'dbInsert must insert the data specified' );
             $this->assertSame( 1, $row[ 'id' ], 'dbInsert must allow the DBMS to specify the auto-increment value freely' );;
+        }
+        public function testInsertMulti() {
+            dbInsertMulti( 'test_models', [
+                [
+                    'a' => 'test1', 'b' => 1, 'c' => 2
+                ],
+                [
+                    'a' => 'test2', 'b' => 3, 'c' => 4
+                ]
+            ] );
+            $rows = dbSelect( 'test_models', [ 'id', 'a', 'b', 'c' ] );
+            $this->assertEquals( 2, count( $rows ), 'dbInsertMulti must insert excactly two rows' );
+            $row1 = $rows[ 0 ];
+            $this->assertEquals( 'test1', $row1[ 'a' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 1, $row1[ 'b' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 2, $row1[ 'c' ], 'dbInsertMulti must insert the data specified' );
+            $row2 = $rows[ 1 ];
+            $this->assertEquals( 'test2', $row2[ 'a' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 3, $row2[ 'b' ], 'dbInsertMulti must insert the data specified' );
+            $this->assertSame( 4, $row2[ 'c' ], 'dbInsertMulti must insert the data specified' );
         }
         public function testInsertNoFields() {
             $this->assertDoesNotThrow( function() {
@@ -122,23 +142,6 @@
             $tables = dbListTables();
 
             $this->assertTrue( array_search( 'test_models', $tables ), 'dbListTables must include all tables in the returned list' );
-        }
-        public function testInsert() {
-            $caught = false;
-            try {
-                dbInsert( 'test_multi', [ 'a' => 1, 'b' => 2, 'c' => 'adfa' ] );
-            }
-            catch ( DBException $e ) {
-                $caught = true;
-            }
-
-            $res = dbSelect( 'test_multi', [ 'a', 'b', 'c' ], [ 'id' => 1 ] );
-
-            $this->assertFalse( $caught, 'dbInsert must not throw an exception if valid data is given' );
-            $this->assertEquals( 1, count( $res ), 'dbInsert must insert exactly one row' );
-            $this->assertSame( 1, $res[ 0 ][ 'a' ], 'dbInsert must insert the data given on the table' );
-            $this->assertSame( 2, $res[ 0 ][ 'b' ], 'dbInsert must insert the data given on the table' );
-            $this->assertSame( 'adfa', $res[ 0 ][ 'c' ], 'dbInsert must insert the data given on the table' );
         }
         public function tearDown() {
             db( 'DROP TABLE test_models' );
