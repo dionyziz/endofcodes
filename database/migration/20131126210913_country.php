@@ -9,7 +9,7 @@
 			'shortname' => 'text COLLATE utf8_unicode_ci NOT NULL'
 		],
         [
-            [ 'type' => 'primary', 'field' => [ 'id' ] ]
+            [ 'type' => 'primary', 'field' => 'id' ]
         ]
 	);  
 ?>

@@ -10,7 +10,7 @@
             'width' => 'int(11) NOT NULL' 
         ],
         [ 
-            [ 'type' => 'primary', 'field' => [ 'id' ] ]
+            [ 'type' => 'primary', 'field' => 'id' ]
         ]
     );
 
@@ -22,7 +22,7 @@
             'userid' => 'int(11) NOT NULL'
         ],
         [ 
-            [ 'type' => 'primary', 'field' => [ 'id' ] ]
+            [ 'type' => 'primary', 'field' => 'id' ]
         ]
     );
 

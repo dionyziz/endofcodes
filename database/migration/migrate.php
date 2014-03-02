@@ -111,26 +111,33 @@
                 foreach ( $keys as $key ) {
                     if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' ) {
                         $type = strtoupper( $key[ 'type' ] );
-                        if ( isset( $key[ 'name' ] ) ) {
-                            $fields = implode( ',', $key[ 'field' ] );
-                            $name = $key[ 'name' ];
-                            $args[] = "CONSTRAINT $name $type KEY ( $fields )"; 
-                        }
-                        else {
-                            foreach ( $key[ 'field' ] as $field ) {
-                                $args[] = "$type KEY ( $field )";
+                        $fields = implode( ',', $key[ 'field' ] );
+                        if ( is_array( $key[ 'field' ] ) ) {
+                            if ( isset( $key[ 'name' ] ) ) {
+                                $name = $key[ 'name' ];
+                                $args[] = "CONSTRAINT $name $type KEY ( $fields )"; 
+                            }
+                            else {
+                                $args[] = "$type KEY ( $fields )";
                             }
                         }
+                        else {
+                            $field = $key[ 'field' ];
+                            $args[] = "$type KEY ( $field )";
+                        }
                     }
-                }
-                if ( $key[ 'type' ] == 'index' ) {
-                    if ( isset( $key[ 'name' ] ) ) {
-                        $fields = implode( ',', $key[ 'field' ] );
-                        $name = $key[ 'name' ];
-                        $args[] = "INDEX $name ( $fields )"; 
-                    }
-                    else {
-                        foreach ( $key[ 'field' ] as $field ) {
+                    if ( $key[ 'type' ] == 'index' ) {
+                        if ( is_array( $key[ 'field' ] ) ) {
+                            $fields = implode( ',', $key[ 'field' ] );
+                            if ( isset( $key[ 'name' ] ) ) {
+                                $name = $key[ 'name' ];
+                            }
+                            else {
+                                $name = '';
+                            }
+                            $args[] = "INDEX $name ( $fields )"; 
+                        }
+                        else {
                             $args[] = "INDEX ( $field )";
                         }
                     }

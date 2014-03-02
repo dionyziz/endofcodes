@@ -14,7 +14,7 @@
         ],
         [ 
             [ 'type' => 'unique', 'field' => [ 'username', 'email' ] ],
-            [ 'type' => 'primary', 'field' => [ 'id' ] ]
+            [ 'type' => 'primary', 'field' => 'id' ]
         ]
     );
     
@@ -26,7 +26,7 @@
             'imagename' => 'varchar(200) COLLATE utf8_unicode_ci NOT NULL',
         ],
         [ 
-            [ 'type' => 'primary', 'field' => [ 'imageid' ] ]
+            [ 'type' => 'primary', 'field' => 'imageid' ]
         ]
     );
 ?>
