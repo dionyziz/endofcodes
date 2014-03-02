@@ -116,8 +116,8 @@
                 foreach ( $keys as $key ) {
                     if ( $key[ 'type' ] == 'unique' || $key[ 'type' ] == 'primary' ) {
                         $type = strtoupper( $key[ 'type' ] );
-                        $fields = implode( ',', $key[ 'field' ] );
                         if ( is_array( $key[ 'field' ] ) ) {
+                            $fields = implode( ',', $key[ 'field' ] );
                             if ( isset( $key[ 'name' ] ) ) {
                                 $name = $key[ 'name' ];
                                 $args[] = "CONSTRAINT $name $type KEY ( $fields )"; 

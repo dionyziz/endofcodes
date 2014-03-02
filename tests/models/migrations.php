@@ -14,7 +14,6 @@
             );
         }
         public function testCreateTable() {
-            $emptySuccess = false;
             $trueSuccess = true;
             try { 
                 $this->createTable();
@@ -26,23 +25,12 @@
             if ( !in_array( 'testTable', $tables ) ) {
                 $trueSuccess = false; 
             }
-            try { 
-                Migration::createTable( 
-                    'testTable', 
-                    [],
-                    []
-                );
-            }
-            catch ( MigrationException $e ) {
-                $emptySuccess = true; 
-            }
             $this->assertTrue( $trueSuccess, 'createTable must create a table when called' );
-            $this->assertTrue( $emptySuccess, 'createTable must not create a table when field are empty' );
         }
-        public function testCreateField() {
+        public function testAddField() {
             $this->createTable();
             $trueSuccess = true;
-            $emptySuccess = $noTableSuccess = false;
+            $noTableSuccess = false;
             try {
                 Migration::addField( 'testTable', 'test1', 'int(11) NOT NULL' ); 
             }
@@ -54,20 +42,13 @@
                 $trueSuccess = false; 
             }
             try {
-                Migration::addField( 'testTable' ); 
-            }
-            catch ( MigrationException $e ) {
-                $emptySuccess = true; 
-            }
-            try {
                 Migration::addField( 'test', 'testField', 'int(11) NOT NULL' ); 
             }
             catch ( MigrationException $e ) {
                 $noTableSuccess = true; 
             }
-            $this->assertTrue( $trueSuccess, 'createField must add a field when called' );
-            $this->assertTrue( $emptySuccess, 'createField must not create a field when fieldname is empty' );
-            $this->assertTrue( $noTableSuccess, 'createField must return an error when table not exists' );
+            $this->assertTrue( $trueSuccess, 'addField must add a field when called' );
+            $this->assertTrue( $noTableSuccess, 'addField must return an error when table not exists' );
         }
         public function testAlterField() {
             $this->createTable();
@@ -138,6 +119,32 @@
             $this->assertTrue( $trueSuccess, 'dropField must drop a field when called' );
             $this->assertTrue( $syntaxSuccess, 'dropField must return an error when an attribute is missing' );
             $this->assertTrue( $noTableSuccess, 'dropField must return an error when table not exists' );
+        }
+        public function testAddFieldNoFieldName()  {
+            $this->createTable();
+            $emptySuccess = false;
+            try {
+                Migration::addField( 'testTable' ); 
+            }
+            catch ( MigrationException $e ) {
+                $emptySuccess = true; 
+            }
+            $this->assertTrue( $emptySuccess, 'addField must not create a field when fieldname is empty' );
+        }
+        public function testCreateTableNoFields() {
+            $emptySuccess = false;
+            try { 
+                Migration::createTable( 
+                    'testTable', 
+                    [],
+                    []
+                );
+            }
+            catch ( MigrationException $e ) {
+                $emptySuccess = true; 
+            }
+            $this->assertTrue( $emptySuccess, 'createTable must not create a table when field are empty' );
+            $this->createTable();
         }
         public function tearDown() {
             Migration::dropTable( 'testTable' );
