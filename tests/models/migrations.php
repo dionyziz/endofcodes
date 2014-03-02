@@ -9,7 +9,7 @@
                     'id' => 'int(11) NOT NULL AUTO_INCREMENT'
                 ],
                 [   
-                    [ 'type' => 'primary', 'field' => [ 'id' ] ]
+                    [ 'type' => 'primary', 'field' => 'id' ]
                 ]
             );
         }
@@ -85,7 +85,7 @@
                 $trueSuccess = false;
             }
             $fields = dbListFields( 'testTable' );
-            if ( in_array( 'test2', $fields ) ) {
+            if ( !in_array( 'testnew2', $fields ) ) {
                 $trueSuccess = false; 
             }
             try {

@@ -1,6 +1,6 @@
 <?php
     require 'views/header.php';
-    
+
     $form = new Form( 'user', 'update' );
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong,
             $password_new_not_matched, $password_new_small, $countries, $user ) {
