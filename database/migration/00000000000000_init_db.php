@@ -13,8 +13,9 @@
             'countryid' => 'int(11) NOT NULL'
         ],
         [ 
-            [ 'type' => 'unique', 'field' => [ 'username', 'email' ] ],
-            [ 'type' => 'primary', 'field' => 'id' ]
+            [ 'type' => 'primary', 'field' => 'id' ],
+            [ 'type' => 'unique', 'field' => 'username', 'name' => 'username' ],
+            [ 'type' => 'unique', 'field' => 'email', 'name' => 'email' ]
         ]
     );
     
