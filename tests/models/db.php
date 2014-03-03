@@ -161,6 +161,34 @@
 
             $this->assertTrue( array_search( 'test_models', $tables ), 'dbListTables must include all tables in the returned list' );
         }
+        public function testDbSelectNoFields() {
+            $caught = false;
+            try {
+                dbSelect( 'test_models' );
+            }
+            catch ( DBException $e ) {
+                $caught = true;
+            }
+
+            $this->assertFalse( $caught, "A DBException must not be caught if the only parameter we got is table" );
+        }
+        public function testDbSelectWithLimitAndOrderBy() {
+            dbInsertMulti( 'test_models', [
+                [
+                    'a' => 'test',
+                    'c' => 42
+                ],
+                [
+                    'a' => 'toast',
+                    'c' => 17
+                ]
+            ] );
+            $rows = dbSelect( 'test_models', [ 'a', 'c' ], [], 'c ASC', 1 );
+
+            $this->assertEquals( 1, count( $rows ), 'When limit = 1 we must get only one row' );
+            $this->assertSame( 17, $rows[ 0 ][ 'c' ], 'dbSelect must return the correct row' );
+            $this->assertSame( 'toast', $rows[ 0 ][ 'a' ], 'dbSelect must return the correct row' );
+        }
         public function tearDown() {
             db( 'DROP TABLE test_models' );
         }

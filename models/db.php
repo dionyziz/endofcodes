@@ -78,14 +78,14 @@
         return mysql_affected_rows();
     }
 
-    function dbSelect( $table, $select = [ "*" ], $where = [] ) {
+    function dbSelect( $table, $select = [ "*" ], $where = [], $orderBy = false, $limit = false ) {
         if ( empty( $where ) ) {
-            return dbSelectMulti( $table, $select );
+            return dbSelectMulti( $table, $select, [], $orderBy, $limit );
         }
-        return dbSelectMulti( $table, $select, [ $where ] );
+        return dbSelectMulti( $table, $select, [ $where ], $orderBy, $limit );
     }
 
-    function dbSelectMulti( $table, $select = [ "*" ], $wheres = [] ) {
+    function dbSelectMulti( $table, $select = [ "*" ], $wheres = [], $orderBy = false, $limit = false ) {
         $sql =  'SELECT ' . implode( ",", $select ) . ' FROM ' . $table;
         $bind = [];
         if ( !empty( $wheres ) ) {
@@ -105,6 +105,13 @@
                 $in[] = '(' . implode( ",", $inHolder ) . ')';
             }
             $sql = $sql . ' WHERE ' . $keys . ' IN ( ' . implode( ",", $in ) . ')';
+        }
+        if ( $orderBy !== false ) {
+            $sql .= ' ORDER BY ' . $orderBy;
+        }
+        if ( $limit !== false ) {
+            assert( $limit > 0, 'limit must be a positive integer' );
+            $sql .= ' LIMIT ' . $limit;
         }
         return dbArray(
             $sql,
