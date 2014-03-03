@@ -39,10 +39,11 @@
         }
         public function testRoundRequestParams() {
             $round = $this->buildRound();
+            $user = $round->creatures[ 1 ]->user;
 
             $this->assertTrue( method_exists( 'GraderSerializer', "roundRequestParams" ), 'GraderSerializer must have a "roundRequestParams" function' );
 
-            $requestParams = GraderSerializer::roundRequestParams( $round );
+            $requestParams = GraderSerializer::roundRequestParams( $round, $user );
 
             $this->assertTrue( isset( $requestParams[ 'round' ] ), 'roundid must exist in exported request params' );
             $this->assertEquals( $round->id, $requestParams[ 'round' ], 'roundid must be encoded properly to request params' );
@@ -54,6 +55,9 @@
 
             $this->assertEquals( 1, $map[ 0 ]->creatureid, 'All creatures must exist in exported request params' );
             $this->assertEquals( 2, $map[ 1 ]->creatureid, 'All creatures must exist in exported request params' );
+
+            $this->assertTrue( isset( $requestParams[ 'userid' ] ), 'userid must exist in exported request params' );
+            $this->assertEquals( $user->id, $requestParams[ 'userid' ], 'userid must be encoded properly to request params' );
         }
         public function testFlattenUser() {
             $user = $this->buildUser( 'vitsalis' );
