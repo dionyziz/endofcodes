@@ -84,18 +84,12 @@
                 $userCountCreatures[ $i ] = 0;
             }
             $creatureCount = 0;
+            $creatures = [];
             for ( $i = 0; $i < $game->width; ++$i ) {
                 for ( $j = 0; $j < $game->height; ++$j ) {
                     if ( isset( $game->grid[ $i ][ $j ] ) ) {
                         $creature = $game->grid[ $i ][ $j ];
-                        $caught = false;
-                        try {
-                            $dbCreature = new Creature( $creature->id, $creature->user->id, $creature->game->id );
-                        }
-                        catch ( ModelNotFoundException $e ) {
-                            $caught = true;
-                        }
-                        $this->assertFalse( $caught, 'The creature must be created in the database after genesis' );
+                        $creatures[] = $game->grid[ $i ][ $j ];
                         ++$userCountCreatures[ $creature->user->id ];
                         $this->assertTrue( $creature->id >= 1, "Creatures ids must start from 1" );
                         $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
@@ -106,6 +100,15 @@
                     }
                 }
             }
+            $caught = false;
+            try {
+                $creatures = Creature::selectUseridMulti( $creatures );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+            $this->assertFalse( $caught, 'An Exception should not be caught when we try to find the creatures after genesis' );
+            $this->assertEquals( $creatureCount, count( $creatures ), 'All the creatures must be stored in the database' );
             $this->assertEquals(
                 count( $game->users ) * $game->creaturesPerPlayer,
                 $creatureCount,
@@ -145,18 +148,6 @@
             $game = $this->buildGame();
 
             $this->assertEquals( 1, $game->id, 'Game id must be 1 when the first game is created' );
-        }
-        public function testFindByDatetime() {
-            $game = $this->buildGame();
-            $datetime = $game->created;
-            $game->initiateAttributes();
-            $game->save();
-            $dbGame = Game::findByDatetime( $datetime );
-
-            $this->assertSame( $game->id, $dbGame->id, 'gameid must be the same during creation' );
-            $this->assertSame( $game->height, $dbGame->height, 'game height must be the same during creation' );
-            $this->assertSame( $game->width, $dbGame->width, 'game width must be the same during creation' );
-            $this->assertEquals( $game->created, $dbGame->created, 'game created must be the same during creation' );
         }
         protected function buildGameWithRoundAndCreatures() {
             $user1 = $this->buildUser( 'vitsalis' );

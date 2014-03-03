@@ -1,4 +1,9 @@
 <?php
+    if ( $this->outputFormat == 'text' ) {
+        require 'views/testrun/results.txt.php';
+        return;
+    }
+
     require 'views/header.php';
 ?>
 

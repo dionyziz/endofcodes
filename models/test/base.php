@@ -97,6 +97,52 @@
         public function assertFalse( $condition, $description = '' ) {
             $this->assertTrue( !$condition, $description );
         }
+        protected function callAndGetException( $function ) {
+            $caught = false;
+
+            try {
+                $function();
+            }
+            catch ( Exception $e ) {
+                $caught = true;
+                $name = get_class( $e );
+                $exception = $e;
+            }
+
+            return compact( 'caught', 'name', 'exception' );
+        }
+        public function assertThrows( $function, $exception, $description = '' ) {
+            $exceptionData = $this->callAndGetException( $function );
+
+            if ( $description != '' ) {
+                $description .= '. ';
+            }
+            $description .= "Expected exception $exception to be thrown, but it was not thrown.";
+
+            if ( $exceptionData[ 'caught' ] ) {
+                if ( strtolower( $exceptionData[ 'name' ] ) != strtolower( $exception ) ) {
+                    $description .= " A " . $exceptionData[ 'name' ] . " exception was thrown instead.";
+                    $exceptionData[ 'caught' ] = false;
+                }
+            }
+            $this->assertTrue( $exceptionData[ 'caught' ], $description );
+        }
+        public function assertDoesNotThrow( $function, $exception, $description = '' ) {
+            $exceptionData = $this->callAndGetException( $function );
+
+            if ( $description != '' ) {
+                $description .= '. ';
+            }
+            $description .= "Expected exception $exception to be avoided, but it was thrown.";
+
+            if ( $exceptionData[ 'caught' ] ) {
+                if ( strtolower( $exceptionData[ 'name' ] ) != strtolower( $exception ) ) {
+                    // re-throw unexpected exception
+                    throw $exceptionData[ 'exception' ];
+                }
+            }
+            $this->assertFalse( $exceptionData[ 'caught' ], $description );
+        }
         public function run() {
             $this_reflection = new ReflectionObject( $this );
 

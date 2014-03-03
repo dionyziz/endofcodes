@@ -1,11 +1,12 @@
 <?php
     function creatureMove( $creature ) {
-        $delta = [
+        $offsets = [
             DIRECTION_NORTH => [ 0, 1 ],
             DIRECTION_EAST => [ 1, 0 ],
             DIRECTION_SOUTH => [ 0, -1 ],
             DIRECTION_WEST => [ -1, 0 ]
-        ][ $creature->intent->direction ];
+        ];
+        $delta = $offsets[ $creature->intent->direction ];
         $x = $creature->locationx + $delta[ 0 ];
         $y = $creature->locationy + $delta[ 1 ];
         if ( $x < 0 || $x >= $creature->game->width || $y < 0 || $y >= $creature->game->height ) {
