@@ -15,6 +15,33 @@
         protected static $attributes = [ 'id', 'gameid', 'userid' ];
         protected static $tableName = 'creatures';
 
+        public static function saveMulti( $creatures ) {
+            $rows = [];
+            foreach ( $creatures as $creature ) {
+                $id = $creature->id;
+                $gameid = $creature->game->id;
+                $userid = $creature->user->id;
+                $rows[] = compact( 'id', 'gameid', 'userid' );
+            }
+            dbInsertMulti( 'creatures', $rows );
+        }
+
+        public static function selectUseridMulti( $creatures ) {
+            $wheres = [];
+            foreach ( $creatures as $creature ) {
+                $id = $creature->id;
+                $gameid = $creature->game->id;
+                $wheres[] = compact( 'id', 'gameid' );
+            }
+            try {
+                $rows = dbSelectMulti( 'creatures', [ 'userid' ], $wheres );
+            }
+            catch ( DBException $e ) {
+                throw new ModelNotFoundException();
+            }
+            return $rows;
+        }
+
         public function __construct( $a = false, $b = false, $c = false ) {
             if ( is_array( $a ) ) {
                 $creature_info = $a;

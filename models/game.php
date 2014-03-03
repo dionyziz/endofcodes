@@ -87,7 +87,6 @@
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
                     $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-                    $creature->save();
                     while ( 1 ) {
                         $x = rand( 0, $this->width - 1 );
                         $y = rand( 0, $this->height - 1 );
@@ -101,6 +100,7 @@
                     $this->rounds[ 0 ]->creatures[] = $creature;
                 }
             }
+            Creature::saveMulti( $this->rounds[ 0 ]->creatures );
             $this->rounds[ 0 ]->save();
         }
 

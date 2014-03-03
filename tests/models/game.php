@@ -84,18 +84,12 @@
                 $userCountCreatures[ $i ] = 0;
             }
             $creatureCount = 0;
+            $creatures = [];
             for ( $i = 0; $i < $game->width; ++$i ) {
                 for ( $j = 0; $j < $game->height; ++$j ) {
                     if ( isset( $game->grid[ $i ][ $j ] ) ) {
                         $creature = $game->grid[ $i ][ $j ];
-                        $caught = false;
-                        try {
-                            $dbCreature = new Creature( $creature->id, $creature->user->id, $creature->game->id );
-                        }
-                        catch ( ModelNotFoundException $e ) {
-                            $caught = true;
-                        }
-                        $this->assertFalse( $caught, 'The creature must be created in the database after genesis' );
+                        $creatures[] = $game->grid[ $i ][ $j ];
                         ++$userCountCreatures[ $creature->user->id ];
                         $this->assertTrue( $creature->id >= 1, "Creatures ids must start from 1" );
                         $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
@@ -106,6 +100,15 @@
                     }
                 }
             }
+            $caught = false;
+            try {
+                $creatures = Creature::selectUseridMulti( $creatures );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+            $this->assertFalse( $caught, 'An Exception should not be caught when we try to find the creatures after genesis' );
+            $this->assertEquals( $creatureCount, count( $creatures ), 'All the creatures must be stored in the database' );
             $this->assertEquals(
                 count( $game->users ) * $game->creaturesPerPlayer,
                 $creatureCount,
