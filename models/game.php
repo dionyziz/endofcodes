@@ -19,6 +19,12 @@
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
+        public static function getLastGame() {
+            $game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 );
+
+            return new Game( $game[ 0 ][ 'id' ] );
+        }
+
         public function __construct( $id = false ) {
             if ( $id ) {
                 $this->exists = true;
@@ -52,22 +58,48 @@
         public function initiateAttributes() {
             $this->creaturesPerPlayer = rand( MIN_CREATURES, MAX_CREATURES );
             $multiply = $this->creaturesPerPlayer * count( $this->users );
-            $this->width = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
-            $this->height = rand( MIN_MULTIPLIER * $multiply + 1, MAX_MULTIPLIER * $multiply - 1 );
+            $min = sqrt( MIN_MULTIPLIER * $multiply + 1 );
+            $max = sqrt( MAX_MULTIPLIER * $multiply + 1 );
+            $this->width = rand( $min, $max );
+            $this->height = rand( $min, $max );
             $this->maxHp = rand( MIN_HP, MAX_HP );
             $this->attributesInitiated = true;
         }
 
-        protected function update() {
-            $id = $this->id;
-            $width = $this->width;
-            $height = $this->height;
+        public function getGlobalRatings() {
+            $ratings = [];
+            $found = [];
 
-            dbUpdate(
-                'games',
-                compact( 'width', 'height' ),
-                compact( 'id' )
-            );
+            for ( $i = count( $this->rounds ) - 1, $position = 1; $i >= 0; --$i ) {
+                $newUsers = [];
+                foreach ( $this->rounds[ $i ]->creatures as $creature ) {
+                    if ( $creature->alive && !isset( $found[ $creature->user->id ] ) ) {
+                        $newUsers[] = $creature->user;
+                        $found[ $creature->user->id ] = true;
+                    }
+                }
+                if ( !empty( $newUsers ) ) {
+                    $ratings[ $position ] = $newUsers;
+                    $position += count( $newUsers );
+                }
+            }
+            return $ratings;
+        }
+
+        public function getCountryRatings( Country $country ) {
+            $ratings = $this->getGlobalRatings();
+            $countryRatings = [];
+
+            foreach ( $ratings as $position => $users ) {
+                $validUsers = [];
+                foreach ( $users as $user ) {
+                    if ( $user->country->id === $country->id ) {
+                        $validUsers[] = $user;
+                    }
+                }
+                $countryRatings[ $position ] = $validUsers;
+            }
+            return $countryRatings;
         }
 
         public function genesis() {
@@ -87,7 +119,6 @@
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
                     $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-                    $creature->save();
                     while ( 1 ) {
                         $x = rand( 0, $this->width - 1 );
                         $y = rand( 0, $this->height - 1 );
@@ -101,6 +132,7 @@
                     $this->rounds[ 0 ]->creatures[] = $creature;
                 }
             }
+            Creature::saveMulti( $this->rounds[ 0 ]->creatures );
             $this->rounds[ 0 ]->save();
         }
 

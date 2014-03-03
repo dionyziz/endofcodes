@@ -84,18 +84,12 @@
                 $userCountCreatures[ $i ] = 0;
             }
             $creatureCount = 0;
+            $creatures = [];
             for ( $i = 0; $i < $game->width; ++$i ) {
                 for ( $j = 0; $j < $game->height; ++$j ) {
                     if ( isset( $game->grid[ $i ][ $j ] ) ) {
                         $creature = $game->grid[ $i ][ $j ];
-                        $caught = false;
-                        try {
-                            $dbCreature = new Creature( $creature->id, $creature->user->id, $creature->game->id );
-                        }
-                        catch ( ModelNotFoundException $e ) {
-                            $caught = true;
-                        }
-                        $this->assertFalse( $caught, 'The creature must be created in the database after genesis' );
+                        $creatures[] = $game->grid[ $i ][ $j ];
                         ++$userCountCreatures[ $creature->user->id ];
                         $this->assertTrue( $creature->id >= 1, "Creatures ids must start from 1" );
                         $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
@@ -106,6 +100,15 @@
                     }
                 }
             }
+            $caught = false;
+            try {
+                $creatures = Creature::selectUseridMulti( $creatures );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+            $this->assertFalse( $caught, 'An Exception should not be caught when we try to find the creatures after genesis' );
+            $this->assertEquals( $creatureCount, count( $creatures ), 'All the creatures must be stored in the database' );
             $this->assertEquals(
                 count( $game->users ) * $game->creaturesPerPlayer,
                 $creatureCount,
@@ -145,6 +148,79 @@
             $game = $this->buildGame();
 
             $this->assertEquals( 1, $game->id, 'Game id must be 1 when the first game is created' );
+        }
+        protected function buildGameWithRoundAndCreatures() {
+            $user1 = $this->buildUser( 'vitsalis' );
+            $user2 = $this->buildUser( 'vitsalissister' );
+            $user3 = $this->buildUser( 'vitsalissisterssecondcousin' );
+
+            $creature1 = $this->buildCreature( 1, 1, 1, $user1 );
+            $creature2 = $this->buildCreature( 2, 2, 2, $user2 );
+            $creature3 = $this->buildCreature( 3, 3, 3, $user3 );
+
+            $round1 = new Round();
+            $round1->id = 0;
+            $round1->creatures = [ 1 => $creature1, 2 => $creature2, 3 => $creature3 ];
+
+            $creature2Clone = clone $creature2;
+            $creature3Clone = clone $creature3;
+            $creature3Clone->alive = false;
+            $round2 = new Round();
+            $round2->id = 1;
+            $round2->creatures = [ 1 => $creature1, 2 => $creature2Clone, 3 => $creature3Clone ];
+
+            $game = new Game();
+            $game->users = [ 1 => $user1, 2 => $user2, 3 => $user3 ];
+            $game->rounds = [ 0 => $round1, 1 => $round2 ];
+
+            return $game;
+        }
+        public function testGetGlobalRatings() {
+            $game = $this->buildGameWithRoundAndCreatures();
+
+            $ratings = $game->getGlobalRatings();
+
+            $this->assertTrue( isset( $ratings[ 1 ] ), 'If there is a winner he must occupy position 1' );
+            $this->assertEquals( 2, count( $ratings[ 1 ] ), 'If there is a draw both winners must be in the first place' );
+
+            $this->assertFalse( isset( $ratings[ 2 ] ), 'If there was a draw in the first place $ratings[ 2 ] must not be set' );
+
+            $this->assertTrue( isset( $ratings[ 3 ] ), 'If there are players in the third position $ratings[ 3 ] must be set' );
+            $this->assertEquals( 1, count( $ratings[ 3 ] ), 'If there are 3 users and the 2 of them had a draw in the first place the last one must be in the third place' );
+
+            $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 2 ]->id, $ratings[ 1 ][ 1 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 3 ][ 0 ]->id, 'The ratings must contain the valid players' );
+        }
+        public function testGetCountryRatings() {
+            $game = $this->buildGameWithRoundAndCreatures();
+            $country1 = $this->buildCountry( 'mycountry1', 'niceshortnamebrah' );
+            $country2 = $this->buildCountry( 'notcountry1', 'thanks' );
+
+            $game->users[ 1 ]->country = $country1;
+            $game->users[ 2 ]->country = $country2;
+            $game->users[ 3 ]->country = $country1;
+
+            $ratings = $game->getCountryRatings( $country1 );
+
+            $this->assertEquals( 1, count( $ratings[ 1 ] ), 'Only one player must be in the first place' );
+            $this->assertEquals( 1, count( $ratings[ 3 ] ), 'All the players that were defeated on the last round must go to the second place' );
+
+            $this->assertEquals( $game->users[ 1 ]->id, $ratings[ 1 ][ 0 ]->id, 'The ratings must contain the valid players' );
+            $this->assertEquals( $game->users[ 3 ]->id, $ratings[ 3 ][ 0 ]->id, 'The ratings must contain the valid players' );
+        }
+        public function testGetLastGame() {
+            $game1 = new Game();
+            $game1->save();
+
+            $game2 = new Game();
+            $game2->created = '9999-12-31 23:59:59';
+            $game2->save();
+
+            $dbGame = Game::getLastGame();
+
+            $this->assertSame( $game2->id, $dbGame->id, "The gameid that getLastGame returns must be the same as the last game's id" );
+            $this->assertEquals( $game2->created, $dbGame->created, "The game created that getLastGame returns must be the same as the last game's created" );
         }
     }
 
