@@ -5,25 +5,27 @@
     if ( $bot_success ) {
         ?><p class='error'>Your bot is correctly configured <img src='static/images/check.png' /></p><?php
     }
-    else if ( $bot_not_success ) {
+    elseif ( $bot_not_success ) {
         ?><p class='error'>Your bot is incorrectly configured <img src='static/images/cancel.png' /></p><?php
-        if ( $could_not_resolve ) {
-            ?><p class='error'>Your bot hostname is invalid. Did you enter a valid hostname?</p><?php
-        }
-        if ( $could_not_connect ) {
-            ?><p class='error'>Your bot is unreachable on the network. Did you enter your public IP address?</p><?php
-        }
-        if ( $http_code_not_ok ) {
-            ?><p class='error'>Your bot is running, but not responding to initiation. Did you write code to handle initiation?</p><?php
-        }
-        if ( $invalid_json ) {
-            ?><p class='error'>Your bot is not sending valid JSON. Did you write code to generate JSON correctly?</p><?php
-        }
-        if ( $invalid_json_dictionary ) {
-            ?><p class='error'>You must set the bot name, version, and your username. Did you build the correct JSON dictionary?</p><?php
-        }
-        if ( $username_mismatch ) {
-            ?><p class='error'>Your bot is not using your username. Did you set your username correctly?</p><?php
+        switch ( $error ) {
+            case 'could_not_resolve':
+                ?><p class='error'>Your bot hostname is invalid. Did you enter a valid hostname?</p><?php
+                break;
+            case 'could_not_connect':
+                ?><p class='error'>Your bot is unreachable on the network. Did you enter your public IP address?</p><?php
+                break;
+            case 'http_code_not_ok':
+                ?><p class='error'>Your bot is running, but not responding to initiation. Did you write code to handle initiation?</p><?php
+                break;
+            case 'invalid_json':
+                ?><p class='error'>Your bot is not sending valid JSON. Did you write code to generate JSON correctly?</p><?php
+                break;
+            case 'invalid_json_dictionary':
+                ?><p class='error'>You must set the bot name, version, and your username. Did you build the correct JSON dictionary?</p><?php
+                break;
+            case 'username_mismatch':
+                ?><p class='error'>Your bot is not using your username. Did you set your username correctly?</p><?php
+                break;
         }
     }
     ?><p>API key: <?php echo $apikey ?></p><?php
