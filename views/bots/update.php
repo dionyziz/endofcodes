@@ -13,10 +13,7 @@
         if ( $could_not_connect ) {
             ?><p class='error'>Your bot is unreachable on the network. Did you enter your public IP address?</p><?php
         }
-        if ( $port_forward_incorrect ) {
-            ?><p class='error'>Your bot is refusing connections. Did you port forward correctly?</p><?php
-        }
-        if ( $initiation_incorrect ) {
+        if ( $http_code_not_ok ) {
             ?><p class='error'>Your bot is running, but not responding to initiation. Did you write code to handle initiation?</p><?php
         }
         if ( $invalid_json ) {

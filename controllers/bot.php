@@ -14,29 +14,17 @@
                 $bot->sendInitiateRequest(); 
             }
             catch ( GraderBotException $e ) {
-                //switch ( $e ) {
-                //    case 'initiate_could_not_resolve': 
-                //        $error = $invalid_hostname;
-                //        break; 
-                //    case 'initiate_could_not_connect':
-                //        $error = $bot_unreachable;
-                //        break;
-                //    case 'initiate_invalid_json': 
-                //        $error = $invalid_json;
-                //        break; 
-                //    case 'initiate_username_mismatch':
-                //        $error = $username_mismatch;
-                //        break;
-                //} 
                 $error = str_replace( "initiate_","",$url );
+                if ( strpos( $error, '_not_set' ) ) {
+                    $error = 'invalid_json_dictionary';
+                }
                 go( 'bot', 'update', [ $error => true ] );
             }
             $user->save();
             go( 'bot', 'update', [ 'bot_success' => true ] );
         }
         public function updateView( $boturl_empty, $boturl_invalid, $bot_success, $bot_not_success, $could_not_resolve, 
-                $could_not_connect, $username_mismatch, $port_forward_incorrect, $initiation_incorrect, $invalid_json, 
-                $invalid_json_dictionary ) {
+                $could_not_connect, $username_mismatch, $http_code_not_ok, $invalid_json, $invalid_json_dictionary ) {
             require_once 'views/bots/update.php'; 
         } 
     }
