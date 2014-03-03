@@ -1,5 +1,4 @@
 <?php
-    require_once 'models/dependencies.php';
     require_once 'header.php';
 
     if ( isset( $_GET[ 'resource' ] ) ) {
@@ -8,15 +7,7 @@
     else {
         $resource = '';
     }
-    $resource = basename( $resource );
-    $filename = 'controllers/' . $resource . '.php';
-    if ( !file_exists( $filename ) ) {
-        $resource = 'dashboard';
-        $filename = 'controllers/' . $resource . '.php';
-    }
-    require_once $filename;
-    $controllername = ucfirst( $resource ) . 'Controller';
-    $controller = new $controllername();
+    $controller = controllerBase::findController( $resource );
     try {
         $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
     }

@@ -1,3 +1,5 @@
+![Build status](https://travis-ci.org/dionyziz/endofcodes.png?branch=master)
+
 *End of Codes* is a game for programmers. You play the game by programming a bot which will play for you.
 
 About the game

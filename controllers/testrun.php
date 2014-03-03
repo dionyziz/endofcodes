@@ -3,6 +3,8 @@
         protected $environment = 'test';
 
         public function create( $name, $all = false ) {
+            set_time_limit( 360 );
+
             require_once 'models/test/base.php';
             require_once 'models/test/withfixtures.php';
 
@@ -14,6 +16,7 @@
             }
 
             $unittests = [];
+            $failed = false;
             foreach ( $tests as $test ) {
                 $path = 'tests/' . $test . '.php';
                 if ( !file_exists( $path ) ) {
@@ -21,10 +24,20 @@
                 }
                 $unittest = require_once $path;
                 $unittest->run();
+                foreach ( $unittest->tests as $test ) {
+                    if ( !$test->success ) {
+                        $failed = true;
+                    }
+                }
 
                 $unittests[] = $unittest;
             }
             require_once 'views/testrun/results.php';
+
+            if ( $failed ) {
+                return 1;
+            }
+            return 0;
         }
 
         public function createView() {

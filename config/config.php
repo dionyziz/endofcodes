@@ -26,17 +26,18 @@
                     'duration' => 60 * 60 * 24 * 365 * 20,
                     'unset_time' => 60 * 60 * 24 * 2
                 ],
-                'forgot_password_exp_time' => 3600 * 24, 
+                'forgot_password_exp_time' => 3600 * 24,
+                'cli_max_width' => 120,
                 'email' => 'team@endofcodes.com',
                 'base' => 'http://localhost/endofcodes/',
                 'root' => '/var/www/endofcodes/'
             ],
             'test' => [
                 'db' => [
-                    'host' => 'sample_host',
-                    'user' => 'sample_user',
-                    'pass' => 'sample_pass',
-                    'dbname' => 'sample_dbname'
+                    'host' => 'localhost',
+                    'user' => 'travis',
+                    'pass' => '',
+                    'dbname' => 'endofcodes_test'
                 ],
                 'files' => [
                     'avatar_extentions' => [ 'jpg', 'png', 'jpeg' ],
@@ -57,6 +58,7 @@
                     'unset_time' => 60 * 60 * 24 * 2
                 ],
                 'forgot_password_exp_time' => 3600 * 24, 
+                'cli_max_width' => 120,
                 'email' => 'team@endofcodes.com',
                 'base' => 'http://localhost/endofcodes/',
                 'root' => '/var/www/endofcodes/'

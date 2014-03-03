@@ -1,10 +1,29 @@
 <?php
     abstract class ControllerBase {
         protected $environment = 'development';
+        public $trusted = false;
+        public $outputFormat = 'html';
 
+        public static function findController( $resource ) {
+            $resource = basename( $resource );
+            $filename = 'controllers/' . $resource . '.php';
+            if ( !file_exists( $filename ) ) {
+                $resource = 'dashboard';
+                $filename = 'controllers/' . $resource . '.php';
+            }
+            require_once $filename;
+            $controllername = ucfirst( $resource ) . 'Controller';
+            $controller = new $controllername();
+
+            return $controller;
+        }
         protected function protectFromForgery( $token = '', $http_request_method = '' ) {
             if ( $http_request_method === 'POST'
-            && ( $token !== $_SESSION[ 'form' ][ 'token' ] || $token == '' ) ) {
+            && ( !isset( $_SESSION[ 'form' ] )
+              || !isset( $_SESSION[ 'form' ][ 'token' ] )
+              || $token !== $_SESSION[ 'form' ][ 'token' ]
+              || $token == '' )
+            && !$this->trusted ) {
                 throw new HTTPUnauthorizedException();
             }
         }
@@ -72,7 +91,7 @@
                     }
                 }
             }
-            call_user_func_array( $callable, $arguments );
+            return call_user_func_array( $callable, $arguments );
         }
         protected function loadConfig() {
             global $config;
@@ -102,7 +121,7 @@
             $this_reflection = new ReflectionObject( $this );
             $method_reflection = $this_reflection->getMethod( $method );
 
-            $this->callWithNamedArgs( $method_reflection, [ $this, $method ], $vars );
+            return $this->callWithNamedArgs( $method_reflection, [ $this, $method ], $vars );
         }
     }
 ?>
