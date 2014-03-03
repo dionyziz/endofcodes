@@ -17,9 +17,9 @@
         public static function roundRequestParams( Round $roundObject, User $user ) {
             $round = $roundObject->id;
             $map = GraderSerializer::serializeCreatureList( $roundObject->creatures );
-            $userid = $user->id;
+            $myid = $user->id;
 
-            return compact( 'round', 'map', 'userid' );
+            return compact( 'round', 'map', 'myid' );
         }
         public static function serializeUserList( $users ) {
             $flattenedUsers = array_map( [ 'GraderSerializer', 'flattenUser' ], array_values( $users ) );

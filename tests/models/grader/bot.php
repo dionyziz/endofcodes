@@ -389,8 +389,8 @@
             $this->assertTrue( isset( $curlConnectionMock->data[ 'map' ] ), 'map must exist in curl connection' );
             $this->assertEquals( $data[ 'map' ], $curlConnectionMock->data[ 'map' ], 'map must be send properly to curl' );
 
-            $this->assertTrue( isset( $curlConnectionMock->data[ 'userid' ] ), 'userid must exist in curl connection' );
-            $this->assertEquals( $data[ 'userid' ], $curlConnectionMock->data[ 'userid' ], 'userid must be send properly to curl' );
+            $this->assertTrue( isset( $curlConnectionMock->data[ 'myid' ] ), 'myid must exist in curl connection' );
+            $this->assertEquals( $data[ 'myid' ], $curlConnectionMock->data[ 'myid' ], 'myid must be send properly to curl' );
         }
         public function testRoundRespondValidJson() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [

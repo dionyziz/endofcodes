@@ -56,8 +56,8 @@
             $this->assertEquals( 1, $map[ 0 ]->creatureid, 'All creatures must exist in exported request params' );
             $this->assertEquals( 2, $map[ 1 ]->creatureid, 'All creatures must exist in exported request params' );
 
-            $this->assertTrue( isset( $requestParams[ 'userid' ] ), 'userid must exist in exported request params' );
-            $this->assertEquals( $user->id, $requestParams[ 'userid' ], 'userid must be encoded properly to request params' );
+            $this->assertTrue( isset( $requestParams[ 'myid' ] ), 'myid must exist in exported request params' );
+            $this->assertEquals( $user->id, $requestParams[ 'myid' ], 'myid must be encoded properly to request params' );
         }
         public function testFlattenUser() {
             $user = $this->buildUser( 'vitsalis' );
