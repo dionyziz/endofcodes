@@ -20,6 +20,7 @@
         $finalsql = strtr( $sql, $bind );
         $res = mysql_query( $finalsql );
         if ( $res === false ) {
+            echo $finalsql . "<br/>";
             throw new DBException( mysql_error() );
         }
         return $res;
@@ -82,7 +83,7 @@
         if ( empty( $where ) ) {
             return dbSelectMulti( $table, $select, [], $orderBy, $limit );
         }
-        return dbSelectMulti( $table, $select, [ $where ] );
+        return dbSelectMulti( $table, $select, [ $where ], $orderBy, $limit );
     }
 
     function dbSelectMulti( $table, $select = [ "*" ], $wheres = [], $orderBy = false, $limit = false ) {
