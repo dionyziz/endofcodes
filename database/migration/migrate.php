@@ -2,7 +2,7 @@
     abstract class Migration {
         protected static function migrate( $sql ) {
             global $config;
-
+            
             $env = getEnv( 'ENVIRONMENT' );
 
             if ( $env === false ) { 

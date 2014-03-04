@@ -1,4 +1,5 @@
 <?php
+    require_once 'models/dependencies.php';
     require_once 'helpers/http.php';
     session_start();
 

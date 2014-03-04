@@ -2,7 +2,7 @@
 
 **Dionysis Zindros** <[dionyziz@gmail.com](mailto:dionyziz@gmail.com)>
 
-4 January - 22 February 2014
+4 January - 1 March 2014
 
 # Scope
 
@@ -16,11 +16,11 @@ It will also be used as a base for the development of the project.
 
 # Engineering team
 
-The project will be implemented by an engineering team led by **Dionysis Zindros**, software engineer at Twitter, and two programmers **Vitalis Salis** and **Dimitris Lamprinos**, software engineering students.
+The project will be implemented by an engineering team led by **Dionysis Zindros**, software engineering student at the National Technical University of Athens, and two programmers **Vitalis Salis** and **Dimitris Lamprinos**, software engineering students.
 
 # Workflow
 
-The game consists of two different end-points. The core of the game is the **grader end-point** which allows players to actually play the game through a RESTful API. The game also exhibits a **web app** in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
+The game consists of two different end-points. The core of the game is the **grader app** which allows players to actually play the game through a RESTful API. The game also exhibits a **web app** in which players can register for their accounts, set up their bots, review their strategy, view the full history of past games, examine opponents’ strategy, and view current rankings.
 
 # Rules of the game
 
@@ -46,7 +46,7 @@ x, y ∈ ℕ
 
 A map location (x’, y’) is called a **neighbouring map location** to (x, y) if (x’, y’) is a map location and:
 
-(x’ = x ∧ |y’ - y| = 1) ∨ (y’ = y ∧ |x’ - x| = 1) (NOTE:  ∧ denotes the logical and operator and ∨ denotes the logical or operator)
+(x’ = x ∧ |y’ - y| = 1) ∨ (y’ = y ∧ |x’ - x| = 1) (NOTE:  ∧ denotes the logical *and* operator and ∨ denotes the logical *or* operator)
 
 ## Players
 
@@ -72,17 +72,15 @@ Each creature is associated with a **creatureid**, a unique positive integer tha
 
 ## Rounds
 
-teger, until the final round, which determines the result of the game. Rounds do not have duration; they are instances of the world in a specific configuration.
-
-The game is **round-based**. The game begins with round 0, the **genesis round**. Each round is numbered after a next consequent in
+The game is round-based. The game begins with round 0, the genesis round. Each round is numbered after a next consequent integer, until the final round, which determines the result of the game. Rounds do not have duration; they are instances of the world in a specific configuration.
 
 ## Hit points
 
-Creatures have hit points. A creature’s hit points is a non-negative number from 0 up to a maximum number **MAX_HP**. Creatures with positive hit points are alive. Creatures with 0 hit points are dead. Once a creature is dead, it cannot be revived. A dead creature’s position does not matter. While alive creatures reserve their position and only one alive creature exists in a certain location, dead creatures do not reserve a position; they can be imagined to exist beyond the game board.
+Creatures have hit points. A creature’s hit points is a non-negative integer from 0 up to a maximum number **MAX_HP**. Creatures with positive hit points are alive. Creatures with 0 hit points are dead. Once a creature is dead, it cannot be revived. A dead creature’s position does not matter. While alive creatures reserve their position and only one alive creature exists in a certain location, dead creatures do not reserve a position; they can be imagined to exist beyond the game board.
 
 ## Grader
 
-The game is overseen by a program called **grader**. The grader sets the game up, communicates with the bots, determines the configuration of each round, determines the outcome of the game, and tears down the game. Furthermore, the grader is responsible for enforcing game rules. As the grader is the de facto rules arbitrator, the source code of the grader is open source and can be used as a reference to the game rules. The de jure rules of the documentation are only incidental and derived from the grader’s source code, which is the normative source.
+The game is overseen by a program called the **grader**. The grader sets the game up, communicates with the bots, determines the configuration of each round, determines the outcome of the game, and tears down the game. Furthermore, the grader is responsible for enforcing game rules. As the grader is the *de facto* rules arbitrator, the source code of the grader is open source and can be used as a reference to the game rules. The *de jure* rules of the documentation are only incidental and derived from the grader’s source code, which is the normative source.
 
 ## Initiation
 
@@ -96,15 +94,15 @@ The numbers M, W, H, MAX_HP are determined as follows:
 
 M ⇜ [100, 200[ ∩ ℕ
 
-W ⇜ ]3NM, 4NM[ ∩ ℕ
+W ⇜ ]√(3NM), √(4NM)[ ∩ ℕ
 
-H ⇜ ]3NM, 4NM[ ∩ ℕ
+H ⇜ ]√(3NM), √(4NM)[ ∩ ℕ
 
 MAX_HP ⇜ [100, 200[ ∩ ℕ
 
 MAX_HP is the same for all creatures. The initial HP for all creatures is set to MAX_HP.
 
-Subsequently, the grader automatically creates the genesis round of the game. This is done by creating M creatures per bot and placing them on the map in random locations as follows. For each player i from 1 to N, for each creature j from 1 to M, the creature j of player i is positioned uniformly at random at an x coordinate from 0 to W - 1 and at a y coordinate from 0 to H - 1, as long at that coordinate is not already in use; if the coordinate is already in use, a different coordinate is chosen at random until an empty one is found.
+Subsequently, the grader automatically creates the genesis round of the game. This is done by creating M creatures per bot and placing them on the map in random locations as follows. For each player i from 1 to N, for each creature j from 1 to M, the creature j of player i is positioned uniformly at random at an (x, y) coordinate from the coordinates that are not already taken; that position is subsequently marked as taken.
 
 The configuration of the world on the genesis round is predetermined by the grader.
 
@@ -114,7 +112,7 @@ The grader shares the full state of the world with all players at the completion
 
 ## Intents
 
-Upon the completion of every round, and as long as there are more than two creatures belonging to different players alive, the grader informs each player about the current full state of the world and inquires each player about what they want to do. This phase is called the commit phase.
+Upon the completion of every round, and as long as there are more than two creatures belonging to different players alive, the grader informs each player about the current full state of the world and inquires each player about what they want to do. This phase is called the **commit phase**.
 
 Each player decides what they want to do with each of their alive creatures. This signifies an intent for each alive creature, for each player. Players are not able to specify intents for dead creatures. The intent can be one of the following:
 
@@ -124,7 +122,7 @@ Each player decides what they want to do with each of their alive creatures. Thi
 
 * **Idle**: The player intents for the creature to remain where it is, doing nothing.
 
-Each player commits to an intent for each of their creatures without being able to see the intents committed by other players.
+Each player commits to an intent for each of their creatures without being able to see the intents committed by other players. When all players have committed their moves, the game advances to the next round.
 
 ## Resolution
 
@@ -132,7 +130,9 @@ Each subsequent round configuration is determined through a process called **res
 
 The resolution algorithm has the purpose of ensuring that the order in which creatures’ intents are examined does not affect the game results. It is desired that the following invariant remains true:
 
-The resolution of round T + 1 is independent on the order in which creatures intents are satisfied.
+*The resolution of round T + 1 is independent on the order in which creatures intents are satisfied.*
+
+The resolution algorithm also ensures that the map remains consistent.
 
 Here is the resolution algorithm:
 
@@ -166,11 +166,19 @@ Here is the resolution algorithm:
 
 Steps 4 and 5 ensure that the map is in consistent condition after the resolution phase is completed. The proof of correctness from resolution follows directly from the inductive assumption that round T is consistent, and step 4a is based on round T locations. Clearly the gensis round is consistent. Step 3 ensures that dead creatures do not take up any space during the resolution phase.
 
+The order in which creatures are examined does not matter, as making a creature move or attack only depends on what happened in the previous round, not the upcoming round. The fact that all creatures that cause map inconsistencies are moved back to their original location ensures that all creatures are treated equally regardless of order.
+
 ## Conclusion
 
-After the resolution phase is completed, the game is checked for winning conditions. If only creatures owned by a particular user are alive on the map, the particular user is pronounced the winner.
+After the resolution phase is completed, the game is checked for **winning conditions**. If only creatures owned by a particular user are alive on the map, the particular user is pronounced the winner.
 
 It is possible that noone is the winner of a particular game. This can happen if all creatures remaining in the last round are killed simultaneously.
+
+At this point, the ranking within the game is determined as follows: The player ranking last in the particular game is the player whose last alive creature died first. The player ranking first is the player whose last alive creature died last. Intermediate rankings are taken by players whose last alive creature died at an intermediate round. It is possible that two players are ranked the same in a game if their last creature died in the same round.
+
+A player is deemed **alive** during a round if at least one of their creatures is alive at that round; otherwise the player is **dead** during a particular round. As creatures cannot be revived, players cannot be revived. We will say that a player **dies** during the first round in which he is dead.
+
+The ranking number of each player is the number of alive players during the round he died. The exception is the winner; if we have a winner, the winner is ranked #1; if we have a draw, all players that died in the last round are all ranked #1.
 
 # Bot API
 
@@ -182,11 +190,11 @@ Each bot has a root end-point which is an http or https URL and can be any valid
 
 Note that it is the grader that is making HTTP requests to each individual bot, not the other way around. The grader is the HTTP client and the bots are the HTTP server.
 
-A bot can misbehave in many ways. We aim to help the programmers by logging the incorrect behavior of bots. This incorrect behavior is then reported in the bot settings page of the web application. Bots that behave incorrectly must be disconnected immediately from the game and all their creatures killed for the particular game. No incorrect responses by the bots is tolerated. The protocol must be followed by the bots to the letter.
+A bot can misbehave in many ways. We aim to help the programmers by logging the incorrect behavior of bots. This incorrect behavior is then reported in the bot settings page of the web application. Bots that behave incorrectly must be disconnected immediately from the game and all their creatures killed for the particular game. No incorrect responses by the bots is tolerated. The protocol must be followed by the bots to the letter. This is to ensure that the grader is simple and doesn't have to take into account fixing the mistakes of bots; in addition, it will help with forward compatibility, as bots will not rely on specific potentially undefined behavior of the grader.
 
-Before the bot is able to play, the following **sanity checks** are performed by the grader. These events are logged and reported as successful or errorneous:
+Before the bot is able to play, the following **sanity checks** are performed by the grader. These events are logged and reported as successful or erroneous:
 
-1. The bot hostname was resolved.
+1. The bot hostname resolves.
 
 2. The bot IP is accessible in the network.
 
@@ -200,7 +208,7 @@ Before the bot is able to play, the following **sanity checks** are performed by
 
 7. The username reported by the bot is associated with the user who is using the bot URL.
 
-Each request from the grader to the bot uses either HTTP GET or HTTP POST. The requests are made on the bot base URL and contain an appended request URI which is in the form "resource" where resource is the name of a REST resource. When performing an HTTP GET request, a resource can be a named item, in which case the individual resource is retrieved, or a generic resource type name, in which the listing of all named resource of the particular type are retrieved. When performing an HTTP POST request, an additional “method” HTTP POST variable is included, which can take the following values:
+Each request from the grader to the bot uses either HTTP GET or HTTP POST. The requests are made on the bot base URL and contain an appended request URI which is in the form "resource" where resource is the name of a REST resource. A resource or resource type can be identified by the URL or through the HTTP variables passed; this distinction is made clear in the documented API calls below and exists to ease the development of bots. When performing an HTTP GET request, a resource can be a named item, in which case the individual resource is retrieved, or a generic resource type name, in which the listing of all named resources of the particular type are retrieved. When performing an HTTP POST request, an additional “method” HTTP POST variable is included, which can take the following values:
 
 1. create
 
@@ -212,7 +220,7 @@ When the method is *create*, the request is made to a generic resource type, of 
 
 All requests are authenticated and authorized by the grader. The authentication is URL-based. If the bot desires to do strong authentication, it must switch to HTTPS. It is recommended that HTTPS is used by all bots.
 
-The grader authenticates itself to the bot using an API key, which is displayed to the bot programmer in the web interface available for bot configuration. The API key is included in all requests and has the name "api_key" and the value displayed in the web interface of the grader. The api key is unique for each bot. The bot must verify that the api key is correct to avoid impostors who may be trying to  deduce one’s strategy beyond the history of available games. The api_key is sent as an HTTP GET variable for GET requests and as an HTTP POST variable for POST requests.
+The grader authenticates itself to the bot using an API key, which is displayed to the bot programmer in the web interface available for bot configuration. The API key is included in all requests and has the name "api_key" and the value displayed in the web interface of the grader. The api key is unique for each bot. The bot can verify that the api key is correct to avoid impostors who may be trying to  deduce one’s strategy beyond the history of available games. The api_key is sent as an HTTP GET variable for GET requests and as an HTTP POST variable for POST requests.
 
 The grader identifies itself using the following User-agent:
 
@@ -242,7 +250,7 @@ The following general errors are logged and reported:
 
 The request may also contain JSON in the POST data. This is true for any non-scalar data structure sent from the grader to the bots. These pieces of JSON are again dictionaries, which contain keys specific to the particular request.
 
-Each bot must be aware of the username of the programmer which it is configured to play for. This user id is displayed in the bot configuration page, along with the api_key.
+Each bot must be aware of the username of the programmer which it is configured to play for. This helps ensure that the bot is playing for its rightful owner.
 
 ## Initiation
 
@@ -288,17 +296,17 @@ The bot must respond with an empty JSON array to this request. Subsequently, the
 
 ## Round
 
-When each round is completed, the grader collects the round configuration and communicates it to each bot. The bot responds with the intent for the next round. This request is a create request sent to the following URL:
+When each round is completed, the grader collects the round configuration and communicates it to each bot. The bot responds with the intent for each of its creatures for the next round. This request is a create request sent to the following URL:
 
-{{botbase}}/game/{{gameid}}/round
-
-Where {{gameid}} indicates the gameid of the game as it was communicated during the initiation phase.
+{{botbase}}/round
 
 The HTTP POST request contains the following variables:
 
 1. **round**: Integer; the number of the round; 0 for genesis.
 
 2. **map**: Array; a list of creature objects, as seen during the round that was just completed.
+
+3. **gameid**: Integer; indicates the gameid of the game as it was communicated during the initiation phase.
 
 The map array is an array that contains a list of creatures. Each creature is a dictionary with the following keys:
 
@@ -328,13 +336,13 @@ An intent object contains the following keys:
 
 3. **direction**: String, one of "north", “east”, “south”, or “west”.
 
-No entries need to be sent for idle intents. The grader subsequently accepts the commit and performs the resolution phase to evaluate the configuration of the next round and makes an additional round create request until the game is completed.
+No entries need to be sent for idle intents. The grader subsequently accepts the commit and performs the resolution phase to evaluate the configuration of the next round and continues making round create requests until the game is completed.
 
 Attempts to manipulate creatures not belonging to their owner are reported as errors. Incorrect desire or direction strings are reported as errors. Attempts to manipulate dead creatures are reported as errors.
 
 After a winner is determined, or we have a draw, a last round create request is sent by the grader, with the last round of the map communicated to the bot. This last request contains alive creatures owned by at most one player; this signifies that the round is the last one.
 
-The bot must respond to the last round with an empty array of intents. Any response deviating from this is reported as an error.
+The bot must respond to the last round with an empty array of intents. However, deviations from this response do not affect the game result, as the game is now finished, so they are not reported or logged.
 
 # Web interface
 
@@ -356,11 +364,11 @@ The purpose and structure of all these pages is described below.
 
 Every page follows a general layout which contains some common elements for all pages.
 
-On the top left, there is the logo of End of Codes. Clicking on it takes one to the Ranking page.
+On the top left of all pages, there is the logo of End of Codes. Clicking on it takes one to the Ranking page.
 
-On the top right, the user menu appears. If the user is logged out, the text "Log in or Register" appears. “Log in” is a link to the login page and “Register” is a link to the register page. If the user is logged in, the avatar and username of the user and an arrow pointing downwards appear. These are links to the user menu, a drop-down menu which contains a larger view of the user’s avatar, their name, a button to log out, and a link to the Settings page.
+On the top right of all pages, the user menu appears. If the user is logged out, the text "Log in or Register" appears. “Log in” is a link to the login page and “Register” is a link to the register page. If the user is logged in, the avatar and username of the user and an arrow pointing downwards appear. These are links to the user menu, a drop-down menu which contains a larger view of the user’s avatar, their name, a button to log out labelled "Log out", and a link to the Settings page.
 
-At the bottom of the page appear a link to the development blog labelled "Blog", a link to the project’s GitHub labelled “Contribute”, and a link to the game rules labelled “Rules”.
+At the bottom of every page appear a link to the development blog labelled "Blog", a link to the project’s GitHub labelled “Contribute”, and a link to the game rules labelled “Rules”.
 
 ### E-mails
 
@@ -396,7 +404,7 @@ Dates and times are displayed in relative format in the past or in the future. R
 
 ### Modals
 
-All modal windows appear on top of the existing application, with a black tint covering the rest of the application in the background. An X button at the top right of the window allows dismissing the modal window and cancelling the action in question.
+All modal windows appear on top of the existing application, with a black tint covering the rest of the application in the background. An X button at the top right of the window allows dismissing the modal window and canceling the action in question.
 
 ### User links
 
@@ -404,7 +412,7 @@ User links are always displayed in distinctive typography. Each user link is dis
 
 ## Login page
 
-The login page allows the user to login. It displays two input boxes, labelled "Username" and “Password” respectively. A button titled “Log in” allows the user to login. If the credentials are correct, the user is logged in and redirected to the Ranking page. Otherwise, they are directed back to the Login page and an appropriate error message is displayed. If the username did not exist, the error message “Your username does not exist” appears. If the username exists but the password is incorrect, the error message “Your password is incorrect” appears.
+The login page allows the user to login. It displays two input boxes, labelled "Username" and “Password” respectively. A button titled “Log in” allows the user to login. If the credentials are correct, the user is logged in and redirected to the Ranking page. Otherwise, they are redirected back to the Login page and an appropriate error message is displayed. If the username did not exist, the error message “Your username does not exist” appears. If the username exists but the password is incorrect, the error message “Your password is incorrect” appears.
 
 The form also has a checkbox named "Remember me" which is checked by default. If the checkbox is checked, then the user is logged in persistently across browser sessions. Otherwise the login expires after the current browser session ends.
 
@@ -492,49 +500,49 @@ If no validation errors exist, then the user’s password is changed to the new 
 
 The Ranking page is the central page of the web interface. It is the landing page when someone is logged out, the landing page when someone is logged in, and the page everyone is redirected to when they complete actions in other pages.
 
-At the top of the page, the text "Next game {{datetime}}" appears, indicating when the next game is taking place. If a game is currently taking place, this text is replaced “Game is currently taking place”.
+At the top of the page, the text "Next game {{datetime}}" appears, indicating when the next game is taking place. If a game is currently taking place, this text is replaced “Game is currently running”.
 
-If the player is logged out, then the global ratings are shown. Otherwise, global ratings are shown in conjunction with user-specific ratings as describe below.
+If the player is logged out, then the global ratings are shown. Otherwise, global ratings are shown in conjunction with user-specific ratings as described below.
 
 At the top of the ranking page, the last game results are shown. The text "Last game {{datetime}}" appears, where {{datetime}} is the datetime the last game took place. Underneath, the username of the game winner is displayed as a link to their profile next to the word “Winner”.
 
-The datetime next to Last game is clickable and has a small down-arrow next to it. This drops down a calendar which allows the user to select the date of which the game results they want to view. In that case, the text "Last game {{datetime}}" changes into “Game from {{datetime}}”. In addition, there is a left and a right arrow next to “Game from X” which allows navigating to previous and next games respectively. If the user navigates back to the last game, the text is changed into “Last game {{datetime}}”. When “Last game” is visible, only a left arrow exists for navigating to the previous game. When the first game is displayed, only a right arrow exists for navigating to the next game.
+The datetime next to Last game is clickable and has a small down-arrow next to it. This drops down a calendar which allows the user to select the date the results of whose game they want to view. In that case, the text "Last game {{datetime}}" changes into “Game from {{datetime}}”. In addition, there is a left and a right arrow next to “Game from X” which allows navigating to previous and next games respectively. If the user navigates back to the last game, the text is changed into “Last game {{datetime}}”. When “Last game” is visible, only a left arrow exists for navigating to the previous game. When the first game is displayed, only a right arrow exists for navigating to the next game.
 
 Underneath the game title, there is a link labelled "Go to game map", which navigates the user to the Game history page for the selected game.
 
-Further below, a list of the top 10 ranking users in the selected game appears, with their rank from 1 to 10, and their names, countries, flags, avatars, and score. All of them are links to their profiles.
+Further below, a list of the top 10 ranking users in the selected game appears, with their rank from 1 to 10, and their usernames, country names, flags, avatars, and score. All of them are links to their profiles.
 
 At the top-right of the table with the top 10 users, there is a text labelled "Filter by country" with a drop-box next to it indicating the default choice “All countries”. Choosing a country from the drop-down displays the top 10 ranking within that particular country. The ranking numbers remain global. This choice is remembered when the page is visited again.
 
-If the user is logged in, the table is augmented with their own name and rank and the 10 people around them, with the same details as the top users. The currently logged in user’s entry is highlighted in yellow and is shown larger in the table. The entries between the top 10 and the 10 users around the user are indicated with empty horizontal rows of short height. These are clickable at their top section or at their bottom section. When clicked at the top section, they expand to show 10 more rows from the top. When clicked on the bottom section, they expand to show 10 more rows from the bottom. There is a hover effect in both cases, making it clear which part is being expanded. If at any moment there are no entries in between, the table is shown as a continuum. The friends of the user are highlighted in the table in green, but they are only highlighted if already displayed.
+If the user is logged in, the table is augmented with their own name and rank and the 10 people around them, with the same details as the top users. The currently logged in user’s entry is highlighted with a yellow background and is shown larger in the table. The entries between the top 10 and the 10 users around the user are indicated with empty horizontal rows of short height and light separating borders. These are clickable at their top section or at their bottom section. When clicked at the top section, they expand to show 10 more rows from the top. When clicked on the bottom section, they expand to show 10 more rows from the bottom. There is a hover effect in both cases, making it clear which part is being expanded. If at any moment there are no entries in between, the table is shown as a continuum. The friends of the user are highlighted in the table with a green background, but they are only highlighted if already displayed. These are true for both the general and the country-filtered rankings.
 
-Underneath the top 10 ranking and the ranking around the current user, there is a graph displayed illustrating the progress of the user during the last 10 days. The graph is labelled "Your recent ranking" and shows a line graph which illustrates the ranking of the user in recent games. The graph vertical scale illustrates the position of the user, while the horizontal scale indicates time. The vertical scale is constrained to the minimum and maximum ranking the user achieved during these 10 days. The highest data point of the best ranking the user has achieved, while the lowest data point is the worst ranking the user has achieved. At the top right of the table, a drop-down box appears which allows selecting larger periods of time to view the statistics graph. These periods are “Last 10 days”, “Last month”, “Last 6 months”, “Last year” and “All time”, provided such time periods have taken place.
+Underneath the top 10 ranking and the ranking around the current user, there is a graph displayed illustrating the progress of the user during the last 10 days. The graph is labelled "Your recent ranking" and shows a line graph which illustrates the ranking of the user in recent games. The graph's vertical scale illustrates the position of the user, while the horizontal scale indicates time. The vertical scale is constrained to the minimum and maximum ranking the user achieved during these 10 days. The highest data point of the best ranking the user has achieved, while the lowest data point is the worst ranking the user has achieved. At the top right of the table, a drop-down box appears which allows selecting larger periods of time to view the statistics graph. These periods are “Last 10 days”, “Last month”, “Last 6 months”, “Last year” and “All time”, provided such time periods have taken place. "All time" is always displayed.
 
-If the user is logged in, a notice always appears indicating whether their bot is working correctly in green or red. Clicking on this notice takes the user to the bot settings page. The text of the notice is "Your bot is working correctly" if green, or a textual description of the currently ongoing error, if there is an error. These errors are based on the last probe that took place against the bot - not the last game that took place.
+If the user is logged in, a notice on the ranking page always appears indicating whether their bot is working correctly in green or red. Clicking on this notice takes the user to the bot settings page. The text of the notice is "Your bot is working correctly" if green, or a textual description of the currently ongoing error, if there is an error. These errors are based on the last probe that took place against the bot - not the last game that took place.
 
 ## Game history page
 
 The game history page allows a user to view the exact history of a specific game, including all creature moves and attacks. To allow for additional screen real estate, the links at the bottom of the layout are not shown on this page, and the whitespace at the header of the page is limited.
 
-At the top of the game history page, the date during which the game took place is shown. Left and right arrows allow navigating to a previous or next game, if they exist.
+At the top of the game history page, the date during which the game took place is shown. Left and right arrows allow navigating to a previous or next game, if they exist. Clicking on a date allows picking a different game using the same user interface as the ranking page.
 
 On the right of the page, a list of users who participated in the game is shown. Each user is assigned a color, which is used to distinguish their creatures on the game map. Their color is shown next to them, along with their country flag and username.
 
-The main game area shows a portion of the map of the game. The map is separated into columns and rows which are clearly separated using vertical and horizontal lines respectively. Each column and each row is numbered on the game grid. The rows and columns are shown with the bottom-left corner being assigned the coordinates (0, 0) and the top-right corner being assigned the coordinates (W - 1, H - 1). The game grid expands to take up as much screen space as the user allows, making sure each column and row has equal width and height and there is enough room to clearly indicate each creature on the map.
+The main game area shows a portion of the map of the game. The map is separated into columns and rows which are clearly separated using vertical and horizontal lines respectively. Each column and each row is numbered on the game grid. The rows and columns are shown with the bottom-left corner being assigned the coordinates (0, 0) and the top-right corner being assigned the coordinates (W - 1, H - 1). The row numbers appear on the left and the column numbers appear on the right. The game grid expands to take up as much screen space as the user allows, making sure each column and row has equal width and height and there is enough room to clearly indicate each creature on the map.
 
-Each creature.
+Each creature appears on the column and row where it exists, provided it is alive. Dead creatures are not displayed. Creatures are shown in circles filled in their owner's color. Mouse overing a creature shows a creature information bubble which contains the player username, country name, and flag, and the creature's id, hit points and location in (x, y) form.
 
 The map shows round 0 by default. At the bottom of the Game history page, a timeline slider appears. The timeline slider allows the user to view different rounds of the game. When the slider is on the left, round 0 is displayed on the map. When the slider is on the right, the last round is displayed on the map. Intermediate rounds are displayed when an intermediate position is selected on the slider.
 
 ## Profile page
 
-The profile page is intented for displaying information about a specific user. On the profile page, on the top left, the avatar of the user appears. Next to it, the name of the user appears. Underneath, the flag and country of the user appears. The flag and country are only shown if the user has selected a country on the settings page.
+The profile page is intended for displaying information about a specific user. On the profile page, on the top left, the avatar of the user appears. Next to it, the name of the user appears. Underneath, the flag and country of the user appear. The flag and country are only shown if the user has selected a country on the settings page.
 
-If the viewing user is logged in, if they are viewing their own profile, a link to the Settings page labelled "Edit profile" appears. If they are viewing another user profile and they are their friend, a button labelled “Remove friend” appears, which deletes the friendship from the logged in user to the user whose profile is being viewed. If they are viewing another user profle and they are not their friend, a button labelled “Add friend” appears, which creates a friendship from the logged in user to the user whose profile is being viewed.
+If the viewing user is logged in, if they are viewing their own profile, a link to the Settings page labelled "Edit profile" appears. If they are viewing another user profile and they are their friend, a button labelled “Remove friend” appears, which deletes the friendship from the logged in user to the user whose profile is being viewed. If they are viewing another user profile and they are not their friend, a button labelled “Add friend” appears, which creates a friendship from the logged in user to the user whose profile is being viewed. Friendships are not mutual.
 
 The text "Last game ranking: X" appears underneath, where X indicates the ranking of the player in the last game.
 
-Further down below, the graph with the ranking during the last 10 days of the user is shown. The details of the graph are similar to the graph displayed on the Rating page for the current user.
+Further down below, the graph with the ranking during the last 10 days of the user is shown. The details of the graph are similar to the graph displayed on the Ranking page for the current user. The user interface elements are the same, allowing the viewer to see statistics over various periods of time.
 
 ## Settings page
 
@@ -561,7 +569,7 @@ Underneath, there is a button labelled "Change password…". When the “Change 
 
 If no validation errors exist, the password is changed and the modal disappears. A notice appears with the text "Your password was changed successfully".
 
-At the bottom of the settings page, there is a button entitled "Delete account". Clicking it shows a modal window with the text “Account deletion cannot be undone. All your scores will be lost!”. Further below, an input box labelled “Password” appears, along with a button captioned “Delete account”. Clicking on the “Delete account” button deletes the user’s account if the password is correct. Otherwise, the text “Your password is incorrect” is displayed.
+At the bottom of the settings page, there is a button entitled "Delete account". Clicking it shows a modal window with the text “Account deletion cannot be undone. All your scores will be lost!”. Further below, an input box labelled “Password” appears, along with a button captioned “Delete account”. Clicking on the “Delete account” button deletes the user’s account if the password is correct. Otherwise, the text “Your password is incorrect” is displayed, and the password field is erased and focused.
 
 ## Bot settings page
 
@@ -579,7 +587,7 @@ Further below, there is an input box with the label "Bot URL:" where the user ca
 
 If no validation errors exist, the bot URL is saved. Once the bot URL is saved, the system probes the bot URL to see if it’s up and running and displays a status message below the "Save bot settings" button.
 
-The status message contains the last probing results from the last time the bot was accessed. The bot is probed immediately when the bot settings page is opened, or when the bot URL setting is changed. The probing involves the grader sanity checks specified in the API section of this specification. The text "Your bot is correctly configured" with a checkbox in green if the bot is correctly configured. Otherwise, it contains the text “Your bot is incorrectly configured” in red with a cross. Underneath, a list of sanity checks appears, in green or red respectively. Only one red entry appears: The first error. Subsequent red entries are supressed. For red sanity checks, a link to the appropriate documentation entry is given, in form of a question.
+The status message contains the last probing results from the last time the bot was accessed. The bot is probed immediately when the bot settings page is opened, or when the bot URL setting is changed. The probing involves the grader sanity checks specified in the API section of this specification. The text "Your bot is correctly configured" appears with a checkbox in green if the bot is correctly configured. Otherwise, it contains the text “Your bot is incorrectly configured” in red with a cross. Underneath, a list of sanity checks appears, in green or red respectively. Only one red entry appears: The first error. Subsequent red entries are suppressed. For red sanity checks, a link to the appropriate documentation entry is given, in form of a question.
 
 1. If the bot hostname does not resolve, the error message "Your bot hostname is invalid. Did you enter a valid hostname?" appears.
 
@@ -595,29 +603,7 @@ The status message contains the last probing results from the last time the bot 
 
 7. If the bot responds with an incorrect username, the error message "Your bot is not using your username. Did you set your username correctly?" appears.
 
-Underneath the current status, an additional "Last game behavior" section appears. If the bot behaved correctly during the last game, the text “Your bot played correctly in the last game” appears in green and with a checkbox. If the bot performed some illegal action or failed to respond to certain requests in the last game, the first problem the bot encountered is reported in this section, in red. These errors are detailed in the bot communication sections of this specification. These can be sanity check errors during the initiation phase, or problems during the game itself.
-
-# Additional requirements
-
-## Security
-
-All pages must be served via HTTPS. Password storage must use modern hashing practices. OWASP top 10 must be avoided. The app should be designed with secure-by-default practices. There are no additional security requirements; it is up to the developers to ensure security. Security features such as login, registration, forgot password, and logout flows must be tested additionally.
-
-## Compatibility
-
-The web app must be compatible with the latest versions of the following browsers:
-
-1. Chrome
-
-2. Firefox
-
-3. Internet Explorer
-
-4. Safari
-
-5. Opera
-
-Previous versions of browsers need not be supported. It can be assumed that Javascript will always be enabled. No mobile support is needed at this time.
+Underneath the current status, an additional "Last game behavior" section appears. If the bot behaved correctly during the last game, the text “Your bot played correctly in the last game” appears in green and with a checkbox. If the bot performed some illegal action or failed to respond to certain requests in the last game, the first problem the bot encountered is reported in this section, in red. These errors are detailed in the bot communication sections of this specification. These can be sanity check errors during the initiation phase, or problems during the game itself. If these errors caused the bot to be terminated during the game, the additional text " and your creatures were killed by the grader" appears at the end of the error.
 
 # Bot libraries
 
@@ -643,6 +629,28 @@ A prototypal, functional bot is included, which behaves in a rule-adhering, but 
 
     2. Otherwise, uniformly randomly choose to idle or to move.
 
-    3. If you have chosen to move, then move at a valid diretion uniformly at random.
+    3. If you have chosen to move, then move at a valid direction uniformly at random.
 
 The strategy illustrates the basic use of the API, including attacking, moving, and idling.
+
+# Additional requirements
+
+## Security
+
+All pages must be served via HTTPS. Password storage must use modern hashing practices. OWASP top 10 problems must be avoided. The app should be designed with secure-by-default practices. There are no additional security requirements; it is up to the developers to ensure security. Security features such as login, registration, forgot password, and logout flows must be tested additionally for adhering to basic security: One should not be able to login with an empty or wrong password, change password without providing the old password, or recover an account using an expired or incorrect link.
+
+## Compatibility
+
+The web app must be compatible with the latest versions of the following browsers:
+
+1. Chrome
+
+2. Firefox
+
+3. Internet Explorer
+
+4. Safari
+
+5. Opera
+
+Previous versions of browsers need not be supported. It can be assumed that Javascript will always be enabled. No mobile support is needed at this time.
