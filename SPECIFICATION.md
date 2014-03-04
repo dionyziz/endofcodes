@@ -308,6 +308,12 @@ The HTTP POST request contains the following variables:
 
 3. **gameid**: Integer; indicates the gameid of the game as it was communicated during the initiation phase.
 
+4. **myid**: Integer; the userid of the current player. While this is accessible to the user through other means, including it at this stage eases the development of bots.
+
+5. **W**: Integer; same as W in game request.
+
+6. **H**: Integer; same as H in game request.
+
 The map array is an array that contains a list of creatures. Each creature is a dictionary with the following keys:
 
 1. **creatureid**: Integer; the id of the creature; must be unique across creatures within an individual game
