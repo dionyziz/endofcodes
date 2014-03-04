@@ -1,6 +1,7 @@
 <?php
     class BotController extends ControllerBase {
         public function update( $boturl = '' ) {
+            require_once 'models/curl.php';
             require_once 'models/grader/bot.php';
             if ( empty( $boturl ) ) {
                 go( 'bot', 'update', [ 'boturl_empty' => true ] );
@@ -14,7 +15,8 @@
                 $bot->sendInitiateRequest(); 
             }
             catch ( GraderBotException $e ) {
-                $error = str_replace( "initiate_","",$url );
+                $error = end( $bot->errors );
+                $error = str_replace( "initiate_", "", $error );
                 if ( strpos( $error, '_not_set' ) ) {
                     $error = 'invalid_json_dictionary';
                 }
@@ -24,7 +26,6 @@
             go( 'bot', 'update', [ 'bot_success' => true ] );
         }
         public function updateView( $boturl_empty, $boturl_invalid, $bot_success, $bot_not_success, $error ) {
-            $error = 'invalid_json_dictionary';
             require_once 'views/bots/update.php'; 
         } 
     }
