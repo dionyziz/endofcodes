@@ -3,10 +3,10 @@
 
     <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
     if ( $bot_success ) {
-        ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' /></p><?php
+        ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='' /></p><?php
     }
     elseif ( $bot_not_success ) {
-        ?><p class='error'>Your bot is incorrectly configured <img src='static/images/cancel.png' /></p><?php
+        ?><p class='error'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='' /></p><?php
         switch ( $error ) {
             case 'could_not_resolve':
                 ?><p class='error'>Your bot hostname is invalid. Did you enter a valid hostname?</p><?php
@@ -28,7 +28,6 @@
                 break;
         }
     }
-    ?><p>API key: <?php // echo $apikey ?></p><?php
     $form = new Form( 'bot', 'update' );
     $form->output( function( $self ) use( $boturl_empty, $boturl_invalid ) {
         $self->createLabel( 'boturl', 'Bot URL' );
