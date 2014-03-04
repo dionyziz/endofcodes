@@ -28,7 +28,7 @@
                 break;
         }
     }
-    ?><p>API key: <?php echo $apikey ?></p><?php
+    ?><p>API key: <?php // echo $apikey ?></p><?php
     $form = new Form( 'bot', 'update' );
     $form->output( function( $self ) use( $boturl_empty, $boturl_invalid ) {
         $self->createLabel( 'boturl', 'Bot URL' );
