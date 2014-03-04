@@ -1,12 +1,5 @@
 <?php
-    include 'migrate.php';
+    require_once 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE  
-                `users` 
-            CHANGE  
-                `forgotpasswordexptime`  `forgotpasswordrequestcreated` DATETIME NULL DEFAULT NULL;'
-        ]
-    );
+    Migration::alterField( 'users', 'forgotpasswordexptime', 'forgotpasswordrequestcreated', 'DATETIME NULL DEFAULT NULL' );
 ?>

@@ -1,12 +1,5 @@
 <?php
-    require 'migrate.php';
+    require_once 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE
-                creatures
-            CHANGE
-                `id` `id` int(11) NOT NULL'
-        ]
-    );
+    Migration::alterField( 'creatures', 'id', 'id', 'int(11) NOT NULL' );
 ?>
