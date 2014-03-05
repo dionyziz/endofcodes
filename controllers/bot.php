@@ -6,6 +6,9 @@
             if ( empty( $boturl ) ) {
                 go( 'bot', 'update', [ 'boturl_empty' => true ] );
             }
+            if ( !filter_var( $boturl, FILTER_VALIDATE_URL ) ) {
+                go( 'bot', 'update', [ 'boturl_invalid' => true ] );
+            }
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $user = $_SESSION[ 'user' ];
             }
