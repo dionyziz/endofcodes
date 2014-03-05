@@ -18,7 +18,7 @@
         ];
         ?><p class='error'><?php
             echo $errors[ $error ]; 
-        ?></p><?php       
+        ?></p><?php
     }
     $form = new Form( 'bot', 'update' );
     $form->output( function( $self ) use( $boturl_empty, $boturl_invalid ) {
