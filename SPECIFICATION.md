@@ -88,7 +88,7 @@ The grader starts the game through the initiation phase. In the initiation phase
 
 WH > 3NM
 
-The number N is predetermined. It is equal to the number of bots that are readily available to play. Let "α ⇜ A" denote that α is an indepdendently uniformly randomly chosen element from the set A (NOTE:  A uniformly randomly chosen variable from a set is a variable chosen from a set such that all elements of the set have the same probability of being chosen.).
+The number N is predetermined. It is equal to the number of bots that are readily available to play. Let "α ⇜ A" denote that α is an independently uniformly randomly chosen element from the set A (NOTE:  A uniformly randomly chosen variable from a set is a variable chosen from a set such that all elements of the set have the same probability of being chosen.).
 
 The numbers M, W, H, MAX_HP are determined as follows:
 
