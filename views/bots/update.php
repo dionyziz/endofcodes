@@ -17,7 +17,7 @@
             'username_mismatch' => 'Your bot is not using your username. Did you set your username correctly?'
         ];
         ?><p class='error'><?php
-            echo $errors[ $error ]; 
+            echo $errors[ $error ];
         ?></p><?php
     }
     $form = new Form( 'bot', 'update' );
