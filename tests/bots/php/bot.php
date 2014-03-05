@@ -5,7 +5,7 @@
             include 'bots/php/game.php';
             $response = json_decode( ob_get_clean() );
 
-            $this->assertTrue( $response !== false, 'The game request response must have valid json' );
+            $this->assertTrue( $response !== NULL, 'The game request response must have valid json' );
 
             $this->assertTrue( is_array( $response ), 'The game request response must be an array' );
             $this->assertTrue( empty( $response ), 'The game request response must be an empty array' );
@@ -15,10 +15,10 @@
             include 'bots/php/bot.php';
             $response = json_decode( ob_get_clean() );
 
-            $this->assertTrue( $response !== false, 'The bot request response must have valid json' );
+            $this->assertTrue( $response !== NULL, 'The bot request response must have valid json' );
 
-            $this->assertTrue( is_object( $response ), 'The game request response must be an array' );
-            $this->assertEquals( 3, count( get_object_vars( $response ) ), 'The bot request response must be an array of 3 entries' );
+            $this->assertTrue( is_object( $response ), 'The game request response must be an object' );
+            $this->assertEquals( 3, count( get_object_vars( $response ) ), 'The bot request response must be an object with 3 attributes' );
 
             $this->assertEquals( 'sample_botname', $response->botname, 'The bot request response must have the correct botname' );
             $this->assertEquals( 'sample_username', $response->username, 'The bot request response must have the correct username' );
@@ -40,7 +40,7 @@
                 'H' => 1
             ] );
 
-            $this->assertTrue( $response !== false, 'The round request response must have valid json' );
+            $this->assertTrue( $response !== NULL, 'The round request response must have valid json' );
             $this->assertTrue( isset( $response->intent ), 'The round request response must have intent set' );
             $this->assertEquals( 0, count( $response->intent ), 'When no creatures are given the user must respond with an empty array' );
         }
@@ -186,25 +186,6 @@
                     $this->assertEquals( 'NONE', $response->intent[ 0 ]->direction, 'When action is NONE direction should be NONE too' );
                     break;
             }
-        }
-        public function testMoveOutOfBounds() {
-            $response = $this->roundRequestAndGetResponse( [
-                'round' => 1,
-                'map' => json_encode( [
-                    [
-                        'creatureid' => 1,
-                        'userid' => 1,
-                        'x' => -2,
-                        'y' => -2,
-                        'hp' => 100
-                    ]
-                ] ),
-                'gameid' => 1,
-                'myid' => 1,
-                'W' => 100,
-                'H' => 100
-            ] );
-            $this->assertEquals( 'NONE', $response->intent[ 0 ]->action, 'When a creature is out of bounds it has no choice of movement' );
         }
     }
     return new BotTest();
