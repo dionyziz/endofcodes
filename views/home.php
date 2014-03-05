@@ -1,34 +1,29 @@
-    <div id="home">
-        <p>Last match ratings(global)</p>
-        <ol id="toplist">
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-            <li><a href="">...........</a> : 10</li>
-        </ol>
-        <select id="selectbox">
-            <option value="select">Select ratings</option>
-            <option value="global">Global</option>
-            <option value="friends">Friends</option>
-            <option value="country">By country</option>
-            <option value="date">By date</option>
-        </select>
-        <div id="persinfo">
-            <p>Your position: <span class="importantnum">4</span></p>
-            <p>Score: <span class="importantnum">10</span></p>
-            <p>Congratulations! you got up by <span class="importantnum">5 </span>positions and <span class="importantnum">8</span> points since your last match</p>
-            <p>Check your progress <a href="">here</a></p>
-            <p>Check your program's process <a href="">here</a></p>
-            <?php
-                if ( isset( $user ) ) {
-                    require_once 'views/session/logoutform.php';
-                }
-            ?>
-        </div>
-    </div>
+<?php
+    require_once 'views/header.php';
+?>
+<div id="home">
+    <p class='center'>Last match ratings(global)</p>
+    <ol class='center' id="toplist">
+        <?php
+            foreach( $ratings as $rating ) {
+                ?><li><a href=""><?php echo $rating; ?></a></li><?php
+            } 
+        ?>
+    </ol>
+    <?php
+//        $filter = [ 
+//            [ 'value' => 'default', 'content' => 'select Ratings' ], 
+//            [ 'value' => 'global', 'content' => 'Global' ], 
+//            [ 'value' => 'country', 'content' => 'By country' ]
+//        ];
+//        $form = new Form( 'dashboard', 'view' );
+//        $form->id = 'selectbox';
+//        $form->createSelect( 'filter', '', $filter );
+        if ( isset( $user ) ) {
+            require_once 'views/session/logoutform.php';
+        }
+    ?>
+</div>
+<?php
+    require_once 'views/footer.php';
+?>
