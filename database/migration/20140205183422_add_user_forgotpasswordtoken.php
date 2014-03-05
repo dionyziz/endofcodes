@@ -1,12 +1,5 @@
 <?php
-    include_once 'migrate.php';
-
-    migrate(
-        [ 
-            'ALTER TABLE
-                users
-            ADD COLUMN
-                forgotpasswordtoken text;'
-        ]
-    );
+    require_once 'migrate.php';
+    
+    Migration::addField( 'users', 'forgotpasswordtoken', 'text' );
 ?>

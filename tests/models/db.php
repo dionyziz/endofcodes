@@ -161,6 +161,11 @@
 
             $this->assertTrue( array_search( 'test_models', $tables ), 'dbListTables must include all tables in the returned list' );
         }
+        public function testListFields() {
+            $fields = dbListFields( 'test_models' );
+
+            $this->assertEquals( [ 'id', 'a', 'b', 'c' ], $fields, 'dbListFields must include all fields in the returned list' );
+        }
         public function testDbSelectNoFields() {
             $caught = false;
             try {
