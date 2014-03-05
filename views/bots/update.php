@@ -8,26 +8,15 @@
     }
     else if ( $bot_not_success ) {
         ?><p class='error'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php
-        switch ( $error ) {
-            case 'could_not_resolve':
-                ?><p class='error'>Your bot hostname is invalid. Did you enter a valid hostname?</p><?php
-                break;
-            case 'could_not_connect':
-                ?><p class='error'>Your bot is unreachable on the network. Did you enter your public IP address?</p><?php
-                break;
-            case 'http_code_not_ok':
-                ?><p class='error'>Your bot is running, but not responding to initiation. Did you write code to handle initiation?</p><?php
-                break;
-            case 'invalid_json':
-                ?><p class='error'>Your bot is not sending valid JSON. Did you write code to generate JSON correctly?</p><?php
-                break;
-            case 'invalid_json_dictionary':
-                ?><p class='error'>You must set the bot name, version, and your username. Did you build the correct JSON dictionary?</p><?php
-                break;
-            case 'username_mismatch':
-                ?><p class='error'>Your bot is not using your username. Did you set your username correctly?</p><?php
-                break;
-        }
+        $errors = [
+            'could_not_resolve' => 'Your bot hostname is invalid. Did you enter a valid hostname?',
+            'could_not_connect' => 'Your bot is unreachable on the network. Did you enter your public IP address?',
+            'http_code_not_ok' => 'Your bot is running, but not responding to initiation. Did you write code to handle initiation?',
+            'invalid_json' => 'Your bot is not sending valid JSON. Did you write code to generate JSON correctly?',
+            'invalid_json_dictionary' => 'You must set the bot name, version, and your username. Did you build the correct JSON dictionary?',
+            'username_mismatch' => 'Your bot is not using your username. Did you set your username correctly?'
+        ];
+        ?><p class='error'><?php echo $errors[ $error ] ?></p><?php       
     }
     $form = new Form( 'bot', 'update' );
     $form->output( function( $self ) use( $boturl_empty, $boturl_invalid ) {
@@ -38,7 +27,7 @@
         if ( $boturl_invalid ) {
             $self->createError( 'Please enter a valid HTTP URL' );
         }
-        $self->createInput( 'text', 'boturl', 'boturl' );
+        $self->createInput( 'text', 'boturl', 'boturl', 'http://' );
         $self->createInput( 'submit', '', '', 'Save bot settings' );
     } );
 
