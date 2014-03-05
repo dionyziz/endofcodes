@@ -6,7 +6,7 @@
     if ( $bot_success ) {
         ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
-    else if ( $bot_not_success ) {
+    else if ( $bot_fail ) {
         ?><p class='error'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php
         $errors = [
             'could_not_resolve' => 'Your bot hostname is invalid. Did you enter a valid hostname?',
@@ -16,7 +16,9 @@
             'invalid_json_dictionary' => 'You must set the bot name, version, and your username. Did you build the correct JSON dictionary?',
             'username_mismatch' => 'Your bot is not using your username. Did you set your username correctly?'
         ];
-        ?><p class='error'><?php echo $errors[ $error ] ?></p><?php       
+        ?><p class='error'><?php
+            echo $errors[ $error ]; 
+        ?></p><?php       
     }
     $form = new Form( 'bot', 'update' );
     $form->output( function( $self ) use( $boturl_empty, $boturl_invalid ) {

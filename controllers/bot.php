@@ -12,6 +12,9 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $user = $_SESSION[ 'user' ];
             }
+            else {
+                throw new HTTPUnauthorizedException();
+            }
             $user->boturl = $boturl; 
             $bot = new GraderBot( $user );
             try {
@@ -23,12 +26,12 @@
                 if ( strpos( $error, '_not_set' ) ) {
                     $error = 'invalid_json_dictionary';
                 }
-                go( 'bot', 'update', [ 'bot_not_success' => true, 'error' => $error ] );
+                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $error ] );
             }
             $user->save();
             go( 'bot', 'update', [ 'bot_success' => true ] );
         }
-        public function updateView( $boturl_empty, $boturl_invalid, $bot_success, $bot_not_success, $error ) {
+        public function updateView( $boturl_empty, $boturl_invalid, $bot_success, $bot_fail, $error ) {
             require_once 'views/bots/update.php'; 
         } 
     }
