@@ -44,7 +44,7 @@
                 }
             }
             if ( count( $directionAttack ) ) {
-                $direction = $delta[ $directionAttack[ rand( 1, count( $directionAttack ) ] ];
+                $direction = $delta[ $directionAttack[ rand( 1, count( $directionAttack ) ) ] ];
                 $intent[] = [
                     'creatureid' => $creature->creatureid,
                     'action' => 'ATTACK',
@@ -61,7 +61,7 @@
                     ];
                 }
                 else {
-                    $direction = $delta[ $directionMove[ rand( 1, count( $directionMove ) ] ];
+                    $direction = $delta[ $directionMove[ rand( 1, count( $directionMove ) ) ] ];
                     $intent[] = [
                         'creatureid' => $creature->creatureid,
                         'action' => 'ATTACK',
