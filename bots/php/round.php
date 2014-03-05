@@ -14,7 +14,7 @@
                 3 => [ 0, -1 ],
                 4 => [ -1, 0 ]
             ];
-            $delta = [
+            $directions = [
                 1 => 'NORTH',
                 2 => 'EAST',
                 3 => 'SOUTH',
@@ -46,7 +46,7 @@
                 }
             }
             if ( count( $directionAttack ) ) {
-                $direction = $delta[ $directionAttack[ rand( 0, count( $directionAttack ) - 1 ) ] ];
+                $direction = $directions[ $directionAttack[ rand( 0, count( $directionAttack ) - 1 ) ] ];
                 $intent[] = [
                     'creatureid' => $creature->creatureid,
                     'action' => 'ATTACK',
@@ -63,7 +63,7 @@
                     ];
                 }
                 else {
-                    $direction = $delta[ $directionMove[ rand( 0, count( $directionMove ) - 1 ) ] ];
+                    $direction = $directions[ $directionMove[ rand( 0, count( $directionMove ) - 1 ) ] ];
                     $intent[] = [
                         'creatureid' => $creature->creatureid,
                         'action' => 'MOVE',
