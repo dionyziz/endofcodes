@@ -1,7 +1,7 @@
 <?php
     echo json_encode( [
-        'botname' => 'botname',
+        'botname' => 'sample_botname',
         'version' => '0.1.0',
-        'username' => 'user'
+        'username' => 'sample_username'
     ] );
 ?>

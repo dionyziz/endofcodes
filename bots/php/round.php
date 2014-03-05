@@ -7,7 +7,7 @@
     $H = $_POST[ 'H' ];
     $intent = [];
     foreach ( $map as $creature ) {
-        if ( $creature->userid = $myid ) {
+        if ( $creature->userid === $myid ) {
             $offsets = [
                 1 => [ 0, 1 ],
                 2 => [ 1, 0 ],
@@ -24,14 +24,16 @@
             $directionMove = [];
             foreach ( $offsets as $key => $offset ) {
                 $creatureFound = false;
-                $positionValid = $creature->x + $offset[ 0 ] < $W && $creature->y + $offset[ 1 ] < $H;
+                $possiblex = $creature->x + $offset[ 0 ];
+                $possibley = $creature->y + $offset[ 1 ];
+                $positionValid = $possiblex < $W && $possibley < $H && $possiblex >= 0 && $possibley >= 0;
                 if ( $positionValid ) {
-                    $x = $creature->x + $offset[ 0 ];
-                    $y = $creature->y + $offset[ 1 ];
-                    foreach ( $map as $creature ) {
-                        if ( $creature->x === $x && $creature->y === $y ) {
+                    $x = $possiblex;
+                    $y = $possibley;
+                    foreach ( $map as $otherCreature ) {
+                        if ( $otherCreature->x === $x && $otherCreature->y === $y ) {
                             $creatureFound = true;
-                            if ( $creature->userid = $myid ) {
+                            if ( $otherCreature->userid === $myid ) {
                                 break;
                             }
                             $directionAttack[] = $key;
@@ -44,7 +46,7 @@
                 }
             }
             if ( count( $directionAttack ) ) {
-                $direction = $delta[ $directionAttack[ rand( 1, count( $directionAttack ) ) ] ];
+                $direction = $delta[ $directionAttack[ rand( 0, count( $directionAttack ) - 1 ) ] ];
                 $intent[] = [
                     'creatureid' => $creature->creatureid,
                     'action' => 'ATTACK',
@@ -61,10 +63,10 @@
                     ];
                 }
                 else {
-                    $direction = $delta[ $directionMove[ rand( 1, count( $directionMove ) ) ] ];
+                    $direction = $delta[ $directionMove[ rand( 0, count( $directionMove ) - 1 ) ] ];
                     $intent[] = [
                         'creatureid' => $creature->creatureid,
-                        'action' => 'ATTACK',
+                        'action' => 'MOVE',
                         'direction' => $direction
                     ];
                 }
