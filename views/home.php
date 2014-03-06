@@ -6,7 +6,9 @@
     <ol class='center' id="toplist">
         <?php
             foreach( $ratings as $rating ) {
-                ?><li><a href=""><?php echo $rating; ?></a></li><?php
+                foreach ( $rating as $user ) {
+                    ?><li><a href=""><?php echo $user->username; ?></a></li><?php
+                }
             } 
         ?>
     </ol>
