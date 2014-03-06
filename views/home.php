@@ -3,7 +3,7 @@
 ?>
 <div id="home">
     <p class='center'>Last match ratings(global)</p>
-    <ul class='center' id="toplist">
+    <ol class='center' id="toplist">
         <?php
             $i = 1;
             foreach( $ratings as $rating ) {
@@ -13,7 +13,7 @@
                 $i++;
             }
         ?>
-    </ul>
+    </ol>
     <?php
 //      $filter = [
 //          [ 'value' => 'default', 'content' => 'select Ratings' ],
