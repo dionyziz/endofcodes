@@ -99,7 +99,7 @@
             ] );
 
             $this->assertEquals( 1, count( $response->intent ), 'When a user has a creature intent must have 1 field' );
-            $this->assertTrue( is_object( $response->intent[ 0 ] ), 'Intent must be an array of objects' );
+            $this->assertTrue( is_object( $response->intent[ 0 ] ), 'Each intent element must be a dictionary' );
             $this->assertEquals( 1, $response->intent[ 0 ]->creatureid, 'Response must have a valid creatureid' );
             $this->assertEquals( 'ATTACK', $response->intent[ 0 ]->action, 'Response must have a valid action' );
             $this->assertEquals( 'NORTH', $response->intent[ 0 ]->direction, 'Response must have a valid direction' );
