@@ -11,13 +11,13 @@
                     ?><li><a href=""><?php echo "$i.$user->username"; ?></a></li><?php
                 }
                 $i++;
-            } 
+            }
         ?>
     </ul>
     <?php
-//      $filter = [ 
-//          [ 'value' => 'default', 'content' => 'select Ratings' ], 
-//          [ 'value' => 'global', 'content' => 'Global' ], 
+//      $filter = [
+//          [ 'value' => 'default', 'content' => 'select Ratings' ],
+//          [ 'value' => 'global', 'content' => 'Global' ],
 //          [ 'value' => 'country', 'content' => 'By country' ]
 //      ];
 //      $form = new Form( 'dashboard', 'view' );
