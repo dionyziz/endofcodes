@@ -17,8 +17,8 @@
 
             return $controller;
         }
-        protected function protectFromForgery( $token = '', $http_request_method = '' ) {
-            if ( $http_request_method === 'POST'
+        protected function protectFromForgery( $token = '', $httpRequestMethod = '' ) {
+            if ( $httpRequestMethod === 'POST'
             && ( !isset( $_SESSION[ 'form' ] )
               || !isset( $_SESSION[ 'form' ][ 'token' ] )
               || $token !== $_SESSION[ 'form' ][ 'token' ]
@@ -27,11 +27,11 @@
                 throw new HTTPUnauthorizedException();
             }
         }
-        protected function getControllerMethod( $requested_method, $http_request_method ) {
-            $method = $requested_method;
+        protected function getControllerMethod( $requestedMethod, $httpRequestMethod ) {
+            $method = $requestedMethod;
 
             try {
-                if ( Form::getRESTMethodIdempotence( $method ) === 1 && $http_request_method != 'POST' ) {
+                if ( Form::getRESTMethodIdempotence( $method ) === 1 && $httpRequestMethod != 'POST' ) {
                     $method .= 'View';
                 }
             }
@@ -41,8 +41,8 @@
 
             return $method;
         }
-        protected function getControllerVars( $get, $post, $files, $http_request_method ) {
-            switch ( $http_request_method ) {
+        protected function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
+            switch ( $httpRequestMethod ) {
                 case 'POST':
                     $vars = array_merge( $post, $files );
                     break;
@@ -74,8 +74,8 @@
                 $_SESSION[ 'user' ] = $user;
             }
         }
-        protected function callWithNamedArgs( $method_reflection, $callable, $vars ) {
-            $parameters = $method_reflection->getParameters();
+        protected function callWithNamedArgs( $methodReflection, $callable, $vars ) {
+            $parameters = $methodReflection->getParameters();
             $arguments = [];
 
             foreach ( $parameters as $parameter ) {
@@ -102,26 +102,26 @@
             $this->loadConfig();
             dbInit();
         }
-        public function dispatch( $get, $post, $files, $http_request_method ) {
+        public function dispatch( $get, $post, $files, $httpRequestMethod ) {
             $this->init();
             $this->sessionCheck();
 
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';
             }
-            $method = $this->getControllerMethod( $get[ 'method' ], $http_request_method );
-            $vars = $this->getControllerVars( $get, $post, $files, $http_request_method );
+            $method = $this->getControllerMethod( $get[ 'method' ], $httpRequestMethod );
+            $vars = $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
             if ( !isset( $vars[ 'token' ] ) ) {
                 $token = '';
             }
             else {
                 $token = $vars[ 'token' ];
             }
-            $this->protectFromForgery( $token, $http_request_method );
-            $this_reflection = new ReflectionObject( $this );
-            $method_reflection = $this_reflection->getMethod( $method );
+            $this->protectFromForgery( $token, $httpRequestMethod );
+            $thisReflection = new ReflectionObject( $this );
+            $methodReflection = $thisReflection->getMethod( $method );
 
-            return $this->callWithNamedArgs( $method_reflection, [ $this, $method ], $vars );
+            return $this->callWithNamedArgs( $methodReflection, [ $this, $method ], $vars );
         }
     }
 ?>

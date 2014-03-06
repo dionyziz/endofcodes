@@ -88,7 +88,7 @@ The grader starts the game through the initiation phase. In the initiation phase
 
 WH > 3NM
 
-The number N is predetermined. It is equal to the number of bots that are readily available to play. Let "α ⇜ A" denote that α is an indepdendently uniformly randomly chosen element from the set A (NOTE:  A uniformly randomly chosen variable from a set is a variable chosen from a set such that all elements of the set have the same probability of being chosen.).
+The number N is predetermined. It is equal to the number of bots that are readily available to play. Let "α ⇜ A" denote that α is an independently uniformly randomly chosen element from the set A (NOTE:  A uniformly randomly chosen variable from a set is a variable chosen from a set such that all elements of the set have the same probability of being chosen.).
 
 The numbers M, W, H, MAX_HP are determined as follows:
 
@@ -307,6 +307,12 @@ The HTTP POST request contains the following variables:
 2. **map**: Array; a list of creature objects, as seen during the round that was just completed.
 
 3. **gameid**: Integer; indicates the gameid of the game as it was communicated during the initiation phase.
+
+4. **myid**: Integer; the userid of the current player. While this is accessible to the user through other means, including it at this stage eases the development of bots.
+
+5. **W**: Integer; same as W in game request.
+
+6. **H**: Integer; same as H in game request.
 
 The map array is an array that contains a list of creatures. Each creature is a dictionary with the following keys:
 

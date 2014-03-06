@@ -1,12 +1,5 @@
 <?php
-    require 'migrate.php';
+    require_once 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE
-                users
-            ADD
-                dob date NOT NULL'
-        ]
-    );
+    Migration::addField( 'users', 'dob', 'date NOT NULL' );
 ?>

@@ -1,15 +1,6 @@
 <?php
-    require 'migrate.php';
+    require_once 'migrate.php';
 
-    migrate(
-        [
-            'ALTER TABLE
-                gameusers
-            DROP INDEX
-                uc_gameusers',
-            'ALTER TABLE
-                gameusers
-            ADD CONSTRAINT pk_gameusers PRIMARY KEY (gameid,userid)'
-        ]
-    );
+    Migration::dropIndex( 'gameusers', 'uc_gameusers' );
+    Migration::addPrimaryKey( 'gameusers', 'pk_gameusers', [ 'gameid', 'userid' ] );
 ?>
