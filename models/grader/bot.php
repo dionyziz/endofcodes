@@ -110,21 +110,25 @@
                 $this->reportError( 'game_additional_data' );
             }
         }
-        protected function reportError( $error ) {
-            $this->errors[] = $error;
-            throw new GraderBotException( end( $this->errors ) );
+        protected function reportError( $error, $expected = '', $actual = '' ) {
+            $this->errors[] = [
+                'error' =>$error,
+                'expected' => $expected,
+                'actual' => $actual
+            ];
+            throw new GraderBotException( $error, $expected, $actual );
         }
         public function sendRoundRequest( Round $round ) {
             $gameid = $round->game->id;
             try {
-                $ch = $this->httpRequest( "round", 'create', GraderSerializer::roundRequestParams( $round, $this->user ) );
+                $ch = $this->httpRequest( "round", 'create', GraderSerializer::roundRequestParams( $round, $this->user, $this->game ) );
             }
             catch ( CurlException $e ) {
                 $this->reportError( $e->error );
             }
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->reportError( 'round_invalid_json' );
+                $this->reportError( 'round_invalid_json', '', $ch->response );
             }
             if ( !isset( $decodedResponse->intent ) ) {
                 $this->reportError( 'round_intent_not_set' );
@@ -175,7 +179,10 @@
 
     class GraderBotException extends Exception {
         public $error;
-        public function __construct( $error ) {
+        public $expected;
+        public $actual;
+
+        public function __construct( $error, $expected = '', $actual = '' ) {
             $this->error = $error;
             parent::__construct( "Grader bot error: $error" );
         }
