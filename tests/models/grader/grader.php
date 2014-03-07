@@ -276,6 +276,18 @@
             $this->assertTrue( $caught, 'A WinnerException must be caught if there is only one user with alive creatures on a round' );
             $this->assertEquals( $grader->registeredUsers[ 1 ]->id, $winnerid, 'The winner must be the one whose creatures are still alive' );
         }
+        public function testBotsIntentsClearedBeforeRound() {
+            $game = $this->buildGameWithUserAndCreature();
+            $game->rounds[ 0 ]->creatures[ 1 ]->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
+            $game->rounds[ 0 ]->creatures[ 2 ]->intent = new Intent( ACTION_ATTACK, DIRECTION_SOUTH );
+            $game->rounds[ 0 ]->creatures[ 2 ]->user = $this->buildUser( 'pkakelas' );
+            $grader = new Grader( $game );
+            $grader->nextRound();
+            foreach ( $game->rounds[ 0 ]->creatures as $creature ) {
+                $this->assertEquals( ACTION_NONE, $creature->intent->action, 'Action must be set to ACTION_NONE before the next round starts' );
+                $this->assertEquals( DIRECTION_NONE, $creature->intent->direction, 'Direction must be set to direction_NONE before the next round starts' );
+            }
+        }
     }
     return new GraderTest();
 ?>
