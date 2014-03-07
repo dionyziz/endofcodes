@@ -23,9 +23,6 @@
 //      $form = new Form( 'dashboard', 'view' );
 //      $form->id = 'selectbox';
 //      $form->createSelect( 'filter', '', $filter );
-        if ( isset( $user ) ) {
-            require_once 'views/session/logoutform.php';
-        }
     ?>
 </div>
 <?php
