@@ -1,10 +1,10 @@
 <?php
-    define( 'MIN_CREATURES', 100 );
-    define( 'MAX_CREATURES', 199 );
+    define( 'MIN_CREATURES', 10 );
+    define( 'MAX_CREATURES', 20 );
     define( 'MIN_MULTIPLIER', 3 );
     define( 'MAX_MULTIPLIER', 4 );
-    define( 'MIN_HP', 100 );
-    define( 'MAX_HP', 199 );
+    define( 'MIN_HP', 1 );
+    define( 'MAX_HP', 10 );
 
     class Game extends ActiveRecordBase {
         public $created;
@@ -161,7 +161,7 @@
                         $roundNumber = count( $this->rounds ) - 1;
                         $this->killBot(
                             $creature->user,
-                            "Tried to move dead creature $creature->id which " .
+                            "Tried to attack with dead creature $creature->id which " .
                                 "was at location ($creature->locationx, $creature->locationy) " .
                                 "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."
                         );
@@ -185,7 +185,7 @@
                         $roundNumber = count( $this->rounds ) - 1;
                         $this->killBot(
                             $creature->user,
-                            "Tried to attack with dead creature $creature->id which " .
+                            "Tried to move with dead creature $creature->id which " .
                                 "was at location ($creature->locationx, $creature->locationy) " .
                                 "to direction " . directionConstToString( $creature->intent->direction ) . " on round $roundNumber."
                         );
@@ -231,6 +231,11 @@
                 }
             }
             $this->rounds[ $roundid ]->save();
+        }
+        public function beforeNextRound() {
+            foreach ( $this->getCurrentRound()->creatures as $creature ) {
+                $creature->intent = new Intent();
+            }
         }
 
         public function getCurrentRound() {

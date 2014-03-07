@@ -89,6 +89,7 @@
         }
         public function nextRound() {
             assert( $this->game instanceof Game, '$this->game must be an instance of game when we create a new round' );
+            $this->game->beforeNextRound();
             $round = $this->game->getCurrentRound();
 
             $usersAlive = [];
@@ -114,6 +115,8 @@
                     $error->user = $bot->user;
                     $error->game = $this->game;
                     $error->error = $e->error;
+                    $error->actual = $e->actual;
+                    $error->expected = $e->expected;
                     $error->save();
                 }
             }
@@ -121,11 +124,13 @@
             $this->game->nextRound();
 
             foreach ( $this->game->getCurrentRound()->errors as $userid => $errors ) {
-                foreach ( $errors as $description ) {
+                foreach ( $errors as $errorDescription ) {
                     $error = new Error();
                     $error->game = $this->game;
                     $error->user = new User( $userid );
-                    $error->error = $description;
+                    $error->error = $errorDescription[ 'error' ];
+                    $actual->actual = $actualDescription[ 'actual' ];
+                    $expected->expected = $expectedDescription[ 'expected' ];
                     $error->save();
                 }
             }

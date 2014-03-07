@@ -24,13 +24,20 @@
                 $grader->nextRound();
             }
             catch ( WinnerException $e ) {
-                go( 'game', 'view', [ 'id' => $e->winnerid ] );
+                die( 'We have a winner: ' . $e->winnerid );
             }
 
             go( 'game', 'update', compact( 'gameid' ) );
         }
-        public function view( $id ) {
-            $user = new User( $id );
+        public function view( $gameid ) {
+            try {
+                $game = new Game( $gameid );
+            }
+            catch ( ModelNotFoundException $e ) {
+                throw new HTTPNotFoundException();
+            }
+            $round = $game->getCurrentRound();
+            $creatures = $round->creatures;
             require 'views/game/view.php';
         }
         public function updateView( $gameid ) {

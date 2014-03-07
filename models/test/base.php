@@ -85,6 +85,12 @@
             if ( $description != '' ) {
                 $description .= '. ';
             }
+            if ( is_array( $expected ) ) {
+                $expected = "Array " . implode( ",", $expected );
+            }
+            if ( is_array( $actual ) ) {
+                $actual = "Array " . implode( ",", $actual );
+            }
             $description .= "Expected '$expected', found '$actual'.";
             return $description;
         }

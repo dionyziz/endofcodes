@@ -1,19 +1,23 @@
 <?php
     class Error extends ActiveRecordBase {
-        protected static $attributes = [ 'gameid', 'userid', 'error' ];
+        protected static $attributes = [ 'gameid', 'userid', 'error', 'actual', 'expected' ];
         protected static $tableName = 'errors';
         protected $gameid;
         protected $userid;
         public $game;
         public $user;
         public $error;
+        public $actual;
+        public $expected;
 
         public function __construct( $id = false ) {
             if ( $id !== false ) {
-                $errorArray = dbSelectOne( 'errors', [ 'gameid', 'error', 'userid' ], compact( 'id' ) );
+                $errorArray = dbSelectOne( 'errors', [ 'gameid', 'error', 'userid', 'actual', 'expected' ], compact( 'id' ) );
                 $this->gameid = $errorArray[ 'gameid' ];
                 $this->userid = $errorArray[ 'userid' ];
                 $this->error = $errorArray[ 'error' ];
+                $this->actual = $errorArray[ 'actual' ];
+                $this->expected = $errorArray[ 'expected' ];
                 $this->game = new Game( $this->gameid );
                 $this->user = new User( $this->userid );
             }
