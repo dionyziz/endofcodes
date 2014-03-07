@@ -89,6 +89,7 @@
         }
         public function nextRound() {
             assert( $this->game instanceof Game, '$this->game must be an instance of game when we create a new round' );
+            $this->game->beforeNextRound();
             $round = $this->game->getCurrentRound();
 
             $usersAlive = [];

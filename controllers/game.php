@@ -18,7 +18,6 @@
         }
         public function update( $gameid ) {
             $game = new Game( $gameid );
-            $game->beforeNextRound();
 
             $grader = new Grader( $game );
             try {
