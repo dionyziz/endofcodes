@@ -420,6 +420,7 @@
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException must be caught if the response is invalid json' );
             $this->assertEquals( 'round_invalid_json', $result[ 'errors' ][ 0 ][ 'error' ], 'A "round_invalid_json" error must be recorded if the bot responds with invalid json' );
+            $this->assertEquals( 'invalid_json', $result[ 'errors' ][ 0 ][ 'actual' ], 'A "round_invalid_json" error must be recorded if the bot responds with invalid json' );
         }
         public function testRoundRespondWithoutIntent() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [] ) );
