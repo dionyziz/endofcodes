@@ -18,7 +18,7 @@
 
     function findCreatureByCoordinates( $round, $x, $y ) {
         foreach ( $round->creatures as $possibleCreature ) {
-            if ( $possibleCreature->hp > 0 ) {
+            if ( $possibleCreature->alive ) {
                 if ( $possibleCreature->locationx == $x && $possibleCreature->locationy == $y ) {
                     return $possibleCreature;
                 }
