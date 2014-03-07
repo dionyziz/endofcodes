@@ -43,6 +43,9 @@
                             echo htmlspecialchars( $_SESSION[ 'user' ]->username );
                         ?>">Profile</a></li><?php
                     }
+                    if ( isset( $user ) ) {
+                        require_once 'views/session/logoutform.php';
+                    }
                 ?>
             </ul>
         </div>

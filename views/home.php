@@ -2,8 +2,8 @@
     require_once 'views/header.php';
 ?>
 <div id="home">
-    <p class='center'>Last match ratings(global)</p>
-    <ol class='center' id="toplist">
+    <p>Last match ratings(global)</p>
+    <ol id="toplist">
         <?php
             $i = 1;
             foreach( $ratings as $rating ) {
