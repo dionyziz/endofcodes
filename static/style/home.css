@@ -1,14 +1,28 @@
-#home #toplist {
-    border: 2px solid black;
-    padding: 2% 3% 2% 3%;
+#header {
+    margin-top: 7%;
+}
+#desc {
+    margin-top: 4%;
+}
+#ratings-title {
+    margin: 2%;
+    margin-top: 3%;
+}
+.github-btn {
+    border: 0;
+    overflow: hidden;
+}
+.bs-docs-social-buttons {
+    display: inline-block;
+    list-style:none;
+    margin-left: 37%;
+}
+.bs-docs-social-buttons > li {
+    display:inline-block;
+    padding-right: 50px;
+}
+.bs-docs-social-buttons > li > iframe {
+    height: 20px;
+    width: 75px; 
 }
 
-#home #toplist li {
-    line-height: 30px;
-    list-style-type: none;
-}
-
-#home #selectbox {
-    margin: 0% 0% 10% 5%;
-    float: left;
-}

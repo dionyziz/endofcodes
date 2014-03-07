@@ -46,5 +46,9 @@
         public function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
             require 'views/session/create.php';
         }
+
+        public function deleteView() {
+            $this->delete();
+        }
     }
 ?>
