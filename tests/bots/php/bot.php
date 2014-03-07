@@ -187,6 +187,60 @@
                     break;
             }
         }
+        public function testAttackDeadCreature() {
+            $response = $this->roundRequestAndGetResponse( [
+                'round' => 1,
+                'map' => json_encode( [
+                    [
+                        'creatureid' => 1,
+                        'userid' => 1,
+                        'x' => 1,
+                        'y' => 1,
+                        'hp' => 100
+                    ],
+                    [
+                        'creatureid' => 2,
+                        'userid' => 2,
+                        'x' => 2,
+                        'y' => 1,
+                        'hp' => 0
+                    ]
+                ] ),
+                'gameid' => 1,
+                'myid' => 1,
+                'W' => 100,
+                'H' => 100
+            ] );
+
+            $this->assertTrue( $response->intent[ 0 ]->action !== 'ATTACK', 'A creature must not try and attack a dead creature' );
+        }
+        public function testAttackWithDeadCreature() {
+            $response = $this->roundRequestAndGetResponse( [
+                'round' => 1,
+                'map' => json_encode( [
+                    [
+                        'creatureid' => 1,
+                        'userid' => 1,
+                        'x' => 1,
+                        'y' => 1,
+                        'hp' => 0
+                    ],
+                    [
+                        'creatureid' => 2,
+                        'userid' => 2,
+                        'x' => 2,
+                        'y' => 1,
+                        'hp' => 10
+                    ]
+                ] ),
+                'gameid' => 1,
+                'myid' => 1,
+                'W' => 100,
+                'H' => 100
+            ] );
+
+            $this->assertTrue( empty( $response->intent ), 'The bot should not try to attack with dead creatures' );
+        }
     }
     return new BotTest();
 ?>

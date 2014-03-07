@@ -7,7 +7,7 @@
     $H = $_POST[ 'H' ];
     $intent = [];
     foreach ( $map as $creature ) {
-        if ( $creature->userid === $myid ) {
+        if ( $creature->userid === $myid && $creature->hp > 0 ) {
             $offsets = [
                 1 => [ 0, 1 ],
                 2 => [ 1, 0 ],
@@ -32,11 +32,12 @@
                     $y = $possibley;
                     foreach ( $map as $otherCreature ) {
                         if ( $otherCreature->x === $x && $otherCreature->y === $y ) {
-                            $creatureFound = true;
-                            if ( $otherCreature->userid === $myid ) {
-                                break;
+                            if ( $otherCreature->hp > 0 ) {
+                                $creatureFound = true;
+                                if ( $otherCreature->userid !== $myid ) {
+                                    $directionAttack[] = $key;
+                                }
                             }
-                            $directionAttack[] = $key;
                             break;
                         }
                     }
