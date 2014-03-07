@@ -377,7 +377,7 @@
                 ]
             ] ) );
             $bot->sendRoundRequest( $round );
-            $data = GraderSerializer::roundRequestParams( $round, $user );
+            $data = GraderSerializer::roundRequestParams( $round, $user, $game );
 
             $this->assertEquals( $botbase . "/round", $curlConnectionMock->url, 'RoundRequest must send a request to the URL {{botbase}}/game/{{gameid}}/round' ); 
             $this->assertEquals( 'POST', $curlConnectionMock->requestMethod, 'RoundRequest must be a POST request' );
@@ -391,6 +391,15 @@
 
             $this->assertTrue( isset( $curlConnectionMock->data[ 'myid' ] ), 'myid must exist in curl connection' );
             $this->assertEquals( $data[ 'myid' ], $curlConnectionMock->data[ 'myid' ], 'myid must be send properly to curl' );
+
+            $this->assertTrue( isset( $curlConnectionMock->data[ 'W' ] ), 'W must exist in curl connection' );
+            $this->assertEquals( $data[ 'W' ], $curlConnectionMock->data[ 'W' ], 'W must be send properly to curl' );
+
+            $this->assertTrue( isset( $curlConnectionMock->data[ 'H' ] ), 'H must exist in curl connection' );
+            $this->assertEquals( $data[ 'H' ], $curlConnectionMock->data[ 'H' ], 'H must be send properly to curl' );
+
+            $this->assertTrue( isset( $curlConnectionMock->data[ 'gameid' ] ), 'gameid must exist in curl connection' );
+            $this->assertEquals( $data[ 'gameid' ], $curlConnectionMock->data[ 'gameid' ], 'gameid must be send properly to curl' );
         }
         public function testRoundRespondValidJson() {
             $result = $this->roundRequestWithJsonAndGetErrors( json_encode( [

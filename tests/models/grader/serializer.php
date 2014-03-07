@@ -39,11 +39,13 @@
         }
         public function testRoundRequestParams() {
             $round = $this->buildRound();
+            $game = $this->buildGame();
+            $game->initiateAttributes();
             $user = $round->creatures[ 1 ]->user;
 
             $this->assertTrue( method_exists( 'GraderSerializer', "roundRequestParams" ), 'GraderSerializer must have a "roundRequestParams" function' );
 
-            $requestParams = GraderSerializer::roundRequestParams( $round, $user );
+            $requestParams = GraderSerializer::roundRequestParams( $round, $user, $game );
 
             $this->assertTrue( isset( $requestParams[ 'round' ] ), 'roundid must exist in exported request params' );
             $this->assertEquals( $round->id, $requestParams[ 'round' ], 'roundid must be encoded properly to request params' );
@@ -58,6 +60,15 @@
 
             $this->assertTrue( isset( $requestParams[ 'myid' ] ), 'myid must exist in exported request params' );
             $this->assertEquals( $user->id, $requestParams[ 'myid' ], 'myid must be encoded properly to request params' );
+
+            $this->assertTrue( isset( $requestParams[ 'W' ] ), 'W must exist in exported request params' );
+            $this->assertEquals( $game->width, $requestParams[ 'W' ], 'W must be encoded properly to request params' );
+
+            $this->assertTrue( isset( $requestParams[ 'H' ] ), 'H must exist in exported request params' );
+            $this->assertEquals( $game->height, $requestParams[ 'H' ], 'H must be encoded properly to request params' );
+
+            $this->assertTrue( isset( $requestParams[ 'gameid' ] ), 'gameid must exist in exported request params' );
+            $this->assertEquals( $game->id, $requestParams[ 'gameid' ], 'gameid must be encoded properly to request params' );
         }
         public function testFlattenUser() {
             $user = $this->buildUser( 'vitsalis' );
