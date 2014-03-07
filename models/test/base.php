@@ -88,7 +88,7 @@
             if ( is_array( $expected ) ) {
                 $expected = "Array " . implode( ",", $expected );
             }
-            else if ( is_array( $actual ) ) {
+            if ( is_array( $actual ) ) {
                 $actual = "Array " . implode( ",", $actual );
             }
             $description .= "Expected '$expected', found '$actual'.";
