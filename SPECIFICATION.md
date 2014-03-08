@@ -86,7 +86,7 @@ The game is overseen by a program called the **grader**. The grader sets the gam
 
 The grader starts the game through the initiation phase. In the initiation phase, the game attributes are decided by the grader. A random W, H, MAX_HP and M are decided. The following inequality must hold in order to ensure there is enough whitespace (set of empty coordinates) in the game board:
 
-WH > 3NM
+WH >= 3NM
 
 The number N is predetermined. It is equal to the number of bots that are readily available to play. Let "α ⇜ A" denote that α is an independently uniformly randomly chosen element from the set A (NOTE:  A uniformly randomly chosen variable from a set is a variable chosen from a set such that all elements of the set have the same probability of being chosen.).
 
@@ -94,9 +94,9 @@ The numbers M, W, H, MAX_HP are determined as follows:
 
 M ⇜ [100, 200[ ∩ ℕ
 
-W ⇜ ]√(3NM), √(4NM)[ ∩ ℕ
+W ⇜ ]⌈ √(3NM) ⌉, ⌊ √(4NM) ⌋[ ∩ ℕ
 
-H ⇜ ]√(3NM), √(4NM)[ ∩ ℕ
+H ⇜ ]⌈ √(3NM) ⌉, ⌊ √(4NM) ⌋[ ∩ ℕ
 
 MAX_HP ⇜ [100, 200[ ∩ ℕ
 
