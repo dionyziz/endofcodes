@@ -2,7 +2,7 @@
     require 'views/header.php';
 ?>
 
-<div id="login"><?php
+<div id="login" class="text-center"><?php
     $form = new Form( 'session', 'create' );
     $form->id = 'login-form';
     $form->output( function( $self ) use ( $username_empty, $password_empty,
@@ -31,7 +31,7 @@
 ?>
 </div>
 
-<p><a href="user/create">Don't have an account?</a></p>
+<p class="text-center"><a href="user/create">Don't have an account?</a></p>
 
 <?php
     require 'views/footer.php';
