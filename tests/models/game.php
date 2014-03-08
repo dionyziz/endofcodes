@@ -16,7 +16,7 @@
             $this->assertTrue( $game->width > 0, 'A game with users must have width' );
             $this->assertTrue( $game->height > 0, 'A game with users must have height' );
             $this->assertTrue(
-                3 * count( $game->users ) * $game->creaturesPerPlayer < $game->width * $game->height,
+                3 * count( $game->users ) * $game->creaturesPerPlayer <= $game->width * $game->height,
                 '3NM < WH must be true'
             );
         }
