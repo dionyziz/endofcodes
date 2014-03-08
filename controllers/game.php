@@ -29,14 +29,24 @@
 
             go( 'game', 'update', compact( 'gameid' ) );
         }
-        public function view( $gameid ) {
+        public function view( $gameid, $roundid = false ) {
             try {
                 $game = new Game( $gameid );
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
-            $round = $game->getCurrentRound();
+            if ( $roundid ) {
+                if ( isset( $game->rounds[ $roundid ] ) ) {
+                    $round = $game->rounds[ $roundid ];
+                }
+                else {
+                    throw new HTTPNotFoundException();
+                }
+            }
+            else {
+                $round = $game->getCurrentRound();
+            }
             $creatures = $round->creatures;
             require 'views/game/view.php';
         }
