@@ -1,3 +1,4 @@
+        </div>
         <footer id="footer" class="panel-footer"> 
             <ul class="social-buttons">
                 <li>
