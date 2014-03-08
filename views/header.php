@@ -19,7 +19,6 @@
             includeStyle( "register" );
             includeStyle( "login" );
             includeStyle( "test" );
-            includeStyle( "bootstrap-theme.min" );
             includeStyle( "bootstrap.min" );
             includeStyle( "links" );
         ?>
@@ -35,8 +34,8 @@
                 </div>
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">Rules</a></li>
-                    <li><a href="#about">Blog</a></li><?php
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li><?php
                     if ( isset( $_SESSION[ 'user'] ) ) {
                         ?><li><a 
                             href="index.php?resource=user&amp;method=view&amp;username=
