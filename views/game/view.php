@@ -29,14 +29,14 @@
         ?><p><a href="?gameid=<?php
             echo htmlspecialchars( $gameid );
         ?>&amp;roundid=<?php
-            echo htmlspecialchars( $round->id ) + 1;
+            echo htmlspecialchars( $round->id + 1 );
         ?>">Next round</a></p><?php
     }
     if ( $round->id > 0 ) {
         ?><p><a href="?gameid=<?php
             echo htmlspecialchars( $gameid );
         ?>&amp;roundid=<?php
-            echo htmlspecialchars( $round->id ) - 1;
+            echo htmlspecialchars( $round->id - 1 );
         ?>">Previous round</a></p><?php
     }
 ?>
