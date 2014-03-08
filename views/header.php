@@ -35,24 +35,22 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
                     <li><a href="">Rules</a></li>
-                    <li><a href="http://blog.endofcodes.com">Blog</a></li><?php
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right"><?php
                     if ( isset( $_SESSION[ 'user'] ) ) {
                         ?><li><a 
                             href="index.php?resource=user&amp;method=view&amp;username=
                             <?php
                                 echo htmlspecialchars( $_SESSION[ 'user' ]->username );
                             ?> ">Profile</a>
-                        </li><?php
-                    }
-                ?></ul>
-                <ul class="nav navbar-nav navbar-right"><?php
-                    if ( isset( $_SESSION[ 'user'] ) ) {
-                        ?><li><a href="session/delete">Log out<li></a></li><?php
+                        </li>
+                        <li><a href="session/delete">Log out<li></a></li><?php
                     }
                     else {
-                        ?><li><a href="session/create">Login</a></li><?php
+                        ?><li><a href="session/create">Login</a></li>
+                        <li class="active"><a href="user/create">Register</a></li><?php
                     }
-                    ?><li class="active"><a href="user/create">Register</a></li>
-                </ul>
+               ?></ul>
             </div>
         </div>
