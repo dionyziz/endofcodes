@@ -36,13 +36,11 @@
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
-            if ( $roundid === $false ) {
-                if ( isset( $game->rounds[ $roundid ] ) ) {
-                    $round = $game->rounds[ $roundid ];
-                }
-                else {
+            if ( $roundid !== false ) {
+                if ( !isset( $game->rounds[ $roundid ] ) ) {
                     throw new HTTPNotFoundException();
                 }
+                $round = $game->rounds[ $roundid ];
             }
             else {
                 $round = $game->getCurrentRound();
