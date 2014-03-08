@@ -58,8 +58,8 @@
         public function initiateAttributes() {
             $this->creaturesPerPlayer = rand( MIN_CREATURES, MAX_CREATURES );
             $multiply = $this->creaturesPerPlayer * count( $this->users );
-            $min = ceil( sqrt( MIN_MULTIPLIER * $multiply ) + 1 );
-            $max = floor( sqrt( MAX_MULTIPLIER * $multiply ) - 1 );
+            $min = ceil( sqrt( MIN_MULTIPLIER * $multiply ) );
+            $max = floor( sqrt( MAX_MULTIPLIER * $multiply ) );
             $this->width = rand( $min, $max );
             $this->height = rand( $min, $max );
             $this->maxHp = rand( MIN_HP, MAX_HP );
