@@ -30,8 +30,10 @@
                             }
                             ?><tr>
                                 <td><?php echo $i; ?></td>
-                                <td><a href=""><?php echo "$user->username"; ?></a></li></td>
-                                <td><?php echo "$country"; ?></li></td><?php
+                                <td><a href=""><?php echo "$user->username"; ?></a></td>
+                                <td><?php echo "$country"; ?></td>
+                                <td><?php echo "Coming soon" ?></td>
+                            </tr><?php 
                         }
                         $i++;
                     }
