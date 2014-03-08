@@ -43,7 +43,7 @@
         }
 
         public function createError( $error_msg ) {
-            ?><p class="error"><?php
+            ?><p class="text-danger"><?php
                 echo htmlspecialchars( $error_msg );
             ?></p><?php
         }
