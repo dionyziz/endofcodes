@@ -1,18 +1,17 @@
-import json, random
+import json, random, sys
 from urlparse import parse_qs
 from bottle import route, run, template, request, response, hook
 
 @hook('after_request')
 def contentType():
-    response.content_type = 'application/json'
-    response.charset = 'UTF-8'
+    response.headers['Content-type'] = 'application/json'
     
 @route('/bot', method='POST')
 def bot():
     return json.dumps({
         'botname': 'pythonbot',
         'version': '0.1.0',
-        'username': 'dionyziz'
+        'username': sys.argv[1]
     })
 
 @route('/game', method='POST')
@@ -22,6 +21,8 @@ def game():
 @route('/round', method='POST')
 def round():
     vars = parse_qs(request.query_string)
+    print(json.dumps(vars))
+
     map = json.loads(vars['map'])
     game_id, my_id = vars['gameid'], vars['myid']
     round, W, H = vars['round'], vars['W'], vars['H']
@@ -61,4 +62,4 @@ def round():
 
     return json.dumps({'intent': intents})
 
-run(host='localhost', port=8083, reloader=True)
+run(host='localhost', port=sys.argv[2], reloader=True)
