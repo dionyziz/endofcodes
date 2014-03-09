@@ -1,6 +1,6 @@
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 body {
     margin-bottom: 50px;
@@ -18,12 +18,11 @@ body {
     overflow: hidden;
 }
 .social-buttons > li {
-    list-style:none;
-    display:inline-block;
+    list-style: none;
+    display: inline-block;
     padding-right: 50px;
 }
 .social-buttons > li > iframe {
     height: 20px;
     width: 75px; 
 }
-
