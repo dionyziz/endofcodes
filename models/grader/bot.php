@@ -1,4 +1,6 @@
 <?php
+    require_once 'models/curl.php';
+
     interface GraderBotInterface {
         public function __construct( User $user );
         public function sendInitiateRequest();
@@ -73,7 +75,7 @@
             }
 
             if ( $ch->responseCode !== 200 ) {
-                $this->reportError( 'initiate_http_code_not_ok' );
+                $this->reportError( 'initiate_http_code_not_ok', '200', $ch->responseCode );
             }
 
             $decodedResponse = json_decode( $ch->response );
