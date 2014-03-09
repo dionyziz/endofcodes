@@ -173,18 +173,17 @@
                 'H' => 100
             ] );
 
-            $validActions = [ 'MOVE', 'NONE' ];
-            $actionValid = array_search( $response->intent[ 0 ]->action, $validActions );
-            $this->assertTrue( is_int( $actionValid ), 'Response must have a valid action' );
-            switch ( $response->intent[ 0 ]->action ) {
-                case 'MOVE':
-                    $validDirections = [ 'NORTH', 'WEST', 'SOUTH', 'EAST' ];
-                    $directionValid = array_search( $response->intent[ 0 ]->direction, $validDirections );
-                    $this->assertTrue( is_int( $directionValid ), 'Response must have a valid direction' );
-                    break;
-                case 'NONE':
-                    $this->assertEquals( 'NONE', $response->intent[ 0 ]->direction, 'When action is NONE direction should be NONE too' );
-                    break;
+            if ( isset( $response->intent[ 0 ] ) ) {
+                $validActions = [ 'MOVE' ];
+                $actionValid = array_search( $response->intent[ 0 ]->action, $validActions );
+                $this->assertTrue( is_int( $actionValid ), 'Response must have a valid action' );
+                switch ( $response->intent[ 0 ]->action ) {
+                    case 'MOVE':
+                        $validDirections = [ 'NORTH', 'WEST', 'SOUTH', 'EAST' ];
+                        $directionValid = array_search( $response->intent[ 0 ]->direction, $validDirections );
+                        $this->assertTrue( is_int( $directionValid ), 'Response must have a valid direction' );
+                        break;
+                }
             }
         }
         public function testAttackDeadCreature() {
@@ -212,7 +211,9 @@
                 'H' => 100
             ] );
 
-            $this->assertTrue( $response->intent[ 0 ]->action !== 'ATTACK', 'A creature must not try and attack a dead creature' );
+            if ( isset( $response->intent[ 0 ] ) ) {
+                $this->assertTrue( $response->intent[ 0 ]->action !== 'ATTACK', 'A creature must not try and attack a dead creature' );
+            }
         }
         public function testAttackWithDeadCreature() {
             $response = $this->roundRequestAndGetResponse( [
@@ -240,6 +241,60 @@
             ] );
 
             $this->assertTrue( empty( $response->intent ), 'The bot should not try to attack with dead creatures' );
+        }
+        public function testResponseEmptyWhenNotMoving() {
+            $response = $this->roundRequestAndGetResponse( [
+                'round' => 1,
+                'map' => json_encode( [
+                    [
+                        'creatureid' => 1,
+                        'userid' => 1,
+                        'x' => 1,
+                        'y' => 1,
+                        'hp' => 2
+                    ],
+                    [
+                        'creatureid' => 2,
+                        'userid' => 1,
+                        'x' => 2,
+                        'y' => 1,
+                        'hp' => 10
+                    ],
+                    [
+                        'creatureid' => 3,
+                        'userid' => 1,
+                        'x' => 0,
+                        'y' => 1,
+                        'hp' => 2
+                    ],
+                    [
+                        'creatureid' => 4,
+                        'userid' => 1,
+                        'x' => 1,
+                        'y' => 0,
+                        'hp' => 2
+                    ],
+                    [
+                        'creatureid' => 5,
+                        'userid' => 1,
+                        'x' => 1,
+                        'y' => 2,
+                        'hp' => 2
+                    ],
+                ] ),
+                'gameid' => 1,
+                'myid' => 1,
+                'W' => 100,
+                'H' => 100
+            ] );
+
+            $hasIntent = false;
+            foreach ( $response->intent as $creatureIntent ) {
+                if ( $creatureIntent->creatureid == 1 ) {
+                    $hasIntent = true;
+                }
+            }
+            $this->assertFalse( $hasIntent, 'If a creature can not move or attack an intent must not be given' );
         }
     }
     return new BotTest();
