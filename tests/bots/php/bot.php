@@ -175,15 +175,10 @@
 
             if ( isset( $response->intent[ 0 ] ) ) {
                 $validActions = [ 'MOVE' ];
-                $actionValid = array_search( $response->intent[ 0 ]->action, $validActions );
-                $this->assertTrue( is_int( $actionValid ), 'Response must have a valid action' );
-                switch ( $response->intent[ 0 ]->action ) {
-                    case 'MOVE':
-                        $validDirections = [ 'NORTH', 'WEST', 'SOUTH', 'EAST' ];
-                        $directionValid = array_search( $response->intent[ 0 ]->direction, $validDirections );
-                        $this->assertTrue( is_int( $directionValid ), 'Response must have a valid direction' );
-                        break;
-                }
+                $this->assertEquals( 'MOVE', $response->intent[ 0 ]->action, 'Response must have a valid action' );
+                $validDirections = [ 'NORTH', 'WEST', 'SOUTH', 'EAST' ];
+                $directionValid = array_search( $response->intent[ 0 ]->direction, $validDirections );
+                $this->assertTrue( is_int( $directionValid ), 'Response must have a valid direction' );
             }
         }
         public function testAttackDeadCreature() {
