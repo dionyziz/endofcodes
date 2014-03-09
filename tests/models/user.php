@@ -204,10 +204,13 @@
             $user = $this->buildUser( 'vitsalis' );
             $image = new Image();
             $image->id = 1;
+            $image->name = 'lala.png';
+            $image->user = $user;
+            $image->save();
             $user->image = $image;
             $user->save();
             $dbUser = new User( $user->id );
-            $this->assertEquals( 1, $dbUser->image->id, 'The imageid must be correctly stored in the database' );
+            $this->assertSame( 1, $dbUser->image->id, 'The imageid must be correctly stored in the database' );
         }
     }
 
