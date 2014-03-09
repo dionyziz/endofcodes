@@ -4,27 +4,30 @@
 <div class="text-center">
     <p><img src="<?php
                 echo $user->image->target_path;
-            ?>" alt="Profile Picture" width="100" height="100" /></p>
+            ?>" alt="Profile Picture" width="100" height="100" /></p><?php
 
-    <p><img src="<?php
+    if ( isset( $user->country ) ) {
+        ?><p><img src="<?php
                 echo $user->country->flag;
             ?>" alt="<?php
                 echo $user->country->name;
-            ?>" width="100" height="100" /></p>
-
-    <p><?php
+            ?>" width="100" height="100" /></p><?php
+    }
+    ?><p><?php
         echo htmlspecialchars( $user->username );
     ?></p>
 
     <p><?php
         echo htmlspecialchars( $user->email );
-    ?></p>
+    ?></p><?php
 
-    <p>Region, Country: <?php
-        echo htmlspecialchars( $user->country->name );
-    ?></p>
+    if ( isset( $user->country ) ) {
+        ?><p>Country: <?php
+            echo htmlspecialchars( $user->country->name );
+        ?></p><?php
+    }
 
-    <p>Score: *score*</p>
+    ?><p>Score: *score*</p>
     <p><a href="">Global</a> position: *pos*</p>
     <p><a href="">Country</a> position: *pos*</p>
     <p><a href="">Last match</a> position: *pos*</p>

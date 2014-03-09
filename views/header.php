@@ -40,12 +40,16 @@
                 <ul class="nav navbar-nav navbar-right"><?php
                     if ( isset( $_SESSION[ 'user'] ) ) {
                         ?><li><a 
-                            href="index.php?resource=user&amp;method=view&amp;username=
-                            <?php
+                            href="index.php?resource=user&amp;method=view&amp;username=<?php
                                 echo htmlspecialchars( $_SESSION[ 'user' ]->username );
                             ?> ">Profile</a>
                         </li>
-                        <li><a href="session/delete">Log out<li></a></li><?php
+                        <li>
+                            <a href="#" onclick="document.getElementById('logout-form').submit();">Log out</a>
+                        </li><?php
+                        $form = new Form( 'session', 'delete' );
+                        $form->id = 'logout-form';
+                        $form->output( function( $self ) {} );
                     }
                     else {
                         ?><li><a href="session/create">Login</a></li>
