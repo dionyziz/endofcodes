@@ -5,10 +5,10 @@
 <div class="text-center">
     <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
     if ( $bot_success ) {
-        ?><p class='text-success'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
+        ?><p class='alert alert-success'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
     else if ( $bot_fail ) {
-        ?><p class='text-danger'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php
+        ?><p class='alert alert-danger'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php
         $errors = [
             'could_not_resolve' => 'Your bot hostname is invalid. Did you enter a valid hostname?',
             'could_not_connect' => 'Your bot is unreachable on the network. Did you enter your public IP address?',
