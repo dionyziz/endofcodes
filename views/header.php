@@ -22,8 +22,8 @@
             includeStyle( "bootstrap.min" );
             includeStyle( "links" );
         ?>
-        <script type="text/javascript" src="../script/cssrefresh.js"></script>
-
+        <script type="text/javascript" src="static/script/cssrefresh.js"></script>
+        <script type="text/javascript" src="static/script/logout.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>
@@ -45,7 +45,7 @@
                             ?> ">Profile</a>
                         </li>
                         <li>
-                            <a href="#" onclick="document.getElementById('logout-form').submit();">Log out</a>
+                            <a href="#" onclick="logout();">Log out</a>
                         </li><?php
                         $form = new Form( 'session', 'delete' );
                         $form->id = 'logout-form';
