@@ -200,6 +200,15 @@
             $this->assertTrue( $emptySuccess, 'passwordValidate should not validate empty passwords' );
             $this->assertTrue( $smallSuccess, 'passwordValidate should not validate too small passwords' );
         }
+        public function testSaveImage() {
+            $user = $this->buildUser( 'vitsalis' );
+            $image = new Image();
+            $image->id = 1;
+            $user->image = $image;
+            $user->save();
+            $dbUser = new User( $user->id );
+            $this->assertEquals( 1, $dbUser->image->id, 'The imageid must be correctly stored in the database' );
+        }
     }
 
     return new UserTest();
