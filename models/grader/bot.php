@@ -22,6 +22,14 @@
             $this->user = $user;
             $this->url = $user->boturl;
         }
+        protected function reportError( $error, $expected = '', $actual = '' ) {
+            $this->errors[] = [
+                'error' =>$error,
+                'expected' => $expected,
+                'actual' => $actual
+            ];
+            throw new GraderBotException( $error, $expected, $actual );
+        }
         protected function httpRequest( $endpoint = '', $method = 'view', $data = array() ) {
             switch ( $method ) {
                 case 'create':
@@ -112,14 +120,6 @@
                 $this->reportError( 'game_additional_data' );
             }
         }
-        protected function reportError( $error, $expected = '', $actual = '' ) {
-            $this->errors[] = [
-                'error' =>$error,
-                'expected' => $expected,
-                'actual' => $actual
-            ];
-            throw new GraderBotException( $error, $expected, $actual );
-        }
         public function sendRoundRequest( Round $round ) {
             $gameid = $round->game->id;
             try {
@@ -186,7 +186,9 @@
 
         public function __construct( $error, $expected = '', $actual = '' ) {
             $this->error = $error;
-            parent::__construct( "Grader bot error: $error" );
+            $this->expected = $expected;
+            $this->actual = $actual;
+            parent::__construct( "Grader bot error: $error. Expected: $expected. Actual: $actual." );
         }
     }
 ?>

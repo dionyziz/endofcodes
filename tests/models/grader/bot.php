@@ -622,6 +622,22 @@
             $this->assertTrue( isset( $result[ 'response' ][ 0 ]->intent->direction ), 'The creature from the collection must have an intent->direction' );
             $this->assertEquals( DIRECTION_NORTH, $result[ 'response' ][ 0 ]->intent->direction, 'direction must be the same as specified' );
         }
+        public function testReportError() {
+            $user = $this->buildUser( 'vitsalis' );
+            $user->boturl = 'http://localhost/vitb';
+            $bot = new GraderBot( $user );
+            $caught = false;
+            try {
+                $bot->sendInitiateRequest();
+            }
+            catch ( GraderBotException $e ) {
+                $caught = true;
+                $this->assertEquals( 'initiate_http_code_not_ok', $e->error, 'The GraderBotException that reportError throws must have the correct error' );
+                $this->assertSame( '200', $e->expected, 'The GraderBotException that reportError throws must have the correct expected' );
+                $this->assertSame( '404', $e->actual, 'The GraderBotException that reportError throws must have the correct actual' );
+            }
+            $this->assertTrue( $caught, 'reportError must throw a GraderBotException' );
+        }
     }
 
     return new GraderBotTest();
