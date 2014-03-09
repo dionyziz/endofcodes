@@ -154,6 +154,8 @@
 
             $this->assertTrue( $caught, 'A GraderBotExcpetion must be caught when HTTP response code is not OK(200)' );
             $this->assertEquals( 'initiate_http_code_not_ok', $bot->errors[ 0 ][ 'error' ], 'Bot whose HTTP response code is not OK(200) must have a "initiate_http_code_not_ok" error' );
+            $this->assertSame( 404, $bot->errors[ 0 ][ 'actual' ], 'Bot whose HTTP response code is not OK(200) must have its actual HTTP status code reported' );
+            $this->assertSame( 200, $bot->errors[ 0 ][ 'expected' ], 'Bot whose HTTP response code is not OK(200) must have its expected HTTP status code reported' );
         }
         protected function initiateWithJsonAndGetErrors( $json ) {
             $bot = $this->buildBot( 'vitsalis' );
