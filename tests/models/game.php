@@ -16,7 +16,7 @@
             $this->assertTrue( $game->width > 0, 'A game with users must have width' );
             $this->assertTrue( $game->height > 0, 'A game with users must have height' );
             $this->assertTrue(
-                3 * count( $game->users ) * $game->creaturesPerPlayer < $game->width * $game->height,
+                3 * count( $game->users ) * $game->creaturesPerPlayer <= $game->width * $game->height,
                 '3NM < WH must be true'
             );
         }
@@ -172,6 +172,7 @@
             $game = new Game();
             $game->users = [ 1 => $user1, 2 => $user2, 3 => $user3 ];
             $game->rounds = [ 0 => $round1, 1 => $round2 ];
+            $round1->game = $round2->game = $game;
 
             return $game;
         }
@@ -221,6 +222,17 @@
 
             $this->assertSame( $game2->id, $dbGame->id, "The gameid that getLastGame returns must be the same as the last game's id" );
             $this->assertEquals( $game2->created, $dbGame->created, "The game created that getLastGame returns must be the same as the last game's created" );
+        }
+        public function testCountGameRounds() {
+             $game = $this->buildGameWithRoundAndCreatures();
+             $game->save();
+
+             foreach ( $game->rounds as $round ) {
+                $round->save();
+             }
+
+             $game2 = new Game( $game->id );
+             $this->assertEquals( 2, count( $game2->rounds ), 'The count of rounds returned by a loaded game must match the number of rounds saved' );
         }
     }
 

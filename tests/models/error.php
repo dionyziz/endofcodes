@@ -9,6 +9,8 @@
             $error->game = $game;
             $error->user = $user;
             $error->error = 'error';
+            $error->actual = 'actual';
+            $error->expected = 'expected';
             $error->save();
 
             $errorObjects = Error::findErrorsByGameAndUser( $game->id, $user->id );
@@ -18,6 +20,8 @@
             $this->assertEquals( 1, count( $errorObjects ), 'The number of errors in the database must be the same as the ones created' );
 
             $this->assertEquals( 'error', $errorObjects[ 0 ]->error, 'The error in the database must be the one during creation' );
+            $this->assertEquals( 'actual', $errorObjects[ 0 ]->actual, 'The actual in the database must be the one during creation' );
+            $this->assertEquals( 'expected', $errorObjects[ 0 ]->expected, 'The expected in the database must be the one during creation' );
         }
     }
 
