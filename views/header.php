@@ -30,10 +30,10 @@
         <div class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">End Of Codes</a>
+                    <a class="navbar-brand" href=".">End Of Codes</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class="active"><a href=".">Home</a></li>
                     <li><a href="">Rules</a></li>
                     <li><a href="http://blog.endofcodes.com">Blog</a></li>
                 </ul>

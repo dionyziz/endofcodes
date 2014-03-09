@@ -5,7 +5,7 @@
 <div class="text-center">
     <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
     if ( $bot_success ) {
-        ?><p class='text-danger'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
+        ?><p class='text-success'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
     else if ( $bot_fail ) {
         ?><p class='text-danger'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php

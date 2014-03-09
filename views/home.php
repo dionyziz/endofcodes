@@ -18,7 +18,7 @@
     <tbody>
         <?php
             $i = 1;
-            foreach( $ratings as $rating ) {
+            foreach ( $ratings as $rating ) {
                 foreach ( $rating as $user ) {
                     if ( !isset( $user->country->name ) ) {
                         $country = "unknown";
@@ -28,15 +28,24 @@
                         $country = $user->country->name;
                     }
                     ?><tr>
-                        <td><?php echo $i; ?></td>
+                        <td><?php 
+                            echo $i; 
+                        ?></td>
                         <td><a href="index.php?resource=user&amp;method=view&amp;username=<?php 
-                            echo $user->username ?>"><?php echo "$user->username"; ?></a>
+                                echo $user->username;
+                            ?>"><?php 
+                                echo $user->username; 
+                            ?></a>
                         </td>
-                        <td><?php echo "$country"; ?></td>
-                        <td><?php echo "Coming soon" ?></td>
+                        <td><?php 
+                            echo $country;
+                        ?></td>
+                        <td><?php 
+                            echo 'Coming soon';
+                        ?></td>
                     </tr><?php 
                 }
-                $i++;
+                ++$i;
             }
         ?>
     </tbody>
