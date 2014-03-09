@@ -4,7 +4,7 @@
     require_once 'models/image.php';
 
     class User extends ActiveRecordBase {
-        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
+        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
         public $username;
         public $password;
         public $email;
@@ -61,7 +61,7 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'imageid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
@@ -70,7 +70,7 @@
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
                 $this->country = new Country( $user_info[ 'countryid' ] );
-                $this->image = new Image( $user_info[ 'avatarid' ] );
+                $this->image = new Image( $user_info[ 'imageid' ] );
                 $this->id = $id;
                 $this->dob = $user_info[ 'dob' ];
                 $this->forgotpasswordtoken = $user_info[ 'forgotpasswordtoken' ];
@@ -145,7 +145,7 @@
                 $day = $month = $year = 0;
             }
             $dob = $this->dob = $year . '-' . $month . '-' . $day;
-            $this->avatarid = 0;
+            $this->imageid = 0;
             $this->generateSessionId();
         }
 

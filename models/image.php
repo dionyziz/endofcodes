@@ -13,7 +13,7 @@
         protected static $tableName = 'images';
 
         public static function findByUser( $user ) {
-            return new Image( $user->avatarid );
+            return new Image( $user->imageid );
         }
 
         public function __construct( $id = false ) {

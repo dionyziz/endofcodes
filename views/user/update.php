@@ -39,7 +39,7 @@
             $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
         }
         $self->createSelect( 'countryid', '', $countries_select_array );
-        $self->createInput( 'submit', '', '', 'Save settings' );
+        $self->createSubmit( 'Save settings' );
     } );
 
     $form = new Form( 'image', 'create' );
@@ -49,12 +49,12 @@
             $self->createError( "This isn't an image" );
         }
         $self->createInput( 'file', 'image', 'image' );
-        $self->createInput( 'submit', '', '', 'Upload' );
+        $self->createSubmit( 'Upload' );
     } );
 
     $form = new Form( 'user', 'delete' );
     $form->output( function( $self ) {
-        $self->createInput( 'submit', '', '', 'Delete your account' );
+        $self->createSubmit( 'Delete your account' );
     } );
 
     require 'views/footer.php';
