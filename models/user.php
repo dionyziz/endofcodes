@@ -16,6 +16,7 @@
         public $salt;
         public $dateOfBirth;
         public $boturl;
+        public $winCount;
         protected $dob;
         protected static $tableName = 'users';
 
@@ -66,6 +67,7 @@
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
                 }
+                $this->winCount = 0;
                 $this->boturl = $user_info[ 'boturl' ];
                 $this->username = $user_info[ 'username' ];
                 $this->email = $user_info[ 'email' ];
@@ -79,6 +81,20 @@
             }
         }
         
+        public function getWinCount() {
+            $games = Game::findAll();
+            foreach ( $games as $game ) {
+                $ratings = $game->getGlobalRatings();
+                if ( isset( $ratings[ 1 ] ) ) {
+                    foreach ( $ratings[ 1 ] as $winner ) {
+                        if ( $winner->id == $this->id ) {
+                            $this->winCount += 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         public static function findByEmail( $email ) {
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "email" ) );
