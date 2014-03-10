@@ -24,7 +24,7 @@
         }
         protected function reportError( $error, $expected = '', $actual = '' ) {
             $this->errors[] = [
-                'error' =>$error,
+                'error' => $error,
                 'expected' => $expected,
                 'actual' => $actual
             ];
