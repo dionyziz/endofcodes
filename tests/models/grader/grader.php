@@ -83,8 +83,8 @@
             $this->assertEquals( 1, count( $error1 ), 'A user must get one error if they have an invalid boturl' );
             $this->assertEquals( 1, count( $error2 ), 'A user must get one error if they have an invalid boturl' );
 
-            $this->assertEquals( 'initiate_error', $error1[ 0 ]->error, 'A user must get a "initiate_error" error if he has an invalid boturl' );
-            $this->assertEquals( 'initiate_error', $error2[ 0 ]->error, 'A user must get a "initiate_error" error if he has an invalid boturl' );
+            $this->assertEquals( 'initiate_error', $error1[ 0 ]->description, 'A user must get a "initiate_error" error if he has an invalid boturl' );
+            $this->assertEquals( 'initiate_error', $error2[ 0 ]->description, 'A user must get a "initiate_error" error if he has an invalid boturl' );
         }
         public function testIncludeUsersWithValidBots() {
             $grader = new Grader( $this->game, $this->users );
@@ -124,8 +124,8 @@
             $this->assertEquals( 1, count( $error1 ), 'A user must get one error if they have an invalid game response' );
             $this->assertEquals( 1, count( $error2 ), 'A user must get one error if they have an invalid game response' );
 
-            $this->assertEquals( 'game_error', $error1[ 0 ]->error, 'A user must get a "game_error" error if he has an invalid game response' );
-            $this->assertEquals( 'game_error', $error2[ 0 ]->error, 'A user must get a "game_error" error if he has an invalid game response' );
+            $this->assertEquals( 'game_error', $error1[ 0 ]->description, 'A user must get a "game_error" error if he has an invalid game response' );
+            $this->assertEquals( 'game_error', $error2[ 0 ]->description, 'A user must get a "game_error" error if he has an invalid game response' );
         }
         public function testCreateGameValidResponse() {
             $grader = new Grader( $this->game, $this->users );
@@ -171,8 +171,8 @@
             $this->assertEquals( 1, count( $errors[ 'error1' ] ), 'A user must get one error if they have an invalid round response' );
             $this->assertEquals( 1, count( $errors[ 'error2' ] ), 'A user must get one error if they have an invalid round response' );
 
-            $this->assertEquals( 'round_error', $errors[ 'error1' ][ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
-            $this->assertEquals( 'round_error', $errors[ 'error2' ][ 0 ]->error, 'A user must get a "round_error" error if he has an invalid round response' );
+            $this->assertEquals( 'round_error', $errors[ 'error1' ][ 0 ]->description, 'A user must get a "round_error" error if he has an invalid round response' );
+            $this->assertEquals( 'round_error', $errors[ 'error2' ][ 0 ]->description, 'A user must get a "round_error" error if he has an invalid round response' );
         }
         public function testNextRoundValidResponse() {
             $errors = $this->nextRoundAndGetErrors( true );
