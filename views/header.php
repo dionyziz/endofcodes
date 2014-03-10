@@ -30,26 +30,26 @@
         <div class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href=".">End Of Codes</a>
+                    <a class="navbar-brand" href="">End Of Codes</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href=".">Home</a></li>
+                    <li class="active"><a href="">Home</a></li>
                     <li><a href="">Rules</a></li>
                     <li><a href="http://blog.endofcodes.com">Blog</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right"><?php
                     if ( isset( $_SESSION[ 'user'] ) ) {
                         ?><li><a 
-                            href="index.php?resource=user&amp;method=view&amp;username=<?php
+                            href="user/view?username=<?php
                                 echo htmlspecialchars( $_SESSION[ 'user' ]->username );
                             ?> ">Profile</a>
                         </li>
                         <li>
-                            <a href="#" onclick="logout();">Log out</a>
+                            <a href="#" id="logout">Log out</a>
                         </li><?php
                         $form = new Form( 'session', 'delete' );
                         $form->id = 'logout-form';
-                        $form->output( function( $self ) {} );
+                        $form->output();
                     }
                     else {
                         ?><li><a href="session/create">Login</a></li>

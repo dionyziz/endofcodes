@@ -54,7 +54,7 @@
         }
 
         if ( isset( $_SESSION[ 'user' ]->id ) && $_SESSION[ 'user' ]->id == $user->id ) {
-            ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
+            ?><p><a href="user/update">Edit Settings</a></p><?php
         }
     ?>
 </div>

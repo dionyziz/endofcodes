@@ -31,10 +31,10 @@
                             echo $i;
                         ?></td>
                         <td>
-                            <a href="index.php?resource=user&amp;method=view&amp;username=<?php
+                            <a href="user/view?username=<?php
                                 echo htmlspecialchars( $user->username );
                             ?>"><?php 
-                                echo $user->username; 
+                                echo htmlspecialchars ( $user->username ); 
                             ?></a>
                         </td>
                         <td><?php 
