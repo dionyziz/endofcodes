@@ -174,7 +174,6 @@
             ] );
 
             if ( isset( $response->intent[ 0 ] ) ) {
-                $validActions = [ 'MOVE' ];
                 $this->assertEquals( 'MOVE', $response->intent[ 0 ]->action, 'Response must have a valid action' );
                 $validDirections = [ 'NORTH', 'WEST', 'SOUTH', 'EAST' ];
                 $directionValid = array_search( $response->intent[ 0 ]->direction, $validDirections );
