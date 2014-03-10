@@ -21,12 +21,11 @@
                 $error = end( $bot->errors );
                 $expected = $error[ 'expected' ];
                 $actual = $error[ 'actual' ];
-                $error = $error[ 'error' ];
-                $error = str_replace( "initiate_", "", $error );
-                if ( strpos( $error, '_not_set' ) ) {
+                $description = str_replace( "initiate_", "", $error[ 'description' ] );
+                if ( strpos( $description, '_not_set' ) ) {
                     $error = 'invalid_json_dictionary';
                 }
-                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $error, 'actual' => $actual, 'expected' => $expected ] );
+                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $description, 'actual' => $actual, 'expected' => $expected ] );
             }
             $user->save();
             go( 'bot', 'update', [ 'bot_success' => true ] );

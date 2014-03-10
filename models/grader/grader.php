@@ -63,7 +63,7 @@
                     $error = new Error();
                     $error->user = $bot->user;
                     $error->game = $this->game;
-                    $error->error = $e->error;
+                    $error->description = $e->error;
                     $error->save();
                 }
             }
@@ -82,7 +82,7 @@
                     $error = new Error();
                     $error->user = $bot->user;
                     $error->game = $this->game;
-                    $error->error = $e->error;
+                    $error->description = $e->error;
                     $error->save();
                 }
             }
@@ -114,7 +114,7 @@
                     $error = new Error();
                     $error->user = $bot->user;
                     $error->game = $this->game;
-                    $error->error = $e->error;
+                    $error->description = $e->error;
                     $error->actual = $e->actual;
                     $error->expected = $e->expected;
                     $error->save();
@@ -128,9 +128,9 @@
                     $error = new Error();
                     $error->game = $this->game;
                     $error->user = new User( $userid );
-                    $error->error = $errorDescription[ 'error' ];
-                    $actual->actual = $actualDescription[ 'actual' ];
-                    $expected->expected = $expectedDescription[ 'expected' ];
+                    $error->description = $errorDescription[ 'error' ];
+                    $error->actual = $actualDescription[ 'actual' ];
+                    $error->expected = $expectedDescription[ 'expected' ];
                     $error->save();
                 }
             }
