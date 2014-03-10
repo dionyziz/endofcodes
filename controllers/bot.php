@@ -4,6 +4,7 @@
             $this->requireLogin();
 
             require_once 'models/grader/bot.php';
+            require_once 'models/error.php';
 
             if ( empty( $boturl ) ) {
                 go( 'bot', 'update', [ 'boturl_empty' => true ] );
@@ -18,15 +19,18 @@
                 $bot->sendInitiateRequest(); 
             }
             catch ( GraderBotException $e ) {
-                $error = end( $bot->errors );
-                $expected = $error[ 'expected' ];
-                $actual = $error[ 'actual' ];
-                $error = $error[ 'error' ];
-                $error = str_replace( "initiate_", "", $error );
-                if ( strpos( $error, '_not_set' ) ) {
-                    $error = 'invalid_json_dictionary';
+                $error = new Error();
+                $error->user = $bot->user;
+                $description = end( $bot->errors );
+                $error->expected = $description[ 'expected' ];
+                $error->actual = $description[ 'actual' ];
+                $error->error = $description[ 'error' ];
+                $error->error = str_replace( "initiate_", "", $error->error );
+                if ( strpos( $error->error, '_not_set' ) ) {
+                    $error->error = 'invalid_json_dictionary';
                 }
-                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $error, 'actual' => $actual, 'expected' => $expected ] );
+                $error->save();
+                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $error->error, 'actual' => $error->actual, 'expected' => $error->expected ] );
             }
             $user->save();
             go( 'bot', 'update', [ 'bot_success' => true ] );

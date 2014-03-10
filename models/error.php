@@ -24,9 +24,14 @@
         }
 
         public function onBeforeCreate() {
-            assert( $this->game instanceof Game, '$error->game must be an instance of Game' );
+            if ( isset( $this->game ) ) {
+                assert( $this->game instanceof Game, '$error->game must be an instance of Game' );
+                $this->gameid = $this->game->id;
+            }
+            else {
+                $this->gameid = 0;
+            }
             assert( $this->user instanceof User, '$error->user must be an instance of User' );
-            $this->gameid = $this->game->id;
             $this->userid = $this->user->id;
         }
 
