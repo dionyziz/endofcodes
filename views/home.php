@@ -21,29 +21,29 @@
             foreach ( $ratings as $rating ) {
                 foreach ( $rating as $user ) {
                     if ( !isset( $user->country->name ) ) {
-                        $country = "unknown";
-                        
+                        $countryName = "unknown";
                     }
                     else {
-                        $country = $user->country->name;
+                        $countryName = htmlspecialchars( $user->country->name );
                     }
                     ?><tr>
-                        <td><?php 
-                            echo $i; 
+                        <td><?php
+                            echo $i;
                         ?></td>
-                        <td><a href="index.php?resource=user&amp;method=view&amp;username=<?php 
-                                echo $user->username;
+                        <td>
+                            <a href="index.php?resource=user&amp;method=view&amp;username=<?php
+                                echo htmlspecialchars( $user->username );
                             ?>"><?php 
                                 echo $user->username; 
                             ?></a>
                         </td>
                         <td><?php 
-                            echo $country;
+                            echo $countryName;
                         ?></td>
                         <td><?php 
                             echo 'Coming soon';
                         ?></td>
-                    </tr><?php 
+                    </tr><?php
                 }
                 ++$i;
             }

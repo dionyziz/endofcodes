@@ -10,7 +10,7 @@
         ?><p><img src="<?php
                 echo $user->country->flag;
             ?>" alt="<?php
-                echo $user->country->name;
+                echo htmlspecialchars( $user->country->name );
             ?>" width="100" height="100" /></p><?php
     }
     ?><p><?php
@@ -52,9 +52,7 @@
                 $self->createInput( 'submit', '', '', $submitValue );
             } );
         }
-    ?>
 
-    <?php
         if ( isset( $_SESSION[ 'user' ]->id ) && $_SESSION[ 'user' ]->id == $user->id ) {
             ?><p><a href="index.php?resource=user&amp;method=update">Edit Settings</a></p><?php
         }
