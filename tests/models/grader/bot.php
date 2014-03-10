@@ -624,8 +624,9 @@
         }
         public function testReportError() {
             $user = $this->buildUser( 'vitsalis' );
-            $user->boturl = 'http://www.google.com/404';
             $bot = new GraderBot( $user );
+            $bot->curlConnectionObject = new CurlConnectionMock();
+            $bot->curlConnectionObject->responseCode = 404;
             $caught = false;
             try {
                 $bot->sendInitiateRequest();
