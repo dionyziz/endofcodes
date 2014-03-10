@@ -220,10 +220,10 @@
             $game->save();
             $game->genesis();
             $dbUser = new User( $user->id );
-            $dbUser->getWinCount();
+            $winCount = $dbUser->getWinCount();
 
             $this->assertTrue( isset( $dbUser->winCount ), 'winCount must be set for each user' );
-            $this->assertSame( 1, $dbUser->winCount, 'winCount must represent the number of wins a user has' );
+            $this->assertSame( 1, $winCount, 'winCount must represent the number of wins a user has' );
         }
     }
 

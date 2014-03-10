@@ -94,6 +94,7 @@
                     }
                 }
             }
+            return $this->winCount;
         }
         public static function findByEmail( $email ) {
             try {
