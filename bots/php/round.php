@@ -56,14 +56,7 @@
             }
             else {
                 $move = rand( 0, 1 );
-                if ( $move === 0 || !count( $directionMove ) ) {
-                    $intent[] = [
-                        'creatureid' => $creature->creatureid,
-                        'action' => 'NONE',
-                        'direction' => 'NONE'
-                    ];
-                }
-                else {
+                if ( $move != 0 && count( $directionMove ) ) {
                     $direction = $directions[ $directionMove[ rand( 0, count( $directionMove ) - 1 ) ] ];
                     $intent[] = [
                         'creatureid' => $creature->creatureid,
