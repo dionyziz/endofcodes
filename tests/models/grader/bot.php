@@ -624,7 +624,7 @@
         }
         public function testReportError() {
             $user = $this->buildUser( 'vitsalis' );
-            $user->boturl = 'http://localhost/vitb';
+            $user->boturl = 'http://www.google.com/404';
             $bot = new GraderBot( $user );
             $caught = false;
             try {
