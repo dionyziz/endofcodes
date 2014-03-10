@@ -17,35 +17,31 @@
     </thead>
     <tbody>
         <?php
-            $i = 1;
-            foreach ( $ratings as $rating ) {
-                foreach ( $rating as $user ) {
-                    if ( !isset( $user->country->name ) ) {
-                        $countryName = "unknown";
-                    }
-                    else {
-                        $countryName = htmlspecialchars( $user->country->name );
-                    }
-                    ?><tr>
-                        <td><?php
-                            echo $i;
-                        ?></td>
-                        <td>
-                            <a href="user/view?username=<?php
-                                echo htmlspecialchars( $user->username );
-                            ?>"><?php 
-                                echo htmlspecialchars ( $user->username ); 
-                            ?></a>
-                        </td>
-                        <td><?php 
-                            echo $countryName;
-                        ?></td>
-                        <td><?php 
-                            echo 'Coming soon';
-                        ?></td>
-                    </tr><?php
+            foreach ( $ratings as $rating => $user ) {
+                if ( !isset( $user->country->name ) ) {
+                    $countryName = "unknown";
                 }
-                ++$i;
+                else {
+                    $countryName = htmlspecialchars( $user->country->name );
+                }
+                ?><tr>
+                    <td><?php
+                        echo $rating;
+                    ?></td>
+                    <td>
+                        <a href="user/view?username=<?php
+                            echo htmlspecialchars( $user->username );
+                        ?>"><?php 
+                            echo htmlspecialchars ( $user->username ); 
+                        ?></a>
+                    </td>
+                    <td><?php 
+                        echo $countryName;
+                    ?></td>
+                    <td><?php 
+                        echo 'Coming soon';
+                    ?></td>
+                </tr><?php
             }
         ?>
     </tbody>
