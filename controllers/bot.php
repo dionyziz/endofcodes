@@ -21,16 +21,15 @@
             catch ( GraderBotException $e ) {
                 $error = new Error();
                 $error->user = $bot->user;
-                $description = end( $bot->errors );
-                $error->expected = $description[ 'expected' ];
-                $error->actual = $description[ 'actual' ];
-                $error->error = $description[ 'error' ];
-                $error->error = str_replace( "initiate_", "", $error->error );
-                if ( strpos( $error->error, '_not_set' ) ) {
-                    $error->error = 'invalid_json_dictionary';
+                $errorInfo = end( $bot->errors );
+                $error->expected = $errorInfo[ 'expected' ];
+                $error->actual = $errorInfo[ 'actual' ];
+                $error->description = str_replace( "initiate_", "", $errorInfo[ 'error' ] );
+                if ( strpos( $error->description, '_not_set' ) ) {
+                    $error->description = 'invalid_json_dictionary';
                 }
                 $error->save();
-                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $error->error, 'actual' => $error->actual, 'expected' => $error->expected ] );
+                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $error->description, 'actual' => $error->actual, 'expected' => $error->expected ] );
             }
             $user->save();
             go( 'bot', 'update', [ 'bot_success' => true ] );

@@ -212,6 +212,19 @@
             $dbUser = new User( $user->id );
             $this->assertSame( 1, $dbUser->image->id, 'The imageid must be correctly stored in the database' );
         }
+        public function testWinCount() {
+            $game = new Game();
+            $user = $this->buildUser( 'vitsalis' );
+            $game->users = [ $user->id => $user ];
+            $game->initiateAttributes();
+            $game->save();
+            $game->genesis();
+            $dbUser = new User( $user->id );
+            $winCount = $dbUser->getWinCount();
+
+            $this->assertTrue( isset( $dbUser->winCount ), 'winCount must be set for each user' );
+            $this->assertSame( 1, $winCount, 'winCount must represent the number of wins a user has' );
+        }
     }
 
     return new UserTest();
