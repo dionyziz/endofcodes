@@ -41,7 +41,7 @@
             foreach ( $this->users as $user ) {
                 $bot = new $this->graderBotClass( $user );
                 $bot->game = $this->game;
-                $this->bots[] = new $this->graderBotClass( $user );
+                $this->bots[] = $bot;
             }
 
             $this->botsInitiated = true;
@@ -107,13 +107,11 @@
             $this->game->nextRound();
 
             foreach ( $this->game->getCurrentRound()->errors as $userid => $errors ) {
-                foreach ( $errors as $errorDescription ) {
+                foreach ( $errors as $description ) {
                     $error = new Error();
                     $error->game = $this->game;
                     $error->user = new User( $userid );
-                    $error->description = $errorDescription[ 'error' ];
-                    $error->actual = $actualDescription[ 'actual' ];
-                    $error->expected = $expectedDescription[ 'expected' ];
+                    $error->description = $description;
                     $error->save();
                 }
             }
