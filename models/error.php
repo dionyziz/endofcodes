@@ -1,4 +1,6 @@
 <?php
+    require_once 'models/game.php';
+
     class Error extends ActiveRecordBase {
         protected static $attributes = [ 'gameid', 'userid', 'description', 'actual', 'expected' ];
         protected static $tableName = 'errors';
@@ -13,6 +15,7 @@
         public function __construct( $id = false ) {
             if ( $id !== false ) {
                 $errorArray = dbSelectOne( 'errors', [ 'gameid', 'description', 'userid', 'actual', 'expected' ], compact( 'id' ) );
+                $this->id = $id;
                 $this->gameid = $errorArray[ 'gameid' ];
                 $this->userid = $errorArray[ 'userid' ];
                 $this->description = $errorArray[ 'description' ];
@@ -30,6 +33,12 @@
             }
             else {
                 $this->gameid = 0;
+            }
+            if ( !isset( $this->actual ) ) {
+                $this->actual = '';
+            }
+            if ( !isset( $this->expected ) ) {
+                $this->expected = '';
             }
             assert( $this->user instanceof User, '$error->user must be an instance of User' );
             $this->userid = $this->user->id;
