@@ -11,19 +11,29 @@
         public function __construct( User $user ) {
             $this->user = $user;
         }
+        protected function buildError( $description ) {
+            $error = new Error();
+            $error->description = $description;
+            $error->user = $this->user;
+            $error->save();
+            return $error;
+        }
         public function sendInitiateRequest() {
             if ( !$this->boturlValid ) {
-                throw new GraderBotException( 'initiate_error' );
+                $error = $this->buildError( 'initiate_error' );
+                throw new GraderBotException( $error );
             }
         }
         public function sendGameRequest( Game $game ) {
             if ( !$this->gameResponseValid ) {
-                throw new GraderBotException( 'game_error' );
+                $error = $this->buildError( 'game_error' );
+                throw new GraderBotException( $error );
             }
         }
         public function sendRoundRequest( Round $round ) {
             if ( !$this->roundResponseValid ) {
-                throw new GraderBotException( 'round_error' );
+                $error = $this->buildError( 'round_error' );
+                throw new GraderBotException( $error );
             }
             return [];
         }
@@ -73,18 +83,6 @@
             $this->assertEquals( 2, count( $grader->bots ), 'The number of bots must be the same as the number of users' );
             $this->assertEquals( 0, count( $grader->registeredBots ), 'The number of registered bots must be the same as the number of valid bots' );
             $this->assertEquals( count( $grader->registeredBots ), count( $grader->registeredUsers ), 'The number of registered users must be the same with the number of registered bots' );
-
-            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
-
-            $this->assertTrue( !empty( $error1 ), 'A user with invalid boturl must have errors' );
-            $this->assertTrue( !empty( $error2 ), 'A user with invalid boturl must have errors' );
-
-            $this->assertEquals( 1, count( $error1 ), 'A user must get one error if they have an invalid boturl' );
-            $this->assertEquals( 1, count( $error2 ), 'A user must get one error if they have an invalid boturl' );
-
-            $this->assertEquals( 'initiate_error', $error1[ 0 ]->description, 'A user must get a "initiate_error" error if he has an invalid boturl' );
-            $this->assertEquals( 'initiate_error', $error2[ 0 ]->description, 'A user must get a "initiate_error" error if he has an invalid boturl' );
         }
         public function testIncludeUsersWithValidBots() {
             $grader = new Grader( $this->game, $this->users );
@@ -97,88 +95,6 @@
 
             $this->assertEquals( 2, count( $grader->registeredBots ), 'The number of registered bots must be the same as the number of valid bots' );
             $this->assertEquals( count( $grader->registeredBots ), count( $grader->registeredUsers ), 'The number of registered users must be the same with the number of registered bots' );
-
-            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
-
-            $this->assertTrue( empty( $error1 ), 'A user with valid boturl must not have errors' );
-            $this->assertTrue( empty( $error2 ), 'A user with valid boturl must not have errors' );
-        }
-        public function testCreateGameInvalidResponse() {
-            $grader = new Grader( $this->game, $this->users );
-            $grader->graderBotClass = 'GraderBotMock';
-            $grader->initiateBots();
-            foreach ( $grader->bots as $bot ) {
-                $bot->boturlValid = true;
-                $bot->gameResponseValid = false;
-            }
-            $grader->initiate();
-            $grader->createGame();
-
-            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
-
-            $this->assertTrue( !empty( $error1 ), 'A user with invalid game response must have errors' );
-            $this->assertTrue( !empty( $error2 ), 'A user with invalid game response must have errors' );
-
-            $this->assertEquals( 1, count( $error1 ), 'A user must get one error if they have an invalid game response' );
-            $this->assertEquals( 1, count( $error2 ), 'A user must get one error if they have an invalid game response' );
-
-            $this->assertEquals( 'game_error', $error1[ 0 ]->description, 'A user must get a "game_error" error if he has an invalid game response' );
-            $this->assertEquals( 'game_error', $error2[ 0 ]->description, 'A user must get a "game_error" error if he has an invalid game response' );
-        }
-        public function testCreateGameValidResponse() {
-            $grader = new Grader( $this->game, $this->users );
-            $grader->graderBotClass = 'GraderBotMock';
-            $grader->initiateBots();
-            foreach ( $grader->bots as $bot ) {
-                $bot->boturlValid = true;
-                $bot->gameResponseValid = true;
-            }
-            $grader->initiate();
-            $grader->createGame();
-
-            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
-
-            $this->assertTrue( empty( $error1 ), 'A user with valid game response must not have errors' );
-            $this->assertTrue( empty( $error2 ), 'A user with valid game response must not have errors' );
-        }
-        protected function nextRoundAndGetErrors( $responseValid ) {
-            $grader = new Grader( $this->game, $this->users );
-            $grader->graderBotClass = 'GraderBotMock';
-            $grader->initiateBots();
-            foreach ( $grader->bots as $bot ) {
-                $bot->boturlValid = true;
-                $bot->gameResponseValid = true;
-                $bot->roundResponseValid = $responseValid;
-            }
-            $grader->initiate();
-            $grader->createGame();
-            $grader->nextRound();
-
-            $error1 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 1 ]->id );
-            $error2 = Error::findErrorsByGameAndUser( $this->game->id, $this->users[ 2 ]->id );
-
-            return compact( 'error1', 'error2' );
-        }
-        public function testNextRoundInvalidResponse() {
-            $errors = $this->nextRoundAndGetErrors( false );
-
-            $this->assertTrue( !empty( $errors[ 'error1' ] ), 'A user with invalid round response must have errors' );
-            $this->assertTrue( !empty( $errors[ 'error2' ] ), 'A user with invalid round response must have errors' );
-
-            $this->assertEquals( 1, count( $errors[ 'error1' ] ), 'A user must get one error if they have an invalid round response' );
-            $this->assertEquals( 1, count( $errors[ 'error2' ] ), 'A user must get one error if they have an invalid round response' );
-
-            $this->assertEquals( 'round_error', $errors[ 'error1' ][ 0 ]->description, 'A user must get a "round_error" error if he has an invalid round response' );
-            $this->assertEquals( 'round_error', $errors[ 'error2' ][ 0 ]->description, 'A user must get a "round_error" error if he has an invalid round response' );
-        }
-        public function testNextRoundValidResponse() {
-            $errors = $this->nextRoundAndGetErrors( true );
-
-            $this->assertTrue( empty( $errors[ 'error1' ] ), 'A user with valid round response must not have errors' );
-            $this->assertTrue( empty( $errors[ 'error2' ] ), 'A user with valid round response must not have errors' );
         }
         public function testRoundResolution() {
             $game = new Game();
