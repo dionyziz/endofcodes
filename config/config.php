@@ -12,7 +12,7 @@
                 'flag_extention' => 'png'
             ],
             'paths' => [
-                'avatar_path' => 'sample_path',
+                'avatar_path' => 'avatars/',
                 'flag_path' => 'static/images/flags/'
             ],
             'pass_min_len' => 7,
@@ -43,7 +43,7 @@
                 'flag_extention' => 'png'
             ],
             'paths' => [
-                'avatar_path' => 'sample_path',
+                'avatar_path' => 'avatars/',
                 'flag_path' => 'static/images/flags/'
             ],
             'pass_min_len' => 7,
