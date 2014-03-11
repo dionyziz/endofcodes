@@ -19,7 +19,7 @@
         ];
         ?><p class='text-danger'><?php
         if ( isset( $errors[ $error ] ) ) {
-            echo $errors[ $error ];
+            echo htmlspecialchars( $errors[ $error ] );
         }
         else {
             ?>Unknown error<?php
