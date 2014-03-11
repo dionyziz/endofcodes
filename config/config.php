@@ -2,10 +2,10 @@
     return [
         'development' => [
             'db' => [
-                'host' => 'sample_host',
-                'user' => 'sample_user',
+                'host' => 'localhost',
+                'user' => 'endofcodes',
                 'pass' => 'sample_pass',
-                'dbname' => 'sample_dbname'
+                'dbname' => 'endofcodes'
             ],
             'files' => [
                 'avatar_extentions' => [ 'jpg', 'png', 'jpeg' ],
