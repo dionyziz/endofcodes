@@ -11,9 +11,13 @@
         return $config;
     }
     function getConfig() {
-        $config = require 'config/config.php';
-        if ( file_exists( 'config/config-local.php' ) ) {
-            $configLocal = require 'config/config-local.php';
+        $pref = '';
+        if ( file_exists( '../config/config.php' ) ) {
+            $pref = '../';
+        }
+        $config = require $pref . 'config/config.php';
+        if ( file_exists( $pref . 'config/config-local.php' ) ) {
+            $configLocal = require $pref . 'config/config-local.php';
             $config = mergeKeys( $config, $configLocal );
         }
         return $config;
