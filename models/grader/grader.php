@@ -60,11 +60,6 @@
                     $this->registeredUsers[] = $bot->user;
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->description = $e->error;
-                    $error->save();
                 }
             }
         }
@@ -79,11 +74,6 @@
                     $bot->sendGameRequest( $this->game );
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->description = $e->error;
-                    $error->save();
                 }
             }
         }
@@ -111,13 +101,6 @@
                     }
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->description = $e->error;
-                    $error->actual = $e->actual;
-                    $error->expected = $e->expected;
-                    $error->save();
                 }
             }
 
