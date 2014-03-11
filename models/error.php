@@ -14,7 +14,12 @@
 
         public function __construct( $id = false ) {
             if ( $id !== false ) {
-                $errorArray = dbSelectOne( 'errors', [ 'gameid', 'description', 'userid', 'actual', 'expected' ], compact( 'id' ) );
+                try {
+                    $errorArray = dbSelectOne( 'errors', [ 'gameid', 'description', 'userid', 'actual', 'expected' ], compact( 'id' ) );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 $this->id = $id;
                 $this->gameid = $errorArray[ 'gameid' ];
                 $this->userid = $errorArray[ 'userid' ];
