@@ -50,7 +50,7 @@
         if ( isset( $image_invalid ) ) {
             $self->createError( "This isn't an image" );
         }
-        $self->createInput( 'file', 'image', 'image' );
+        $self->createInput( 'file', 'image', 'avatar-form' );
         $self->createSubmit( 'Upload' );
     } );
 
