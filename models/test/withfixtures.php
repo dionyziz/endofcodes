@@ -80,7 +80,9 @@
             $error->actual = $actual;
             $error->expected = $expected;
             $error->user = $user;
-            $error->game = $game;
+            if ( $game !== false ) {
+                $error->game = $game;
+            }
             $error->save();
             return $error;
         }
