@@ -22,13 +22,22 @@
             $this->user = $user;
             $this->url = $user->boturl;
         }
-        protected function reportError( $error, $expected = '', $actual = '' ) {
+        protected function reportError( $description, $expected = '', $actual = '' ) {
             $this->errors[] = [
-                'error' => $error,
+                'description' => $description,
                 'expected' => $expected,
                 'actual' => $actual
             ];
-            throw new GraderBotException( $error, $expected, $actual );
+            $error = new Error();
+            $error->description = $description;
+            $error->expected = $expected;
+            $error->actual = $actual;
+            $error->user = $this->user;
+            if ( isset( $this->game ) ) {
+                $error->game = $this->game;
+            }
+            $error->save();
+            throw new GraderBotException( $error );
         }
         protected function httpRequest( $endpoint = '', $method = 'view', $data = array() ) {
             switch ( $method ) {
@@ -181,14 +190,13 @@
 
     class GraderBotException extends Exception {
         public $error;
-        public $expected;
-        public $actual;
 
-        public function __construct( $error, $expected = '', $actual = '' ) {
+        public function __construct( $error ) {
+            if ( !is_object( $error ) ) {
+                die( $error );
+            }
             $this->error = $error;
-            $this->expected = $expected;
-            $this->actual = $actual;
-            parent::__construct( "Grader bot error: $error. Expected: $expected. Actual: $actual." );
+            parent::__construct( "Grader bot error: $error->description. Expected: $error->expected. Actual: $error->actual." );
         }
     }
 ?>
