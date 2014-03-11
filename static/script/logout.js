@@ -6,4 +6,3 @@ function logout() {
 }
 
 $( document ).ready( logout );
-
