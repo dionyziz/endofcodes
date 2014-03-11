@@ -137,8 +137,8 @@
         }
 
         public function killBot( $user, $description ) {
-            $roundid = count( $this->rounds ) - 1;
-            foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
+            $round = $this->getCurrentRound();
+            foreach ( $round->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
                     $creature->kill();
                 }
