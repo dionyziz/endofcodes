@@ -74,5 +74,15 @@
             $game->save();
             return $game;
         }
+        protected function buildError( $description, $actual, $expected, $user, $game = false ) {
+            $error = new Error();
+            $error->description = $description;
+            $error->actual = $actual;
+            $error->expected = $expected;
+            $error->user = $user;
+            $error->game = $game;
+            $error->save();
+            return $error;
+        }
     }
 ?>
