@@ -10,10 +10,10 @@
         }
         return $config;
     }
-    function getConfig() {
+    function getConfig( $migration = false ) {
         $pref = '';
-        if ( file_exists( '../config/config.php' ) ) {
-            $pref = '../';
+        if ( $migration !== false ) {
+            $pref = '../../';
         }
         $config = require $pref . 'config/config.php';
         if ( file_exists( $pref . 'config/config-local.php' ) ) {

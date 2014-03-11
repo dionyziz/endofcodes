@@ -7,19 +7,20 @@
 
             if ( $env === false ) { 
                 $pref = "";
+                $migration = false;
                 $env = 'test';
             }
             else {
+                $migration = true;
                 $pref = "../../";
             }
 
             require_once $pref . 'helpers/config.php';
-            
             require_once $pref . 'models/database.php';
             require_once $pref . 'models/db.php';
 
 
-            $config = getConfig()[ $env ]; 
+            $config = getConfig( $migration )[ $env ]; 
             dbInit();
 
             try {
