@@ -192,9 +192,6 @@
         public $error;
 
         public function __construct( $error ) {
-            if ( !is_object( $error ) ) {
-                die( $error );
-            }
             $this->error = $error;
             parent::__construct( "Grader bot error: $error->description. Expected: $error->expected. Actual: $error->actual." );
         }
