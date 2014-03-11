@@ -494,6 +494,11 @@
                     'intent' => [
                         [
                             'creatureid' => 1,
+                            'action' => 'ATTACK',
+                            'direction' => 'NORTH'
+                        ],
+                        [
+                            'creatureid' => 2,
                             'action' => 'faksdfjaskfja',
                             'direction' => 'NORTH',
                             'additional' => 'shit'

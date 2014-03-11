@@ -155,12 +155,12 @@
                     }
                 }
             }
-            if ( count( ( array )$decodedResponse->intent[ 0 ] ) > count( $requiredAttributes ) ) {
-                $this->reportError( 'round_additional_data' );
-            }
             $collection = [];
             $round = $this->game->getCurrentRound();
             foreach ( $decodedResponse->intent as $creatureIntentData ) {
+                if ( count( ( array )$creatureIntentData ) > count( $requiredAttributes ) ) {
+                    $this->reportError( 'round_additional_data' );
+                }
                 if ( !isset( $round->creatures[ $creatureIntentData->creatureid ] ) ) {
                     $this->reportError( 'round_invalid_creatureid' );
                 }
