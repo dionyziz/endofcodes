@@ -36,21 +36,23 @@
     <p><img src="static/images/github-logo.png" alt="github link" width="40" height="40" /></p>
     <p><img src="static/images/google+-logo.jpeg" alt="google+ link" width="40" height="40" /></p>
     <?php
-        if ( isset( $_SESSION[ 'user' ] ) && $_SESSION[ 'user' ]->id != $user->id ) {
-            if ( !$followExists ) {
-                $formMethod = 'create';
-                $submitValue = 'Follow';
+        if ( isset( $_SESSION[ 'user' ] ) ) {
+            if ( $_SESSION[ 'user' ]->id != $user->id ) {
+                if ( !$followExists ) {
+                    $formMethod = 'create';
+                    $submitValue = 'Follow';
+                }
+                else {
+                    $formMethod = 'delete';
+                    $submitValue = 'Unfollow';
+                }
+                $form = new Form( 'follow', $formMethod );
+                $form->output( function( $self ) use( $user, $submitValue ) {
+                    $self->createInput( 'hidden', 'followerid', '', $_SESSION[ 'user' ]->id );
+                    $self->createInput( 'hidden', 'followedid', '', $user->id );
+                    $self->createInput( 'submit', '', '', $submitValue );
+                } );
             }
-            else {
-                $formMethod = 'delete';
-                $submitValue = 'Unfollow';
-            }
-            $form = new Form( 'follow', $formMethod );
-            $form->output( function( $self ) use( $user, $submitValue ) {
-                $self->createInput( 'hidden', 'followerid', '', $_SESSION[ 'user' ]->id );
-                $self->createInput( 'hidden', 'followedid', '', $user->id );
-                $self->createInput( 'submit', '', '', $submitValue );
-            } );
         }
 
         if ( isset( $_SESSION[ 'user' ]->id ) ) {

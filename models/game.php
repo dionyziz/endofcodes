@@ -26,6 +26,7 @@
         }
 
         public function __construct( $id = false ) {
+            require_once 'models/round.php';
             if ( $id ) {
                 $this->exists = true;
                 $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
