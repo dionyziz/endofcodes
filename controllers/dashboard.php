@@ -7,7 +7,6 @@
             require_once 'models/game.php';
             $game = Game::getLastGame();
             $ratings = $game->getGlobalRatings();
-            $ratings = array_slice( $ratings, 0, 10 );
             require_once 'views/home.php';
         }
     }
