@@ -3,8 +3,8 @@
 <html lang="en">
     <head>
         <title>EndofCodes Demo</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <base href='<?php
         global $config;
 
@@ -23,6 +23,7 @@
             includeStyle( "links" );
         ?>
         <script type="text/javascript" src="static/script/cssrefresh.js"></script>
+        <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
         <script type="text/javascript" src="static/script/logout.js"></script>
         <meta charset="utf-8" />
     </head>

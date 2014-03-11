@@ -133,7 +133,7 @@
         }
 
         public function output( $callable = false ) {
-            if ( $callable !=false ) {
+            if ( $callable != false ) {
                 ob_start();
                 $callable( $this );
                 $out = ob_get_clean();
