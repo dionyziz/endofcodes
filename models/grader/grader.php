@@ -107,11 +107,13 @@
             $this->game->nextRound();
 
             foreach ( $this->game->getCurrentRound()->errors as $userid => $errors ) {
-                foreach ( $errors as $description ) {
+                foreach ( $errors as $errorInfo ) {
                     $error = new Error();
                     $error->game = $this->game;
                     $error->user = new User( $userid );
-                    $error->description = $description;
+                    $error->description = $errorInfo[ 'description' ];
+                    $error->actual = $errorInfo[ 'actual' ];
+                    $error->expected = $errorInfo[ 'expected' ];
                     $error->save();
                 }
             }

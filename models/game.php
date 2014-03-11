@@ -136,7 +136,7 @@
             $this->rounds[ 0 ]->save();
         }
 
-        public function killBot( $user, $description ) {
+        public function killBot( $user, $description, $actual = '', $expected = '' ) {
             $round = $this->getCurrentRound();
             foreach ( $round->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
@@ -144,7 +144,7 @@
                 }
             }
 
-            $this->getCurrentRound()->error( $user->id, $description );
+            $this->getCurrentRound()->error( $user->id, $description, $actual, $expected );
         }
 
         public function nextRound() {

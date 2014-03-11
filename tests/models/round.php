@@ -34,9 +34,11 @@
         }
         public function testError() {
             $round = new Round();
-            $round->error( 1, 'fuck this user' );
+            $round->error( 1, 'fuck this user', 'actual', 'expected' );
 
-            $this->assertEquals( 'fuck this user', $round->errors[ 1 ][ 0 ], 'error must store the description of the error specfied' );
+            $this->assertEquals( 'fuck this user', $round->errors[ 1 ][ 0 ][ 'description' ], 'description must store the description of the error specfied' );
+            $this->assertEquals( 'expected', $round->errors[ 1 ][ 0 ][ 'expected' ], 'expected must store the expected of the error specfied' );
+            $this->assertEquals( 'actual', $round->errors[ 1 ][ 0 ][ 'actual' ], 'actual must store the actual of the error specfied' );
         }
     }
     return new RoundTest();
