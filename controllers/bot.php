@@ -19,23 +19,18 @@
                 $bot->sendInitiateRequest(); 
             }
             catch ( GraderBotException $e ) {
-                $error = new Error();
-                $error->user = $bot->user;
-                $errorInfo = end( $bot->errors );
-                $error->expected = $errorInfo[ 'expected' ];
-                $error->actual = $errorInfo[ 'actual' ];
-                $error->description = str_replace( "initiate_", "", $errorInfo[ 'error' ] );
-                if ( strpos( $error->description, '_not_set' ) ) {
-                    $error->description = 'invalid_json_dictionary';
-                }
-                $error->save();
-                go( 'bot', 'update', [ 'bot_fail' => true, 'error' => $error->description, 'actual' => $error->actual, 'expected' => $error->expected ] );
+                go( 'bot', 'update', [ 'bot_fail' => true, 'errorid' => $e->error->id ] );
             }
             $user->save();
             go( 'bot', 'update', [ 'bot_success' => true ] );
         }
-        public function updateView( $boturl_empty, $boturl_invalid, $bot_success, $bot_fail, $error, $expected, $actual ) {
+        public function updateView( $boturl_empty, $boturl_invalid, $bot_success, $bot_fail, $errorid = false ) {
+            require_once 'models/error.php';
+
             $this->requireLogin();
+            if ( $errorid !== false ) {
+                $error = new Error( $errorid );
+            }
 
             require_once 'models/grader/bot.php';
             require_once 'views/bot/update.php';
