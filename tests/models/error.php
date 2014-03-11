@@ -15,7 +15,7 @@
             $this->assertSame( $error->actual, $dbError->actual, 'actual must be correctly stored in the database' );
             $this->assertSame( $error->expected, $dbError->expected, 'expected must be correctly stored in the database' );
         }
-        public function testfindErrorsByGameAndUser() {
+        public function testFindErrorsByGameAndUser() {
             $game = $this->buildGame();
             $user = $this->buildUser( 'vitsalis' );
             $error = $this->buildError( 'description', 'actual', 'expected', $user, $game );
