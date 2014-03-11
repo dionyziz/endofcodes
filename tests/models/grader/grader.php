@@ -1,41 +1,40 @@
 <?php
     require_once 'models/grader/grader.php';
     require_once 'tests/models/grader/bot.php';
+    require_once 'models/error.php';
 
     class GraderBotMock implements GraderBotInterface {
         public $boturlValid;
         public $gameResponseValid;
         public $roundResponseValid;
         public $user;
+        public $roundReturnValue = [];
 
         public function __construct( User $user ) {
             $this->user = $user;
         }
-        protected function buildError( $description ) {
+        protected function throwError( $description ) {
             $error = new Error();
             $error->description = $description;
             $error->user = $this->user;
             $error->save();
-            return $error;
+            throw new GraderBotException( $error );
         }
         public function sendInitiateRequest() {
             if ( !$this->boturlValid ) {
-                $error = $this->buildError( 'initiate_error' );
-                throw new GraderBotException( $error );
+                $this->throwError( 'initiate_error' );
             }
         }
         public function sendGameRequest( Game $game ) {
             if ( !$this->gameResponseValid ) {
-                $error = $this->buildError( 'game_error' );
-                throw new GraderBotException( $error );
+                $this->throwError( 'game_error' );
             }
         }
         public function sendRoundRequest( Round $round ) {
             if ( !$this->roundResponseValid ) {
-                $error = $this->buildError( 'round_error' );
-                throw new GraderBotException( $error );
+                $this->throwError( 'round_error' );
             }
-            return [];
+            return $this->roundReturnValue;
         }
     }
 
@@ -157,17 +156,22 @@
             $this->assertEquals( 2, $newCreature2->locationx, 'A creature must move in x axis if it is specified' );
             $this->assertEquals( 3, $newCreature2->locationy, 'A creature must move in y axis if it is specified' );
         }
-        protected function buildGameWithUserAndCreature() {
+        protected function buildGameWithUserAndCreatures() {
             $game = new Game();
             $game->save();
-            $game->users = [ 1 => $this->buildUser( 'vitsalis' ) ];
+            $game->users = [ 1 => $this->users[ 1 ], 2 => $this->users[ 2 ] ];
             $game->rounds[ 0 ] = new Round();
-            $game->rounds[ 0 ]->creatures = [ 1 => $this->buildCreature( 1, 1, 1, $game->users[ 1 ] ) ];
+            $game->rounds[ 0 ]->id = 0;
+            $game->rounds[ 0 ]->creatures = [
+                1 => $this->buildCreature( 1, 1, 1, $this->users[ 1 ], $game ),
+                2 => $this->buildCreature( 2, 3, 3, $this->users[ 2 ], $game )
+            ];
+            $game->rounds[ 0 ]->game = $game;
 
             return $game;
         }
         public function testFindBotsFromGame() {
-            $game = $this->buildGameWithUserAndCreature();
+            $game = $this->buildGameWithUserAndCreatures();
             $grader = new Grader( $game );
 
             $this->assertTrue( isset( $grader->registeredUsers ), "Grader must get its users from the game" );
@@ -177,7 +181,8 @@
             $this->assertEquals( $game->users[ 1 ]->id, $grader->registeredBots[ 0 ]->user->id, 'Grader must get valid bots from the game' );
         }
         public function testFindWinner() {
-            $game = $this->buildGameWithUserAndCreature();
+            $game = $this->buildGameWithUserAndCreatures();
+            unset( $game->rounds[ 0 ]->creatures[ 2 ] );
             $grader = new Grader( $game );
 
             $caught = false;
@@ -193,7 +198,7 @@
             $this->assertEquals( $grader->registeredUsers[ 1 ]->id, $winnerid, 'The winner must be the one whose creatures are still alive' );
         }
         public function testBotsIntentsClearedBeforeRound() {
-            $game = $this->buildGameWithUserAndCreature();
+            $game = $this->buildGameWithUserAndCreatures();
             $game->rounds[ 0 ]->creatures[ 1 ]->intent = new Intent( ACTION_MOVE, DIRECTION_NORTH );
             $grader = new Grader( $game );
             try {
@@ -205,6 +210,32 @@
                 $this->assertEquals( ACTION_NONE, $creature->intent->action, 'Action must be set to ACTION_NONE before the next round starts' );
                 $this->assertEquals( DIRECTION_NONE, $creature->intent->direction, 'Direction must be set to direction_NONE before the next round starts' );
             }
+        }
+        public function testErrorsSavedAfterResolution() {
+            $game = $this->buildGameWithUserAndCreatures();
+            $grader = new Grader( $game );
+            foreach ( $grader->registeredBots as $key => $bot ) {
+                unset( $grader->registeredBots[ $key ] );
+            }
+            foreach ( $game->users as $user ) {
+                $bot = new GraderBotMock( $user );
+                $bot->game = $game;
+                $bot->roundResponseValid = true;
+                if ( $user->id == 1 ) {
+                    $creature = new Creature();
+                    $creature->id = 1;
+                    $creature->intent = new Intent( ACTION_ATTACK, DIRECTION_NORTH );
+                    $bot->roundReturnValue = [ $creature ];
+                }
+                $grader->registeredBots[] = $bot;
+            }
+            $grader->nextRound();
+
+            $errors = Error::findErrorsByGameAndUser( $game->id, 1 );
+
+            $this->assertEquals( 1, count( $errors ), 'There must be only one error' );
+            $this->assertSame( $game->id, $errors[ 0 ]->game->id, 'gameid must be saved correctly on error' );
+            $this->assertSame( 1, $errors[ 0 ]->user->id, 'userid must be saved correctly on error' );
         }
     }
     return new GraderTest();
