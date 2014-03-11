@@ -3,7 +3,7 @@
 ?>
 
     <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
-    if ( $bot_success ) {
+    if ( !$bot_fail ) {
         ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
     else if ( $bot_fail ) {

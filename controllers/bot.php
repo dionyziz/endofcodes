@@ -22,14 +22,17 @@
                 go( 'bot', 'update', [ 'bot_fail' => true, 'errorid' => $e->error->id ] );
             }
             $user->save();
-            go( 'bot', 'update', [ 'bot_success' => true ] );
+            go( 'bot', 'update' );
         }
-        public function updateView( $boturl_empty, $boturl_invalid, $bot_success, $bot_fail, $errorid = false ) {
+        public function updateView( $boturl_empty, $boturl_invalid, $bot_fail, $errorid = false ) {
             require_once 'models/error.php';
 
             $this->requireLogin();
             if ( $errorid !== false ) {
                 $error = new Error( $errorid );
+                if ( $error->user->id !== $_SESSION[ 'user' ]->id ) {
+                    throw new HTTPUnauthorizedException();
+                }
             }
 
             require_once 'models/grader/bot.php';
