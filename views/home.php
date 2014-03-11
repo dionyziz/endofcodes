@@ -18,7 +18,7 @@
     <tbody>
         <?php
             foreach ( $ratings as $rating => $users ) {
-                foreach( $users as $user) {
+                foreach( $users as $user ) {
                     if ( !isset( $user->country->name ) ) {
                         $countryName = "unknown";
                     }
