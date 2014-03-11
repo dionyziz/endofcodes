@@ -4,7 +4,6 @@
             $this->requireLogin();
 
             require_once 'models/grader/bot.php';
-            require_once 'models/error.php';
 
             if ( empty( $boturl ) ) {
                 go( 'bot', 'update', [ 'boturl_empty' => true ] );
