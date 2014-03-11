@@ -1,10 +1,8 @@
-document.addEventListener(
-    'DOMContentLoaded', function() {
-        var button = document.getElementById( 'logout' );
-        button.addEventListener( 
-            'click', function() { 
-                document.getElementById( 'logout-form' ).submit(); 
-            }, false 
-        );
-    }
-);
+function logout() {
+    $( '#logout' ).click( function() {
+        $( '#logout-form' ).submit();
+    });
+}
+
+$( document ).ready( logout );
+
