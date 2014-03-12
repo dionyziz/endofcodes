@@ -53,10 +53,7 @@
                     $self->createInput( 'submit', '', '', $submitValue );
                 } );
             }
-        }
-
-        if ( isset( $_SESSION[ 'user' ]->id ) ) {
-            if ( $_SESSION[ 'user' ]->id == $user->id ) {
+            else {
                 ?><p><a href="user/update">Edit Settings</a></p><?php
             }
         }

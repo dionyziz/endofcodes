@@ -18,10 +18,10 @@
     <tbody>
         <?php
             foreach ( $ratings as $rating => $users ) {
-                if( $rating > 10 ) {
+                if ( $rating > 10 ) {
                     break;
                 }
-                foreach( $users as $user ) {
+                foreach ( $users as $user ) {
                     if ( !isset( $user->country->name ) ) {
                         $countryName = "unknown";
                     }
