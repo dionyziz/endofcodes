@@ -103,7 +103,7 @@
             require_once 'models/geolocation.php';
             require_once 'models/country.php';
             $countries = Country::findAll();
-            $visitorCountryCode = Location::getCountryCode();
+            $location = Location::getCountryName();
             require 'views/user/create.php';
         }
 
