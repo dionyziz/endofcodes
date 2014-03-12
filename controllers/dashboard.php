@@ -4,9 +4,10 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $user = $_SESSION[ 'user' ];
             }
-            require 'views/header.php';
-            require 'views/home.php';
-            require 'views/footer.php';
+            require_once 'models/game.php';
+            $game = Game::getLastGame();
+            $ratings = $game->getGlobalRatings();
+            require_once 'views/home.php';
         }
     }
 ?>
