@@ -6,9 +6,6 @@
     color: blue;
 }
 
-.error {
-    color: red;
-}
-.check {
-    color: green;
+#avatar-form {
+    margin-left: 46%;
 }

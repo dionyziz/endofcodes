@@ -1,6 +1,8 @@
 <?php
     require 'views/header.php';
+?>
 
+<div class="text-center"><?php
     if( isset( $valid_bot ) ) {
         ?><p>Your bot is set up to play the next game</p><?php
     }
@@ -48,7 +50,7 @@
         if ( isset( $image_invalid ) ) {
             $self->createError( "This isn't an image" );
         }
-        $self->createInput( 'file', 'image', 'image' );
+        $self->createInput( 'file', 'image', 'avatar-form' );
         $self->createSubmit( 'Upload' );
     } );
 
@@ -56,6 +58,8 @@
     $form->output( function( $self ) {
         $self->createSubmit( 'Delete your account' );
     } );
+?></div>
 
+<?php
     require 'views/footer.php';
 ?>

@@ -2,7 +2,7 @@
     require 'views/header.php';
 ?>
 
-<div id="login"><?php
+<div class="text-center"><?php
     $form = new Form( 'session', 'create' );
     $form->id = 'login-form';
     $form->output( function( $self ) use ( $username_empty, $password_empty,
@@ -28,10 +28,8 @@
         ?><p><a href="forgotpasswordrequest/create">Forgot password?</a></p><?php
         $self->createInput( 'submit', '', '', 'Login' );
     } );
-?>
+    ?><p><a href="user/create">Don't have an account?</a></p>
 </div>
-
-<p><a href="user/create">Don't have an account?</a></p>
 
 <?php
     require 'views/footer.php';

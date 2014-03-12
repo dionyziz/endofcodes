@@ -43,7 +43,7 @@
         }
 
         public function createError( $error_msg ) {
-            ?><p class="error"><?php
+            ?><p class="alert alert-danger"><?php
                 echo htmlspecialchars( $error_msg );
             ?></p><?php
         }
@@ -132,10 +132,15 @@
             ?></label><?php
         }
 
-        public function output( $callable ) {
-            ob_start();
-            $callable( $this );
-            $out = ob_get_clean();
+        public function output( $callable = false ) {
+            if ( $callable != false ) {
+                ob_start();
+                $callable( $this );
+                $out = ob_get_clean();
+            }
+            else {
+                $out = "";
+            }
             if ( !isset( $_SESSION[ 'form' ][ 'token' ] ) ) {
                 $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create();
             }

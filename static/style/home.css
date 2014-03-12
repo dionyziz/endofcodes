@@ -1,18 +1,6 @@
-#home #toplist {
-    float: left;
-    border: 2px solid black;
-    padding: 2% 3% 2% 3%;
+#desc {
+    margin-top: 41px;
 }
-
-#home #toplist li {
-    line-height: 30px;
-}
-
-#home #selectbox {
-    margin: 0% 0% 10% 5%;
-    float: left;
-}
-
-#home #persinfo {
-    margin-left: 30%;
+#ratings-title {
+    margin: 34px;
 }
