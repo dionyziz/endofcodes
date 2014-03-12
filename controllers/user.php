@@ -100,8 +100,10 @@
 
         public function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid,
                 $password_empty, $password_not_matched, $password_small ) {
+            require_once 'models/geolocation.php';
             require_once 'models/country.php';
             $countries = Country::findAll();
+            $visitorCountryCode = Location::getCountryCode();
             require 'views/user/create.php';
         }
 
