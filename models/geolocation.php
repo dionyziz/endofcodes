@@ -1,5 +1,5 @@
 <?php
-    class Location {
+    class Location extends ActiveRecordBase {
         protected static function info() {
             return unserialize(
                 file_get_contents( 
