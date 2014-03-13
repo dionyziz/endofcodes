@@ -103,7 +103,12 @@
             require_once 'models/geolocation.php';
             require_once 'models/country.php';
             $countries = Country::findAll();
-            $location = Location::getCountryName();
+            try {
+                $location = Location::getCountryName();
+            }
+            catch ( ModelNotFoundException $e ) {
+                $location = ''; 
+            }
             require 'views/user/create.php';
         }
 

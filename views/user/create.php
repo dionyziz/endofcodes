@@ -27,6 +27,7 @@
             $email_empty, $username_used, $password_small,
             $password_not_matched, $email_used, $email_invalid, $countries ) {
         global $config;
+        global $location;
 
         if ( isset( $username_empty ) ) {
             $self->createError( 'Please type a username.' );

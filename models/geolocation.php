@@ -10,12 +10,18 @@
 
         public static function getCountryCode() {
             $info = self::info();
-            return $info[ 'geoplugin_countryCode' ];
+            if( !empty( $info[ 'geoplugin_countryCode' ] ) ) {
+                return $info[ 'geoplugin_countryCode' ];
+            }
+            throw new ModelNotFoundException();
         }
 
         public static function getCountryName() {
             $info = self::info();
-            return $info[ 'geoplugin_countryName' ];
+            if( !empty( $info[ 'geoplugin_countryName' ] ) ) {
+                return $info[ 'geoplugin_countryName' ];
+            }
+            throw new ModelNotFoundException();
         }
     }
 ?>
