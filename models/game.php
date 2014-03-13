@@ -137,15 +137,15 @@
             $this->rounds[ 0 ]->save();
         }
 
-        public function killBot( $user, $description ) {
-            $roundid = count( $this->rounds ) - 1;
-            foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
+        public function killBot( $user, $description, $actual = '', $expected = '' ) {
+            $round = $this->getCurrentRound();
+            foreach ( $round->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
                     $creature->kill();
                 }
             }
 
-            $this->getCurrentRound()->error( $user->id, $description );
+            $this->getCurrentRound()->error( $user->id, $description, $actual, $expected );
         }
 
         public function nextRound() {
