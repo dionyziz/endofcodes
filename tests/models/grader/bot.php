@@ -52,7 +52,7 @@
 
     class GraderBotTest extends UnitTestWithFixtures {
         protected function assertErrorSavedInDb( $error ) {
-            $dbError = new Error( $e->error->id );
+            $dbError = new Error( $error->id );
             $this->assertSame( $dbError->actual, $error->actual, 'reportError must save the actual in the database' );
             $this->assertSame( $dbError->expected, $error->expected, 'reportError must save the expected in the database' );
             $this->assertSame( $dbError->description, $error->description, 'reportError must save the description in the database' );
@@ -96,6 +96,7 @@
                 $bot->sendInitiateRequest();
             }
             catch ( GraderBotException $e ) {
+                $this->assertErrorSavedInDb( $e->error );
                 $caught = true;
             }
 
@@ -117,6 +118,7 @@
                 $bot->sendInitiateRequest();
             }
             catch ( GraderBotException $e ) {
+                $this->assertErrorSavedInDb( $e->error );
                 $caught = true;
             }
 
@@ -156,6 +158,7 @@
                 $bot->sendInitiateRequest();
             }
             catch ( GraderBotException $e ) {
+                $this->assertErrorSavedInDb( $e->error );
                 $caught = true;
             }
 
@@ -178,6 +181,7 @@
             }
             catch ( GraderBotException $e ) {
                 $caught = true;
+                $this->assertErrorSavedInDb( $e->error );
             }
 
             return [
@@ -263,6 +267,7 @@
             }
             catch ( GraderBotException $e ) {
                 $caught = true;
+                $this->assertErrorSavedInDb( $e->error );
             }
 
             return [
@@ -335,8 +340,10 @@
             $game->genesis();
             $round = $game->rounds[ 0 ];
             $user = $game->users[ 1 ];
-            $creature1 = $this->buildCreature( 1, 1, 1, $user );
-            $creature2 = $this->buildCreature( 2, 2, 2, $game->users[ 2 ] );
+            $creature1 = $round->creatures[ 1 ];
+            $creature1->user = $user;
+            $creature2 = $round->creatures[ 2 ];
+            $creature2->user = $game->users[ 2 ];
             $round->creatures = [
                 $creature1->id => $creature1,
                 $creature2->id => $creature2

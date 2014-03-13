@@ -91,6 +91,7 @@
                         $creature = $game->grid[ $i ][ $j ];
                         $creatures[] = $game->grid[ $i ][ $j ];
                         ++$userCountCreatures[ $creature->user->id ];
+                        $this->assertEquals( $game->rounds[ 0 ]->creatures[ $creature->id ]->id, $creature->id, 'The creatures dictionary must be in the form creatureid=>creature' );
                         $this->assertTrue( $creature->id >= 1, "Creatures ids must start from 1" );
                         $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
                         $this->assertTrue( $creature->locationy >= 0, "A creature's y coordinate must be non-negative" );

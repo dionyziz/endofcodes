@@ -130,7 +130,7 @@
                             break;
                         }
                     }
-                    $this->rounds[ 0 ]->creatures[] = $creature;
+                    $this->rounds[ 0 ]->creatures[ $id ] = $creature;
                 }
             }
             Creature::saveMulti( $this->rounds[ 0 ]->creatures );
