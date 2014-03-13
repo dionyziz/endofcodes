@@ -20,6 +20,7 @@
             $configLocal = require $pref . 'config/config-local.php';
             $config = mergeKeys( $config, $configLocal );
         }
+        $config[ 'root' ] = getcwd();
         return $config;
     }
 ?>
