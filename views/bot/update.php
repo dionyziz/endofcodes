@@ -2,12 +2,13 @@
     require 'views/header.php';
 ?>
 
+<div class="text-center">
     <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
     if ( !$bot_fail ) {
         ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
     else if ( $bot_fail ) {
-        ?><p class='error'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php
+        ?><p class='alert alert-danger'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php
         $errors = [
             'initiate_could_not_resolve' => 'Your bot hostname is invalid. Did you enter a valid hostname?',
             'initiate_could_not_connect' => 'Your bot is unreachable on the network. Did you enter your public IP address?',
@@ -51,6 +52,8 @@
         $self->createInput( 'text', 'boturl', 'boturl', $_SESSION[ 'user' ]->boturl );
         $self->createInput( 'submit', '', '', 'Save bot settings' );
     } );
+?></div>
 
+<?php
     require 'views/footer.php';
 ?>
