@@ -2,10 +2,10 @@
     class Location extends ActiveRecordBase {
         protected static function info() {
             return unserialize(
-                file_get_contents( 
-                    'http://www.geoplugin.net/php.gp?ip=' . $_SERVER[ 'REMOTE_ADDR' ] 
-                ) 
-            ); 
+                file_get_contents(
+                    'http://www.geoplugin.net/php.gp?ip=' . $_SERVER[ 'REMOTE_ADDR' ]
+                )
+            );
         }
 
         public static function getCountryCode() {
@@ -25,4 +25,3 @@
         }
     }
 ?>
-
