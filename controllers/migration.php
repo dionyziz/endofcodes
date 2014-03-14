@@ -6,12 +6,12 @@
             require_once 'models/migration/base.php';
 
             if ( !empty( $name ) ) {
-                $this->run( $name );
+                $this->run( $name, $env );
             }
             else {
-                $migrations = Migration::getUnexecuted();
+                $migrations = Migration::getUnexecuted( $env );
                 foreach( $migrations as $name ) {
-                    $this->run( $name ); 
+                    $this->run( $name, $env ); 
                 }
             }
         }
@@ -23,14 +23,14 @@
             require_once 'views/migration/create.php';
         }
 
-        protected function run( $name ) {
+        protected function run( $name, $env ) {
             try {
                 require_once 'database/migration/' . $name;
             }
             catch ( MigrationException $e ) {
                 throw $e;
             }
-            Migration::createLog( $name );
+            Migration::createLog( $name, $env );
             echo "The migration script completed successfully without errors.\n"; 
         }
     }

@@ -6,3 +6,5 @@ config-local.php
 avatars
 .DS_STORE
 tags
+development.txt
+test.txt

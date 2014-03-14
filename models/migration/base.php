@@ -23,15 +23,15 @@
                 throw new MigrationException( $e );
             }
         } 
-        public static function createLog( $name ) {
-            $path = 'database/migration/log.txt';
+        public static function createLog( $name, $env ) {
+            $path = 'database/migration/' . $env . '.txt';
             $fh = fopen( $path, 'w' ) or die( "can't open file" );
             fwrite( $fh, $name );
             fclose( $fh );
         }
 
-        public static function getUnexecuted() {
-            $last = self::getLast();
+        public static function getUnexecuted( $env ) {
+            $last = self::getLast( $env );
             $migrations = self::findAll();
             $delete = true;
             foreach( $migrations as $key => $migration ) {
@@ -43,9 +43,9 @@
             return $migrations;
         }
 
-        public static function getLast() {
+        public static function getLast( $env = 'development' ) {
             ob_start();
-            include 'database/migration/log.txt';
+            include 'database/migration/' . $env . '.txt';
             return ob_get_clean();
         }
             
