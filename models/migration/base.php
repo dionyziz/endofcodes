@@ -2,25 +2,18 @@
     abstract class Migration {
         protected static function migrate( $sql ) {
             global $config;
-            
-            $env = getEnv( 'ENVIRONMENT' );
 
-            if ( $env === false ) { 
-                $pref = "";
-                $migration = false;
-                $env = 'test';
+            require_once 'helpers/config.php';
+            require_once 'models/database.php';
+            require_once 'models/db.php';
+
+            if ( isset( $GLOBALS[ 'env' ] ) ) {
+                $env = $GLOBALS[ 'env' ];
             }
             else {
-                $migration = true;
-                $pref = "../../";
+                $env = getEnv( 'ENVIRONMENT' );
             }
-
-            require_once $pref . 'helpers/config.php';
-            require_once $pref . 'models/database.php';
-            require_once $pref . 'models/db.php';
-
-
-            $config = getConfig( $migration )[ $env ]; 
+            $config = getConfig()[ $env ]; 
             dbInit();
 
             try {
@@ -31,18 +24,19 @@
             }
         } 
         
-        public static function run( $sql ) {
-            try {
-                self::migrate( $sql );
+        public static function findAll() {
+            $array = [];
+            $handle = opendir( 'database/migration/' );
+            while ( false !== ( $entry = readdir( $handle ) ) ) {
+                if ( $entry != "." && $entry != ".." && $entry != "log.txt" ) {
+                    $array[] = $entry;
+                }
             }
-            catch ( MigrationException $e ) {
-                throw $e;
-            }
-            echo "Migration successful.\n"; 
+            return $array;
         }
 
         public static function addField( $table, $field, $description ) {
-            self::run( 
+            self::migrate( 
                 "ALTER TABLE
                     $table
                 ADD COLUMN
@@ -51,7 +45,7 @@
         }
  
         public static function alterField( $table, $oldName, $newName, $description ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 CHANGE
@@ -60,7 +54,7 @@
         }
     
         public static function dropField( $table, $field ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 DROP COLUMN
@@ -69,14 +63,14 @@
         }
 
         public static function dropTable( $table ) {
-            self::run(
+            self::migrate(
                 "DROP TABLE 
                     $table;"
             ); 
         }
 
         public static function dropPrimaryKey( $table ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 DROP PRIMARY KEY;"
@@ -85,7 +79,7 @@
 
         public static function addPrimaryKey( $table, $name, $columns = [] ) {
             $columns = implode( ',', $columns );
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 ADD CONSTRAINT $name PRIMARY KEY ( $columns );"
@@ -93,7 +87,7 @@
         }
 
         public static function dropIndex( $table, $name ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 DROP INDEX
@@ -147,7 +141,7 @@
                 $attributes = array_merge( $attributes, $args );
             } 
             $attributes = implode( ',', $attributes );
-            self::run(
+            self::migrate(
                 "CREATE TABLE IF NOT EXISTS
                     $tableName (
                         $attributes
