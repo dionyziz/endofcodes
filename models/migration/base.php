@@ -23,7 +23,32 @@
                 throw new MigrationException( $e );
             }
         } 
-        
+        public static function createLog( $name ) {
+            $path = 'database/migration/log.txt';
+            $fh = fopen( $path, 'w' ) or die( "can't open file" );
+            fwrite( $fh, $name );
+            fclose( $fh );
+        }
+
+        public static function getUnexecuted() {
+            $last = self::getLast();
+            $migrations = self::findAll();
+            $delete = true;
+            foreach( $migrations as $key => $migration ) {
+                if( $migration == $last || $delete ) {
+                    unset( $migrations[ $key ] );
+                    $delete = false;
+                }
+            }
+            return $migrations;
+        }
+
+        public static function getLast() {
+            ob_start();
+            include 'database/migration/log.txt';
+            return ob_get_clean();
+        }
+            
         public static function findAll() {
             $array = [];
             $handle = opendir( 'database/migration/' );
@@ -32,6 +57,7 @@
                     $array[] = $entry;
                 }
             }
+            array_multisort( $array, SORT_ASC, $array );
             return $array;
         }
 
