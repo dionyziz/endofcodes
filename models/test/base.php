@@ -164,7 +164,7 @@
             $this->currentTest = $test;
             ob_start();
             $test->run();
-            $noise = ob_get_clean();
+            ob_get_clean();
             if ( $test->success ) {
                 ++$this->successTestsCount;
             }
