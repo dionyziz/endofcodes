@@ -1,5 +1,4 @@
 <?php
-
     Migration::createTable( 
         'users', 
         [
