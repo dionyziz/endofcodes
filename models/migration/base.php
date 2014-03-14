@@ -10,8 +10,11 @@
             if ( isset( $GLOBALS[ 'env' ] ) ) {
                 $env = $GLOBALS[ 'env' ];
             }
-            else {
+            else if ( !empty( getEnv( 'ENVIRONMENT' ) ) ) {
                 $env = getEnv( 'ENVIRONMENT' );
+            }
+            else {
+                $env = 'test';
             }
             $config = getConfig()[ $env ]; 
             dbInit();
@@ -53,7 +56,7 @@
             $array = [];
             $handle = opendir( 'database/migration/' );
             while ( false !== ( $entry = readdir( $handle ) ) ) {
-                if ( $entry != "." && $entry != ".." && $entry != "log.txt" ) {
+                if ( $entry != "." && $entry != ".." && $entry != "development.txt" && $entry != "test.txt" ) {
                     $array[] = $entry;
                 }
             }

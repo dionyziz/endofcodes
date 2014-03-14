@@ -1,5 +1,5 @@
 <?php
-    require_once 'database/migration/migrate.php';
+    require_once 'models/migration/base.php';
 
     class MigrationsTest extends UnitTestWithFixtures {
         protected function createTable() {
