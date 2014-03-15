@@ -7,7 +7,7 @@
             'value' => $migration
         ];
     }
-    $form = new Form( 'migration', 'create' );
+    $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) use( $list ) {
 
         $self->createSelect( 'name', '', $list );

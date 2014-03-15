@@ -1,5 +1,5 @@
 <?php
-    class MigrationController extends ControllerBase {
+    class MigrationRunController extends ControllerBase {
         public function create( $name = '', $env ) {
             $GLOBALS[ 'env' ] = $env;
 
@@ -34,3 +34,4 @@
             echo "The migration script completed successfully without errors.\n"; 
         }
     }
+?>
