@@ -26,7 +26,9 @@
                 $this->description = $errorArray[ 'description' ];
                 $this->actual = $errorArray[ 'actual' ];
                 $this->expected = $errorArray[ 'expected' ];
-                $this->game = new Game( $this->gameid );
+                if ( $this->gameid != 0 ) {
+                    $this->game = new Game( $this->gameid );
+                }
                 $this->user = new User( $this->userid );
             }
         }

@@ -57,6 +57,12 @@
             $this->assertSame( $dbError->expected, $error->expected, 'reportError must save the expected in the database' );
             $this->assertSame( $dbError->description, $error->description, 'reportError must save the description in the database' );
             $this->assertSame( $dbError->user->id, $error->user->id, 'reportError must save the userid in the database' );
+            if ( isset( $error->game ) ) {
+                $this->assertSame( $dbError->game->id, $error->game->id, 'reportError must save the gameid in the database' );
+            }
+            else {
+                $this->assertFalse( isset( $error->game->id ), 'game should not be set if the error does not have a game' );
+            }
         }
         public function testInitiateRequest() {
             $user = $this->buildUser( 'vitsalis' );

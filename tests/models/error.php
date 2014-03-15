@@ -25,6 +25,13 @@
             }
             $this->assertTrue( $caught, 'A ModelNotFoundExcpetion must be thrown when a we try to get a non existent error' );
         }
+        public function testSaveErrorNoGame() {
+            $user = $this->buildUser( 'vitsalis' );
+            $error = $this->buildError( 'description', 'actual', 'expected', $user );
+
+            $dbError = new Error( $error->id );
+            $this->assertFalse( isset( $dbError->game ), 'If an error has 0 as gameid, the game must not be set' );
+        }
         public function testFindErrorsByGameAndUser() {
             $game = $this->buildGame();
             $user = $this->buildUser( 'vitsalis' );
