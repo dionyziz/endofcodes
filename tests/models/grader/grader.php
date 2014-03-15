@@ -236,6 +236,9 @@
                 if ( $bot->user->id == 1 ) {
                     $this->assertTrue( $bot->errorThrown, 'An error must be thrown if the intent is invalid' );
                 }
+                else {
+                    $this->assertFalse( $bot->errorThrown, 'A user that does not have invalid intent should not have errors' );
+                }
             }
         }
         public function testGameSetOnBots() {
