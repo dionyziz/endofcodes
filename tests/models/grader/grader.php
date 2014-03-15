@@ -232,14 +232,14 @@
             }
             $grader->nextRound();
 
-            foreach ( $grader->registeredBots as $bot ) {
-                if ( $bot->user->id == 1 ) {
-                    $this->assertTrue( $bot->errorThrown, 'An error must be thrown if the intent is invalid' );
-                }
-                else {
-                    $this->assertFalse( $bot->errorThrown, 'A user that does not have invalid intent should not have errors' );
-                }
-            }
+            $errors = Error::findErrorsByGameAndUser( $game->id, 1 );
+
+            $this->assertEquals( 1, count( $errors ), 'There must be only one error' );
+            $this->assertSame( $game->id, $errors[ 0 ]->game->id, 'gameid must be saved correctly on error' );
+            $this->assertSame( 1, $errors[ 0 ]->user->id, 'userid must be saved correctly on error' );
+
+            $errors = Error::findErrorsByGameAndUser( $game->id, 2 );
+            $this->assertEquals( 0, count( $errors ), 'There must be no errors' );
         }
         public function testGameSetOnBots() {
             $game = $this->buildGame();
