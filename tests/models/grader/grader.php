@@ -237,6 +237,16 @@
             $this->assertSame( $game->id, $errors[ 0 ]->game->id, 'gameid must be saved correctly on error' );
             $this->assertSame( 1, $errors[ 0 ]->user->id, 'userid must be saved correctly on error' );
         }
+        public function testGameSetOnBots() {
+            $game = $this->buildGame();
+            $game->initiateAttributes();
+            $game->genesis();
+
+            $grader = new Grader( $game );
+            foreach ( $grader->registeredBots as $bot ) {
+                $this->assertSame( $game->id, $bot->game->id, 'The bot must have the valid game' );
+            }
+        }
     }
     return new GraderTest();
 ?>
