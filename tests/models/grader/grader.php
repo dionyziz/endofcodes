@@ -160,6 +160,8 @@
         protected function buildGameWithUserAndCreatures() {
             $game = new Game();
             $game->save();
+            $game->height = 100;
+            $game->width = 100;
             $game->users = [ 1 => $this->users[ 1 ], 2 => $this->users[ 2 ] ];
             $game->rounds[ 0 ] = new Round();
             $game->rounds[ 0 ]->id = 0;
@@ -223,6 +225,8 @@
                 $bot->game = $game;
                 $bot->roundResponseValid = true;
                 if ( $user->id == 1 ) {
+                    $game->rounds[ 0 ]->creatures[ 1 ]->locationx = 1;
+                    $game->rounds[ 0 ]->creatures[ 1 ]->locationy = 1;
                     $creature = new Creature();
                     $creature->id = 1;
                     $creature->intent = new Intent( ACTION_ATTACK, DIRECTION_NORTH );
@@ -237,6 +241,11 @@
             $this->assertEquals( 1, count( $errors ), 'There must be only one error' );
             $this->assertSame( $game->id, $errors[ 0 ]->game->id, 'gameid must be saved correctly on error' );
             $this->assertSame( 1, $errors[ 0 ]->user->id, 'userid must be saved correctly on error' );
+            $this->assertSame(
+                "Tried to attack non existent creature with creature 1.",
+                $errors[ 0 ]->description,
+                'Description must be valid'
+            );
 
             $errors = Error::findErrorsByGameAndUser( $game->id, 2 );
             $this->assertEquals( 0, count( $errors ), 'There must be no errors' );
