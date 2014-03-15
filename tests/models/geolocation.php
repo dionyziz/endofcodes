@@ -3,32 +3,30 @@
 
     class GeolocationTest extends UnitTestWithFixtures {
         public function testGetCountryCode() {
-            $_SERVER[ 'REMOTE_ADDR' ] = '83.212.120.21'; //Gunther's IP. Located in Greece.
+            $ip = '83.212.120.21'; //Gunther's IP. Located in Greece.
             $this->assertEquals( 
                 'GR', 
-                Location::getCountryCode(), 
+                Location::getCountryCode( $ip ), 
                 'getCountryCode() must return the true country shortcode, where IP is located' 
             );
-            $_SERVER[ 'REMOTE_ADDR' ] = '192.0.0.1';
             $this->assertThrows( 
                 function() {
-                    Location::getCountryCode(); 
+                    Location::getCountryCode( '192.0.0.1' ); 
                 }, 
                 'ModelNotFoundException', 
                 'GetCountryCode() must return Exception when $_SERVER[ "REMOTE_ADDR" ] does not hold a valid public ip address' 
             );
         }
         public function testGetCountryName() {
-            $_SERVER[ 'REMOTE_ADDR' ] = '83.212.120.21'; //Gunther's IP. Located in Greece.
+            $ip = '83.212.120.21'; //Gunther's IP. Located in Greece.
             $this->assertEquals( 
                 'Greece', 
-                Location::getCountryName(), 
+                Location::getCountryName( $ip ), 
                 'getCountryName() must return the true country name, where IP is located' 
             );
-            $_SERVER[ 'REMOTE_ADDR' ] = '192.0.0.1';
             $this->assertThrows( 
                 function() {
-                    Location::getCountryName(); 
+                    Location::getCountryName( '192.0.0.1' ); 
                 }, 
                 'ModelNotFoundException', 
                 'GetCountryName() must return Exception when $_SERVER[ "REMOTE_ADDR" ] does not hold a valid public ip address' 
