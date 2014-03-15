@@ -25,7 +25,7 @@
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
             }
             catch ( DBException $e ) {
-                throw new ModelNotFoundException();
+                throw new MigrationException( $e );
             }
             return new User( $user[ 'id' ] );
         }
