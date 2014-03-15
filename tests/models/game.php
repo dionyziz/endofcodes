@@ -132,9 +132,10 @@
             $game = $this->buildGame();
             $game->initiateAttributes();
             $game->genesis();
+            $user = $game->users[ 1 ];
 
             $this->assertTrue( method_exists( $game, "killBot" ), 'Game object must export a killBot function' ); 
-            $game->killBot( $game->users[ 1 ], 'fuck him' );
+            $game->killBot( $user, 'description', 'actual', 'expected' );
 
             foreach ( $game->rounds[ 0 ]->creatures as $creature ) {
                 if ( $creature->user->id === $game->users[ 1 ]->id ) {
@@ -144,6 +145,11 @@
                     $this->assertEquals( DIRECTION_NONE, $creature->intent->direction, 'Dead creature must have direction set to none' );
                 }
             }
+            $this->assertEquals( 1, count( $game->rounds[ 0 ]->errors[ $user->id ] ), 'killBot must store one error' );
+            $userErrors = $game->rounds[ 0 ]->errors[ $user->id ][ 0 ];
+            $this->assertEquals( 'description', $userErrors[ 'description' ], "killBot must store the error on the round's error array" );
+            $this->assertEquals( 'actual', $userErrors[ 'actual' ], "killBot must store the actual on the round's actual array" );
+            $this->assertEquals( 'expected', $userErrors[ 'expected' ], "killBot must store the expected on the round's expected array" );
         }
         public function testGameIdNonZero() {
             $game = $this->buildGame();
