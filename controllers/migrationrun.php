@@ -9,7 +9,12 @@
                 $this->run( $name, $env );
             }
             else {
-                $migrations = Migration::getUnexecuted( $env );
+                try {
+                    $migrations = Migration::getUnexecuted( $env );
+                }
+                catch( ModelNotFoundException $e ) {
+                    $migrations = Migration::findAll();
+                } 
                 foreach( $migrations as $name ) {
                     $this->run( $name, $env ); 
                 }
@@ -18,11 +23,15 @@
         public function createView() {
             require_once 'models/migration/base.php';
             
-            $last = Migration::getLast();
+            try {
+                $last = Migration::getLast();
+            }
+            catch ( ModelNotFoundException $e ) {
+                $last = 'You have not created any logs yet.';
+            }
             $migrations = Migration::findAll();
             require_once 'views/migration/create.php';
         }
-
         protected function run( $name, $env ) {
             try {
                 require_once 'database/migration/' . $name;

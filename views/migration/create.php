@@ -25,7 +25,7 @@
     } );
     ?><p> Last Migration: <?php echo $last; ?></p><?php
 
-    $form = new Form( 'migration', 'create' );
+    $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) use( $list ) {
         $self->createSelect( 'env', 'env', [
             [

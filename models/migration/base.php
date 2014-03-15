@@ -34,7 +34,12 @@
         }
 
         public static function getUnexecuted( $env ) {
-            $last = self::getLast( $env );
+            try {
+                $last = self::getLast( $env );
+            }
+            catch ( ModelNotFoundException $e ) {
+                throw $e;
+            }
             $migrations = self::findAll();
             $delete = true;
             foreach( $migrations as $key => $migration ) {
@@ -49,7 +54,10 @@
         public static function getLast( $env = 'development' ) {
             ob_start();
             include 'database/migration/' . $env . '.txt';
-            return ob_get_clean();
+            $log = ob_get_clean();
+            if ( empty( $log ) ) {
+                throw new ModelNotFoundException();
+            }
         }
             
         public static function findAll() {
