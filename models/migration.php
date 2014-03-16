@@ -25,12 +25,13 @@
                 throw new MigrationException( $e );
             }
         } 
+
         public static function createLog( $name, $env ) {
             $path = 'database/migration/.history';
             if ( !$fh = fopen( $path, 'w' ) ) {
                 throw new ModelNotFoundException();
             }
-            fwrite( $fh, $name );
+            fwrite( $fh, "$env: $name\n" );
             fclose( $fh );
         }
 
@@ -40,18 +41,27 @@
             }
             catch ( ModelNotFoundException $e ) {
             }
+            $migrationNew = [];
             $migrations = self::findAll();
-            $key = array_search( $last, $migrations );
-
-            return $migrations;
+            foreach ( $migrations as $key => $migration ) {
+                $migrationNew[ $key ] = $migration;
+                if ( $migration == $last ) {
+                        break;
+                }
+            }
+            return array_diff( $migrations, $migrationNew );
         }
 
         public static function findLast( $env = 'development' ) {
-            $log = file_get_contents( 'database/migration/.history' );
-            if ( empty( $log ) ) {
+            $logs = file_get_contents( 'database/migration/.history' );
+            $result = preg_split( "/$env:/", $logs );
+            if( count( $result ) > 1 ){
+                $result_split = explode( ' ', $result[ 1 ] );
+                return $result_split[ 1 ];
+            }
+            else {
                 throw new ModelNotFoundException();
             }
-            return $log;
         }
             
         public static function findAll() {
