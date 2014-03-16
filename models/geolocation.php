@@ -10,7 +10,7 @@
 
         public static function getCountryCode( $ip ) {
             $info = self::info( $ip );
-            if( !empty( $info[ 'geoplugin_countryCode' ] ) ) {
+            if ( !empty( $info[ 'geoplugin_countryCode' ] ) ) {
                 return $info[ 'geoplugin_countryCode' ];
             }
             throw new ModelNotFoundException();
@@ -18,7 +18,7 @@
 
         public static function getCountryName( $ip ) {
             $info = self::info( $ip );
-            if( !empty( $info[ 'geoplugin_countryName' ] ) ) {
+            if ( !empty( $info[ 'geoplugin_countryName' ] ) ) {
                 return $info[ 'geoplugin_countryName' ];
             }
             throw new ModelNotFoundException();
