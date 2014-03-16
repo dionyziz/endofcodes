@@ -3,7 +3,7 @@
 
     class GeolocationTest extends UnitTestWithFixtures {
         public function testGetCountryCode() {
-            $ip = '83.212.120.21'; //Gunther's IP. Located in Greece.
+            $ip = '83.212.120.21'; // Gunther's IP. Located in Greece.
             $this->assertEquals( 
                 'GR', 
                 Location::getCountryCode( $ip ), 
@@ -18,7 +18,7 @@
             );
         }
         public function testGetCountryName() {
-            $ip = '83.212.120.21'; //Gunther's IP. Located in Greece.
+            $ip = '83.212.120.21'; // Gunther's IP. Located in Greece.
             $this->assertEquals( 
                 'Greece', 
                 Location::getCountryName( $ip ), 
