@@ -39,32 +39,26 @@
                 $last = self::findLast( $env );
             }
             catch ( ModelNotFoundException $e ) {
-                throw $e;
             }
             $migrations = self::findAll();
-            foreach ( $migrations as $key => $migration ) {
-                if ( $migration == $last || $delete ) {
-                    unset( $migrations[ $key ] );
-                    break;
-                }
-            }
+            $key = array_search( $last, $migrations );
+
             return $migrations;
         }
 
         public static function findLast( $env = 'development' ) {
-            ob_start();
-            file_get_contents( 'database/migration/.history' );
-            $log = ob_get_clean();
+            $log = file_get_contents( 'database/migration/.history' );
             if ( empty( $log ) ) {
                 throw new ModelNotFoundException();
             }
+            return $log;
         }
             
         public static function findAll() {
             $array = [];
             $handle = opendir( 'database/migration/' );
             while ( false !== ( $entry = readdir( $handle ) ) ) {
-                if ( $entry != "." && $entry != ".." ) {
+                if ( $entry != "." && $entry != ".." && $entry != ".history" ) {
                     $array[] = $entry;
                 }
             }
