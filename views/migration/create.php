@@ -23,7 +23,9 @@
         ] );
         $self->createSubmit( 'Run migration' );
     } );
-    ?><p> Last Migration: <?php echo $last; ?></p><?php
+    ?><p> Last Migration: <?php 
+        echo $last; 
+    ?></p><?php
 
     $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) use( $list ) {

@@ -3,7 +3,7 @@
         public function create( $name = '', $env ) {
             $GLOBALS[ 'env' ] = $env;
 
-            require_once 'models/migration/base.php';
+            require_once 'models/migration.php';
 
             if ( !empty( $name ) ) {
                 $this->run( $name, $env );
@@ -21,10 +21,10 @@
             }
         }
         public function createView() {
-            require_once 'models/migration/base.php';
+            require_once 'models/migration.php';
             
             try {
-                $last = Migration::getLast();
+                $last = Migration::findLast();
             }
             catch ( ModelNotFoundException $e ) {
                 $last = 'You have not created any logs yet.';

@@ -16,7 +16,6 @@
             else {
                 $env = 'test';
             }
-            $config = getConfig()[ $env ]; 
             dbInit();
 
             try {
@@ -27,33 +26,34 @@
             }
         } 
         public static function createLog( $name, $env ) {
-            $path = 'database/migration/' . $env . '.txt';
-            $fh = fopen( $path, 'w' ) or die( "can't open file" );
+            $path = 'database/migration/.history';
+            if ( !$fh = fopen( $path, 'w' ) ) {
+                throw new ModelNotFoundException();
+            }
             fwrite( $fh, $name );
             fclose( $fh );
         }
 
         public static function getUnexecuted( $env ) {
             try {
-                $last = self::getLast( $env );
+                $last = self::findLast( $env );
             }
             catch ( ModelNotFoundException $e ) {
                 throw $e;
             }
             $migrations = self::findAll();
-            $delete = true;
-            foreach( $migrations as $key => $migration ) {
-                if( $migration == $last || $delete ) {
+            foreach ( $migrations as $key => $migration ) {
+                if ( $migration == $last || $delete ) {
                     unset( $migrations[ $key ] );
-                    $delete = false;
+                    break;
                 }
             }
             return $migrations;
         }
 
-        public static function getLast( $env = 'development' ) {
+        public static function findLast( $env = 'development' ) {
             ob_start();
-            include 'database/migration/' . $env . '.txt';
+            file_get_contents( 'database/migration/.history' );
             $log = ob_get_clean();
             if ( empty( $log ) ) {
                 throw new ModelNotFoundException();
@@ -64,11 +64,11 @@
             $array = [];
             $handle = opendir( 'database/migration/' );
             while ( false !== ( $entry = readdir( $handle ) ) ) {
-                if ( $entry != "." && $entry != ".." && $entry != "development.txt" && $entry != "test.txt" ) {
+                if ( $entry != "." && $entry != ".." ) {
                     $array[] = $entry;
                 }
             }
-            array_multisort( $array, SORT_ASC, $array );
+            asort( $array );
             return $array;
         }
 
