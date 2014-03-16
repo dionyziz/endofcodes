@@ -3,6 +3,6 @@ php:
     - 5.5
 before_script:
     - mysql -e 'create database endofcodes_test;'
-    - ENVIRONMENT=test 
+    - ENVIRONMENT=test DB_NAME=travis DB_PASSWORD='' 
     - php run migrationrun create all=yes 
 script: make all
