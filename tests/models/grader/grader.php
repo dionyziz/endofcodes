@@ -246,6 +246,16 @@
                 $errors[ 0 ]->description,
                 'Description must be valid'
             );
+            $this->assertSame(
+                "not attack non existent creature",
+                $errors[ 0 ]->expected,
+                'Expected must be valid'
+            );
+            $this->assertSame(
+                "attacked non existent creature",
+                $errors[ 0 ]->actual,
+                'Actual must be valid'
+            );
 
             $errors = Error::findErrorsByGameAndUser( $game->id, 2 );
             $this->assertEquals( 0, count( $errors ), 'There must be no errors' );
