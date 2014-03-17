@@ -25,9 +25,8 @@
     $form->id = 'register-form';
     $form->output( function( $self ) use( $username_empty, $username_invalid, $password_empty,
             $email_empty, $username_used, $password_small,
-            $password_not_matched, $email_used, $email_invalid, $countries ) {
+            $password_not_matched, $email_used, $email_invalid, $countries, $location ) {
         global $config;
-        global $location;
 
         if ( isset( $username_empty ) ) {
             $self->createError( 'Please type a username.' );
