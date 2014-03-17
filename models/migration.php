@@ -41,15 +41,10 @@
             }
             catch ( ModelNotFoundException $e ) {
             }
-            $migrationNew = [];
             $migrations = self::findAll();
-            foreach ( $migrations as $key => $migration ) {
-                $migrationNew[ $key ] = $migration;
-                if ( $migration == $last ) {
-                        break;
-                }
-            }
-            return array_diff( $migrations, $migrationNew );
+            $position = array_search( trim( $last ), $migrations );
+            $ran = array_slice( $migrations, 0, $position + 1 );
+            return array_diff( $migrations, $ran );
         }
 
         public static function findLast( $env = 'development' ) {
@@ -72,7 +67,7 @@
                     $array[] = $entry;
                 }
             }
-            asort( $array );
+            array_multisort( $array, SORT_ASC, $array );
             return $array;
         }
 
