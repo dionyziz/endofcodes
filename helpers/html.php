@@ -104,7 +104,7 @@
                         ?>"<?php
                     }
                     if ( $selected == $option[ 'content' ] ) {
-                        ?>selected="selected"<?php
+                        ?> selected="selected"<?php
                     }
                 ?>><?php
                     echo htmlspecialchars( $option[ 'content' ] );
