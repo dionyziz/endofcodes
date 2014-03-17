@@ -45,7 +45,6 @@
             else {
                 $round = $game->getCurrentRound();
             }
-            $creatures = $round->creatures;
             require 'views/game/view.php';
         }
         public function updateView( $gameid ) {
