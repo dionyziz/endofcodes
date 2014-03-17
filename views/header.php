@@ -16,8 +16,8 @@
             includeStyle( "footer" );
             includeStyle( "navigation" );
             includeStyle( "home" );
-            includeStyle( "register" );
-            includeStyle( "login" );
+            includeStyle( "user/create" );
+            includeStyle( "session/create" );
             includeStyle( "test" );
             includeStyle( "bootstrap.min" );
             includeStyle( "links" );
