@@ -3,7 +3,7 @@
         protected static function info( $ip ) {
             return unserialize(
                 file_get_contents(
-                    'http://www.geoplugin.net/php.gp?ip=' . $ip 
+                    'http://www.geoplugin.net/php.gp?ip=' . $ip
                 )
             );
         }
