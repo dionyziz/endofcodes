@@ -63,7 +63,7 @@
             $array = [];
             $handle = opendir( 'database/migration/' );
             while ( false !== ( $entry = readdir( $handle ) ) ) {
-                if ( $entry != "." && $entry != ".." && $entry != ".history" ) {
+                if ( strpos( $entry, '.php' ) ) {
                     $array[] = $entry;
                 }
             }

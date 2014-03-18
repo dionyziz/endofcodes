@@ -162,9 +162,7 @@
         protected function runTest( $name ) {
             $test = new UnitTestMethod( $this, $name );
             $this->currentTest = $test;
-            ob_start();
             $test->run();
-            ob_get_clean();
             if ( $test->success ) {
                 ++$this->successTestsCount;
             }
