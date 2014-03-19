@@ -1,7 +1,7 @@
 <?php
     class MigrationRunController extends ControllerBase {
         public function create( $name = '', $env ) {
-            $GLOBALS[ 'env' ] = $env;
+            $this->environment = $env;
 
             require_once 'models/migration.php';
 

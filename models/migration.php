@@ -1,22 +1,9 @@
 <?php
     abstract class Migration {
         protected static function migrate( $sql ) {
-            global $config;
-
             require_once 'helpers/config.php';
             require_once 'models/database.php';
             require_once 'models/db.php';
-
-            if ( isset( $GLOBALS[ 'env' ] ) ) {
-                $env = $GLOBALS[ 'env' ];
-            }
-            else if ( !empty( getEnv( 'ENVIRONMENT' ) ) ) {
-                $env = getEnv( 'ENVIRONMENT' );
-            }
-            else {
-                $env = 'test';
-            }
-            dbInit();
 
             try {
                 $res = db( $sql );
