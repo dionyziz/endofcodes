@@ -20,7 +20,7 @@
             require_once $pref . 'models/db.php';
 
 
-            $config = getConfig( $migration )[ $env ]; 
+            $config = getConfig( $env, $migration );
             dbInit();
 
             try {
