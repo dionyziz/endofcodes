@@ -8,7 +8,6 @@
         public $gameResponseValid;
         public $roundResponseValid;
         public $user;
-        public $errorThrown = false;
         public $roundReturnValue = [];
 
         public function __construct( User $user ) {
@@ -18,7 +17,6 @@
             $error = new Error();
             $error->description = $description;
             $error->user = $this->user;
-            $this->errorThrown = true;
             throw new GraderBotException( $error );
         }
         public function sendInitiateRequest() {
