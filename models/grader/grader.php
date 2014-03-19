@@ -41,7 +41,7 @@
             foreach ( $this->users as $user ) {
                 $bot = new $this->graderBotClass( $user );
                 $bot->game = $this->game;
-                $this->bots[] = new $this->graderBotClass( $user );
+                $this->bots[] = $bot;
             }
 
             $this->botsInitiated = true;
@@ -60,11 +60,6 @@
                     $this->registeredUsers[] = $bot->user;
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->error = $e->error;
-                    $error->save();
                 }
             }
         }
@@ -79,11 +74,6 @@
                     $bot->sendGameRequest( $this->game );
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->error = $e->error;
-                    $error->save();
                 }
             }
         }
@@ -111,26 +101,19 @@
                     }
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->error = $e->error;
-                    $error->actual = $e->actual;
-                    $error->expected = $e->expected;
-                    $error->save();
                 }
             }
 
             $this->game->nextRound();
 
             foreach ( $this->game->getCurrentRound()->errors as $userid => $errors ) {
-                foreach ( $errors as $errorDescription ) {
+                foreach ( $errors as $errorInfo ) {
                     $error = new Error();
                     $error->game = $this->game;
                     $error->user = new User( $userid );
-                    $error->error = $errorDescription[ 'error' ];
-                    $actual->actual = $actualDescription[ 'actual' ];
-                    $expected->expected = $expectedDescription[ 'expected' ];
+                    $error->description = $errorInfo[ 'description' ];
+                    $error->actual = $errorInfo[ 'actual' ];
+                    $error->expected = $errorInfo[ 'expected' ];
                     $error->save();
                 }
             }
