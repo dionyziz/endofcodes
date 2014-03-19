@@ -96,7 +96,7 @@
         protected function loadConfig() {
             global $config;
 
-            $config = getConfig()[ $this->environment ];
+            $config = getConfig( $this->environment );
         }
         protected function init() {
             $this->loadConfig();
