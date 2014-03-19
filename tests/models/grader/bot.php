@@ -512,6 +512,15 @@
         public function testRoundRespondAdditionalData() {
             $this->assertRoundThrows(
                 [
+                    'intent' => [],
+                    'additional' => []
+                ],
+                'round_additional_data'
+            );
+        }
+        public function testRoundRespondIntentAdditionalData() {
+            $this->assertRoundThrows(
+                [
                     'intent' => [
                         [
                             'creatureid' => 1,
@@ -526,7 +535,7 @@
                         ]
                     ]
                 ],
-                'round_additional_data'
+                'round_intent_additional_data'
             );
         }
         public function testRoundRespondInvalidAction() {
