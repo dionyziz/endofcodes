@@ -60,7 +60,7 @@
         }
 
         protected function create() {
-            assert( $this->game instanceof Game );
+            assert( $this->game instanceof Game/*, '$this->game must be an instance of Game when a round is created'*/ );
 
             $rows = [];
             $gameid = $this->game->id;
