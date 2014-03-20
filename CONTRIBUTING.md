@@ -96,7 +96,7 @@ deployed to production within the next few days.
 We try to ensure that the quality of the code we merge is decent. Here are
 some things we look for:
 
-1. The change fixes a real problem, introduces a new feature, or usefully
+1. The change fixes **a real problem**, introduces a new feature, or usefully
 refactors existing code. We look for the GitHub issue it corresponds to to see
 that it really does fix the problem, or at the spec to see that it really does
 build what we envisioned.
@@ -150,7 +150,7 @@ This means that by contributing to the project, you are agreeing to make your
 modifications available to the world for ever, even if you change your mind
 later.
 
-==Blog==
+## Blog
 We maintain a [development blog](http://blog.endofcodes.com/). If you
 contribute, we encourage you to blog about it so that our users are aware of
 our whereabouts.
