@@ -10,8 +10,8 @@
     $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) use( $list ) {
 
-        $self->createSelect( 'name', '', $list );
-        $self->createSelect( 'env', 'env', [
+        $self->createSelect( 'name', $list );
+        $self->createSelect( 'env', [
             [
                 'content' => 'development',
                 'value' => 'development'

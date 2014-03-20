@@ -102,7 +102,7 @@
             else {
                 $env = $this->environment;
             }
-            $config = getConfig()[ $env ];
+            $config = getConfig( $env );
         }
         protected function init() {
             $this->loadConfig();

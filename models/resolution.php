@@ -46,7 +46,9 @@
             $attackerCreature->intent = new Intent();
             $attackerCreature->game->killBot(
                 $attackerCreature->user,
-                "Tried to attack non existent creature with creature $attackerCreature->id."
+                "Tried to attack non existent creature with creature $attackerCreature->id.",
+                'attacked non existent creature',
+                'not attack non existent creature'
             );
             return;
         }

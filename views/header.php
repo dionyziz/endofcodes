@@ -2,6 +2,7 @@
 
 <html lang="en">
     <head>
+        <meta charset="utf-8" />
         <title>EndofCodes Demo</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,8 +17,8 @@
             includeStyle( "footer" );
             includeStyle( "navigation" );
             includeStyle( "home" );
-            includeStyle( "register" );
-            includeStyle( "login" );
+            includeStyle( "user/create" );
+            includeStyle( "session/create" );
             includeStyle( "test" );
             includeStyle( "bootstrap.min" );
             includeStyle( "links" );

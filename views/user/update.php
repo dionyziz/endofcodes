@@ -40,7 +40,7 @@
         foreach ( $countries as $key => $country ) {
             $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
         }
-        $self->createSelect( 'countryid', '', $countries_select_array );
+        $self->createSelect( 'countryid', $countries_select_array );
         $self->createSubmit( 'Save settings' );
     } );
 
