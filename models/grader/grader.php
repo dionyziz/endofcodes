@@ -14,12 +14,12 @@
         protected $botsInitiated = false;
 
         public function __construct( Game $game, $users = false ) {
-            assert( $game->exists, 'Game must exist when grader is constructed' );
+            assert( $game->exists/*, 'Game must exist when grader is constructed'*/ );
             
             if ( count( $game->rounds ) ) {
                 // already existing game
-                assert( $users === false, 'game already has users since genesis has run' );
-                assert( isset( $game->users ), 'game must have users' );
+                assert( $users === false/*, 'game already has users since genesis has run'*/ );
+                assert( isset( $game->users )/*, 'game must have users'*/ );
                 $this->registeredUsers = $game->users;
                 foreach ( $game->users as $user ) {
                     $bot = new GraderBot( $user );
@@ -29,10 +29,10 @@
             }
             else {
                 // new game
-                assert( is_array( $users ), 'Users must be an array' );
+                assert( is_array( $users )/*, 'Users must be an array'*/ );
                 $this->users = $users;
                 foreach ( $this->users as $user ) {
-                    assert( $user instanceof User, '$grader->users is not a collection of users' );
+                    assert( $user instanceof User/*, '$grader->users is not a collection of users'*/ );
                 }
             }
             $this->game = $game;
@@ -47,7 +47,7 @@
             $this->botsInitiated = true;
         }
         public function initiate() {
-            assert( $this->botsInitiated, 'Bots should be initiated before grader initiates' );
+            assert( $this->botsInitiated/*, 'Bots should be initiated before grader initiates'*/ );
 
             $this->registeredBots = [];
             $this->registeredUsers = [];
@@ -78,7 +78,7 @@
             }
         }
         public function nextRound() {
-            assert( $this->game instanceof Game, '$this->game must be an instance of game when we create a new round' );
+            assert( $this->game instanceof Game/*, '$this->game must be an instance of game when we create a new round'*/ );
             $this->game->beforeNextRound();
             $round = $this->game->getCurrentRound();
 
