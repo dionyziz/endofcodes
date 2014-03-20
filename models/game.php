@@ -104,7 +104,7 @@
         }
 
         public function genesis() {
-            assert( $this->attributesInitiated, 'game attributes not initiated before genesis' );
+            assert( $this->attributesInitiated );
 
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
