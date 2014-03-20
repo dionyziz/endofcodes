@@ -3,5 +3,6 @@ php:
     - 5.5
 before_script:
     - mysql -e 'create database endofcodes_test;'
+    - ENVIROMENT=test
     - php run migrationrun create env=test 
 script: make all
