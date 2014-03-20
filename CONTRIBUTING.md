@@ -20,10 +20,11 @@ To contribute, follow these simple steps:
 1. Write tests for your fix.
 1. Implement your fix.
 1. Make sure **all** unit tests pass.
+1. Push your new branch with your changes to your fork.
 1. Submit a pull request.
 
 ## Finding an issue
-There are three ways to find something to do on the project:
+There are four ways to find something to do on the project:
 
 1. You have a problem with the project or an idea of your own. In this case,
 simply go ahead and implement your idea! It's not necessary that we have
@@ -75,10 +76,26 @@ Pull requests are reviewed by our peers, just like you. You can also review
 pending pull requests by others too! Just go to 
 [the list of open pull requests](https://github.com/dionyziz/endofcodes/pulls),
 pick one you want to see merged, and see if the code looks good. If you see
-some issue, leave a comment on the particular line of code, or in the pull
+some issue, leave a comment on the particular line of code, or on the pull
 request itself. If everything looks good to you, leave a comment indicating
 that it's ready to be merged. You can say "LGTM" for "Looks Good To Me". If
 you're a collaborator, you can also merge pull requests directly in this case.
+
+Try to make one pull request per issue. If you want to make two changes,
+make *two* different branches **from master** and pull request. If multiple
+changes depend on each other, then you should *still* make a different branch
+for each change - but base the dependent branch on the branch it depends on
+instead of master. After you make your changes, you should make two different
+pull requests. First, make a pull request from the base branch (that the other
+branch was based on). Finally, make a pull request for the dependent
+branch.
+Write a comment on your pull request of the dependent branch saying it depends
+on a previous pull request by
+[mentioning](https://github.com/blog/957-introducing-issue-mentions) the
+previous pull request. We'll then review them in order.
+
+If a pull request fixes an issue, mention the issue it fixes in your pull
+request. When the pull request is merged, you can close the issue too.
 
 Please don't merge your own pull requests! Peer review exists to ensure our
 software is of good quality. Even the most experienced programmers make
@@ -101,6 +118,10 @@ refactors existing code. We look for the GitHub issue it corresponds to to see
 that it really does fix the problem, or at the spec to see that it really does
 build what we envisioned.
 
+1. The change **fixes one problem** and not multiple problems.
+Or that it introduces one feature, not multiple. If the pull request can be
+split up to multiple ones, we'll ask you to do so.
+
 1. **The change is architecturally sound.** We want to keep our code organized
 based on correct software design principles and maintain modularity,
 extensibility, and orthogonality. We also value simplicity and elegance and
@@ -109,14 +130,17 @@ want to make sure we don't overabstract.
 1. **The change is tested.** We test all our code changes in back-end code. We
 aim for good coverage, so make sure all use cases are covered. This doesn't
 include just all lines of code, but also all the categories of use cases you can
-envision. We do not merge code that doesn't include unit tests. If you make a
-bug fix, we require a regression test. We recommend that you follow test-driven
-development principles and test before you implement.
+think of. We do not merge code that doesn't include unit tests. If you make a
+bug fix, we require a
+[regression test](https://en.wikipedia.org/wiki/Regression_testing#Background).
+We recommend that you follow
+[test-driven development](https://en.wikipedia.org/wiki/Test-driven_development)
+principles and write tests before you implement.
 
 1. **The tests pass.** This includes tests that were not written for the
 specific change - all tests must pass. We do not merge a failing build. You can
-run all tests using `php run testrun create all=yes` from the command line, or
-use our web interface.  We use
+run all tests using `php run testrun create all=yes` or simply `make` from the
+command line, or use our web interface.  We use
 [travis](https://travis-ci.org/dionyziz/endofcodes)
 to automatically run tests in every pull request and on every merge. You should
 also enable it in your fork so that tests run after each push.
@@ -153,4 +177,5 @@ later.
 ## Blog
 We maintain a [development blog](http://blog.endofcodes.com/). If you
 contribute, we encourage you to blog about it so that our users are aware of
-our whereabouts.
+our whereabouts. You will be given blog write access along with commit access.
+Just ask!
