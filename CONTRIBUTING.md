@@ -1,4 +1,4 @@
-==Contributing to End of Codes==
+# Contributing to End of Codes
 
 End of Codes is an open source project. We love contributions. We would like to
 work more bazaar-style and encourage external authors. Thanks for your interest
@@ -7,7 +7,7 @@ in contributing. You're amazing!
 This document outlines some contribution guidelines so that your contributions
 can be included in the codebase.
 
-==Workflow==
+## Workflow
 To contribute, follow these simple steps:
 
 1. [Fork](https://help.github.com/articles/fork-a-repo) the GitHub repo.
@@ -22,7 +22,7 @@ To contribute, follow these simple steps:
 1. Make sure **all** unit tests pass.
 1. Submit a pull request.
 
-==Finding an issue==
+## Finding an issue
 There are three ways to find something to do on the project:
 
 1. You have a problem with the project or an idea of your own. In this case,
@@ -63,7 +63,7 @@ Please note that the spec is not a static document. If you have a big idea that
 requires spec changes, go ahead and change the spec; then pull request these
 changes. We will discuss new ideas in such pull requests.
 
-==Reviewing pull requests==
+## Reviewing pull requests
 If you make a pull request with your change, we promise to review it within
 3 days. Hopefully we will review it within 1 day - we try to be responsive.
 
@@ -92,7 +92,7 @@ Note that we merge directly to master. As we're in a volatile first version, we
 don't have a separate 'develop' branch yet. Anything that gets merged is
 deployed to production within the next few days.
 
-==Requirements==
+## Requirements
 We try to ensure that the quality of the code we merge is decent. Here are
 some things we look for:
 
@@ -138,12 +138,12 @@ standard that you should follow.
 1. **Master is merged.** If other changes have been merged since your pull request,
 you must merge them into your branch before it gets merged.
 
-==Commit access==
+## Commit access
 If you contribute often, we'll give you commit access so that you can assign
 issues to yourself, have issues assigned to you, or merge pull requests by
 others. Please follow the guidelines above.
 
-==License==
+## License
 Please be aware that we're an open source project and are working under the
 [MIT license](https://en.wikipedia.org/wiki/MIT_License).
 This means that by contributing to the project, you are agreeing to make your
