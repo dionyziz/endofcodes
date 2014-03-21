@@ -34,7 +34,8 @@
             require_once 'views/migration/create.php';
         }
         protected function run( $name, $env ) {
-            $this->init( $env );
+            $this->environment = $env;
+            $this->init();
 
             try {
                 require_once 'database/migration/' . $name;

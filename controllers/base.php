@@ -104,10 +104,7 @@
             }
             $config = getConfig( $env );
         }
-        protected function init( $env = '' ) {
-            if ( !empty( $env ) ) {
-                $this->environment = $env;
-            }
+        protected function init() {
             $this->loadConfig();
             dbInit();
         }
