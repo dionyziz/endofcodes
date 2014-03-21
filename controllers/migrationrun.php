@@ -1,7 +1,8 @@
 <?php
     class MigrationRunController extends ControllerBase {
         public function create( $name = '', $env ) {
-            $this->environment = $env;
+            global $config;
+
 
             require_once 'models/migration.php';
 
@@ -33,6 +34,8 @@
             require_once 'views/migration/create.php';
         }
         protected function run( $name, $env ) {
+            $this->init( $env );
+
             try {
                 require_once 'database/migration/' . $name;
             }

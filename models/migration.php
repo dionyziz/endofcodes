@@ -27,6 +27,7 @@
                 $last = self::findLast( $env );
             }
             catch ( ModelNotFoundException $e ) {
+                return self::findAll();
             }
             $migrations = self::findAll();
             $position = array_search( trim( $last ), $migrations );
@@ -35,14 +36,13 @@
         }
 
         public static function findLast( $env = 'development' ) {
-            $logs = file_get_contents( 'database/migration/.history' );
+            if ( !$logs = file_get_contents( 'database/migration/.history' ) ) {
+                throw new ModelNotFoundException();
+            }
             $result = preg_split( "/$env:/", $logs );
             if( count( $result ) > 1 ){
                 $result_split = explode( ' ', $result[ 1 ] );
                 return $result_split[ 1 ];
-            }
-            else {
-                throw new ModelNotFoundException();
             }
         }
             
