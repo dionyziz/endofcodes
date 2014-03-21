@@ -5,8 +5,12 @@
                 $user = $_SESSION[ 'user' ];
             }
             require_once 'models/game.php';
-            $game = Game::getLastGame();
-            $ratings = $game->getGlobalRatings();
+            try {
+                $game = Game::getLastGame();
+                $ratings = $game->getGlobalRatings();
+            }
+            catch ( DBException $e ) {
+            }
             require_once 'views/home.php';
         }
     }
