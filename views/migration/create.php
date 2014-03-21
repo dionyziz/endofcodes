@@ -23,10 +23,23 @@
         ] );
         $self->createSubmit( 'Run migration' );
     } );
-    ?><p> Last Migration: <?php 
-        echo $last; 
-    ?></p><?php
+    ?><p>Last Migrations:</p>
 
+
+    <table class="table">
+        <tbody>
+            <tr><?php
+                foreach ( $last as $key => $migration ) {
+                    if ( empty( $migration ) ) {
+                        $migration = 'unknown';
+                    }
+                    ?><tr>
+                        <td><?php echo $key; ?></td>
+                        <td><?php echo $migration; ?></td>
+                    </tr><?php
+                }
+        ?></tbody>
+    </table><?php
     $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) use( $list ) {
         $self->createSelect( 'env', [

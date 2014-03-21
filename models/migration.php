@@ -35,10 +35,24 @@
             return array_diff( $migrations, $ran );
         }
 
-        public static function findLast( $env = 'development' ) {
+        public static function findLast( $env = '' ) {
             if ( !$logs = file_get_contents( 'database/migration/.history' ) ) {
                 throw new ModelNotFoundException();
             }
+            if ( empty( $env ) ) {
+                $environments = [ 'development', 'test' ];
+                $last = [];
+                foreach ( $environments as $env ) {
+                    $last[ $env ] = self::getLast( $env, $logs );
+                }
+                return $last;
+            }
+            else {
+                return self::getLast( $env, $logs );
+            }
+        }
+
+        protected static function getLast( $env, $logs ) {
             $result = preg_split( "/$env:/", $logs );
             if( count( $result ) > 1 ){
                 $result_split = explode( ' ', $result[ 1 ] );
