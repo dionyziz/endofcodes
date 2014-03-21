@@ -7,3 +7,4 @@ before_script:
     - for i in `find .|sort|grep -v ^.$|grep -v migrate.php`; do ENVIRONMENT=test DB_NAME=travis DB_PASSWORD='' php $i; done
     - cd ../..
 script: make all
+
