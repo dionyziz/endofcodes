@@ -25,7 +25,6 @@
     } );
     ?><p>Last Migrations:</p>
 
-
     <table class="table">
         <tbody>
             <tr><?php
