@@ -181,36 +181,26 @@
             $this->assertEquals( $game->users[ 1 ]->id, $grader->registeredUsers[ 1 ]->id, 'Grader must get valid users from the game' );
             $this->assertEquals( $game->users[ 1 ]->id, $grader->registeredBots[ 0 ]->user->id, 'Grader must get valid bots from the game' );
         }
-        public function testFindWinner() {
+        public function testGameEnd() {
             $game = $this->buildGameWithUserAndCreatures();
             unset( $game->rounds[ 0 ]->creatures[ 2 ] );
             $grader = new Grader( $game );
 
             $caught = false;
-            try {
-                $grader->nextRound();
-            }
-            catch ( WinnerException $e ) {
-                $caught = true;
-            }
+            $grader->nextRound();
 
-            $this->assertTrue( $caught, 'A WinnerException must be caught if there is only one user with alive creatures on a round' );
+            $this->assertTrue( $game->ended, 'The game must end if there is only one creature' );
         }
-        public function testGetWinnerExceptionWithoutPlayers() {
+        public function testGameEndWithoutPlayers() {
             $game = $this->buildGameWithUserAndCreatures();
             unset( $game->rounds[ 0 ]->creatures[ 1 ] );
             unset( $game->rounds[ 0 ]->creatures[ 2 ] );
             $grader = new Grader( $game );
 
             $caught = false;
-            try {
-                $grader->nextRound();
-            }
-            catch ( WinnerException $e ) {
-                $caught = true;
-            }
+            $grader->nextRound();
 
-            $this->assertTrue( $caught, 'A WinnerException must be caught if there are no users with alive creatures on a round' );
+            $this->assertTrue( $game->ended, 'The game must end if there are no creatures' );
         }
         public function testBotsIntentsClearedBeforeRound() {
             $game = $this->buildGameWithUserAndCreatures();
