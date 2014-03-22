@@ -27,7 +27,7 @@
 
         public function __construct( $id = false ) {
             require_once 'models/round.php';
-            if ( $id ) {
+            if ( $id !== false ) {
                 $this->exists = true;
                 $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
                 $this->id = $gameid = $id;
@@ -104,7 +104,7 @@
         }
 
         public function genesis() {
-            assert( $this->attributesInitiated, 'game attributes not initiated before genesis' );
+            assert( $this->attributesInitiated/*, 'game attributes not initiated before genesis'*/ );
 
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
@@ -130,22 +130,22 @@
                             break;
                         }
                     }
-                    $this->rounds[ 0 ]->creatures[] = $creature;
+                    $this->rounds[ 0 ]->creatures[ $id ] = $creature;
                 }
             }
             Creature::saveMulti( $this->rounds[ 0 ]->creatures );
             $this->rounds[ 0 ]->save();
         }
 
-        public function killBot( $user, $description ) {
-            $roundid = count( $this->rounds ) - 1;
-            foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
+        public function killBot( $user, $description, $actual = '', $expected = '' ) {
+            $round = $this->getCurrentRound();
+            foreach ( $round->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
                     $creature->kill();
                 }
             }
 
-            $this->getCurrentRound()->error( $user->id, $description );
+            $this->getCurrentRound()->error( $user->id, $description, $actual, $expected );
         }
 
         public function nextRound() {

@@ -7,11 +7,15 @@
         public $game;
         public $errors = []; // dictionary from userid to list of errors
 
-        public function error( $userid, $description ) {
+        public function error( $userid, $description, $actual = '', $expected = '' ) {
             if ( !isset( $this->errors[ $userid ] ) ) {
                 $this->errors[ $userid ] = [];
             }
-            $this->errors[ $userid ][] = $description;
+            $this->errors[ $userid ][] = [
+                'description' => $description,
+                'actual' => $actual,
+                'expected' => $expected
+            ];
         }
         public function __construct( $a = false, $b = false ) {
             if ( $a instanceof Round ) {
@@ -56,7 +60,7 @@
         }
 
         protected function create() {
-            assert( $this->game instanceof Game, '$this->game must be an instance of Game when a round is created' );
+            assert( $this->game instanceof Game/*, '$this->game must be an instance of Game when a round is created'*/ );
 
             $rows = [];
             $gameid = $this->game->id;
