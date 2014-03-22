@@ -17,7 +17,7 @@
     </thead>
     <tbody>
         <?php
-            if( isset( $ratings ) ) {
+            if ( isset( $ratings ) ) {
                 foreach ( $ratings as $rating => $users ) {
                     if ( $rating > 10 ) {
                         break;
