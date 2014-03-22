@@ -10,7 +10,7 @@
         }
         return $config;
     }
-    function getConfig( $migration = false ) {
+    function getConfig( $env, $migration = false ) {
         $pref = '';
         if ( $migration !== false ) {
             $pref = '../../';
@@ -20,6 +20,8 @@
             $configLocal = require $pref . 'config/config-local.php';
             $config = mergeKeys( $config, $configLocal );
         }
+        $config = $config[ $env ];
+        $config[ 'root' ] = getcwd();
         return $config;
     }
 ?>

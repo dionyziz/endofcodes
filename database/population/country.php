@@ -6,7 +6,7 @@
 
     global $config;
 
-    $config = getConfig()[ getEnv( 'ENVIRONMENT' ) ];
+    $config = getConfig( getEnv( 'ENVIRONMENT' ) );
     dbInit();
 
     $countries = getCountries();

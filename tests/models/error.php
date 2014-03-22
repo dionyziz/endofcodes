@@ -15,6 +15,23 @@
             $this->assertSame( $error->actual, $dbError->actual, 'actual must be correctly stored in the database' );
             $this->assertSame( $error->expected, $dbError->expected, 'expected must be correctly stored in the database' );
         }
+        public function testGetNonExistentError() {
+            $caught = false;
+            try {
+                $error = new Error( 1 );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $caught = true;
+            }
+            $this->assertTrue( $caught, 'A ModelNotFoundExcpetion must be thrown when a we try to get a non existent error' );
+        }
+        public function testSaveErrorNoGame() {
+            $user = $this->buildUser( 'vitsalis' );
+            $error = $this->buildError( 'description', 'actual', 'expected', $user );
+
+            $dbError = new Error( $error->id );
+            $this->assertFalse( isset( $dbError->game ), 'If an error has 0 as gameid, the game must not be set' );
+        }
         public function testFindErrorsByGameAndUser() {
             $game = $this->buildGame();
             $user = $this->buildUser( 'vitsalis' );

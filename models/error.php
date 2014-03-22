@@ -26,14 +26,16 @@
                 $this->description = $errorArray[ 'description' ];
                 $this->actual = $errorArray[ 'actual' ];
                 $this->expected = $errorArray[ 'expected' ];
-                $this->game = new Game( $this->gameid );
+                if ( $this->gameid != 0 ) {
+                    $this->game = new Game( $this->gameid );
+                }
                 $this->user = new User( $this->userid );
             }
         }
 
         public function onBeforeCreate() {
             if ( isset( $this->game ) ) {
-                assert( $this->game instanceof Game, '$error->game must be an instance of Game' );
+                assert( $this->game instanceof Game/*, '$error->game must be an instance of Game'*/ );
                 $this->gameid = $this->game->id;
             }
             else {
@@ -45,13 +47,13 @@
             if ( !isset( $this->expected ) ) {
                 $this->expected = '';
             }
-            assert( $this->user instanceof User, '$error->user must be an instance of User' );
+            assert( $this->user instanceof User/*, '$error->user must be an instance of User'*/ );
             $this->userid = $this->user->id;
         }
 
         public static function findErrorsByGameAndUser( $gameid, $userid ) {
-            assert( $gameid > 0, 'gameid must be a positive number' );
-            assert( $userid > 0, 'userid must be a positive number' );
+            assert( $gameid > 0/*, 'gameid must be a positive number'*/ );
+            assert( $userid > 0/*, 'userid must be a positive number'*/ );
 
             $errorsArray = dbSelect(
                 'errors',

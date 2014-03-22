@@ -51,6 +51,19 @@
     }
 
     class GraderBotTest extends UnitTestWithFixtures {
+        protected function assertErrorSavedInDb( $error ) {
+            $dbError = new Error( $error->id );
+            $this->assertSame( $dbError->actual, $error->actual, 'reportError must save the actual in the database' );
+            $this->assertSame( $dbError->expected, $error->expected, 'reportError must save the expected in the database' );
+            $this->assertSame( $dbError->description, $error->description, 'reportError must save the description in the database' );
+            $this->assertSame( $dbError->user->id, $error->user->id, 'reportError must save the userid in the database' );
+            if ( isset( $error->game ) ) {
+                $this->assertSame( $dbError->game->id, $error->game->id, 'reportError must save the gameid in the database' );
+            }
+            else {
+                $this->assertFalse( isset( $error->game->id ), 'game should not be set if the error does not have a game' );
+            }
+        }
         public function testInitiateRequest() {
             $user = $this->buildUser( 'vitsalis' );
             $bot = new GraderBot( $user );
@@ -89,6 +102,7 @@
                 $bot->sendInitiateRequest();
             }
             catch ( GraderBotException $e ) {
+                $this->assertErrorSavedInDb( $e->error );
                 $caught = true;
             }
 
@@ -110,6 +124,7 @@
                 $bot->sendInitiateRequest();
             }
             catch ( GraderBotException $e ) {
+                $this->assertErrorSavedInDb( $e->error );
                 $caught = true;
             }
 
@@ -149,6 +164,7 @@
                 $bot->sendInitiateRequest();
             }
             catch ( GraderBotException $e ) {
+                $this->assertErrorSavedInDb( $e->error );
                 $caught = true;
             }
 
@@ -171,6 +187,7 @@
             }
             catch ( GraderBotException $e ) {
                 $caught = true;
+                $this->assertErrorSavedInDb( $e->error );
             }
 
             return [
@@ -256,6 +273,7 @@
             }
             catch ( GraderBotException $e ) {
                 $caught = true;
+                $this->assertErrorSavedInDb( $e->error );
             }
 
             return [
@@ -328,8 +346,10 @@
             $game->genesis();
             $round = $game->rounds[ 0 ];
             $user = $game->users[ 1 ];
-            $creature1 = $this->buildCreature( 1, 1, 1, $user );
-            $creature2 = $this->buildCreature( 2, 2, 2, $game->users[ 2 ] );
+            $creature1 = $round->creatures[ 1 ];
+            $creature1->user = $user;
+            $creature2 = $round->creatures[ 2 ];
+            $creature2->user = $game->users[ 2 ];
             $round->creatures = [
                 $creature1->id => $creature1,
                 $creature2->id => $creature2
@@ -349,6 +369,7 @@
             }
             catch ( GraderBotException $e ) {
                 $return[ 'caught' ] = true;
+                $this->assertErrorSavedInDb( $e->error );
             }
 
             $return[ 'errors' ] = $bot->errors;
@@ -491,6 +512,15 @@
         public function testRoundRespondAdditionalData() {
             $this->assertRoundThrows(
                 [
+                    'intent' => [],
+                    'additional' => []
+                ],
+                'round_additional_data'
+            );
+        }
+        public function testRoundRespondIntentAdditionalData() {
+            $this->assertRoundThrows(
+                [
                     'intent' => [
                         [
                             'creatureid' => 1,
@@ -505,7 +535,7 @@
                         ]
                     ]
                 ],
-                'round_additional_data'
+                'round_intent_additional_data'
             );
         }
         public function testRoundRespondInvalidAction() {
@@ -641,13 +671,9 @@
                 $this->assertEquals( 'initiate_http_code_not_ok', $e->error->description, 'The GraderBotException that reportError throws must have the correct error' );
                 $this->assertSame( '200', $e->error->expected, 'The GraderBotException that reportError throws must have the correct expected' );
                 $this->assertSame( '404', $e->error->actual, 'The GraderBotException that reportError throws must have the correct actual' );
+                $this->assertErrorSavedInDb( $e->error );
             }
             $this->assertTrue( $caught, 'reportError must throw a GraderBotException' );
-            $dbError = new Error( $e->error->id );
-            $this->assertSame( $dbError->actual, '404', 'reportError must save the actual in the database' );
-            $this->assertSame( $dbError->expected, '200', 'reportError must save the expected in the database' );
-            $this->assertSame( $dbError->description, 'initiate_http_code_not_ok', 'reportError must save the description in the database' );
-            $this->assertSame( $dbError->user->id, $user->id, 'reportError must save the userid in the database' );
         }
     }
 

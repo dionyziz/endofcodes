@@ -144,6 +144,9 @@
             if ( !isset( $decodedResponse->intent ) ) {
                 $this->reportError( 'round_intent_not_set' );
             }
+            if ( count( ( array )$decodedResponse ) > 1 ) {
+                $this->reportError( 'round_additional_data' );
+            }
             $requiredAttributes = [ 'creatureid', 'direction', 'action' ];
             foreach ( $decodedResponse->intent as $creatureIntent ) {
                 foreach ( $requiredAttributes as $attribute ) {
@@ -159,7 +162,7 @@
             $round = $this->game->getCurrentRound();
             foreach ( $decodedResponse->intent as $creatureIntentData ) {
                 if ( count( ( array )$creatureIntentData ) > count( $requiredAttributes ) ) {
-                    $this->reportError( 'round_additional_data' );
+                    $this->reportError( 'round_intent_additional_data' );
                 }
                 if ( !isset( $round->creatures[ $creatureIntentData->creatureid ] ) ) {
                     $this->reportError( 'round_invalid_creatureid' );
