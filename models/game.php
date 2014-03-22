@@ -20,7 +20,10 @@
         protected static $attributes = [ 'width', 'height', 'created' ];
 
         public static function getLastGame() {
-            if ( !$game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 ) ) {
+            try {
+                $game = dbSelectOne( 'games', [ 'id' ], [], 'created DESC', 1 );
+            }
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new Game( $game[ 0 ][ 'id' ] );
