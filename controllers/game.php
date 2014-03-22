@@ -24,7 +24,7 @@
                 $grader->nextRound();
             }
             catch ( WinnerException $e ) {
-                die( 'We have a winner: ' . $e->winnerid );
+                go();
             }
 
             go( 'game', 'update', compact( 'gameid' ) );

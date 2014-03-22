@@ -89,8 +89,8 @@
                 }
             }
 
-            if ( count( $usersAlive ) === 1 ) {
-                throw new WinnerException( end( $usersAlive )->id );
+            if ( count( $usersAlive ) <= 1 ) {
+                throw new WinnerException();
             }
 
             foreach ( $this->registeredBots as $bot ) {
@@ -121,11 +121,8 @@
     }
 
     class WinnerException extends Exception {
-        public $winnerid;
-
-        public function __construct( $id ) {
-            $this->winnerid = $id;
-            parent::__construct( "Winner's id " . $id );
+        public function __construct() {
+            parent::__construct( "Winner found" );
         }
     }
 ?>
