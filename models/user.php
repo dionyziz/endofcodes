@@ -171,7 +171,7 @@
             unset( $this->salt );
         }
 
-        protected function onCreateError( $e ) {
+        protected function onCreateError( $eDb ) {
             try {
                 User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );
@@ -182,7 +182,7 @@
                     throw new ModelValidationException( 'email_used' );
                 } 
                 catch ( ModelNotFoundException $e ) {
-                    throw $e;
+                    throw $eDb;
                 }
             }
         }
