@@ -24,7 +24,7 @@
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );
