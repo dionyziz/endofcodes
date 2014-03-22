@@ -41,7 +41,7 @@
                     compact( "sessionid" )
                 );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $row[ 'id' ] );
@@ -64,7 +64,7 @@
                 try {
                     $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'imageid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
-                catch ( DBException $e ) {
+                catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->winCount = 0;
@@ -100,7 +100,7 @@
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "email" ) );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );
