@@ -17,7 +17,7 @@
                 try {
                     $errorArray = dbSelectOne( 'errors', [ 'gameid', 'description', 'userid', 'actual', 'expected' ], compact( 'id' ) );
                 }
-                catch ( DBException $e ) {
+                catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->id = $id;

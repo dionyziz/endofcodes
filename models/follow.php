@@ -16,7 +16,7 @@
                         compact( 'followerid', 'followedid' )
                     );
                 }
-                catch ( DBException $e ) {
+                catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->follower = new User( $followerid );
