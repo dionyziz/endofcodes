@@ -55,13 +55,11 @@
             $round = new Round();
             $creature = $this->buildCreature( 1, 0, 0, $user );
             $round->creatures = [ $creature->id => $creature ];
-            $this->assertTrue( method_exists( $round, 'isFinalRound' ), 'Round object must export an isFinalRound function' );
             $this->assertTrue( $round->isFinalRound(), "isFinalRound() must be true if the round's creatures belong to only one user" );
         }
         public function testIsFinalRoundNoCreatures() {
             $round = new Round();
             $round->creatures = [];
-            $this->assertTrue( method_exists( $round, 'isFinalRound' ), 'Round object must export an isFinalRound function' );
             $this->assertTrue( $round->isFinalRound(), "isFinalRound() must be true if the round has no creatures" );
         }
     }

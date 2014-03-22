@@ -37,7 +37,7 @@
 </div>
 <div class='time'>
     <span class='round'>Round <?php
-        echo "$round->id";
+        echo $round->id;
     ?></span>
     <span class="next"><?php
         if ( isset( $game->rounds[ $round->id + 1 ] ) ) {
