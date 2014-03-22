@@ -57,13 +57,12 @@
             
         public static function findAll() {
             $array = [];
-            $handle = opendir( 'database/migration/' );
-            while ( false !== ( $entry = readdir( $handle ) ) ) {
-                if ( strpos( $entry, '.php' ) ) {
-                    $array[] = $entry;
-                }
+            $dir = 'database/migration/';
+            foreach ( glob( $dir . '*.php' ) as $filename) {
+                $filename = str_replace( $dir, '', $filename );
+                $array[] = $filename;
             }
-            array_multisort( $array, SORT_ASC, $array );
+            sort( $array );
             return $array;
         }
 
