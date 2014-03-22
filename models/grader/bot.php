@@ -1,5 +1,6 @@
 <?php
     require_once 'models/curl.php';
+    require_once 'models/error.php';
 
     interface GraderBotInterface {
         public function __construct( User $user );
