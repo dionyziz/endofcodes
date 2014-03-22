@@ -96,7 +96,7 @@
         protected function loadConfig() {
             global $config;
 
-            if( !empty( getEnv( 'ENVIROMENT' ) ) ) {
+            if ( !empty( getEnv( 'ENVIROMENT' ) ) ) {
                 $env = getEnv( 'ENVIROMENT' );
             }
             else {

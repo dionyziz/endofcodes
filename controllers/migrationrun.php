@@ -1,8 +1,7 @@
 <?php
     class MigrationRunController extends ControllerBase {
-        public function create( $name = '', $env ) {
+        public function create( $env, $name = '' ) {
             global $config;
-
 
             require_once 'models/migration.php';
 
@@ -11,15 +10,16 @@
             }
             else {
                 try {
-                    $migrations = Migration::getUnexecuted( $env );
+                    $migrations = Migration::findUnexecuted( $env );
                 }
-                catch( ModelNotFoundException $e ) {
+                catch ( ModelNotFoundException $e ) {
                     $migrations = Migration::findAll();
                 } 
-                foreach( $migrations as $name ) {
+                foreach ( $migrations as $name ) {
                     $this->run( $name, $env ); 
                 }
             }
+            require_once 'views/migration/results.php';
         }
         public function createView() {
             require_once 'models/migration.php';
@@ -28,7 +28,6 @@
                 $last = Migration::findLast();
             }
             catch ( ModelNotFoundException $e ) {
-                $last = 'You have not created any logs yet.';
             }
             $migrations = Migration::findAll();
             require_once 'views/migration/create.php';
@@ -44,7 +43,6 @@
                 throw $e;
             }
             Migration::createLog( $name, $env );
-            echo "The migration script completed successfully without errors.\n"; 
         }
     }
 ?>

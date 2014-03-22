@@ -1,10 +1,6 @@
 <?php
     abstract class Migration {
         protected static function migrate( $sql ) {
-            require_once 'helpers/config.php';
-            require_once 'models/database.php';
-            require_once 'models/db.php';
-
             try {
                 $res = db( $sql );
             }
@@ -22,7 +18,7 @@
             fclose( $fh );
         }
 
-        public static function getUnexecuted( $env ) {
+        public static function findUnexecuted( $env ) {
             try {
                 $last = self::findLast( $env );
             }
