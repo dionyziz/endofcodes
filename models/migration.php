@@ -18,7 +18,19 @@
             fclose( $fh );
         }
 
-        public static function findUnexecuted( $env ) {
+        public static function findUnexecuted( $env = '' ) {
+            if ( empty( $env ) ) {
+                $environments = [ 'development', 'test' ];
+                $list = [];
+                foreach ( $environments as $env ) {
+                    $list[ $env ]  = self::getUnexecuted( $env );
+                }
+                return $list;
+            } 
+            return self::getUnexecuted( $env );
+        }
+
+        protected static function getUnexecuted( $env ) {
             try {
                 $last = self::findLast( $env );
             }
@@ -47,7 +59,7 @@
         }
 
         protected static function getLast( $env, $logs ) {
-            $result = preg_split( "/$env:/", $logs );
+            $result = explode( "$env:", $logs );
             if ( count( $result ) <= 1 ){
                 return;
             }

@@ -29,6 +29,7 @@
             }
             catch ( ModelNotFoundException $e ) {
             }
+            $pending = Migration::findUnexecuted();
             $migrations = Migration::findAll();
             require_once 'views/migration/create.php';
         }
