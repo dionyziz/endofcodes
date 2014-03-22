@@ -22,7 +22,12 @@
         public static function getLastGame() {
             $game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 );
 
-            return new Game( $game[ 0 ][ 'id' ] );
+            try {
+                return new Game( $game[ 0 ][ 'id' ] );
+            }
+            catch ( DBException $e ) {
+                throw new ModelNotFoundException();
+            }
         }
 
         public function __construct( $id = false ) {

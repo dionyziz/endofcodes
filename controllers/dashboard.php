@@ -9,7 +9,7 @@
                 $game = Game::getLastGame();
                 $ratings = $game->getGlobalRatings();
             }
-            catch ( DBException $e ) {
+            catch ( ModelNotFoundException $e ) {
             }
             require_once 'views/home.php';
         }
