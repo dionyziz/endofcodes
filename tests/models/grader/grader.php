@@ -192,11 +192,25 @@
             }
             catch ( WinnerException $e ) {
                 $caught = true;
-                $winnerid = $e->winnerid;
             }
 
             $this->assertTrue( $caught, 'A WinnerException must be caught if there is only one user with alive creatures on a round' );
-            $this->assertEquals( $grader->registeredUsers[ 1 ]->id, $winnerid, 'The winner must be the one whose creatures are still alive' );
+        }
+        public function testGetWinnerExceptionWithoutPlayers() {
+            $game = $this->buildGameWithUserAndCreatures();
+            unset( $game->rounds[ 0 ]->creatures[ 1 ] );
+            unset( $game->rounds[ 0 ]->creatures[ 2 ] );
+            $grader = new Grader( $game );
+
+            $caught = false;
+            try {
+                $grader->nextRound();
+            }
+            catch ( WinnerException $e ) {
+                $caught = true;
+            }
+
+            $this->assertTrue( $caught, 'A WinnerException must be caught if there are no users with alive creatures on a round' );
         }
         public function testBotsIntentsClearedBeforeRound() {
             $game = $this->buildGameWithUserAndCreatures();
