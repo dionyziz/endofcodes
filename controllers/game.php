@@ -10,22 +10,35 @@
             $grader->initiateBots();
             $grader->initiate();
             $grader->createGame();
+            if ( $game->ended ) {
+                go();
+            }
 
             go( 'game', 'update', [ 'gameid' => $game->id ] );
         }
         public function createView() {
             require 'views/game/create.php';
         }
-        public function update( $gameid ) {
-            $game = new Game( $gameid );
+        public function update( $gameid, $finishit = false ) {
+            try {
+                $game = new Game( $gameid );
+            }
+            catch ( ModelNotFoundException $e ) {
+                throw new HTTPNotFoundException();
+            }
+
+            if ( $game->ended ) {
+                go();
+            }
 
             $grader = new Grader( $game );
-            try {
+            do {
+                if ( $game->ended ) {
+                    go();
+                }
+
                 $grader->nextRound();
-            }
-            catch ( WinnerException $e ) {
-                die( 'We have a winner: ' . $e->winnerid );
-            }
+            } while ( $finishit );
 
             go( 'game', 'update', compact( 'gameid' ) );
         }
@@ -45,10 +58,15 @@
             else {
                 $round = $game->getCurrentRound();
             }
-            $creatures = $round->creatures;
             require 'views/game/view.php';
         }
         public function updateView( $gameid ) {
+            try {
+                $game = new Game( $gameid );
+            }
+            catch ( ModelNotFoundException $e ) {
+                throw new HTTPNotFoundException();
+            }
             require 'views/game/update.php';
         }
     }

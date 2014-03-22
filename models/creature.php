@@ -66,7 +66,7 @@
                     $this->user = new User( $userid );
                     $this->game = new Game( $gameid );
                 }
-                catch ( DBException $e ) {
+                catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
             }

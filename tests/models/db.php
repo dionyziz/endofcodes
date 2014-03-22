@@ -106,13 +106,19 @@
             dbInsert( 'test_models', [] );
             $this->assertThrows( function() {
                 dbSelectOne( 'test_models' );
-            }, 'DBException', 'dbSelectOne must throw an exception if more than one rows are found' );
+            }, 'DBExceptionWrongCount', 'dbSelectOne must throw an exception if more than one rows are found', function( $e ) {
+                $this->assertEquals( 1, $e->expected, 'Expected rows in DBExceptionWrongCount for selectOne must always be 1' );
+                $this->assertTrue( $e->actual > 1, 'Actual rows in DBExceptionWrongCount for selectOne must be greater than 1 if more rows are present' );
+            } );
 
             dbDelete( 'test_models' );
 
             $this->assertThrows( function() {
                 dbSelectOne( 'test_models' );
-            }, 'DBException', 'dbSelectOne must throw an exception if no rows are found' );
+            }, 'DBExceptionWrongCount', 'dbSelectOne must throw an exception if no rows are found', function( $e ) {
+                $this->assertEquals( 1, $e->expected, 'Expected rows in DBExceptionWrongCount for selectOne must always be 1' );
+                $this->assertEquals( 0, $e->actual, 'Actual rows in DBExceptionWrongCount for selectOne must be 0 when no rows are present' );
+            } );
         }
         public function testSelectMulti() {
             dbInsertMulti( 'test_models', [

@@ -16,12 +16,14 @@
         public $maxHp;
         public $grid = [ [] ];
         public $attributesInitiated = false;
+        public $ended = false;
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
         public static function getLastGame() {
-            $game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 );
-
+            if ( !$game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 ) ) {
+                throw new ModelNotFoundException();
+            }
             return new Game( $game[ 0 ][ 'id' ] );
         }
 
@@ -29,7 +31,12 @@
             require_once 'models/round.php';
             if ( $id !== false ) {
                 $this->exists = true;
-                $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
+                try {
+                    $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 $this->id = $gameid = $id;
                 $this->created = $game_info[ 'created' ];
                 $this->width = $game_info[ 'width' ];
@@ -46,6 +53,12 @@
                             $this->users[ $userid ] = new User( $userid );
                         }
                     }
+                    if ( end( $this->rounds )->isFinalRound() ) {
+                        $this->ended = true;
+                    }
+                }
+                else {
+                    $this->ended = true;
                 }
             }
             else {
@@ -105,6 +118,10 @@
 
         public function genesis() {
             assert( $this->attributesInitiated/*, 'game attributes not initiated before genesis'*/ );
+            if ( count( $this->users ) === 0 ) {
+                $this->ended = true;
+                return;
+            }
 
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
@@ -120,7 +137,7 @@
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
                     $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-                    while ( 1 ) {
+                    while ( true ) {
                         $x = rand( 0, $this->width - 1 );
                         $y = rand( 0, $this->height - 1 );
                         if ( !isset( $this->grid[ $x ][ $y ] ) ) {
@@ -135,6 +152,7 @@
             }
             Creature::saveMulti( $this->rounds[ 0 ]->creatures );
             $this->rounds[ 0 ]->save();
+            $this->ended = $this->rounds[ 0 ]->isFinalRound();
         }
 
         public function killBot( $user, $description, $actual = '', $expected = '' ) {
@@ -232,6 +250,7 @@
                 }
             }
             $this->rounds[ $roundid ]->save();
+            $this->ended = $this->rounds[ $roundid ]->isFinalRound();
         }
         public function beforeNextRound() {
             foreach ( $this->getCurrentRound()->creatures as $creature ) {

@@ -82,17 +82,6 @@
             $this->game->beforeNextRound();
             $round = $this->game->getCurrentRound();
 
-            $usersAlive = [];
-            foreach ( $round->creatures as $creature ) {
-                if ( $creature->alive ) {
-                    $usersAlive[ $creature->user->id ] = $creature->user;
-                }
-            }
-
-            if ( count( $usersAlive ) === 1 ) {
-                throw new WinnerException( end( $usersAlive )->id );
-            }
-
             foreach ( $this->registeredBots as $bot ) {
                 try {
                     $creatureCollection = $bot->sendRoundRequest( $round );
@@ -117,15 +106,6 @@
                     $error->save();
                 }
             }
-        }
-    }
-
-    class WinnerException extends Exception {
-        public $winnerid;
-
-        public function __construct( $id ) {
-            $this->winnerid = $id;
-            parent::__construct( "Winner's id " . $id );
         }
     }
 ?>
