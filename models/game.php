@@ -21,8 +21,9 @@
         protected static $attributes = [ 'width', 'height', 'created' ];
 
         public static function getLastGame() {
-            $game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 );
-
+            if ( !$game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 ) ) {
+                throw new ModelNotFoundException();
+            }
             return new Game( $game[ 0 ][ 'id' ] );
         }
 
@@ -30,7 +31,12 @@
             require_once 'models/round.php';
             if ( $id !== false ) {
                 $this->exists = true;
-                $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
+                try {
+                    $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 $this->id = $gameid = $id;
                 $this->created = $game_info[ 'created' ];
                 $this->width = $game_info[ 'width' ];
