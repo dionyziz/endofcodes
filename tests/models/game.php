@@ -66,6 +66,7 @@
             $game->save();
             $game->initiateAttributes();
             $game->genesis();
+            $this->assertTrue( $game->ended, 'If there are no users the game must end' );
 
             $this->assertEquals( 0, count( $game->rounds ), 'No round must be created during genesis' );
             $dbGame = new Game( $game->id );
@@ -77,6 +78,7 @@
             $game->save();
             $game->initiateAttributes();
             $game->genesis();
+            $this->assertTrue( $game->ended, 'If there is only one user the game must end' );
 
             $this->assertEquals( 1, count( $game->rounds ), 'A round must be created even if there is only one user' );
             $dbGame = new Game( $game->id );
@@ -88,6 +90,7 @@
             $game->genesis();
             $this->assertEquals( 1, count( $game->rounds ), 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
+            $this->assertFalse( $game->ended, 'If there are multiple users the game must not end' );
             $dbGame = new Game( $game->id );
             $this->assertFalse( $dbGame->ended, 'If there are multiple users the game must not end' );
 

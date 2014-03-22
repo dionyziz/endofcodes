@@ -146,6 +146,7 @@
             }
             Creature::saveMulti( $this->rounds[ 0 ]->creatures );
             $this->rounds[ 0 ]->save();
+            $this->ended = $this->rounds[ 0 ]->isFinalRound();
         }
 
         public function killBot( $user, $description, $actual = '', $expected = '' ) {

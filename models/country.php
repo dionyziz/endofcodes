@@ -12,7 +12,7 @@
                 try {
                     $row = dbSelectOne( 'countries', [ 'name', 'shortname' ], compact( 'id' ) );
                 }
-                catch ( DBException $e ) {
+                catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->name = $row[ 'name' ];

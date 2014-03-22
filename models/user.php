@@ -24,7 +24,7 @@
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );
@@ -41,7 +41,7 @@
                     compact( "sessionid" )
                 );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $row[ 'id' ] );
@@ -64,7 +64,7 @@
                 try {
                     $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'imageid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
-                catch ( DBException $e ) {
+                catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->winCount = 0;
@@ -100,7 +100,7 @@
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "email" ) );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );
@@ -171,7 +171,7 @@
             unset( $this->salt );
         }
 
-        protected function onCreateError( $e ) {
+        protected function onCreateError( $eDb ) {
             try {
                 User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );
@@ -182,7 +182,7 @@
                     throw new ModelValidationException( 'email_used' );
                 } 
                 catch ( ModelNotFoundException $e ) {
-                    throw $e;
+                    throw $eDb;
                 }
             }
         }
