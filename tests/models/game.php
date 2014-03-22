@@ -61,12 +61,38 @@
             $this->assertEquals( $game->created, $dbGame->created, 'Created in the db must be the same as the created during creation' );
             $this->assertSame( $game->id, $dbGame->id, 'Id in the db must be the same as the id during creation' );
         }
+        public function testGenesisNoUsers() {
+            $game = new Game();
+            $game->save();
+            $game->initiateAttributes();
+            $game->genesis();
+            $this->assertTrue( $game->ended, 'If there are no users the game must end' );
+
+            $this->assertEquals( 0, count( $game->rounds ), 'No round must be created during genesis' );
+            $dbGame = new Game( $game->id );
+            $this->assertTrue( $dbGame->ended, 'If there are no users the game must end' );
+        }
+        public function testGenesisOneUser() {
+            $game = new Game();
+            $game->users = [ $this->buildUser( 'vitsalis' ) ];
+            $game->save();
+            $game->initiateAttributes();
+            $game->genesis();
+            $this->assertTrue( $game->ended, 'If there is only one user the game must end' );
+
+            $this->assertEquals( 1, count( $game->rounds ), 'A round must be created even if there is only one user' );
+            $dbGame = new Game( $game->id );
+            $this->assertTrue( $dbGame->ended, 'If there is only one user the game must end' );
+        }
         public function testGenesis() {
             $game = $this->buildGame();
             $game->initiateAttributes();
             $game->genesis();
-            $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
+            $this->assertEquals( 1, count( $game->rounds ), 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
+            $this->assertFalse( $game->ended, 'If there are multiple users the game must not end' );
+            $dbGame = new Game( $game->id );
+            $this->assertFalse( $dbGame->ended, 'If there are multiple users the game must not end' );
 
             $caught = false;
             try {

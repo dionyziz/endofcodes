@@ -58,6 +58,16 @@
                 }
             }
         }
+        public function isFinalRound() {
+            $usersAlive = [];
+            foreach ( $this->creatures as $creature ) {
+                if ( $creature->alive ) {
+                    $usersAlive[ $creature->user->id ] = $creature->user;
+                }
+            }
+
+            return count( $usersAlive ) <= 1;
+        }
 
         protected function create() {
             assert( $this->game instanceof Game/*, '$this->game must be an instance of Game when a round is created'*/ );

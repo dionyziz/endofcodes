@@ -16,6 +16,7 @@
         public $maxHp;
         public $grid = [ [] ];
         public $attributesInitiated = false;
+        public $ended = false;
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
@@ -55,6 +56,12 @@
                             $this->users[ $userid ] = new User( $userid );
                         }
                     }
+                    if ( end( $this->rounds )->isFinalRound() ) {
+                        $this->ended = true;
+                    }
+                }
+                else {
+                    $this->ended = true;
                 }
             }
             else {
@@ -114,6 +121,10 @@
 
         public function genesis() {
             assert( $this->attributesInitiated/*, 'game attributes not initiated before genesis'*/ );
+            if ( count( $this->users ) === 0 ) {
+                $this->ended = true;
+                return;
+            }
 
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
@@ -129,7 +140,7 @@
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
                     $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-                    while ( 1 ) {
+                    while ( true ) {
                         $x = rand( 0, $this->width - 1 );
                         $y = rand( 0, $this->height - 1 );
                         if ( !isset( $this->grid[ $x ][ $y ] ) ) {
@@ -144,6 +155,7 @@
             }
             Creature::saveMulti( $this->rounds[ 0 ]->creatures );
             $this->rounds[ 0 ]->save();
+            $this->ended = $this->rounds[ 0 ]->isFinalRound();
         }
 
         public function killBot( $user, $description, $actual = '', $expected = '' ) {
@@ -241,6 +253,7 @@
                 }
             }
             $this->rounds[ $roundid ]->save();
+            $this->ended = $this->rounds[ $roundid ]->isFinalRound();
         }
         public function beforeNextRound() {
             foreach ( $this->getCurrentRound()->creatures as $creature ) {
