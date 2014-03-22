@@ -10,7 +10,11 @@
     ?></strong>
 </div>
 
-<div class='game'>
+<div class='game' style="width:<?php
+    echo $game->width * 20;
+?>px; height:<?php
+    echo $game->height * 20;
+?>px;">
     <div class='gameboard'>
         <?php
             $colors = [ 'red', 'blue', 'green', 'yellow', 'purple', 'cyan', 'black', 'pink' ];
@@ -22,10 +26,10 @@
                         }
                         echo $playerColor[ $creature->user->id ];
                     ?> creature" style="left: <?php
-                        echo $creature->locationx * 25;
+                        echo $creature->locationx * 20;
                     ?>px; top: <?php
-                        echo $creature->locationy * 25;
-                    ?>px; width: 25px; height: 25px;"></div><?php
+                        echo $creature->locationy * 20;
+                    ?>px;"></div><?php
                 }
             }
         ?>

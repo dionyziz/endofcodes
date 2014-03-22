@@ -1,7 +1,7 @@
 @charset "UTF-8";
 div.game {
     border: 1px solid #999;
-    position: absolute;
+    position: static;
     top: 40px;
     left: 0;
     right: 200px;
@@ -108,7 +108,7 @@ h2 {
     border-radius: 50px;
 }
 .time {
-    position: absolute;
+    position: static;
     bottom: 0;
     margin: 5px;
     left: 0;

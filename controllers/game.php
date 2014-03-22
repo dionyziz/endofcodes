@@ -19,19 +19,26 @@
         public function createView() {
             require 'views/game/create.php';
         }
-        public function update( $gameid ) {
+        public function update( $gameid, $finishit = false ) {
             try {
                 $game = new Game( $gameid );
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
+
             if ( $game->ended ) {
                 go();
             }
 
             $grader = new Grader( $game );
-            $grader->nextRound();
+            do {
+                if ( $game->ended ) {
+                    go();
+                }
+
+                $grader->nextRound();
+            } while ( $finishit );
 
             go( 'game', 'update', compact( 'gameid' ) );
         }
