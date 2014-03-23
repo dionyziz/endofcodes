@@ -1,5 +1,7 @@
 <?php
     abstract class Migration {
+        public static $path  = 'database/migration/.history';
+
         protected static function migrate( $sql ) {
             try {
                 $res = db( $sql );
@@ -10,12 +12,11 @@
         } 
 
         public static function createLog( $name, $env ) {
-            $path = 'database/migration/.history';
-            $data = file_get_contents( $path );
+            $data = file_get_contents( static::$path );
             $array = json_decode( $data, true );
             $array[ $env ] = $name;
             $data = json_encode( $array );
-            file_put_contents( $path, $data);
+            file_put_contents( static::$path, $data);
         }
 
         public static function findUnexecuted( $env = '' ) {

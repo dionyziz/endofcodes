@@ -23,6 +23,31 @@
             catch ( MigrationException $e ) {
             }
         }
+        public function testCreateLog() {
+            //Migration::$path = 'database/migration/.migTestLog';
+            Migration::createLog( 'migration1', 'development' ); 
+            Migration::createLog( 'migration2', 'test' );
+            Migration::createLog( 'migration3', 'test' );
+            $logs = Migration::findLast();
+            //$this->assertTrue( file_exists( Migration::$path ), 'The log file must exist' );
+            //$this->assertEquals( 2,  count( $logs ), 'createLog should create only one record for each environment' );
+            $this->assertTrue( array_key_exists( 'test', $logs ), 'The envs of last migrations must exist in the array' );
+            $this->assertTrue( array_key_exists( 'development', $logs ), 'The envs of last migrations must exist in the array' );
+            $this->assertEquals( $logs[ 'development' ], 'migration1' , 'Last migration name must have as a key its environment' );
+            $this->assertEquals( $logs[ 'test' ], 'migration3', 'Last migration must have as a key its environment' );
+        }
+        public function testFindLast() {
+            Migration::createLog( 'migration1', 'development' ); 
+            Migration::createLog( 'migration2', 'test' );
+            $logs = Migration::findLast();
+            $logDev = Migration::findLast( 'development' );
+            $logTest = Migration::findLast( 'test' );
+            $this->assertTrue( is_array( $logs ) , 'findLast must return an array if not attributes are given' );
+            $this->assertEquals( $logs[ 'development' ], 'migration1' , 'Last migration name must have as a key its environment' );
+            $this->assertEquals( $logs[ 'test' ], 'migration2', 'Last migration must have as a key its environment' );
+            $this->assertEquals( $logDev, 'migration1', 'findLast must return the value of the array with key its environment' );
+            $this->assertEquals( $logTest, 'migration2', 'findLast must return the value of the array with key its environment' );
+        }
         public function testCreateTable() {
             $tables = dbListTables(); 
             $this->assertDoesNotThrow( function () {
