@@ -11,11 +11,11 @@
 
         public static function createLog( $name, $env ) {
             $path = 'database/migration/.history';
-            if ( !$fh = fopen( $path, 'w' ) ) {
-                throw new ModelNotFoundException();
-            }
-            fwrite( $fh, "$env: $name\n" );
-            fclose( $fh );
+            $data = file_get_contents( $path );
+            $array = json_decode( $data, true );
+            $array[ $env ] = $name;
+            $data = json_encode( $array );
+            file_put_contents( $path, $data);
         }
 
         public static function findUnexecuted( $env = '' ) {
@@ -47,26 +47,13 @@
             if ( !$logs = file_get_contents( 'database/migration/.history' ) ) {
                 throw new ModelNotFoundException();
             }
+            $array = json_decode( $logs, true );
             if ( empty( $env ) ) {
-                $environments = [ 'development', 'test' ];
-                $last = [];
-                foreach ( $environments as $env ) {
-                    $last[ $env ] = self::getLast( $env, $logs );
-                }
-                return $last;
+                return $array;
             }
-            return self::getLast( $env, $logs );
+            return $array[ $env ];
         }
 
-        protected static function getLast( $env, $logs ) {
-            $result = explode( "$env:", $logs );
-            if ( count( $result ) <= 1 ){
-                return;
-            }
-            $result_split = explode( ' ', $result[ 1 ] );
-            return $result_split[ 1 ];
-        }
-            
         public static function findAll() {
             $array = [];
             $dir = 'database/migration/';
