@@ -1,5 +1,5 @@
 <?php
-    class TestTest extends UnitTest {
+    class TestTest extends UnitTestWithFixtures {
         public function testFindAllFindsFilesInFolders() {
             $path = 'mock/depth1/depth2/depth3/';
             mkdir( 'tests/' . $path, 0777, true );
