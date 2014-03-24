@@ -42,9 +42,8 @@
                 return self::findAll();
             }
             $migrations = self::findAll();
-            $position = array_search( trim( $last ), $migrations );
-            $ran = array_slice( $migrations, 0, $position + 1 );
-            return array_diff( $migrations, $ran );
+            $position = array_search( $last, $migrations );
+            return array_slice( $migrations, $position + 1 );
         }
 
         public static function findLast( $env = '' ) {
@@ -62,7 +61,7 @@
             $array = [];
             foreach ( glob( static::$path . '*.php' ) as $filename) {
                 $filename = str_replace( static::$path, '', $filename );
-                $array[] = $filename;
+                $array[] = trim( $filename );
             }
             sort( $array );
             return $array;

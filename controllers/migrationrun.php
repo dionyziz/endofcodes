@@ -34,14 +34,14 @@
             require_once 'views/migration/create.php';
         }
         protected function run( $name, $env ) {
+            $migrations = Migration::findAll();
             $this->environment = $env;
             $this->init();
-
-            try {
+            if ( in_array( $name, $migrations ) ) {
                 require_once 'database/migration/' . $name;
             }
-            catch ( MigrationException $e ) {
-                throw $e;
+            else {
+                throw new HTTPUnauthorizedException();
             }
             Migration::createLog( $name, $env );
         }

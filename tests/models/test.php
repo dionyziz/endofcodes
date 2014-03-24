@@ -9,22 +9,6 @@
 
             $this->assertTrue( array_search( $path . 'magic', $tests ) !== false, 'findAll() must find tests in subfolders' );
         }
-        protected function rrmdir( $dir ) {
-            if ( is_dir( $dir ) ) {
-                $objects = scandir( $dir );
-                foreach ( $objects as $object ) {
-                    if ( $object != "." && $object != ".." ) {
-                        if ( filetype( $dir . "/" . $object ) == "dir" ) {
-                            $this->rrmdir( $dir . "/" . $object );
-                        }
-                        else {
-                            unlink( $dir . "/" . $object );
-                        }
-                    }
-                }
-                rmdir( $dir );
-            }
-        }
         public function tearDown() {
             $this->rrmdir( 'tests/mock' );
         }
