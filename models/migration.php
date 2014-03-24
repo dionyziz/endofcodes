@@ -1,6 +1,8 @@
 <?php
     abstract class Migration {
-        public static $path  = 'database/migration/.history';
+        public static $log  = 'database/migration/.history';
+        public static $path  = 'database/migration/';
+        public static $environments  = [ 'development', 'test' ];
 
         protected static function migrate( $sql ) {
             try {
@@ -12,18 +14,19 @@
         } 
 
         public static function createLog( $name, $env ) {
-            $data = file_get_contents( static::$path );
-            $array = json_decode( $data, true );
+            if ( file_exists( static::$log ) ) {
+                $data = file_get_contents( static::$log );
+                $array = json_decode( $data, true );
+            }
             $array[ $env ] = $name;
             $data = json_encode( $array );
-            file_put_contents( static::$path, $data);
+            file_put_contents( static::$log, $data);
         }
 
         public static function findUnexecuted( $env = '' ) {
             if ( empty( $env ) ) {
-                $environments = [ 'development', 'test' ];
                 $list = [];
-                foreach ( $environments as $env ) {
+                foreach ( static::$environments as $env ) {
                     $list[ $env ]  = self::getUnexecuted( $env );
                 }
                 return $list;
@@ -45,7 +48,7 @@
         }
 
         public static function findLast( $env = '' ) {
-            if ( !$logs = file_get_contents( 'database/migration/.history' ) ) {
+            if ( !$logs = file_get_contents( static::$log ) ) {
                 throw new ModelNotFoundException();
             }
             $array = json_decode( $logs, true );
@@ -57,9 +60,8 @@
 
         public static function findAll() {
             $array = [];
-            $dir = 'database/migration/';
-            foreach ( glob( $dir . '*.php' ) as $filename) {
-                $filename = str_replace( $dir, '', $filename );
+            foreach ( glob( static::$path . '*.php' ) as $filename) {
+                $filename = str_replace( static::$path, '', $filename );
                 $array[] = $filename;
             }
             sort( $array );

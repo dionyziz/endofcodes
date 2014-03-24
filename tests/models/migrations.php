@@ -15,6 +15,12 @@
         }
         public function setUp() {
             $this->createTable();        
+            Migration::$path = 'tests/migrations/';
+            Migration::$log = 'tests/migrations/.testLog';
+            mkdir( Migration::$path, 0777, true );
+            for ( $i = 1; $i <= 5; $i++ ) {
+                file_put_contents( Migration::$path . $i . '.php', '' );
+            }
         }
         public function tearDown() {
             try {
@@ -22,31 +28,54 @@
             }
             catch ( MigrationException $e ) {
             }
+            $this->rrmdir( Migration::$path );
         }
         public function testCreateLog() {
-            //Migration::$path = 'database/migration/.migTestLog';
-            Migration::createLog( 'migration1', 'development' ); 
-            Migration::createLog( 'migration2', 'test' );
-            Migration::createLog( 'migration3', 'test' );
+            Migration::createLog( 'migration1', 'env1' ); 
+            Migration::createLog( 'migration2', 'env2' );
+            Migration::createLog( 'migration3', 'env2' );
             $logs = Migration::findLast();
-            //$this->assertTrue( file_exists( Migration::$path ), 'The log file must exist' );
-            //$this->assertEquals( 2,  count( $logs ), 'createLog should create only one record for each environment' );
-            $this->assertTrue( array_key_exists( 'test', $logs ), 'The envs of last migrations must exist in the array' );
-            $this->assertTrue( array_key_exists( 'development', $logs ), 'The envs of last migrations must exist in the array' );
-            $this->assertEquals( $logs[ 'development' ], 'migration1' , 'Last migration name must have as a key its environment' );
-            $this->assertEquals( $logs[ 'test' ], 'migration3', 'Last migration must have as a key its environment' );
+            $this->assertTrue( file_exists( Migration::$path ), 'The log file must exist' );
+            $this->assertEquals( count( $logs ), 2, 'createLog should create only one record for each environment' );
+            $this->assertTrue( isset( $logs[ 'env1' ] ), 'The envs of last migrations must exist in the array' );
+            $this->assertTrue( isset( $logs[ 'env2' ] ), 'The envs of last migrations must exist in the array' );
+            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'Last migration name must have as a key its environment' );
+            $this->assertEquals( 'migration3', $logs[ 'env2' ], 'Last migration must have as a key its environment' );
         }
         public function testFindLast() {
-            Migration::createLog( 'migration1', 'development' ); 
-            Migration::createLog( 'migration2', 'test' );
+            Migration::createLog( 'migration1', 'env1' ); 
+            Migration::createLog( 'migration2', 'env2' );
             $logs = Migration::findLast();
-            $logDev = Migration::findLast( 'development' );
-            $logTest = Migration::findLast( 'test' );
+            $log1 = Migration::findLast( 'env1' );
+            $log2 = Migration::findLast( 'env2' );
             $this->assertTrue( is_array( $logs ) , 'findLast must return an array if not attributes are given' );
-            $this->assertEquals( $logs[ 'development' ], 'migration1' , 'Last migration name must have as a key its environment' );
-            $this->assertEquals( $logs[ 'test' ], 'migration2', 'Last migration must have as a key its environment' );
-            $this->assertEquals( $logDev, 'migration1', 'findLast must return the value of the array with key its environment' );
-            $this->assertEquals( $logTest, 'migration2', 'findLast must return the value of the array with key its environment' );
+            $this->assertEquals( $logs[ 'env1' ], 'migration1' , 'Last migration name must have as a key its environment' );
+            $this->assertEquals( $logs[ 'env2' ], 'migration2', 'Last migration must have as a key its environment' );
+            $this->assertEquals( $log1, 'migration1', 'findLast must return the value of the array with key its environment' );
+            $this->assertEquals( $log2, 'migration2', 'findLast must return the value of the array with key its environment' );
+        }
+        public function testFindAll() {
+            file_put_contents( Migration::$path . 'notphp.txt', '' );
+            $all = Migration::findAll( Migration::$path );
+            $this->assertTrue( is_array( $all ), 'findAll() must return an array' );
+            $this->assertTrue( !in_array( 'notphp.txt', $all ), 'findAll() must return only php files' );
+            $this->assertEquals( count( $all ), 5, 'findAll() must hold every php file in the directory' );
+        }
+        public function testFindUnexecuted() {
+            Migration::$environments = [ 'env1', 'env2'];
+            file_put_contents( Migration::$log, '' );
+            Migration::createLog( '3.php', 'env1' ); 
+            Migration::createLog( '2.php', 'env2' ); 
+            $unex1 = Migration::findUnexecuted( 'env1' );
+            $unex = Migration::findUnexecuted();
+            $this->assertTrue( is_array( $unex1 ), 'findUnexecuted() must return an array' );
+            $this->assertTrue( !in_array( '1.php', $unex1 ), 'findUnexecuted() must not return executed files' );
+            $this->assertTrue( !in_array( '2.php', $unex1 ), 'findUnexecuted() must not return executed files' );
+            $this->assertTrue( !in_array( '3.php', $unex1 ), 'findUnexecuted() must not return executed files' );
+            $this->assertTrue( in_array( '4.php', $unex1 ), 'findUnexecuted() must return unexecuted files' );
+            $this->assertTrue( in_array( '5.php', $unex1 ), 'findUnexecuted() must return unexecuted files' );
+            $this->assertTrue( isset( $unex[ 'env1' ] ), 'findUnexecuted() must return all environments when not attributes are given' );
+            $this->assertTrue( isset( $unex[ 'env2' ] ), 'findUnexecuted() must return all environments when not attributes are given' );
         }
         public function testCreateTable() {
             $tables = dbListTables(); 
@@ -121,7 +150,22 @@
                 );
             }, 'MigrationException', 'createTable must not create a table when field are empty' );
         }
+        protected function rrmdir( $dir ) {
+            if ( is_dir( $dir ) ) {
+                $objects = scandir( $dir );
+                foreach ( $objects as $object ) {
+                    if ( $object != "." && $object != ".." ) {
+                        if ( filetype( $dir . "/" . $object ) == "dir" ) {
+                            $this->rrmdir( $dir . "/" . $object );
+                        }
+                        else {
+                            unlink( $dir . "/" . $object );
+                        }
+                    }
+                }
+                rmdir( $dir );
+            }
+        }
     }
-
     return new MigrationsTest();
 ?>
