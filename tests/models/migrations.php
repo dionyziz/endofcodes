@@ -30,6 +30,14 @@
             }
             $this->rrmdir( Migration::$path );
         }
+        public function testMigrate() {
+            $this->assertDoesNotThrow( function() {
+                Migration::addField( 'field', 'testTable', 'int(11) NOT NULL' ); 
+            }, 'MigrationException', 'migrate() must not throw an migration error when the script completes successfully' );
+            $this->assertThrows( function() {
+                Migration::addField( 'id', 'testTable', 'int(11) NOT NULL' ); 
+            }, 'MigrationException', 'migrate() must throw an migration error when the script does not complete successfully' );
+        }
         public function testCreateLog() {
             Migration::createLog( 'migration1', 'env1' ); 
             Migration::createLog( 'migration2', 'env2' );
