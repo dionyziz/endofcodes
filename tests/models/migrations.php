@@ -32,7 +32,7 @@
         }
         public function testMigrate() {
             $this->assertDoesNotThrow( function() {
-                Migration::addField( 'field', 'testTable', 'int(11) NOT NULL' ); 
+                Migration::addField( 'testTable', 'test', 'int(11) NOT NULL' );
             }, 'MigrationException', 'migrate() must not throw an migration error when the script completes successfully' );
             $this->assertThrows( function() {
                 Migration::addField( 'id', 'testTable', 'int(11) NOT NULL' ); 
