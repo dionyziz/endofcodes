@@ -27,7 +27,7 @@
         if( isset( $last ) ) {
             ?><table class="table">
                 <tbody>
-                    <tr><?php
+                    <?php
                         foreach ( $last as $key => $migration ) {
                             if ( empty( $migration ) ) {
                                 $migration = 'unknown';
