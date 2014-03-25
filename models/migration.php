@@ -2,7 +2,7 @@
     abstract class Migration {
         public static $log  = 'database/migration/.history';
         public static $path  = 'database/migration/';
-        public static $environments  = [ 'development', 'test' ];
+        public static $environments = [ 'development', 'test' ];
 
         protected static function migrate( $sql ) {
             try {
@@ -27,7 +27,7 @@
             if ( empty( $env ) ) {
                 $list = [];
                 foreach ( static::$environments as $env ) {
-                    $list[ $env ]  = self::getUnexecuted( $env );
+                    $list[ $env ] = self::getUnexecuted( $env );
                 }
                 return $list;
             } 
@@ -59,7 +59,7 @@
 
         public static function findAll() {
             $array = [];
-            foreach ( glob( static::$path . '*.php' ) as $filename) {
+            foreach ( glob( static::$path . '*.php' ) as $filename ) {
                 $filename = str_replace( static::$path, '', $filename );
                 $array[] = trim( $filename );
             }

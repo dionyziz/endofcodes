@@ -18,7 +18,7 @@
             Migration::$path = 'tests/migrations/';
             Migration::$log = 'tests/migrations/.testLog';
             mkdir( Migration::$path, 0777, true );
-            for ( $i = 1; $i <= 5; $i++ ) {
+            for ( $i = 1; $i <= 5; ++$i ) {
                 file_put_contents( Migration::$path . $i . '.php', '' );
             }
         }
@@ -47,8 +47,8 @@
             $this->assertEquals( count( $logs ), 2, 'createLog should create only one record for each environment' );
             $this->assertTrue( isset( $logs[ 'env1' ] ), 'The envs of last migrations must exist in the array' );
             $this->assertTrue( isset( $logs[ 'env2' ] ), 'The envs of last migrations must exist in the array' );
-            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'Last migration name must have as a key its environment' );
-            $this->assertEquals( 'migration3', $logs[ 'env2' ], 'Last migration must have as a key its environment' );
+            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'Last migration name must have a key its environment' );
+            $this->assertEquals( 'migration3', $logs[ 'env2' ], 'Last migration must have a key its environment' );
         }
         public function testFindLast() {
             Migration::createLog( 'migration1', 'env1' ); 
@@ -57,8 +57,8 @@
             $log1 = Migration::findLast( 'env1' );
             $log2 = Migration::findLast( 'env2' );
             $this->assertTrue( is_array( $logs ) , 'findLast must return an array if not attributes are given' );
-            $this->assertEquals( $logs[ 'env1' ], 'migration1' , 'Last migration name must have as a key its environment' );
-            $this->assertEquals( $logs[ 'env2' ], 'migration2', 'Last migration must have as a key its environment' );
+            $this->assertEquals( $logs[ 'env1' ], 'migration1' , 'Last migration name must have a key its environment' );
+            $this->assertEquals( $logs[ 'env2' ], 'migration2', 'Last migration must have a key its environment' );
             $this->assertEquals( $log1, 'migration1', 'findLast must return the value of the array with key its environment' );
             $this->assertEquals( $log2, 'migration2', 'findLast must return the value of the array with key its environment' );
         }
@@ -70,7 +70,7 @@
             $this->assertEquals( count( $all ), 5, 'findAll() must hold every php file in the directory' );
         }
         public function testFindUnexecuted() {
-            Migration::$environments = [ 'env1', 'env2'];
+            Migration::$environments = [ 'env1', 'env2' ];
             file_put_contents( Migration::$log, '' );
             Migration::createLog( '3.php', 'env1' ); 
             Migration::createLog( '2.php', 'env2' ); 
