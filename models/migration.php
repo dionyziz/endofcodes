@@ -20,7 +20,7 @@
             }
             $array[ $env ] = $name;
             $data = json_encode( $array );
-            file_put_contents( static::$log, $data);
+            file_put_contents( static::$log, $data );
         }
 
         public static function findUnexecuted( $env = '' ) {
