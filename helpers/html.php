@@ -84,11 +84,11 @@
             ?> /></p><?php
         }
 
-        public function createSubmit( $value, $attributes ) {
+        public function createSubmit( $value, $attributes = '' ) {
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $name = '', $option_array, $selected = '', $id = '' ) {
+        public function createSelect( $name = '', $option_array, $selected = '', $id = '', $attributes = '' ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -99,6 +99,13 @@
                     ?>id="<?php
                         echo htmlspecialchars( $id );
                     ?>" <?php
+                }
+                if ( !empty( $attributes ) ) {
+                    foreach ( $attributes as $key => $value ) {
+                        echo $key ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
                 }
             ?>><?php
             foreach ( $option_array as $option ) {
