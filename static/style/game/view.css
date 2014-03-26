@@ -37,17 +37,6 @@ div.gameboard {
     font-weight: normal;
     font-size: 80%;
 }
-h1 {
-    margin: 0;
-    padding: 0;
-    font-size: 110%;
-    font-weight: normal;
-    float: left;
-}
-h2 {
-    display: inline;
-    font-size: 100%;
-}
 .yellow {
     background: #fceabb; /* Old browsers */
     background: -moz-linear-gradient(top,  #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%); /* FF3.6+ */
