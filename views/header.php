@@ -2,6 +2,7 @@
 
 <html lang="en">
     <head>
+        <meta charset="utf-8" />
         <title>EndofCodes Demo</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,11 +17,12 @@
             includeStyle( "footer" );
             includeStyle( "navigation" );
             includeStyle( "home" );
-            includeStyle( "register" );
-            includeStyle( "login" );
+            includeStyle( "user/create" );
+            includeStyle( "session/create" );
             includeStyle( "test" );
             includeStyle( "bootstrap.min" );
             includeStyle( "links" );
+            includeStyle( "game/view" );
         ?>
         <script type="text/javascript" src="static/script/cssrefresh.js"></script>
         <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
@@ -59,4 +61,4 @@
                ?></ul>
             </div>
         </div>
-        <div class="container">
+        <div class="container" id="main">

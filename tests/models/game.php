@@ -61,12 +61,38 @@
             $this->assertEquals( $game->created, $dbGame->created, 'Created in the db must be the same as the created during creation' );
             $this->assertSame( $game->id, $dbGame->id, 'Id in the db must be the same as the id during creation' );
         }
+        public function testGenesisNoUsers() {
+            $game = new Game();
+            $game->save();
+            $game->initiateAttributes();
+            $game->genesis();
+            $this->assertTrue( $game->ended, 'If there are no users the game must end' );
+
+            $this->assertEquals( 0, count( $game->rounds ), 'No round must be created during genesis' );
+            $dbGame = new Game( $game->id );
+            $this->assertTrue( $dbGame->ended, 'If there are no users the game must end' );
+        }
+        public function testGenesisOneUser() {
+            $game = new Game();
+            $game->users = [ $this->buildUser( 'vitsalis' ) ];
+            $game->save();
+            $game->initiateAttributes();
+            $game->genesis();
+            $this->assertTrue( $game->ended, 'If there is only one user the game must end' );
+
+            $this->assertEquals( 1, count( $game->rounds ), 'A round must be created even if there is only one user' );
+            $dbGame = new Game( $game->id );
+            $this->assertTrue( $dbGame->ended, 'If there is only one user the game must end' );
+        }
         public function testGenesis() {
             $game = $this->buildGame();
             $game->initiateAttributes();
             $game->genesis();
-            $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
+            $this->assertEquals( 1, count( $game->rounds ), 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
+            $this->assertFalse( $game->ended, 'If there are multiple users the game must not end' );
+            $dbGame = new Game( $game->id );
+            $this->assertFalse( $dbGame->ended, 'If there are multiple users the game must not end' );
 
             $caught = false;
             try {
@@ -91,6 +117,7 @@
                         $creature = $game->grid[ $i ][ $j ];
                         $creatures[] = $game->grid[ $i ][ $j ];
                         ++$userCountCreatures[ $creature->user->id ];
+                        $this->assertEquals( $game->rounds[ 0 ]->creatures[ $creature->id ]->id, $creature->id, 'The creatures dictionary must be in the form creatureid=>creature' );
                         $this->assertTrue( $creature->id >= 1, "Creatures ids must start from 1" );
                         $this->assertTrue( $creature->locationx >= 0, "A creature's x coordinate must be non-negative" );
                         $this->assertTrue( $creature->locationy >= 0, "A creature's y coordinate must be non-negative" );
@@ -131,9 +158,10 @@
             $game = $this->buildGame();
             $game->initiateAttributes();
             $game->genesis();
+            $user = $game->users[ 1 ];
 
             $this->assertTrue( method_exists( $game, "killBot" ), 'Game object must export a killBot function' ); 
-            $game->killBot( $game->users[ 1 ], 'fuck him' );
+            $game->killBot( $user, 'description', 'actual', 'expected' );
 
             foreach ( $game->rounds[ 0 ]->creatures as $creature ) {
                 if ( $creature->user->id === $game->users[ 1 ]->id ) {
@@ -143,6 +171,11 @@
                     $this->assertEquals( DIRECTION_NONE, $creature->intent->direction, 'Dead creature must have direction set to none' );
                 }
             }
+            $this->assertEquals( 1, count( $game->rounds[ 0 ]->errors[ $user->id ] ), 'killBot must store one error' );
+            $userErrors = $game->rounds[ 0 ]->errors[ $user->id ][ 0 ];
+            $this->assertEquals( 'description', $userErrors[ 'description' ], "killBot must store the error on the round's error array" );
+            $this->assertEquals( 'actual', $userErrors[ 'actual' ], "killBot must store the actual on the round's actual array" );
+            $this->assertEquals( 'expected', $userErrors[ 'expected' ], "killBot must store the expected on the round's expected array" );
         }
         public function testGameIdNonZero() {
             $game = $this->buildGame();

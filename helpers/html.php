@@ -88,7 +88,7 @@
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $name = '', $id = '', $option_array ) {
+        public function createSelect( $name = '', $option_array, $selected = '', $id = '' ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -107,6 +107,9 @@
                         ?>value="<?php
                             echo htmlspecialchars( $option[ 'value' ] );
                         ?>"<?php
+                    }
+                    if ( $selected == $option[ 'content' ] ) {
+                        ?> selected="selected"<?php
                     }
                 ?>><?php
                     echo htmlspecialchars( $option[ 'content' ] );

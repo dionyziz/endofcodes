@@ -1,5 +1,6 @@
 <?php
     require_once 'models/curl.php';
+    require_once 'models/error.php';
 
     interface GraderBotInterface {
         public function __construct( User $user );
@@ -22,13 +23,22 @@
             $this->user = $user;
             $this->url = $user->boturl;
         }
-        protected function reportError( $error, $expected = '', $actual = '' ) {
+        protected function reportError( $description, $expected = '', $actual = '' ) {
             $this->errors[] = [
-                'error' => $error,
+                'description' => $description,
                 'expected' => $expected,
                 'actual' => $actual
             ];
-            throw new GraderBotException( $error, $expected, $actual );
+            $error = new Error();
+            $error->description = $description;
+            $error->expected = $expected;
+            $error->actual = $actual;
+            $error->user = $this->user;
+            if ( isset( $this->game ) ) {
+                $error->game = $this->game;
+            }
+            $error->save();
+            throw new GraderBotException( $error );
         }
         protected function httpRequest( $endpoint = '', $method = 'view', $data = array() ) {
             switch ( $method ) {
@@ -135,6 +145,9 @@
             if ( !isset( $decodedResponse->intent ) ) {
                 $this->reportError( 'round_intent_not_set' );
             }
+            if ( count( ( array )$decodedResponse ) > 1 ) {
+                $this->reportError( 'round_additional_data' );
+            }
             $requiredAttributes = [ 'creatureid', 'direction', 'action' ];
             foreach ( $decodedResponse->intent as $creatureIntent ) {
                 foreach ( $requiredAttributes as $attribute ) {
@@ -146,12 +159,12 @@
                     }
                 }
             }
-            if ( count( ( array )$decodedResponse->intent[ 0 ] ) > count( $requiredAttributes ) ) {
-                $this->reportError( 'round_additional_data' );
-            }
             $collection = [];
             $round = $this->game->getCurrentRound();
             foreach ( $decodedResponse->intent as $creatureIntentData ) {
+                if ( count( ( array )$creatureIntentData ) > count( $requiredAttributes ) ) {
+                    $this->reportError( 'round_intent_additional_data' );
+                }
                 if ( !isset( $round->creatures[ $creatureIntentData->creatureid ] ) ) {
                     $this->reportError( 'round_invalid_creatureid' );
                 }
@@ -181,14 +194,10 @@
 
     class GraderBotException extends Exception {
         public $error;
-        public $expected;
-        public $actual;
 
-        public function __construct( $error, $expected = '', $actual = '' ) {
+        public function __construct( Error $error ) {
             $this->error = $error;
-            $this->expected = $expected;
-            $this->actual = $actual;
-            parent::__construct( "Grader bot error: $error. Expected: $expected. Actual: $actual." );
+            parent::__construct( "Grader bot error: $error->description. Expected: $error->expected. Actual: $error->actual." );
         }
     }
 ?>

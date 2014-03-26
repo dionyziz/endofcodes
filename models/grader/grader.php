@@ -14,12 +14,12 @@
         protected $botsInitiated = false;
 
         public function __construct( Game $game, $users = false ) {
-            assert( $game->exists, 'Game must exist when grader is constructed' );
+            assert( $game->exists/*, 'Game must exist when grader is constructed'*/ );
             
             if ( count( $game->rounds ) ) {
                 // already existing game
-                assert( $users === false, 'game already has users since genesis has run' );
-                assert( isset( $game->users ), 'game must have users' );
+                assert( $users === false/*, 'game already has users since genesis has run'*/ );
+                assert( isset( $game->users )/*, 'game must have users'*/ );
                 $this->registeredUsers = $game->users;
                 foreach ( $game->users as $user ) {
                     $bot = new GraderBot( $user );
@@ -29,10 +29,10 @@
             }
             else {
                 // new game
-                assert( is_array( $users ), 'Users must be an array' );
+                assert( is_array( $users )/*, 'Users must be an array'*/ );
                 $this->users = $users;
                 foreach ( $this->users as $user ) {
-                    assert( $user instanceof User, '$grader->users is not a collection of users' );
+                    assert( $user instanceof User/*, '$grader->users is not a collection of users'*/ );
                 }
             }
             $this->game = $game;
@@ -41,13 +41,13 @@
             foreach ( $this->users as $user ) {
                 $bot = new $this->graderBotClass( $user );
                 $bot->game = $this->game;
-                $this->bots[] = new $this->graderBotClass( $user );
+                $this->bots[] = $bot;
             }
 
             $this->botsInitiated = true;
         }
         public function initiate() {
-            assert( $this->botsInitiated, 'Bots should be initiated before grader initiates' );
+            assert( $this->botsInitiated/*, 'Bots should be initiated before grader initiates'*/ );
 
             $this->registeredBots = [];
             $this->registeredUsers = [];
@@ -60,11 +60,6 @@
                     $this->registeredUsers[] = $bot->user;
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->error = $e->error;
-                    $error->save();
                 }
             }
         }
@@ -79,29 +74,13 @@
                     $bot->sendGameRequest( $this->game );
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->error = $e->error;
-                    $error->save();
                 }
             }
         }
         public function nextRound() {
-            assert( $this->game instanceof Game, '$this->game must be an instance of game when we create a new round' );
+            assert( $this->game instanceof Game/*, '$this->game must be an instance of game when we create a new round'*/ );
             $this->game->beforeNextRound();
             $round = $this->game->getCurrentRound();
-
-            $usersAlive = [];
-            foreach ( $round->creatures as $creature ) {
-                if ( $creature->alive ) {
-                    $usersAlive[ $creature->user->id ] = $creature->user;
-                }
-            }
-
-            if ( count( $usersAlive ) === 1 ) {
-                throw new WinnerException( end( $usersAlive )->id );
-            }
 
             foreach ( $this->registeredBots as $bot ) {
                 try {
@@ -111,38 +90,22 @@
                     }
                 }
                 catch ( GraderBotException $e ) {
-                    $error = new Error();
-                    $error->user = $bot->user;
-                    $error->game = $this->game;
-                    $error->error = $e->error;
-                    $error->actual = $e->actual;
-                    $error->expected = $e->expected;
-                    $error->save();
                 }
             }
 
             $this->game->nextRound();
 
             foreach ( $this->game->getCurrentRound()->errors as $userid => $errors ) {
-                foreach ( $errors as $errorDescription ) {
+                foreach ( $errors as $errorInfo ) {
                     $error = new Error();
                     $error->game = $this->game;
                     $error->user = new User( $userid );
-                    $error->error = $errorDescription[ 'error' ];
-                    $actual->actual = $actualDescription[ 'actual' ];
-                    $expected->expected = $expectedDescription[ 'expected' ];
+                    $error->description = $errorInfo[ 'description' ];
+                    $error->actual = $errorInfo[ 'actual' ];
+                    $error->expected = $errorInfo[ 'expected' ];
                     $error->save();
                 }
             }
-        }
-    }
-
-    class WinnerException extends Exception {
-        public $winnerid;
-
-        public function __construct( $id ) {
-            $this->winnerid = $id;
-            parent::__construct( "Winner's id " . $id );
         }
     }
 ?>
