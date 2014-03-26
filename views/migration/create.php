@@ -43,6 +43,7 @@
     else {
         ?><p>You have not created any logs yet.</p><?php
     }
+    ?><h2>All Migrations <small>in case of new database</small></h2><?php
     $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) {
         $self->createSelect( 'env', [
@@ -56,7 +57,7 @@
             ]
         ] );
         $self->createInput( 'hidden', 'all', 'all', true );
-        $self->createSubmit( "Run all migrations(if you created a new database)" );
+        $self->createSubmit( "Run all migrations" );
     } );
     ?><h2>Pending migrations</h2><?php
     $form = new Form( 'migrationrun', 'create' );
