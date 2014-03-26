@@ -80,7 +80,7 @@
         }
         public function testGetWinnerIdNoUsers() {
             $round = $this->buildRoundWithCreatures( [] );
-            $this->assertEquals( 0, $round->getWinnerId(), 'If there are no players in the round, getWinnerId must return 0' );
+            $this->assertFalse( $round->getWinnerId(), 'If there are no players in the round, getWinnerId must return false' );
         }
         public function testWinnerIdMultipleUsers() {
             $user1 = $this->buildUser( 'vitsalis' );
@@ -94,7 +94,7 @@
             catch ( ModelValidationException $e ) {
                 $caught = true;
             }
-            $this->assertTrue( $caught, 'A ModelValidationException must be caught if tha round is not the final one' );
+            $this->assertTrue( $caught, 'A ModelValidationException must be caught if the round is not the final one' );
         }
     }
     return new RoundTest();

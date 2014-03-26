@@ -80,9 +80,7 @@
             if ( !empty( $usersAlive ) ) {
                 return end( $usersAlive )->id;
             }
-            else {
-                return 0;
-            }
+            false;
         }
 
         protected function create() {
