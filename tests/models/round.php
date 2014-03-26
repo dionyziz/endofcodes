@@ -40,27 +40,61 @@
             $this->assertEquals( 'expected', $round->errors[ 1 ][ 0 ][ 'expected' ], 'expected must store the expected of the error specfied' );
             $this->assertEquals( 'actual', $round->errors[ 1 ][ 0 ][ 'actual' ], 'actual must store the actual of the error specfied' );
         }
+        protected function buildRoundWithCreatures( $users ) {
+            $creatureid = 1;
+            $x = $y = 0;
+            $creatures = [];
+            foreach ( $users as $user ) {
+                $creatures[ $creatureid ] = $this->buildCreature( $creatureid, $x, $y, $user );
+                ++$x;
+                ++$y;
+                ++$creatureid;
+            }
+            $round = new Round();
+            $round->creatures = $creatures;
+            return $round;
+        }
         public function testIsFinalRoundMultipleCreaturesDifferentUsers() {
             $user1 = $this->buildUser( 'vitsalis' );
             $user2 = $this->buildUser( 'dionyziz' );
-            $creature1 = $this->buildCreature( 1, 0, 0, $user1 );
-            $creature2 = $this->buildCreature( 2, 1, 1, $user2 );
-            $round = new Round();
-            $round->creatures = [ $creature1->id => $creature1, $creature2->id => $creature2 ];
+            $users = [ $user1->id => $user1, $user2->id => $user2 ];
+            $round = $this->buildRoundWithCreatures( $users );
             $this->assertTrue( method_exists( $round, 'isFinalRound' ), 'Round object must export an isFinalRound function' );
             $this->assertFalse( $round->isFinalRound(), "isFinalRound() must be false if the round's creatures belong to multiple users" );
         }
         public function testIsFinalRound() {
-            $user = $this->buildUser( 'vitsalis' );
-            $round = new Round();
-            $creature = $this->buildCreature( 1, 0, 0, $user );
-            $round->creatures = [ $creature->id => $creature ];
+            $user1 = $this->buildUser( 'vitsalis' );
+            $users = [ $user1->id => $user1 ];
+            $round = $this->buildRoundWithCreatures( $users );
             $this->assertTrue( $round->isFinalRound(), "isFinalRound() must be true if the round's creatures belong to only one user" );
         }
         public function testIsFinalRoundNoCreatures() {
-            $round = new Round();
-            $round->creatures = [];
+            $round = $this->buildRoundWithCreatures( [] );
             $this->assertTrue( $round->isFinalRound(), "isFinalRound() must be true if the round has no creatures" );
+        }
+        public function testGetWinnerIdOneUser() {
+            $user1 = $this->buildUser( 'vitsalis' );
+            $users = [ $user1->id => $user1 ];
+            $round = $this->buildRoundWithCreatures( $users );
+            $this->assertEquals( $user1->id, $round->getWinnerId(), 'Get winner id must return the id of the winner' );
+        }
+        public function testGetWinnerIdNoUsers() {
+            $round = $this->buildRoundWithCreatures( [] );
+            $this->assertEquals( 0, $round->getWinnerId(), 'If there are no players in the round, getWinnerId must return 0' );
+        }
+        public function testWinnerIdMultipleUsers() {
+            $user1 = $this->buildUser( 'vitsalis' );
+            $user2 = $this->buildUser( 'dionyziz' );
+            $users = [ $user1->id => $user1, $user2->id => $user2 ];
+            $round = $this->buildRoundWithCreatures( $users );
+            $caught = false;
+            try {
+                $round->getWinnerId();
+            }
+            catch ( ModelValidationException $e ) {
+                $caught = true;
+            }
+            $this->assertTrue( $caught, 'A ModelValidationException must be caught if tha round is not the final one' );
         }
     }
     return new RoundTest();
