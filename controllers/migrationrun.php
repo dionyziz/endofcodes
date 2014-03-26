@@ -1,6 +1,6 @@
 <?php
     class MigrationRunController extends ControllerBase {
-        public function create( $env, $name = '' ) {
+        public function create( $env, $name = '', $all = false ) {
             global $config;
 
             require_once 'models/migration.php';
@@ -9,12 +9,17 @@
                 $this->run( $name, $env );
             }
             else {
-                try {
-                    $migrations = Migration::findUnexecuted( $env );
-                }
-                catch ( ModelNotFoundException $e ) {
+                if ( $all ) {
                     $migrations = Migration::findAll();
-                } 
+                }
+                else {
+                    try {
+                        $migrations = Migration::findUnexecuted( $env );
+                    }
+                    catch ( ModelNotFoundException $e ) {
+                        $migrations = Migration::findAll();
+                    } 
+                }
                 foreach ( $migrations as $name ) {
                     $this->run( $name, $env ); 
                 }
