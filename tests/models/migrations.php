@@ -71,11 +71,12 @@
         }
         public function testFindUnexecuted() {
             Migration::$environments = [ 'env1', 'env2' ];
-            file_put_contents( Migration::$log, '' );
             Migration::createLog( '3.php', 'env1' ); 
             Migration::createLog( '2.php', 'env2' ); 
             $unex1 = Migration::findUnexecuted( 'env1' );
             $unex = Migration::findUnexecuted();
+            file_put_contents( Migration::$log, '' );
+            $all = Migration::findUnexecuted();
             $this->assertTrue( is_array( $unex1 ), 'findUnexecuted() must return an array' );
             $this->assertTrue( !in_array( '1.php', $unex1 ), 'findUnexecuted() must not return executed files' );
             $this->assertTrue( !in_array( '2.php', $unex1 ), 'findUnexecuted() must not return executed files' );
@@ -84,6 +85,8 @@
             $this->assertTrue( in_array( '5.php', $unex1 ), 'findUnexecuted() must return unexecuted files' );
             $this->assertTrue( isset( $unex[ 'env1' ] ), 'findUnexecuted() must return all environments when not attributes are given' );
             $this->assertTrue( isset( $unex[ 'env2' ] ), 'findUnexecuted() must return all environments when not attributes are given' );
+            $this->assertEquals( count( $all[ 'env1' ] ), 5, 'findUnexecuted() must return all files when not any log exists' );
+            $this->assertEquals( count( $all[ 'env2' ] ), 5, 'findUnexecuted() must return all files when not any log exists' );
         }
         public function testCreateTable() {
             $tables = dbListTables(); 
