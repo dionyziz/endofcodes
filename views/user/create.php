@@ -84,7 +84,7 @@
         for ( $i = 1; $i <= 31; ++$i ) {
             $days_select_array[] = [ 'value' => $i, 'content' => $i ];
         }
-        $self->createSelect( 'day', $days_select_array );
+        $self->createSelect( $days_select_array, 'day' );
         $months_select_array = [ [ 'content' => 'Select Month' ] ];
         for ( $i = 1; $i <= 12; ++$i ) {
             $months_select_array[] = [
@@ -92,18 +92,18 @@
                 'content' => date( 'M', mktime( 0, 0, 0, $i, 1, 2000 ) )
             ];
         }
-        $self->createSelect( 'month', $months_select_array );
+        $self->createSelect( $months_select_array, 'month' );
         $years_select_array = [ [ 'content' => 'Select Year' ] ];
         $current_year = date( 'Y' );
         for ( $i = $current_year - $config[ 'age' ][ 'min' ]; $i >= $current_year - $config[ 'age' ][ 'max' ]; --$i ) {
             $years_select_array[] = [ 'value' => $i, 'content' => $i ];
         }
-        $self->createSelect( 'year', $years_select_array );
+        $self->createSelect( $years_select_array, 'year' );
         $countries_select_array = [ [ 'content' => 'Select Country' ] ];
         foreach ( $countries as $key => $country ) {
             $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
         }
-        $self->createSelect( 'countryid', $countries_select_array, $location );
+        $self->createSelect( $countries_select_array, 'countryid', $location );
         $self->createInput( 'submit', '', '', 'Register' );
     } );
 

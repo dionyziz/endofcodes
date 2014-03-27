@@ -75,8 +75,9 @@
                     ?>" <?php
                 }
                 if ( !empty( $attributes ) ) {
-                    foreach( $attributes as $key => $value ) {
-                        echo $key ?>="<?php
+                    foreach ( $attributes as $key => $value ) {
+                        echo $key; 
+                        ?>="<?php
                             echo htmlspecialchars( $value );
                         ?>" <?php
                     }
@@ -88,7 +89,7 @@
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $name = '', $option_array, $selected = '', $id = '', $attributes = '' ) {
+        public function createSelect( $option_array, $name = '', $selected = '', $id = '', $attributes = '' ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -102,7 +103,8 @@
                 }
                 if ( !empty( $attributes ) ) {
                     foreach ( $attributes as $key => $value ) {
-                        echo $key ?>="<?php
+                        echo $key; 
+                        ?>="<?php
                             echo htmlspecialchars( $value );
                         ?>" <?php
                     }
@@ -176,7 +178,8 @@
                 }
                 if ( isset( $this->attributes ) ) {
                     foreach( $this->attributes as $key => $value ) {
-                        echo $key ?>="<?php
+                        echo $key; 
+                        ?>="<?php
                             echo htmlspecialchars( $value );
                         ?>" <?php
                     }
