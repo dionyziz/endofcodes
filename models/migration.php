@@ -1,7 +1,7 @@
 <?php
     abstract class Migration {
-        public static $log  = 'database/migration/.history';
-        public static $path  = 'database/migration/';
+        public static $log = 'database/migration/.history';
+        public static $path = 'database/migration/';
         public static $environments = [ 'development', 'test' ];
 
         protected static function migrate( $sql ) {
