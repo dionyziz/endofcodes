@@ -58,15 +58,29 @@
                 }
             }
         }
-        public function isFinalRound() {
+        protected function getUsersAlive() {
             $usersAlive = [];
             foreach ( $this->creatures as $creature ) {
                 if ( $creature->alive ) {
                     $usersAlive[ $creature->user->id ] = $creature->user;
                 }
             }
+            return $usersAlive;
+        }
+        public function isFinalRound() {
+            $usersAlive = $this->getUsersAlive();
 
             return count( $usersAlive ) <= 1;
+        }
+        public function getWinnerId() {
+            if ( !$this->isFinalRound() ) {
+                throw new ModelValidationException( 'There is no winner if the game is not over' );
+            }
+            $usersAlive = $this->getUsersAlive();
+            if ( !empty( $usersAlive ) ) {
+                return end( $usersAlive )->id;
+            }
+            return false;
         }
 
         protected function create() {
