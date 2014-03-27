@@ -47,8 +47,8 @@
             $this->assertEquals( count( $logs ), 2, 'createLog should create only one record for each environment' );
             $this->assertTrue( isset( $logs[ 'env1' ] ), 'The envs of last migrations must exist in the array' );
             $this->assertTrue( isset( $logs[ 'env2' ] ), 'The envs of last migrations must exist in the array' );
-            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'Last migration name must have a key its environment' );
-            $this->assertEquals( 'migration3', $logs[ 'env2' ], 'Last migration must have a key its environment' );
+            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'createLog must keep the last migration in each environment' );
+            $this->assertEquals( 'migration3', $logs[ 'env2' ], 'createLog must keep the last migration in each environment' );
         }
         public function testFindLast() {
             Migration::createLog( 'migration1', 'env1' ); 
