@@ -6,23 +6,18 @@
             require_once 'models/migration.php';
 
             if ( !empty( $name ) ) {
-                $this->run( $name, $env );
+                $migrations = [ $name ];
             }
             else {
                 if ( $all ) {
                     $migrations = Migration::findAll();
                 }
                 else {
-                    try {
-                        $migrations = Migration::findUnexecuted( $env );
-                    }
-                    catch ( ModelNotFoundException $e ) {
-                        $migrations = Migration::findAll();
-                    } 
+                    $migrations = Migration::findUnexecuted( $env );
                 }
-                foreach ( $migrations as $name ) {
-                    $this->run( $name, $env ); 
-                }
+            }
+            foreach ( $migrations as $name ) {
+                $this->run( $name, $env ); 
             }
             require_once 'views/migration/results.php';
         }
@@ -42,12 +37,10 @@
             $migrations = Migration::findAll();
             $this->environment = $env;
             $this->init();
-            if ( in_array( $name, $migrations ) ) {
-                require_once 'database/migration/' . $name;
-            }
-            else {
+            if ( !in_array( $name, $migrations ) ) {
                 throw new HTTPUnauthorizedException();
             }
+            require_once 'database/migration/' . $name;
             Migration::createLog( $name, $env );
         }
     }
