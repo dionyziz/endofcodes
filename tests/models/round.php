@@ -87,14 +87,7 @@
             $user2 = $this->buildUser( 'dionyziz' );
             $users = [ $user1->id => $user1, $user2->id => $user2 ];
             $round = $this->buildRoundWithCreatures( $users );
-            $caught = false;
-            try {
-                $round->getWinnerId();
-            }
-            catch ( ModelValidationException $e ) {
-                $caught = true;
-            }
-            $this->assertTrue( $caught, 'A ModelValidationException must be caught if the round is not the final one' );
+            $this->assertThrows( [ $round, 'getWinnerId' ], 'ModelValidationException', 'A ModelValidationException must be thrown if the round is not the final one' );
         }
     }
     return new RoundTest();
