@@ -4,6 +4,7 @@
         protected $resource;
         protected $method;
         public $id;
+        public $attributes;
         public $formMethod;
         protected $hasFile = false;
         protected $token;
@@ -48,7 +49,7 @@
             ?></p><?php
         }
 
-        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $checked = false ) {
+        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = '' ) {
             if ( !Form::isValidType( $type ) ) {
                 $type = 'text';
             }
@@ -73,17 +74,22 @@
                         echo htmlspecialchars( $value );
                     ?>" <?php
                 }
-                if ( $type == 'checkbox' && $checked ) {
-                    ?>checked="yes"<?php
+                if ( !empty( $attributes ) ) {
+                    foreach ( $attributes as $key => $value ) {
+                        echo $key; 
+                        ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
                 }
             ?> /></p><?php
         }
 
-        public function createSubmit( $value ) {
-            $this->createInput( 'submit', '', '', $value );
+        public function createSubmit( $value, $attributes = '' ) {
+            $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $name = '', $option_array, $selected = '', $id = '' ) {
+        public function createSelect( $option_array, $name = '', $selected = '', $id = '', $attributes = '' ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -94,6 +100,14 @@
                     ?>id="<?php
                         echo htmlspecialchars( $id );
                     ?>" <?php
+                }
+                if ( !empty( $attributes ) ) {
+                    foreach ( $attributes as $key => $value ) {
+                        echo $key; 
+                        ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
                 }
             ?>><?php
             foreach ( $option_array as $option ) {
@@ -161,6 +175,14 @@
                     ?>id="<?php
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
+                }
+                if ( isset( $this->attributes ) ) {
+                    foreach( $this->attributes as $key => $value ) {
+                        echo $key; 
+                        ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
                 }
                 ?>action="<?php
                     echo htmlspecialchars( $this->resource );
