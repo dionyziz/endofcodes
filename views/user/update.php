@@ -38,7 +38,7 @@
         ?><p>Change country</p><?php
         $countries_select_array[] = 'Select Country';
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[ $key + 1 ] = $country->name;
+            $countries_select_array[ $country->shortname ] = $country->name;
         }
         $self->createSelect( $countries_select_array, 'countryid' );
         $self->createSubmit( 'Save settings' );
