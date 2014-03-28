@@ -1,6 +1,4 @@
 <?php
-    require_once 'migrate.php';
-
     Migration::createTable(
         'games',
         [ 
@@ -13,7 +11,6 @@
             [ 'type' => 'primary', 'field' => 'id' ]
         ]
     );
-
     Migration::createTable(
         'creatures',
         [ 
@@ -25,7 +22,6 @@
             [ 'type' => 'primary', 'field' => 'id' ]
         ]
     );
-
     Migration::createTable(
         'gameusers',
         [ 
@@ -36,7 +32,6 @@
             [ 'type' => 'unique', 'field' => [ 'userid', 'gameid' ], 'name' => 'uc_gameusers' ]
         ]
     );
-
     Migration::createTable(
         'roundcreatures',
         [ 

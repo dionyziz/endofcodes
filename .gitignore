@@ -6,3 +6,4 @@ config-local.php
 avatars
 .DS_STORE
 tags
+.history
