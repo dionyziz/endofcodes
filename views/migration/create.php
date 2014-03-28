@@ -1,25 +1,14 @@
 <?php
     require 'views/header.php';
 
-    foreach ( $migrations as $migration ) {
-        $list[] = [
-            'content' => $migration,
-            'value' => $migration
-        ];
-    }
+    $migrations = array_combine( $migrations, $migrations );
     $form = new Form( 'migrationrun', 'create' );
-    $form->output( function( $self ) use( $list ) {
-        $self->createSelect( 'name', $list );
-        $self->createSelect( 'env', [
-            [
-                'content' => 'development',
-                'value' => 'development'
-            ],
-            [
-                'content' => 'test',
-                'value' => 'test'
-            ]
-        ] );
+    $form->output( function( $self ) use( $migrations ) {
+        $self->createSelect( $migrations, 'name' );
+        $self->createSelect( [
+            'development' => 'development',
+            'test' => 'test'
+        ], 'env' );
         $self->createSubmit( 'Run migration' );
     } );
     ?><h2>Last Migrations:</h2><?php
@@ -49,32 +38,20 @@
     ?><h2>All Migrations <small>in case of new database</small></h2><?php
     $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) {
-        $self->createSelect( 'env', [
-            [
-                'content' => 'development',
-                'value' => 'development'
-            ],
-            [
-                'content' => 'test',
-                'value' => 'test'
-            ]
-        ] );
+        $self->createSelect( [
+            'development' => 'development',
+            'test' => 'test'
+        ], 'env' );
         $self->createInput( 'hidden', 'all', 'all', true );
         $self->createSubmit( "Run all migrations" );
     } );
     ?><h2>Pending migrations</h2><?php
     $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) {
-        $self->createSelect( 'env', [
-            [
-                'content' => 'development',
-                'value' => 'development'
-            ],
-            [
-                'content' => 'test',
-                'value' => 'test'
-            ]
-        ] );
+        $self->createSelect( [
+            'development' => 'development',
+            'test' => 'test'
+        ], 'env' );
         $self->createSubmit( "Run pending migrations" );
     } );
     foreach ( $pending as $env => $migs ) {
