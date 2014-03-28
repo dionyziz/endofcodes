@@ -111,12 +111,10 @@
                 }
             ?>><?php
             foreach ( $optionArray as $value => $content ) {
-                ?><option <?php
-                    if ( isset( $value ) ) {
-                        ?>value="<?php
-                            echo htmlspecialchars( $value );
-                        ?>"<?php
-                    }
+                ?><option 
+                    value="<?php
+                        echo htmlspecialchars( $value );
+                    ?>"<?php
                     if ( $selected == $content ) {
                         ?> selected="selected"<?php
                     }
