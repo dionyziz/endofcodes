@@ -61,7 +61,7 @@
         protected function getUsersAlive() {
             $usersAlive = [];
             foreach ( $this->creatures as $creature ) {
-                if ( $creature->alive ) {
+                if ( $creature->alive && isset( $creature->user ) ) {
                     $usersAlive[ $creature->user->id ] = $creature->user;
                 }
             }
