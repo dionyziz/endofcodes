@@ -58,6 +58,7 @@
             else {
                 $round = $game->getCurrentRound();
             }
+            $genesis = $game->rounds[ 0 ];
             require 'views/game/view.php';
         }
         public function updateView( $gameid ) {
