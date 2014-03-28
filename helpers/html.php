@@ -89,7 +89,7 @@
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $option_array, $name = '', $selected = '', $id = '', $attributes = '' ) {
+        public function createSelect( $optionArray, $name = '', $selected = '', $id = '', $attributes = '' ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -110,18 +110,18 @@
                     }
                 }
             ?>><?php
-            foreach ( $option_array as $option ) {
+            foreach ( $optionArray as $value => $content ) {
                 ?><option <?php
-                    if ( isset( $option[ 'value' ] ) ) {
+                    if ( isset( $value ) ) {
                         ?>value="<?php
-                            echo htmlspecialchars( $option[ 'value' ] );
+                            echo htmlspecialchars( $value );
                         ?>"<?php
                     }
-                    if ( $selected == $option[ 'content' ] ) {
+                    if ( $selected == $content ) {
                         ?> selected="selected"<?php
                     }
                 ?>><?php
-                    echo htmlspecialchars( $option[ 'content' ] );
+                    echo htmlspecialchars( $content );
                 ?></option><?php
             }
             ?></select></p><?php
