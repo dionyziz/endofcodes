@@ -64,7 +64,7 @@
             $array = [];
             foreach ( glob( static::$path . '*.php' ) as $filename ) {
                 $filename = str_replace( static::$path, '', $filename );
-                $array[] = trim( $filename );
+                $array[] = $filename;
             }
             sort( $array );
             return $array;

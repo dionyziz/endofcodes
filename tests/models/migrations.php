@@ -44,11 +44,11 @@
             Migration::createLog( 'migration3', 'env2' );
             $logs = Migration::findLast();
             $this->assertTrue( file_exists( Migration::$path ), 'The log file must exist' );
-            $this->assertEquals( count( $logs ), 2, 'createLog should create only one record for each environment' );
+            $this->assertEquals( 2, count( $logs ), 'createLog should create only one record for each environment' );
             $this->assertTrue( isset( $logs[ 'env1' ] ), 'The envs of last migrations must exist in the array' );
             $this->assertTrue( isset( $logs[ 'env2' ] ), 'The envs of last migrations must exist in the array' );
-            $this->assertEquals( $logs[ 'env1' ], 'migration1', 'createLog must keep the last migration in each environment' );
-            $this->assertEquals( $logs[ 'env2' ], 'migration3', 'createLog must keep the last migration in each environment' );
+            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'createLog must keep the last migration in each environment' );
+            $this->assertEquals( 'migration3', $logs[ 'env2' ], 'createLog must keep the last migration in each environment' );
         }
         public function testFindLast() {
             Migration::createLog( 'migration1', 'env1' ); 
@@ -70,7 +70,7 @@
             $all = Migration::findAll( Migration::$path );
             $this->assertTrue( is_array( $all ), 'findAll() must return an array' );
             $this->assertTrue( !in_array( 'notphp.txt', $all ), 'findAll() must return only php files' );
-            $this->assertEquals( count( $all ), 5, 'findAll() must hold every php file in the directory' );
+            $this->assertEquals( 5, count( $all ), 'findAll() must hold every php file in the directory' );
         }
         public function testFindUnexecuted() {
             Migration::$environments = [ 'env1', 'env2' ];
@@ -88,8 +88,8 @@
             $this->assertTrue( in_array( '5.php', $unex1 ), 'findUnexecuted() must return unexecuted files' );
             $this->assertTrue( isset( $unex[ 'env1' ] ), 'findUnexecuted() must return all environments when not attributes are given' );
             $this->assertTrue( isset( $unex[ 'env2' ] ), 'findUnexecuted() must return all environments when not attributes are given' );
-            $this->assertEquals( count( $all[ 'env1' ] ), 5, 'findUnexecuted() must return all files when not any log exists' );
-            $this->assertEquals( count( $all[ 'env2' ] ), 5, 'findUnexecuted() must return all files when not any log exists' );
+            $this->assertEquals( 5, count( $all[ 'env1' ] ), 'findUnexecuted() must return all files when not any log exists' );
+            $this->assertEquals( 5, count( $all[ 'env2' ] ), 'findUnexecuted() must return all files when not any log exists' );
         }
         public function testCreateTable() {
             $tables = dbListTables(); 
