@@ -54,6 +54,9 @@
             if ( empty( $env ) ) {
                 return $array;
             }
+            if ( !isset( $array[ $env ] ) ) {
+                throw new ModelNotFoundException();
+            }
             return $array[ $env ];
         }
 

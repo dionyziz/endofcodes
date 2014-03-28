@@ -33,10 +33,10 @@
         public function testMigrate() {
             $this->assertDoesNotThrow( function() {
                 Migration::addField( 'testTable', 'test', 'int(11) NOT NULL' );
-            }, 'MigrationException', 'migrate() must not throw an migration error when the script completes successfully' );
+            }, 'MigrationException', 'migrate() must not throw a migration error when the script completes successfully' );
             $this->assertThrows( function() {
                 Migration::addField( 'id', 'testTable', 'int(11) NOT NULL' ); 
-            }, 'MigrationException', 'migrate() must throw an migration error when the script does not complete successfully' );
+            }, 'MigrationException', 'migrate() must throw a migration error when the script does not complete successfully' );
         }
         public function testCreateLog() {
             Migration::createLog( 'migration1', 'env1' ); 
@@ -47,8 +47,8 @@
             $this->assertEquals( count( $logs ), 2, 'createLog should create only one record for each environment' );
             $this->assertTrue( isset( $logs[ 'env1' ] ), 'The envs of last migrations must exist in the array' );
             $this->assertTrue( isset( $logs[ 'env2' ] ), 'The envs of last migrations must exist in the array' );
-            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'createLog must keep the last migration in each environment' );
-            $this->assertEquals( 'migration3', $logs[ 'env2' ], 'createLog must keep the last migration in each environment' );
+            $this->assertEquals( $logs[ 'env1' ], 'migration1', 'createLog must keep the last migration in each environment' );
+            $this->assertEquals( $logs[ 'env2' ], 'migration3', 'createLog must keep the last migration in each environment' );
         }
         public function testFindLast() {
             Migration::createLog( 'migration1', 'env1' ); 
@@ -56,11 +56,14 @@
             $logs = Migration::findLast();
             $log1 = Migration::findLast( 'env1' );
             $log2 = Migration::findLast( 'env2' );
-            $this->assertTrue( is_array( $logs ) , 'findLast must return an array if not attributes are given' );
-            $this->assertEquals( $logs[ 'env1' ], 'migration1' , 'Last migration name must have a key its environment' );
-            $this->assertEquals( $logs[ 'env2' ], 'migration2', 'Last migration must have a key its environment' );
-            $this->assertEquals( $log1, 'migration1', 'findLast must return the value of the array with key its environment' );
-            $this->assertEquals( $log2, 'migration2', 'findLast must return the value of the array with key its environment' );
+            $this->assertTrue( is_array( $logs ), 'findLast must return an array if not attributes are given' );
+            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'Last migration name must have a key its environment' );
+            $this->assertEquals( 'migration2', $logs[ 'env2' ], 'Last migration must have a key its environment' );
+            $this->assertEquals( 'migration1', $log1, 'findLast must return the value of the array with key its environment' );
+            $this->assertEquals( 'migration2', $log2, 'findLast must return the value of the array with key its environment' );
+            $this->assertThrows( function() {
+                Migration::findLast( 'wrongEnv' ); 
+            }, 'ModelNotFoundException', 'findLast() must throw a ModelNotFoundException when the environment is not isset in logs' );
         }
         public function testFindAll() {
             file_put_contents( Migration::$path . 'notphp.txt', '' );

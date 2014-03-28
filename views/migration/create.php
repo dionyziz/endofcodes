@@ -9,7 +9,6 @@
     }
     $form = new Form( 'migrationrun', 'create' );
     $form->output( function( $self ) use( $list ) {
-
         $self->createSelect( 'name', $list );
         $self->createSelect( 'env', [
             [
@@ -24,7 +23,7 @@
         $self->createSubmit( 'Run migration' );
     } );
     ?><h2>Last Migrations:</h2><?php
-    if( isset( $last ) ) {
+    if ( isset( $last ) ) {
         ?><table class="table">
             <tbody>
                 <?php
@@ -33,8 +32,12 @@
                             $migration = 'unknown';
                         }
                         ?><tr>
-                            <td><?php echo $key; ?></td>
-                            <td><?php echo $migration; ?></td>
+                            <td><?php 
+                                echo $key; 
+                            ?></td>
+                            <td><?php 
+                                echo $migration; 
+                            ?></td>
                         </tr><?php
                     }
             ?></tbody>
@@ -75,11 +78,19 @@
         $self->createSubmit( "Run pending migrations" );
     } );
     foreach ( $pending as $env => $migs ) {
-        ?><h3><?php echo $env; ?></h3><?php
-        ?><p>Total: <?php echo count( $migrations ); ?> Pending: <?php echo count( $migs ); ?></p>
+        ?><h3><?php 
+            echo $env; 
+        ?></h3>
+        <p>Total: <?php 
+            echo count( $migrations ); 
+        ?> Pending: <?php 
+            echo count( $migs ); 
+        ?></p>
         <ol><?php
             foreach ( $migs as $mig ) {
-                ?><li><?php echo $mig; ?></li><?php
+                ?><li><?php 
+                    echo $mig; 
+                ?></li><?php
             }
         ?></ol><?php
     }
