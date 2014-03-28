@@ -18,12 +18,15 @@
     <div class='gameboard'>
         <?php
             $colors = [ 'red', 'blue', 'green', 'yellow', 'purple', 'cyan', 'black', 'pink' ];
+            $playerColor = [];
+            foreach ( $genesis->creatures as $creature ) {
+                if ( !isset( $playerColor[ $creature->user->id ] ) ) {
+                    $playerColor[ $creature->user->id ] = array_shift( $colors );
+                }
+            }
             foreach ( $round->creatures as $creature ) {
                 if ( $creature->alive ) {
                     ?><div class="<?php
-                        if ( !isset( $playerColor[ $creature->user->id ] ) ) {
-                            $playerColor[ $creature->user->id ] = array_shift( $colors );
-                        }
                         echo $playerColor[ $creature->user->id ];
                     ?> creature" style="left: <?php
                         echo $creature->locationx * 20;
