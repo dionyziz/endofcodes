@@ -96,7 +96,13 @@
         protected function loadConfig() {
             global $config;
 
-            $config = getConfig( $this->environment );
+            if ( !empty( getEnv( 'ENVIROMENT' ) ) ) {
+                $env = getEnv( 'ENVIROMENT' );
+            }
+            else {
+                $env = $this->environment;
+            }
+            $config = getConfig( $env );
         }
         protected function init() {
             $this->loadConfig();

@@ -10,14 +10,10 @@
         }
         return $config;
     }
-    function getConfig( $env, $migration = false ) {
-        $pref = '';
-        if ( $migration !== false ) {
-            $pref = '../../';
-        }
-        $config = require $pref . 'config/config.php';
-        if ( file_exists( $pref . 'config/config-local.php' ) ) {
-            $configLocal = require $pref . 'config/config-local.php';
+    function getConfig( $env ) {
+        $config = require 'config/config.php';
+        if ( file_exists( 'config/config-local.php' ) ) {
+            $configLocal = require 'config/config-local.php';
             $config = mergeKeys( $config, $configLocal );
         }
         $config = $config[ $env ];
