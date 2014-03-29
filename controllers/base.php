@@ -62,7 +62,7 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 return;
             }
-            $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
+            $cookiename = $config[ 'persistentCookie' ][ 'name' ];
             if ( isset( $_COOKIE[ $cookiename ] ) ) {
                 require_once 'models/user.php';
                 try {
