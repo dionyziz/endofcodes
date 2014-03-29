@@ -16,6 +16,7 @@
     foreach ( $game->users as $user ) {
         $playerColor[ $user->id ] = array_shift( $colors );
     }
+    $hasCreatures = [];
     foreach ( $round->creatures as $creature ) {
         if ( $creature->alive ) {
             if ( !isset( $hasCreatures[ $creature->user->id ] ) ) {
