@@ -23,87 +23,87 @@
 <?php
     $form = new Form( 'user', 'create' );
     $form->id = 'register-form';
-    $form->output( function( $self ) use( $username_empty, $username_invalid, $password_empty,
-            $email_empty, $username_used, $password_small,
-            $password_not_matched, $email_used, $email_invalid, $countries, $location ) {
+    $form->output( function( $self ) use( $usernameEmpty, $usernameInvalid, $passwordEmpty,
+            $emailEmpty, $usernameUsed, $passwordSmall,
+            $passwordNotMatched, $emailUsed, $emailInvalid, $countries, $location ) {
         global $config;
 
-        if ( isset( $username_empty ) ) {
+        if ( isset( $usernameEmpty ) ) {
             $self->createError( 'Please type a username.' );
         }
-        if ( isset( $username_invalid ) ) {
+        if ( isset( $usernameInvalid ) ) {
             $self->createError( 'Usernames can only have numbers, letters, "." and "_"' );
         }
-        if ( isset( $password_empty ) ) {
+        if ( isset( $passwordEmpty ) ) {
             $self->createError( 'Please type a password.' );
         }
-        if ( isset( $email_empty ) ) {
+        if ( isset( $emailEmpty ) ) {
             $self->createError( 'Please type an email.' );
         }
         $self->createLabel( 'username', 'Username' );
-        if ( isset( $username_used ) ) {
+        if ( isset( $usernameUsed ) ) {
             $self->createError( 'Username already exists' );
-            $username_value = "";
+            $usernameValue = "";
         }
-        else if ( isset( $_SESSION[ 'create_post' ][ 'username' ] ) ) {
-            $username_value = $_SESSION[ 'create_post' ][ 'username' ];
-            unset( $_SESSION[ 'create_post' ][ 'username' ] );
+        else if ( isset( $_SESSION[ 'createPost' ][ 'username' ] ) ) {
+            $usernameValue = $_SESSION[ 'createPost' ][ 'username' ];
+            unset( $_SESSION[ 'createPost' ][ 'username' ] );
         }
         else {
-            $username_value = "";
+            $usernameValue = "";
         }
-        $self->createInput( 'text', 'username', 'username', $username_value );
+        $self->createInput( 'text', 'username', 'username', $usernameValue );
         $self->createLabel( 'password', 'Password' );
-        if ( isset( $password_small ) ) {
+        if ( isset( $passwordSmall ) ) {
             $self->createError( 'Password should be at least 7 characters long' );
         }
-        if ( isset( $password_not_matched ) ) {
+        if ( isset( $passwordNotMatched ) ) {
             $self->createError( 'Passwords do not match' );
         }
         $self->createInput( 'password', 'password', 'password' );
-        $self->createLabel( 'password_repeat', 'Repeat' );
-        $self->createInput( 'password', 'password_repeat', 'password_repeat' );
+        $self->createLabel( 'passwordRepeat', 'Repeat' );
+        $self->createInput( 'password', 'PasswordRepeat', 'passwordRepeat' );
         $self->createLabel( 'email', 'Email' );
-        if ( isset( $email_invalid ) ) {
+        if ( isset( $emailInvalid ) ) {
             $self->createError( 'This is not a valid email' );
         }
-        if ( isset( $email_used ) ) {
+        if ( isset( $emailUsed ) ) {
             $self->createError( 'Email is already used' );
-            $email_value = "";
+            $emailValue = "";
         }
-        else if ( isset( $_SESSION[ 'create_post' ][ 'email' ] ) ) {
-            $email_value = $_SESSION[ 'create_post' ][ 'email' ];
-            unset( $_SESSION[ 'create_post' ][ 'email' ] );
+        else if ( isset( $_SESSION[ 'createPost' ][ 'email' ] ) ) {
+            $emailValue = $_SESSION[ 'createPost' ][ 'email' ];
+            unset( $_SESSION[ 'createPost' ][ 'email' ] );
         }
         else {
-            $email_value = "";
+            $emailValue = "";
         }
-        $self->createInput( 'text', 'email', 'email', $email_value );
+        $self->createInput( 'text', 'email', 'email', $emailValue );
         $self->createLabel( 'dob', 'Date of birth' );
-        $days_select_array = [ [ 'content' => 'Select Day' ] ];
+        $daysSelectArray = [ [ 'content' => 'Select Day' ] ];
         for ( $i = 1; $i <= 31; ++$i ) {
-            $days_select_array[] = [ 'value' => $i, 'content' => $i ];
+            $daysSelectArray[] = [ 'value' => $i, 'content' => $i ];
         }
-        $self->createSelect( $days_select_array, 'day' );
-        $months_select_array = [ [ 'content' => 'Select Month' ] ];
+        $self->createSelect( $daysSelectArray, 'day' );
+        $monthsSelectArray = [ [ 'content' => 'Select Month' ] ];
         for ( $i = 1; $i <= 12; ++$i ) {
-            $months_select_array[] = [
+            $monthsSelectArray[] = [
                 'value' => $i,
                 'content' => date( 'M', mktime( 0, 0, 0, $i, 1, 2000 ) )
             ];
         }
-        $self->createSelect( $months_select_array, 'month' );
-        $years_select_array = [ [ 'content' => 'Select Year' ] ];
-        $current_year = date( 'Y' );
-        for ( $i = $current_year - $config[ 'age' ][ 'min' ]; $i >= $current_year - $config[ 'age' ][ 'max' ]; --$i ) {
-            $years_select_array[] = [ 'value' => $i, 'content' => $i ];
+        $self->createSelect( $monthsSelectArray, 'month' );
+        $yearsSelectArray = [ [ 'content' => 'Select Year' ] ];
+        $currentYear = date( 'Y' );
+        for ( $i = $currentYear - $config[ 'age' ][ 'min' ]; $i >= $currentYear - $config[ 'age' ][ 'max' ]; --$i ) {
+            $yearsSelectArray[] = [ 'value' => $i, 'content' => $i ];
         }
-        $self->createSelect( $years_select_array, 'year' );
-        $countries_select_array = [ [ 'content' => 'Select Country' ] ];
+        $self->createSelect( $yearsSelectArray, 'year' );
+        $countriesSelectArray = [ [ 'content' => 'Select Country' ] ];
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
+            $countriesSelectArray[] = [ 'value' => $key + 1, 'content' => $country->name ];
         }
-        $self->createSelect( $countries_select_array, 'countryid', $location );
+        $self->createSelect( $countriesSelectArray, 'countryid', $location );
         $self->createInput( 'submit', '', '', 'Register' );
     } );
 
