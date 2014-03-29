@@ -25,7 +25,7 @@
                 $this->id = $id;
                 $this->name = $image_info[ 'name' ];
                 $this->ext = Extention::get( $this->name );
-                $this->target_path = $config[ 'paths' ][ 'avatar_path' ] . $id . '.' . $this->ext;
+                $this->target_path = $config[ 'paths' ][ 'avatarPath' ] . $id . '.' . $this->ext;
             }
         }
 
@@ -34,24 +34,24 @@
             $this->userid = $this->user->id;
             $this->name = basename( $this->name );
             if ( !Extention::valid( $this->ext ) ) {
-                throw new ModelValidationException( 'image_invalid' );
+                throw new ModelValidationException( 'imageInvalid' );
             }
         }
 
         protected function onCreate() {
             global $config;
 
-            $target_path = $config[ 'paths' ][ 'avatar_path' ];
+            $targetPath = $config[ 'paths' ][ 'avatarPath' ];
             $ext = $this->ext;
             $name = $this->id . "." . $ext;
-            $this->target_path = $target_path . $name;
+            $this->target_path = $targetPath . $name;
             $this->upload();
         }
 
         public function upload() {
-            $tmp_name = $this->tmp_name;
-            $target_path = $this->target_path;
-            return move_uploaded_file( $tmp_name, $target_path );
+            $tmpName = $this->tmp_name;
+            $targetPath = $this->target_path;
+            return move_uploaded_file( $tmpName, $targetPath );
         }
     }
 ?>

@@ -82,9 +82,9 @@
             }
             catch ( CurlException $e ) {
                 $errorMap = [
-                    CURLE_COULDNT_RESOLVE_HOST => 'initiate_could_not_resolve',
-                    CURLE_COULDNT_CONNECT => 'initiate_could_not_connect',
-                    CURLE_URL_MALFORMAT => 'initiate_malformed_url'
+                    CURLE_COULDNT_RESOLVE_HOST => 'initiateCouldNotResolve',
+                    CURLE_COULDNT_CONNECT => 'initiateCouldNotConnect',
+                    CURLE_URL_MALFORMAT => 'initiateMalformedUrl'
                 ];
                 if ( isset( $errorMap[ $e->error ] ) ) {
                     $this->reportError( $errorMap[ $e->error ] );
@@ -93,24 +93,24 @@
             }
 
             if ( $ch->responseCode !== 200 ) {
-                $this->reportError( 'initiate_http_code_not_ok', '200', $ch->responseCode );
+                $this->reportError( 'initiateHttpCodeNotOk', '200', $ch->responseCode );
             }
 
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->reportError( 'initiate_invalid_json' );
+                $this->reportError( 'initiateInvalidJson' );
             }
             $requiredAttributes = [ 'botname', 'version', 'username' ];
             foreach ( $requiredAttributes as $attribute ) {
                 if ( !isset( $decodedResponse->$attribute ) ) {
-                    $this->reportError( 'initiate_' . $attribute . '_not_set' );
+                    $this->reportError( 'initiate' . $attribute . 'NotSet' );
                 }
             }
             if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
-                $this->reportError( 'initiate_additional_data' );
+                $this->reportError( 'initiateAdditionalData' );
             }
             if ( $this->user->username !== $decodedResponse->username ) {
-                $this->reportError( 'initiate_username_mismatch' );
+                $this->reportError( 'initiateUsernameMismatch' );
             }
             $this->version = $decodedResponse->version;
             $this->botname = $decodedResponse->botname;
@@ -124,10 +124,10 @@
             }
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->reportError( 'game_invalid_json' );
+                $this->reportError( 'gameInvalidJson' );
             }
             if ( count( ( array )$decodedResponse ) ) {
-                $this->reportError( 'game_additional_data' );
+                $this->reportError( 'gameAdditionalData' );
             }
         }
         public function sendRoundRequest( Round $round ) {
@@ -140,22 +140,22 @@
             }
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->reportError( 'round_invalid_json', '', $ch->response );
+                $this->reportError( 'roundInvalidJson', '', $ch->response );
             }
             if ( !isset( $decodedResponse->intent ) ) {
-                $this->reportError( 'round_intent_not_set' );
+                $this->reportError( 'roundIntentNotSet' );
             }
             if ( count( ( array )$decodedResponse ) > 1 ) {
-                $this->reportError( 'round_additional_data' );
+                $this->reportError( 'roundAdditionalData' );
             }
             $requiredAttributes = [ 'creatureid', 'direction', 'action' ];
             foreach ( $decodedResponse->intent as $creatureIntent ) {
                 foreach ( $requiredAttributes as $attribute ) {
                     if ( !is_object( $creatureIntent ) ) {
-                        $this->reportError( 'round_response_not_object' );
+                        $this->reportError( 'roundResponseNotObject' );
                     }
                     if ( !isset( $creatureIntent->$attribute ) ) {
-                        $this->reportError( 'round_' . $attribute . '_not_set' );
+                        $this->reportError( 'round' . $attribute . 'NotSet' );
                     }
                 }
             }
@@ -163,13 +163,13 @@
             $round = $this->game->getCurrentRound();
             foreach ( $decodedResponse->intent as $creatureIntentData ) {
                 if ( count( ( array )$creatureIntentData ) > count( $requiredAttributes ) ) {
-                    $this->reportError( 'round_intent_additional_data' );
+                    $this->reportError( 'roundIntentAdditionalData' );
                 }
                 if ( !isset( $round->creatures[ $creatureIntentData->creatureid ] ) ) {
-                    $this->reportError( 'round_invalid_creatureid' );
+                    $this->reportError( 'roundInvalidCreatureid' );
                 }
                 if ( $round->creatures[ $creatureIntentData->creatureid ]->user->id !== $this->user->id ) {
-                    $this->reportError( 'round_intent_not_own_creature' );
+                    $this->reportError( 'roundIntentNotOwnCreature' );
                 }
                 $creature = new Creature();
                 $creature->id = $creatureIntentData->creatureid;
@@ -177,13 +177,13 @@
                     $action = actionStringToConst( $creatureIntentData->action );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    $this->reportError( 'round_action_invalid' );
+                    $this->reportError( 'roundActionInvalid' );
                 }
                 try {
                     $direction = directionStringToConst( $creatureIntentData->direction );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    $this->reportError( 'round_direction_invalid' );
+                    $this->reportError( 'roundDirectionInvalid' );
                 }
                 $creature->intent = new Intent( $action, $direction );
                 $collection[] = $creature;
