@@ -42,8 +42,8 @@
             $country = new Country( $testId );
             $this->assertTrue( is_object( $country ), 'new Country() must return an object' );
             $this->assertEquals( $testId, $country->id, 'new Country() must return the appropriate country' );
-            $this->assertEquals( $shortname, $country->shortname, ''new Country()' must return the appropriate shortname' );
-            $this->assertEquals( $countries[ $shortname ], $country->name, ''new Country()' must return the appropriate name' );
+            $this->assertEquals( $shortname, $country->shortname, 'new Country() must return the appropriate shortname' );
+            $this->assertEquals( $countries[ $shortname ], $country->name, 'new Country() must return the appropriate name' );
         }
         public function testFindByiShortname() {
             $this->insertCountries();
