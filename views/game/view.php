@@ -10,6 +10,44 @@
     ?></strong>
 </div>
 
+<?php
+    $colors = [ 'red', 'blue', 'green', 'yellow', 'purple', 'cyan', 'black', 'pink' ];
+    $playerColor = [];
+    foreach ( $game->users as $user ) {
+        $playerColor[ $user->id ] = array_shift( $colors );
+    }
+    foreach ( $round->creatures as $creature ) {
+        if ( $creature->alive ) {
+            if ( !isset( $hasCreatures[ $creature->user->id ] ) ) {
+                $hasCreatures[ $creature->user->id ] = true;
+            }
+        }
+    }
+?>
+
+<aside>
+    <ol><?php
+        foreach ( $game->users as $user ) {
+            ?><li<?php
+                if ( isset( $currentUser ) && $user->id == $currentUser->id ) {
+                    ?> class='you'<?php
+                }
+            ?>><span class='<?php
+                echo $playerColor[ $user->id ];
+            ?> bubble'></span> <?php
+                if ( !isset( $hasCreatures[ $user->id ] ) ) {
+                    ?><del><?php
+                        echo $user->username;
+                    ?></del><?php
+                }
+                else {
+                    echo $user->username;
+                }
+            ?></li><?php
+        }
+    ?></ol>
+</aside>
+
 <div class='game' style="width:<?php
     echo $game->width * 20;
 ?>px; height:<?php
@@ -17,13 +55,6 @@
 ?>px;">
     <div class='gameboard'>
         <?php
-            $colors = [ 'red', 'blue', 'green', 'yellow', 'purple', 'cyan', 'black', 'pink' ];
-            $playerColor = [];
-            foreach ( $genesis->creatures as $creature ) {
-                if ( !isset( $playerColor[ $creature->user->id ] ) ) {
-                    $playerColor[ $creature->user->id ] = array_shift( $colors );
-                }
-            }
             foreach ( $round->creatures as $creature ) {
                 if ( $creature->alive ) {
                     ?><div class="<?php
@@ -38,6 +69,7 @@
         ?>
     </div>
 </div>
+
 <div class='time'>
     <span class='round'>Round <?php
         echo $round->id;

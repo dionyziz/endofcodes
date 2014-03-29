@@ -111,3 +111,34 @@ div.gameboard {
     top: 5px;
     font-size: 90%;
 }
+aside {
+    float: right;
+    width: 210px;
+}
+aside ol {
+    border-top: 1px solid #eee;
+}
+.bubble {
+    border-radius: 50px;
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 3px 0px rgba( 0, 0, 0, 0.5 );
+}
+aside ol span {
+    background-color: yellow;
+    display: block;
+    float: left;
+    margin-right: 5px;
+}
+aside ol li {
+    border-bottom: 1px solid #eee;
+    padding: 5px 3px 5px 8px;
+    font-size: 90%;
+    line-height: 19px;
+}
+aside ol li del {
+    color: #999;
+}
+aside ol li.you {
+    background-color: #ffffca;
+}
