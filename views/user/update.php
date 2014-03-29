@@ -40,7 +40,7 @@
         foreach ( $countries as $key => $country ) {
             $countries_select_array[ $country->shortname ] = $country->name;
         }
-        $self->createSelect( $countries_select_array, 'countryid' );
+        $self->createSelect( $countries_select_array, 'countryShortname' );
         $self->createSubmit( 'Save settings' );
     } );
 

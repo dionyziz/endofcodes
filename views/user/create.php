@@ -97,7 +97,7 @@
         foreach ( $countries as $key => $country ) {
             $countriesSelectArray[ $country->shortname ] = $country->name;
         }
-        $self->createSelect( $countriesSelectArray, 'countryid', $location );
+        $self->createSelect( $countriesSelectArray, 'countryShortname', $location );
         $self->createInput( 'submit', '', '', 'Register' );
     } );
 

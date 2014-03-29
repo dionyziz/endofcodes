@@ -5,6 +5,17 @@
         public $shortname;
         protected static $tableName = 'countries';
 
+        public static function findByShortname( $shortname ) {
+            try {
+                $country = dbSelectOne( 'countries', [ 'id' ], compact( 'shortname' ) );
+            }
+            catch ( DBExceptionWrongCount $e ) {
+                throw new ModelNotFoundException();
+            }
+
+            return new Country( $country[ 'id' ] ); 
+        }
+
         public function __construct( $id = false ) {
             global $config;
 
