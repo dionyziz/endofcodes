@@ -5,21 +5,21 @@
 <div class="text-center"><?php
     $form = new Form( 'session', 'create' );
     $form->id = 'login-form';
-    $form->output( function( $self ) use ( $username_empty, $password_empty,
-            $username_wrong, $password_wrong ) {
-        if ( isset( $username_empty ) ) {
+    $form->output( function( $self ) use ( $usernameEmpty, $passwordEmpty,
+            $usernameWrong, $passwordWrong ) {
+        if ( isset( $usernameEmpty ) ) {
             $self->createError( "Please type a username." );
         }
-        if ( isset( $password_empty ) ) {
+        if ( isset( $passwordEmpty ) ) {
             $self->createError( "Please type a password." );
         }
         $self->createLabel( 'username', 'Username' );
-        if ( isset( $username_wrong ) ) {
+        if ( isset( $usernameWrong ) ) {
             $self->createError( "Username doesn't exist." );
         }
         $self->createInput( 'text', 'username', 'username' );
         $self->createLabel( 'password', 'Password' );
-        if ( isset( $password_wrong ) ) {
+        if ( isset( $passwordWrong ) ) {
             $self->createError( "Password is incorrect." );
         }
         $self->createInput( 'password', 'password', 'password' );
