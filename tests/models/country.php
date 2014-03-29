@@ -30,7 +30,7 @@
         public function testFindAll() {
             $this->insertCountries();
             $countriesArray = Country::findAll();
-            $this->assertTrue( is_array( $countriesArray ), 'Country::findAll() did not return an array of countries' );
+            $this->assertTrue( is_array( $countriesArray ), 'Country::findAll() must return an array of countries' );
             $this->assertEquals( 3, count( $countriesArray ), 'Country::findAll() did not return as many countries as it should' );
         } 
         public function testCountryConstruct() {
@@ -40,10 +40,18 @@
             $shortname = $shortnames[ 0 ];
             $this->insertCountries();
             $country = new Country( $testId );
-            $this->assertTrue( is_object( $country ), "'new Country()' did not return an object" );
-            $this->assertEquals( $testId, $country->id, "'new Country()' did not return the appropriate country" );
-            $this->assertEquals( $shortname, $country->shortname, "'new Country()' did not return the appropriate shortname" );
-            $this->assertEquals( $countries[ $shortname ], $country->name, "'new Country()' did not return the appropriate name" );
+            $this->assertTrue( is_object( $country ), 'new Country() must return an object' );
+            $this->assertEquals( $testId, $country->id, 'new Country() must return the appropriate country' );
+            $this->assertEquals( $shortname, $country->shortname, ''new Country()' must return the appropriate shortname' );
+            $this->assertEquals( $countries[ $shortname ], $country->name, ''new Country()' must return the appropriate name' );
+        }
+        public function testFindByiShortname() {
+            $this->insertCountries();
+            $country = Country::findByShortname( 'GR' );
+            $this->assertTrue( is_object( $country ), 'findByShortname must return an object' );
+            $this->assertSame( 1, $country->id, 'findByShortname must find the correct country' );
+            $this->assertEquals( 'GR', $country->shortname, 'findByShortname must return the appropriate shortname' );
+            $this->assertEquals( 'Greece', $country->name, 'findByShortname must return the appropriate name' );
         }
     }
 
