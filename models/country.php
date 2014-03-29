@@ -18,7 +18,7 @@
                 $this->name = $row[ 'name' ];
                 $this->id = $id;
                 $this->shortname = $row[ 'shortname' ];
-                $this->flag = $config[ 'paths' ][ 'flag_path' ] . strtolower( $this->shortname ) . '.' . $config[ 'files' ][ 'flag_extention' ];
+                $this->flag = $config[ 'paths' ][ 'flagPath' ] . strtolower( $this->shortname ) . '.' . $config[ 'files' ][ 'flagExtention' ];
             }
         }
     }

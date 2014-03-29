@@ -103,7 +103,7 @@
             $requiredAttributes = [ 'botname', 'version', 'username' ];
             foreach ( $requiredAttributes as $attribute ) {
                 if ( !isset( $decodedResponse->$attribute ) ) {
-                    $this->reportError( 'initiate' . $attribute . 'NotSet' );
+                    $this->reportError( 'initiate' . ucfirst( $attribute ) . 'NotSet' );
                 }
             }
             if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
@@ -155,7 +155,7 @@
                         $this->reportError( 'roundResponseNotObject' );
                     }
                     if ( !isset( $creatureIntent->$attribute ) ) {
-                        $this->reportError( 'round' . $attribute . 'NotSet' );
+                        $this->reportError( 'round' . ucfirst( $attribute ) . 'NotSet' );
                     }
                 }
             }
