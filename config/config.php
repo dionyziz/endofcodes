@@ -12,7 +12,7 @@
                 'flagExtention' => 'png'
             ],
             'paths' => [
-                'avatar_path' => 'avatars/',
+                'avatarPath' => 'avatars/',
                 'flagPath' => 'static/images/flags/'
             ],
             'passMinLen' => 7,
