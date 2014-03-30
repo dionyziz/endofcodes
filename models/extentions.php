@@ -13,7 +13,7 @@
 
         public static function getValid() {
             global $config;
-            return $config[ 'files' ][ 'avatar_extentions' ];
+            return $config[ 'files' ][ 'avatarExtentions' ];
         }
 
         public static function valid( $ext ) {

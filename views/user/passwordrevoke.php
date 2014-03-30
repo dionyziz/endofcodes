@@ -4,14 +4,14 @@
 
 <div><?php 
     $form = new Form( 'forgotpasswordrequest', 'create' );  
-    $form->output( function( $self ) use ( $input_empty, $username_not_exists, $email_not_exists ) {
-        if ( $input_empty ) {
+    $form->output( function( $self ) use ( $inputEmpty, $usernameNotExists, $emailNotExists ) {
+        if ( $inputEmpty ) {
             $self->createError( "Please enter your username or email" );
         }
-        if ( $email_not_exists ) {
+        if ( $emailNotExists ) {
             $self->createError( "This email doesn't exist" );
         }
-        if ( $username_not_exists ) {
+        if ( $usernameNotExists ) {
             $self->createError( "This username doesn't exist" );
         }
         $self->createLabel( 'username', 'Please enter your username or email' );

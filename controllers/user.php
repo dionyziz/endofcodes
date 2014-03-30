@@ -1,10 +1,10 @@
 <?php
     class UserController extends ControllerBase {
-        public function create( $username = '', $password = '', $password_repeat = '', $email = '',
+        public function create( $username = '', $password = '', $passwordRepeat = '', $email = '',
                                 $countryid = '', $day = '', $month = '', $year = '' ) {
             require_once 'models/country.php';
-            if ( $password !== $password_repeat ) {
-                go( 'user', 'create', [ 'password_not_matched' => true ] );
+            if ( $password !== $passwordRepeat ) {
+                go( 'user', 'create', [ 'passwordNotMatched' => true ] );
             }
             try {
                 $country = new Country( $countryid );
@@ -12,7 +12,7 @@
             catch ( ModelNotFoundException $e ) {
                 $country = new Country();
             }
-            $_SESSION[ 'create_post' ] = compact( 'username', 'email' );
+            $_SESSION[ 'createPost' ] = compact( 'username', 'email' );
             $user = new User();
             $user->username = $username;
             $user->password = $password;
@@ -55,22 +55,22 @@
             require_once 'views/user/view.php';
         }
 
-        public function update( $password = '', $password_new = '', $password_repeat = '',
+        public function update( $password = '', $passwordNew = '', $passwordRepeat = '',
                                 $countryid = '', $email = '' ) {
             require_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
             }
             $user = $_SESSION[ 'user' ];
-            if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
+            if ( !empty( $passwordNew ) || !empty( $passwordRepeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
-                    if ( $password_new !== $password_repeat ) {
-                        go( 'user', 'update', [ 'password_new_not_matched' => true ] );
+                    if ( $passwordNew !== $passwordRepeat ) {
+                        go( 'user', 'update', [ 'passwordNewNotMatched' => true ] );
                     }
-                    $user->password = $password_new;
+                    $user->password = $passwordNew;
                 }
                 else {
-                    go( 'user', 'update', [ 'password_wrong' => true ] );
+                    go( 'user', 'update', [ 'passwordWrong' => true ] );
                 }
             }
             $user->email = $email;
@@ -98,8 +98,8 @@
             go();
         }
 
-        public function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid,
-                                    $password_empty, $password_not_matched, $password_small ) {
+        public function createView( $usernameEmpty, $usernameInvalid, $usernameUsed, $emailEmpty, $emailUsed, $emailInvalid,
+                                    $passwordEmpty, $passwordNotMatched, $passwordSmall ) {
             require_once 'models/geolocation.php';
             require_once 'models/country.php';
             $countries = Country::findAll();
@@ -112,8 +112,8 @@
             require 'views/user/create.php';
         }
 
-        public function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong,
-                                    $email_invalid, $email_used ) {
+        public function updateView( $imageInvalid, $passwordNewSmall, $passwordNewNotMatched, $passwordWrong,
+                                    $emailInvalid, $emailUsed ) {
             require_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();

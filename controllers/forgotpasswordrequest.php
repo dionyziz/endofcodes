@@ -2,14 +2,14 @@
     class ForgotPasswordRequestController extends ControllerBase {
         public function create( $input ) {
             if ( empty( $input ) ) {
-                go( 'forgotpasswordrequest', 'create', [ 'input_empty' => true ] );
+                go( 'forgotpasswordrequest', 'create', [ 'inputEmpty' => true ] );
             }
             if ( filter_var( $input, FILTER_VALIDATE_EMAIL ) ) {
                 try {
                     $user = User::findByEmail( $input );
                 }    
                 catch ( ModelNotFoundException $e ) {
-                    go( 'forgotpasswordrequest', 'create', [ 'email_not_exists' => true ] );
+                    go( 'forgotpasswordrequest', 'create', [ 'emailNotExists' => true ] );
                 }
             } 
             else {
@@ -17,15 +17,15 @@
                     $user = User::findByUsername( $input );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    go( 'forgotpasswordrequest', 'create', [ 'username_not_exists' => true ] );
+                    go( 'forgotpasswordrequest', 'create', [ 'usernameNotExists' => true ] );
                 }
             }
             $user->createForgotPasswordLink();
             include 'views/user/forgot/link.php'; 
         }
-        public function update( $password, $password_repeat, $password_token ) {
-            if ( $password !== $password_repeat ) {
-                go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true, 'password_token' => $password_token ] );
+        public function update( $password, $passwordRepeat, $passwordToken ) {
+            if ( $password !== $passwordRepeat ) {
+                go( 'forgotpasswordrequest', 'update', [ 'passwordNotMatched' => true, 'passwordToken' => $passwordToken ] );
             }
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $user = $_SESSION[ 'user' ];
@@ -34,7 +34,7 @@
                 throw new HTTPUnauthorizedException();
             }
             try {
-                $user->revokePasswordCheck( $password_token );
+                $user->revokePasswordCheck( $passwordToken );
             }
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
                 throw new HTTPUnauthorizedException();
@@ -43,18 +43,18 @@
                 $user::passwordValidate( $password );
             }
             catch ( ModelValidationException $e ) {
-                go( 'forgotpasswordrequest', 'update', [ $e->error => true, 'password_token' => $password_token ] );
+                go( 'forgotpasswordrequest', 'update', [ $e->error => true, 'passwordToken' => $passwordToken ] );
             }
             $user->password = $password;
             $user->forgotpasswordtoken = $user->forgotpasswordrequestCreated = null;
             $user->save();
             go();
         } 
-        public function createView( $input_empty, $username_not_exists, $email_not_exists ) {
+        public function createView( $inputEmpty, $usernameNotExists, $emailNotExists ) {
             include 'views/user/passwordrevoke.php';
         }
-        public function updateView( $username, $password_empty, $password_invalid, $password_not_matched, $password_token ) {            
-            if ( !empty( $password_empty ) && !empty( $password_not_matched ) && !empty( $password_invalid ) ) {
+        public function updateView( $username, $passwordEmpty, $passwordInvalid, $passwordNotMatched, $passwordToken ) {            
+            if ( !empty( $passwordEmpty ) && !empty( $passwordNotMatched ) && !empty( $passwordInvalid ) ) {
                 include 'views/user/forgot/reset.php'; 
                 return;
             }
@@ -66,7 +66,7 @@
                     throw new HTTPNotFoundException();
                 }
                 try {
-                    $user->revokePasswordCheck( $password_token );
+                    $user->revokePasswordCheck( $passwordToken );
                     $_SESSION[ 'user' ] = $user;
                 }
                 catch ( ForgotPasswordModelInvalidTokenException $e ) {
@@ -77,10 +77,10 @@
                 $user = $_SESSION[ 'user' ];
             }
             try {
-                $user->revokePasswordCheck( $password_token ); 
+                $user->revokePasswordCheck( $passwordToken ); 
             }
             catch ( ModelValidationException $e ) {
-                if ( $e->error == 'link_expired' )  {
+                if ( $e->error == 'linkExpired' )  {
                     include 'views/user/forgot/expired.php';
                 }
             }

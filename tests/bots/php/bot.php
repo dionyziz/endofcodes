@@ -20,8 +20,8 @@
             $this->assertTrue( is_object( $response ), 'The game request response must be an object' );
             $this->assertEquals( 3, count( get_object_vars( $response ) ), 'The bot request response must be an object with 3 attributes' );
 
-            $this->assertEquals( 'sample_botname', $response->botname, 'The bot request response must have the correct botname' );
-            $this->assertEquals( 'sample_username', $response->username, 'The bot request response must have the correct username' );
+            $this->assertEquals( 'sampleBotname', $response->botname, 'The bot request response must have the correct botname' );
+            $this->assertEquals( 'sampleUsername', $response->username, 'The bot request response must have the correct username' );
             $this->assertEquals( '0.1.0', $response->version, 'The bot request response must have the correct version' );
         }
         protected function roundRequestAndGetResponse( $postFields ) {

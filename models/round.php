@@ -37,20 +37,20 @@
                 $this->game = $game;
                 $gameid = $game->id;
                 $roundid = $id;
-                $creatures_info = dbSelect(
+                $creaturesInfo = dbSelect(
                     'roundcreatures',
                     [ 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ],
                     compact( 'roundid', 'gameid' )
                 );
-                foreach ( $creatures_info as $i => $creature_info ) {
-                    $id = $creature_info[ 'creatureid' ];
-                    $user_info = dbSelectOne(
+                foreach ( $creaturesInfo as $i => $creatureInfo ) {
+                    $id = $creatureInfo[ 'creatureid' ];
+                    $userInfo = dbSelectOne(
                         'creatures',
                         [ 'userid' ],
                         compact( 'id', 'gameid' )
                     );
-                    $user = new User( $user_info[ 'userid' ] );
-                    $creature = new Creature( $creature_info );
+                    $user = new User( $userInfo[ 'userid' ] );
+                    $creature = new Creature( $creatureInfo );
                     $creature->game = $game;
                     $creature->round = $this;
                     $creature->user = $user;

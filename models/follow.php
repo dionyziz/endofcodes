@@ -26,10 +26,10 @@
 
         protected function onBeforeSave() {
             if ( !is_int( $this->follower->id ) ) {
-                throw new ModelValidationException( 'followerid_not_valid' );
+                throw new ModelValidationException( 'followeridNotValid' );
             }
             if ( !is_int( $this->followed->id ) ) {
-                throw new ModelValidationException( 'followedid_not_valid' );
+                throw new ModelValidationException( 'followedidNotValid' );
             }
         }
 

@@ -32,15 +32,15 @@
             if ( $id !== false ) {
                 $this->exists = true;
                 try {
-                    $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
+                    $gameInfo = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
                 }
                 catch ( DBException $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->id = $gameid = $id;
-                $this->created = $game_info[ 'created' ];
-                $this->width = $game_info[ 'width' ];
-                $this->height = $game_info[ 'height' ];
+                $this->created = $gameInfo[ 'created' ];
+                $this->width = $gameInfo[ 'width' ];
+                $this->height = $gameInfo[ 'height' ];
                 $data = dbSelectOne( 'roundcreatures', [ 'COUNT(DISTINCT roundid) AS countrounds' ], compact( 'gameid' ) );
                 $countrounds = $data[ 'countrounds' ];
                 if ( $countrounds > 0 ) {

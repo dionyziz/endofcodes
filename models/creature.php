@@ -44,15 +44,15 @@
 
         public function __construct( $a = false, $b = false, $c = false ) {
             if ( is_array( $a ) ) {
-                $creature_info = $a;
+                $creatureInfo = $a;
                 $this->exists = true;
-                $this->id = $creature_info[ 'creatureid' ];
-                $this->locationx = $creature_info[ 'locationx' ];
-                $this->locationy = $creature_info[ 'locationy' ];
-                $this->hp = $creature_info[ 'hp' ];
+                $this->id = $creatureInfo[ 'creatureid' ];
+                $this->locationx = $creatureInfo[ 'locationx' ];
+                $this->locationy = $creatureInfo[ 'locationy' ];
+                $this->hp = $creatureInfo[ 'hp' ];
                 $this->alive = $this->hp > 0;
-                $action = actionStringToConst( $creature_info[ 'action' ] );
-                $direction = directionStringToConst( $creature_info[ 'direction' ] );
+                $action = actionStringToConst( $creatureInfo[ 'action' ] );
+                $direction = directionStringToConst( $creatureInfo[ 'direction' ] );
                 $this->intent = new Intent( $action, $direction );
                 $this->intent->creature = $this;
             }
@@ -61,7 +61,7 @@
                 $userid = $b;
                 $gameid = $c;
                 try {
-                    $creature_info = dbSelectOne( 'creatures', [ 'id' ], compact( 'id', 'userid', 'gameid' ) );
+                    $creatureInfo = dbSelectOne( 'creatures', [ 'id' ], compact( 'id', 'userid', 'gameid' ) );
                     $this->id = $a;
                     $this->user = new User( $userid );
                     $this->game = new Game( $gameid );

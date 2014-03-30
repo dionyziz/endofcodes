@@ -51,10 +51,10 @@
             global $config;
 
             if ( empty( $password ) ) {
-                throw new ModelValidationException( 'password_empty' );
+                throw new ModelValidationException( 'passwordEmpty' );
             }
-            if ( strlen( $password ) < $config[ 'pass_min_len' ] ) {
-                throw new ModelValidationException( 'password_invalid' );
+            if ( strlen( $password ) < $config[ 'passMinLen' ] ) {
+                throw new ModelValidationException( 'passwordInvalid' );
             }
         }
 
@@ -62,21 +62,21 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'imageid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
+                    $userInfo = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'imageid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
                 }
                 catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->winCount = 0;
-                $this->boturl = $user_info[ 'boturl' ];
-                $this->username = $user_info[ 'username' ];
-                $this->email = $user_info[ 'email' ];
-                $this->country = new Country( $user_info[ 'countryid' ] );
-                $this->image = new Image( $user_info[ 'imageid' ] );
+                $this->boturl = $userInfo[ 'boturl' ];
+                $this->username = $userInfo[ 'username' ];
+                $this->email = $userInfo[ 'email' ];
+                $this->country = new Country( $userInfo[ 'countryid' ] );
+                $this->image = new Image( $userInfo[ 'imageid' ] );
                 $this->id = $id;
-                $this->dob = $user_info[ 'dob' ];
-                $this->forgotpasswordtoken = $user_info[ 'forgotpasswordtoken' ];
-                $this->forgotpasswordrequestcreated = $user_info[ 'forgotpasswordrequestcreated' ];
+                $this->dob = $userInfo[ 'dob' ];
+                $this->forgotpasswordtoken = $userInfo[ 'forgotpasswordtoken' ];
+                $this->forgotpasswordrequestcreated = $userInfo[ 'forgotpasswordrequestcreated' ];
                 $this->exists = true;
             }
         }
@@ -110,25 +110,25 @@
             global $config;
 
             if ( empty( $this->username ) ) {
-                throw new ModelValidationException( 'username_empty' );
+                throw new ModelValidationException( 'usernameEmpty' );
             }
             if ( preg_match( '#[^a-zA-Z0-9._]#', $this->username ) ) {
-                throw new ModelValidationException( 'username_invalid' );
+                throw new ModelValidationException( 'usernameInvalid' );
             }
             if ( empty( $this->password ) && !$this->exists ) {
-                throw new ModelValidationException( 'password_empty' );
+                throw new ModelValidationException( 'passwordEmpty' );
             }
             if ( !$this->exists && empty( $this->email ) ) {
-                throw new ModelValidationException( 'email_empty' );
+                throw new ModelValidationException( 'emailEmpty' );
             }
-            if ( isset( $this->password ) && strlen( $this->password ) < $config[ 'pass_min_len' ] ) {
+            if ( isset( $this->password ) && strlen( $this->password ) < $config[ 'passMinLen' ] ) {
                 if ( $this->exists ) {
-                    throw new ModelValidationException( 'password_new_small' );
+                    throw new ModelValidationException( 'passwordNewSmall' );
                 }
-                throw new ModelValidationException( 'password_small' );
+                throw new ModelValidationException( 'passwordSmall' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
-                throw new ModelValidationException( 'email_invalid' );
+                throw new ModelValidationException( 'emailInvalid' );
             }
 
             if ( isset( $this->password ) ) {
@@ -174,12 +174,12 @@
         protected function onCreateError( $eDb ) {
             try {
                 User::findByUsername( $this->username );
-                throw new ModelValidationException( 'username_used' );
+                throw new ModelValidationException( 'usernameUsed' );
             }
             catch ( ModelNotFoundException $e ) {
                 try { 
                     User::findByEmail( $this->email ); 
-                    throw new ModelValidationException( 'email_used' );
+                    throw new ModelValidationException( 'emailUsed' );
                 } 
                 catch ( ModelNotFoundException $e ) {
                     throw $eDb;
@@ -188,7 +188,7 @@
         }
 
         protected function onUpdateError( $e ) {
-            throw new ModelValidationException( 'email_used' );
+            throw new ModelValidationException( 'emailUsed' );
         }
 
         protected function generateSessionId() {
@@ -227,7 +227,7 @@
             $this->save();
             $email = $this->email;
             $username = urlencode( $this->username );
-            $link = $config[ 'base' ] . "/forgotpasswordrequest/update?username=$username&password_token=$value";
+            $link = $config[ 'base' ] . "/forgotpasswordrequest/update?username=$username&passwordToken=$value";
             $this->mailFromExternalView( $email, "views/user/forgot/mail.php", 'Password Reset', compact( "username", "link" ) );
         }
         
@@ -257,8 +257,8 @@
             $datetime = strtotime( $this->forgotpasswordrequestcreated );
             $now = time();
             $period = $now - $datetime;
-            if ( $period > $config[ 'forgot_password_exp_time' ] ) {
-                throw new ModelValidationException( 'link_expired' );
+            if ( $period > $config[ 'forgotPasswordExpTime' ] ) {
+                throw new ModelValidationException( 'linkExpired' );
             } 
         }
     }

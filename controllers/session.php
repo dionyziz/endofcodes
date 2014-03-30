@@ -5,26 +5,26 @@
 
             require_once 'models/user.php';
             if ( empty( $username ) ) {
-                go( 'session', 'create', [ 'username_empty' => true ] );
+                go( 'session', 'create', [ 'usernameEmpty' => true ] );
             }
             if ( empty( $password ) ) {
-                go( 'session', 'create', [ 'password_empty' => true ] );
+                go( 'session', 'create', [ 'passwordEmpty' => true ] );
             }
             try {
                 $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
-                go( 'session', 'create', [ 'username_wrong' => true ] );
+                go( 'session', 'create', [ 'usernameWrong' => true ] );
             }
             if ( !$user->authenticatesWithPassword( $password ) ) {
-                go( 'session', 'create', [ 'password_wrong' => true ] );
+                go( 'session', 'create', [ 'passwordWrong' => true ] );
             }
             if ( $persistent ) {
                 $user->renewSessionId();
                 setcookie(
-                    $config[ 'persistent_cookie' ][ 'name' ],
+                    $config[ 'persistentCookie' ][ 'name' ],
                     $user->sessionid,
-                    time() + $config[ 'persistent_cookie' ][ 'duration' ]
+                    time() + $config[ 'persistentCookie' ][ 'duration' ]
                 );
             }
             $_SESSION[ 'user' ] = $user;
@@ -36,14 +36,14 @@
 
             unset( $_SESSION[ 'user' ] );
             setcookie(
-                $config[ 'persistent_cookie' ][ 'name' ],
+                $config[ 'persistentCookie' ][ 'name' ],
                 '',
-                time() - $config[ 'persistent_cookie' ][ 'unset_time' ]
+                time() - $config[ 'persistentCookie' ][ 'unsetTime' ]
             );
             go();
         }
 
-        public function createView( $password_wrong, $username_empty, $password_empty, $username_wrong ) {
+        public function createView( $passwordWrong, $usernameEmpty, $passwordEmpty, $usernameWrong ) {
             require 'views/session/create.php';
         }
     }
