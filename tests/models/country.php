@@ -45,7 +45,7 @@
             $this->assertEquals( $shortname, $country->shortname, 'new Country() must return the appropriate shortname' );
             $this->assertEquals( $countries[ $shortname ], $country->name, 'new Country() must return the appropriate name' );
         }
-        public function testFindByiShortname() {
+        public function testFindByShortname() {
             $this->insertCountries();
             $country = Country::findByShortname( 'GR' );
             $this->assertTrue( is_object( $country ), 'findByShortname must return an object' );
