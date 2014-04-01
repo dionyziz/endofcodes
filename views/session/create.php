@@ -24,21 +24,21 @@
         $self->createInput( 'password', 'password', '', '', [ 'placeholder' => 'Password' ] );
         ?><p id="check"><?php $self->createInput( 'checkbox', 'persistent', '', '', [
             'checked' => true
-        ] );  ?></p>
-        <p>Remember me<a id='forgot' href="#">Forgot Password?</a></p>
+        ] ); ?></p>
+        <p>Remember me<a id='forgot' href="forgotpasswordrequest/create">Forgot password?</a></p>
         <p><?php $self->createSubmit( 'LOGIN' ); ?></p><?php
     } );
     ?><p><span class="round">OR</span></p>
     <p>
-        <a class="google-before rounded"><span class="fontawesome-google-plus"></span></a>
+        <p class="google-before rounded"><span class="fontawesome-google-plus"></span></p>
         <button class="google rounded-left">LOGIN WITH GOOGLE+</button>
     </p>
     <p>
-        <a class="github-before rounded"><span class="fontawesome-github"></span></a>
+        <p class="github-before rounded"><span class="fontawesome-github"></span></p>
         <button class="github rounded-left">LOGIN WITH GITHUB</button>
     </p>
 </div>
-<p class='text-center' id='register'>New to End Of Codes? <a href='user/create'>Create an account</a></p>
+<p class='text-center'>New to End Of Codes? <a href='user/create'>Create an account</a></p>
 
 <?php
     require 'views/footer.php';
