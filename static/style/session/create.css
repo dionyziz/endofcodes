@@ -13,7 +13,6 @@ width: 300px;
 #forgot {
     font-size: 16px;
     float: right;
-    margin-top: 1px;
 }
 #check {
     margin-top: 18px;
@@ -32,7 +31,6 @@ width: 300px;
     color: #f4f4f4;
     height: 43px;
     width: 300px;
-    -webkit-appearance:none;
 }
 #login-form input[type="text"], #login-form input[type="password"] {
     background-color: #e5e5e5;
@@ -46,7 +44,6 @@ width: 300px;
     height: 43px;
     padding: 0px 10px;
     width: 300px;
-    -webkit-appearance:none;
 }
 #login-form input[type="password"] {
     margin-bottom: 5px;

@@ -24,8 +24,8 @@
         $self->createInput( 'password', 'password', '', '', [ 'placeholder' => 'Password' ] );
         ?><p id="check"><?php $self->createInput( 'checkbox', 'persistent', '', '', [
             'checked' => true
-        ] ); ?></p>
-        <p>Remember me<a id='forgot' href="forgotpasswordrequest/create">Forgot password?</a></p>
+        ] ); ?>Remember me
+        <a id='forgot' href="forgotpasswordrequest/create">Forgot password?</a></p>
         <p><?php $self->createSubmit( 'LOGIN' ); ?></p><?php
     } );
     ?><p><span class="round">OR</span></p>
