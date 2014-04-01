@@ -7,7 +7,7 @@
     $form = new Form( 'session', 'create' );
     $form->id = 'login-form';
     $form->output( function( $self ) use ( $username_empty, $password_empty,
-                $username_wrong, $password_wrong ) {
+            $username_wrong, $password_wrong ) {
         if ( isset( $username_empty ) ) {
             $self->createError( "Please type a username." );
         }
