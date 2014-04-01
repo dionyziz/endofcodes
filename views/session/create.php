@@ -2,36 +2,43 @@
     require 'views/header.php';
 ?>
 
-<div class="text-center"><?php
+<div id="login">
+    <h1 class="text-center" id='title'>Please login</h1><?php
     $form = new Form( 'session', 'create' );
     $form->id = 'login-form';
     $form->output( function( $self ) use ( $username_empty, $password_empty,
-            $username_wrong, $password_wrong ) {
+                $username_wrong, $password_wrong ) {
         if ( isset( $username_empty ) ) {
             $self->createError( "Please type a username." );
         }
         if ( isset( $password_empty ) ) {
             $self->createError( "Please type a password." );
         }
-        $self->createLabel( 'username', 'Username' );
         if ( isset( $username_wrong ) ) {
             $self->createError( "Username doesn't exist." );
         }
-        $self->createInput( 'text', 'username', 'username' );
-        $self->createLabel( 'password', 'Password' );
+        $self->createInput( 'text', 'username', '', 'Username' );
         if ( isset( $password_wrong ) ) {
             $self->createError( "Password is incorrect." );
         }
-        $self->createInput( 'password', 'password', 'password' );
-        $self->createLabel( 'persistent', 'Remember me' );
-        $self->createInput( 'checkbox', 'persistent', 'persistent', '', [
+        $self->createInput( 'password', 'password', '', 'Password' );
+        ?><p id="check"><?php $self->createInput( 'checkbox', 'persistent', '', '', [
             'checked' => true
-        ] );
-        ?><p><a href="forgotpasswordrequest/create">Forgot password?</a></p><?php
-        $self->createInput( 'submit', '', '', 'Login' );
+        ] );  ?></p>
+        <p>Remember me<a id='forgot' href="#">Forgot Password?</a></p>
+        <p><?php $self->createSubmit( 'LOGIN' ); ?></p><?php
     } );
-    ?><p><a href="user/create">Don't have an account?</a></p>
+    ?><p><span class="round">OR</span></p>
+    <p>
+        <a class="google-before rounded"><span class="fontawesome-google-plus"></span></a>
+        <button class="google rounded-left">LOGIN WITH GOOGLE+</button>
+    </p>
+    <p>
+        <a class="github-before rounded"><span class="fontawesome-github"></span></a>
+        <button class="github rounded-left">LOGIN WITH GITHUB</button>
+    </p>
 </div>
+<p class='text-center' id='register'>New to End Of Codes? <a href='user/create'>Create an account</a></p>
 
 <?php
     require 'views/footer.php';
