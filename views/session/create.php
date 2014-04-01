@@ -17,11 +17,11 @@
         if ( isset( $username_wrong ) ) {
             $self->createError( "Username doesn't exist." );
         }
-        $self->createInput( 'text', 'username', '', 'Username' );
+        $self->createInput( 'text', 'username', '', '', [ 'placeholder' => 'Username' ] );
         if ( isset( $password_wrong ) ) {
             $self->createError( "Password is incorrect." );
         }
-        $self->createInput( 'password', 'password', '', 'Password' );
+        $self->createInput( 'password', 'password', '', '', [ 'placeholder' => 'Password' ] );
         ?><p id="check"><?php $self->createInput( 'checkbox', 'persistent', '', '', [
             'checked' => true
         ] );  ?></p>
