@@ -159,7 +159,7 @@ aside ol li.you {
     content: '▼';
     color: rgba(0, 0, 0, 0.7);
     position: absolute;
-    bottom: -14px;
+    bottom: -15px;
     right: 13px;
 }
 .infobubble h3 {
