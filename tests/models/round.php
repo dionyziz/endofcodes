@@ -89,6 +89,14 @@
             $round = $this->buildRoundWithCreatures( $users );
             $this->assertThrows( [ $round, 'getWinnerId' ], 'ModelValidationException', 'A ModelValidationException must be thrown if the round is not the final one' );
         }
+        public function testGenesisOnConstructor() {
+            $game = $this->buildGameWithRoundAndCreatures();
+            $genesis = $game->rounds[ 0 ];
+            $dbRound = new Round( $game, 1, $genesis );
+            foreach ( $dbRound->creatures as $creatureid => $creature ) {
+                $this->assertSame( $genesis->creatures[ $creatureid ]->user->id, $creature->user->id, 'Round constructor must copy users from genesis' );
+            }
+        }
     }
     return new RoundTest();
 ?>
