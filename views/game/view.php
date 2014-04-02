@@ -86,7 +86,7 @@
         ?>
         <div class='infobubble'>
             <span class='hp'>
-                <span class='numeric'>0/100</span>
+                <span class='numeric'></span>
                 <span class='damage' style=''></span>
             </span>
             <div class='stats'>

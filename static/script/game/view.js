@@ -10,6 +10,7 @@ $( document ).ready( function() {
         $( '.player' ).text( username );
         $( '.creatureid' ).text( 'Creature ' + id );
         $( '.location' ).text( x + ', ' + y );
+        $( '.numeric' ).text( hp + ' / ' + maxHp );
         $( '.damage' ).css( 'width', Math.floor( 100 * ( maxHp - hp ) / maxHp ) + '%' );
         $( '.infobubble' ).css( 'top', $( this ).position().top - $( '.infobubble' ).height() - 14 );
         $( '.infobubble' ).css( 'left', $( this ).position().left - $( '.infobubble' ).width() + 30 );
