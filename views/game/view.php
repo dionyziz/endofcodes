@@ -58,9 +58,25 @@
         <?php
             foreach ( $round->creatures as $creature ) {
                 if ( $creature->alive ) {
+                    $creatureInfo = [
+                        'creatureid' => $creature->id,
+                        'username' => $creature->user->username,
+                        'x' => $creature->locationx,
+                        'y' => $creature->locationy,
+                        'hp' => $creature->hp,
+                        'maxHp' => $game->maxHp
+                    ];
                     ?><div class="<?php
                         echo $playerColor[ $creature->user->id ];
-                    ?> creature" style="left: <?php
+                    ?> creature" <?php
+                        foreach ( $creatureInfo as $key => $value ) {
+                            ?>data-<?php
+                                echo $key;
+                            ?>='<?php
+                                echo $value;
+                            ?>' <?php
+                        }
+                    ?>style="left: <?php
                         echo $creature->locationx * 20;
                     ?>px; top: <?php
                         echo $creature->locationy * 20;
