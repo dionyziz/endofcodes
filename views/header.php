@@ -12,6 +12,7 @@
         echo $config[ 'base' ];
         ?>' />
         <?php
+            includeStyle( "bootstrap.min" );
             includeStyle( "general" );
             includeStyle( "header" );
             includeStyle( "footer" );
@@ -20,7 +21,6 @@
             includeStyle( "user/create" );
             includeStyle( "session/create" );
             includeStyle( "test" );
-            includeStyle( "bootstrap.min" );
             includeStyle( "links" );
             includeStyle( "game/view" );
         ?>
