@@ -27,15 +27,19 @@
 ?>
 
 <aside>
-    <ol><?php
+    <ol class="playerList"><?php
         foreach ( $game->users as $user ) {
             ?><li<?php
                 if ( isset( $currentUser ) && $user->id == $currentUser->id ) {
                     ?> class='you'<?php
                 }
-            ?>><span class='<?php
+            ?> data-id="<?php
+                echo $user->id;
+            ?>"><span class='<?php
                 echo $playerColor[ $user->id ];
-            ?> bubble'></span> <?php
+            ?> bubble' data-color="<?php
+                echo $playerColor[ $user->id ];
+            ?>"></span> <?php
                 if ( !isset( $hasCreatures[ $user->id ] ) ) {
                     ?><del><?php
                         echo $user->username;
