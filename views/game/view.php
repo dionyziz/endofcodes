@@ -68,6 +68,17 @@
                 }
             }
         ?>
+        <div class='infobubble'>
+            <span class='hp'>
+                <span class='numeric'>0/100</span>
+                <span class='damage' style=''></span>
+            </span>
+            <div class='stats'>
+                <h3 class="creatureid"></h3>
+                Player: <strong class="player"></strong>
+                Location: <strong class="location"></strong>
+            </div>
+        </div>
     </div>
 </div>
 
