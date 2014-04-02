@@ -204,3 +204,9 @@ aside ol li.you {
     position: relative;
     top: 0px;
 }
+.previous {
+    display: inline;
+}
+.next {
+    display: inline;
+}
