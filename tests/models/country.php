@@ -50,8 +50,6 @@
             $country = Country::findByShortname( 'GR' );
             $this->assertTrue( is_object( $country ), 'findByShortname must return an object' );
             $this->assertSame( 1, $country->id, 'findByShortname must find the correct country' );
-            $this->assertEquals( 'GR', $country->shortname, 'findByShortname must return the appropriate shortname' );
-            $this->assertEquals( 'Greece', $country->name, 'findByShortname must return the appropriate name' );
         }
     }
 

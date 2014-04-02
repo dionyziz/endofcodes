@@ -220,4 +220,15 @@
                 echo htmlspecialchars( "static/style/" . $path . ".css" );
             ?>" /><?php
     }
+
+    function createSelectPrepare( $array, $first = '', $value = '' ) {
+        if( empty( $value ) ) {
+            $value = $array;
+        }
+        $array= array_combine( $value, $array );
+        if ( !empty( $first ) ) {
+            array_unshift( $array, $first );
+        }
+        return $array; 
+    }
 ?>

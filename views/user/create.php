@@ -80,19 +80,16 @@
         }
         $self->createInput( 'text', 'email', 'email', $email_value );
         $self->createLabel( 'dob', 'Date of birth' );
-        $days = range( 1, 31 ); 
-        $daysSelectArray = array_combine( $days, $days );
-        array_unshift( $daysSelectArray, 'Select Day' );
-        $self->createSelect( $daysSelectArray, 'day' );
-        $months = range( 1, 12 ); 
-        $monthsSelectArray = array_combine( $months, $months );
-        array_unshift( $monthsSelectArray, 'Select Month' );
-        $self->createSelect( $monthsSelectArray, 'month' );
+        $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
+        $self->createSelect( $days, 'day' );
+        $months = createSelectPrepare( range( 1, 12 ), 'Select Month' );
+        $self->createSelect( $months, 'month' );
         $current_year = date( 'Y' );
-        $years = range( $current_year - $config[ 'age' ][ 'min' ], $current_year - $config[ 'age' ][ 'max' ] );
-        $yearsSelectArray = array_combine( $years, $years );
-        array_unshift( $yearsSelectArray, 'Select Year' );
-        $self->createSelect( $yearsSelectArray, 'year' );
+        $years = createSelectPrepare (
+            range( $current_year - $config[ 'age' ][ 'min' ], $current_year - $config[ 'age' ][ 'max' ] ),
+            'Select Year'
+        );
+        $self->createSelect( $years, 'year' );
         $countriesSelectArray[] = 'Select Country';
         foreach ( $countries as $key => $country ) {
             $countriesSelectArray[ $country->shortname ] = $country->name;
