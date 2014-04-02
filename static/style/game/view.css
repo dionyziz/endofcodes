@@ -147,6 +147,7 @@ aside ol li.you {
     background-color: #ffffca;
 }
 .infobubble {
+    z-index: 1001;
     display: none;
     background-color: rgba(0, 0, 0, 0.7);
     color: #ccc;
