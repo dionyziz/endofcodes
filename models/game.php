@@ -44,8 +44,9 @@
                 $data = dbSelectOne( 'roundcreatures', [ 'COUNT(DISTINCT roundid) AS countrounds' ], compact( 'gameid' ) );
                 $countrounds = $data[ 'countrounds' ];
                 if ( $countrounds > 0 ) {
-                    for ( $i = 0; $i < $countrounds; ++$i ) {
-                        $this->rounds[ $i ] = new Round( $this, $i );
+                    $this->rounds[ 0 ] = new Round( $this, 0 );
+                    for ( $i = 1; $i < $countrounds; ++$i ) {
+                        $this->rounds[ $i ] = new Round( $this, $i, $this->rounds[ 0 ] );
                     }
                     foreach ( $this->rounds[ 0 ]->creatures as $creature ) {
                         $userid = $creature->user->id;
