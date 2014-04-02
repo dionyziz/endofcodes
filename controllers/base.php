@@ -1,6 +1,7 @@
 <?php
     abstract class ControllerBase {
         protected $environment = 'development';
+        protected $acceptTypes = [];
         public $trusted = false;
         public $outputFormat = 'html';
 
@@ -104,8 +105,24 @@
             }
             $config = getConfig( $env );
         }
+        protected function readHTTPAccept() {
+            $accept = strtolower( str_replace( ' ', '', $_SERVER[ 'HTTP_ACCEPT' ] ) );
+            $accept = explode( ',', $accept );
+            $acceptTypes = [];
+            foreach ( $accept as $a ) {
+                if ( strpos( $a, ';q=' ) ) {
+                    list( $a, $q ) = explode( ';q=', $a );
+                    if ( $q === 0 ) {
+                        continue;
+                    }
+                }
+                $acceptTypes[ $a ] = true;
+            }
+            $this->acceptTypes = $acceptTypes;
+        }
         protected function init() {
             $this->loadConfig();
+            $this->readHTTPAccept();
             dbInit();
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
