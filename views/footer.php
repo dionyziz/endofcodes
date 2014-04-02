@@ -9,6 +9,5 @@
                 </li>
             </ul>    
         </footer>
-        <script type="text/javascript" src="static/script/game/view.js"></script>
     </body>
 </html>
