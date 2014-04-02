@@ -91,8 +91,8 @@
             </span>
             <div class='stats'>
                 <h3 class="creatureid"></h3>
-                Player: <strong class="player"></strong>
-                Location: <strong class="location"></strong>
+                <div>Player: <strong class="player"></strong></div>
+                <div>Location: <strong class="location"></strong></div>
             </div>
         </div>
     </div>

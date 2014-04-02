@@ -118,6 +118,10 @@ aside {
 aside ol {
     border-top: 1px solid #eee;
 }
+aside li {
+    white-space: nowrap;
+    overflow: hidden;
+}
 .bubble {
     border-radius: 50px;
     width: 20px;
@@ -188,6 +192,8 @@ aside ol li.you {
     float: right;
 }
 .infobubble .stats {
+    overflow: hidden;
+    white-space: nowrap;
     padding: 5px;
 }
 .infobubble .numeric {
