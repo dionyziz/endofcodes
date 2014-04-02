@@ -13,7 +13,7 @@
         public $rounds = [];
         public $users = []; // dictionary from userid to user
         public $creaturesPerPlayer;
-        public $maxHp;
+        public $maxHp = 0;
         public $grid = [ [] ];
         public $attributesInitiated = false;
         public $ended = false;
@@ -46,6 +46,9 @@
                 if ( $countrounds > 0 ) {
                     for ( $i = 0; $i < $countrounds; ++$i ) {
                         $this->rounds[ $i ] = new Round( $this, $i );
+                    }
+                    if ( isset( $this->rounds[ 0 ]->creatures[ 1 ] ) ) {
+                        $this->maxHp = $this->rounds[ 0 ]->creatures[ 1 ]->hp;
                     }
                     foreach ( $this->rounds[ 0 ]->creatures as $creature ) {
                         $userid = $creature->user->id;

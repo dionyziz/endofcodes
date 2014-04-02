@@ -93,6 +93,7 @@
             $this->assertFalse( $game->ended, 'If there are multiple users the game must not end' );
             $dbGame = new Game( $game->id );
             $this->assertFalse( $dbGame->ended, 'If there are multiple users the game must not end' );
+            $this->assertSame( $game->maxHp, $dbGame->maxHp, 'maxHp must be retrieved from the database' );
 
             $caught = false;
             try {
