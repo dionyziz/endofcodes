@@ -61,8 +61,14 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $currentUser = $_SESSION[ 'user' ];
             }
-
-            require 'views/game/view.php';
+            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                require_once 'models/grader/serializer.php';
+                $mapJson = GraderSerializer::serializeCreatureList( $round->creatures );
+                require 'views/game/view.json.php';
+            }
+            else {
+                require 'views/game/view.php';
+            }
         }
         public function updateView( $gameid ) {
             try {
