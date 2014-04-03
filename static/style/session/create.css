@@ -18,6 +18,9 @@
     margin-top: 18px;
     font-size: 16px;
 }
+.uppercase {
+    text-transform: uppercase;
+}
 #login-form input[type="checkbox"] { 
     float: left;
 }
@@ -70,7 +73,6 @@
     color: #f4f4f4;
     cursor: pointer;
     height: 43px;
-    text-transform: uppercase;
     width: 250px;
 }
 .rounded {
@@ -96,6 +98,5 @@
     color: #f4f4f4;
     cursor: pointer;
     height: 43px;
-    text-transform: uppercase;
     width: 250px;
 }

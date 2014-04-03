@@ -22,20 +22,23 @@
             $self->createError( "Password is incorrect." );
         }
         $self->createInput( 'password', 'password', '', '', [ 'placeholder' => 'Password' ] );
-        ?><p id="check"><?php $self->createInput( 'checkbox', 'persistent', '', '', [
-            'checked' => true
-        ] ); ?>Remember me
-        <a id='forgot' href="forgotpasswordrequest/create">Forgot password?</a></p>
-        <p><?php $self->createSubmit( 'LOGIN' ); ?></p><?php
+        ?><p id="check"><?php 
+            $self->createInput( 'checkbox', 'persistent', '', '', [ 'checked' => true ] ); 
+            ?>Remember me
+            <a id='forgot' href="forgotpasswordrequest/create">Forgot password?</a>
+        </p>
+        <p><?php 
+            $self->createSubmit( 'login', [ 'class' => 'uppercase' ] ); 
+        ?></p><?php
     } );
-    ?><p><span class="round">OR</span></p>
+    ?><p><span class="round uppercase">or</span></p>
     <p>
         <p class="google-before rounded"><span class="fontawesome-google-plus"></span></p>
-        <button class="google rounded-left">LOGIN WITH GOOGLE+</button>
+        <button class="google rounded-left uppercase">login with google+</button>
     </p>
     <p>
         <p class="github-before rounded"><span class="fontawesome-github"></span></p>
-        <button class="github rounded-left">LOGIN WITH GITHUB</button>
+        <button class="github rounded-left uppercase">login with github</button>
     </p>
 </div>
 <p class='text-center'>New to End Of Codes? <a href='user/create'>Create an account</a></p>
