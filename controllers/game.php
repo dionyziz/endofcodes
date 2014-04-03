@@ -61,6 +61,7 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $currentUser = $_SESSION[ 'user' ];
             }
+
             require 'views/game/view.php';
         }
         public function updateView( $gameid ) {
