@@ -221,11 +221,11 @@
             ?>" /><?php
     }
 
-    function createSelectPrepare( $array, $first = '', $value = '' ) {
-        if( empty( $value ) ) {
-            $value = $array;
+    function createSelectPrepare( $array, $first = '', $keys = '' ) {
+        if ( empty( $key ) ) {
+            $keys = $array;
         }
-        $array= array_combine( $value, $array );
+        $array = array_combine( $keys, $array );
         if ( !empty( $first ) ) {
             array_unshift( $array, $first );
         }
