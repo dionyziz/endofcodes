@@ -4,8 +4,8 @@
 
     $countries = getCountries();
 
-    foreach ( $countries as $shortname => $name ) {
-        $country = new Country( '', $name, $shortname );
+    foreach ( $countries as $countryShortname => $countryName ) {
+        $country = new Country( '', $countryName, $countryShortname );
         $country->save();
     }
 ?>
