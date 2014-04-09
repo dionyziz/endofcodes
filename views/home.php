@@ -5,7 +5,9 @@
     <h1 class="text-center">Programmers get ready...</h1>
     <p class="text-center" id="desc">End of Codes is a programming game. The project’s goal is to make a game targetting programmers in which each player has to use code to program a strategy for their bot to try and eliminate other players. The game aims to be a competitive programming platform in which programmers can compete for good rankings.</p>
 </div>
-<h2 id="ratings-title">Last game ratings</h2>
+<h2 id="ratings-title"><a href='game/view?gameid=<?php
+    echo $game->id;
+?>'>Last game</a> ratings</h2>
 <?php
     if ( $game->ended !== false ) {
         ?><table class="table table-striped">
