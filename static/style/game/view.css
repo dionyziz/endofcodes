@@ -163,6 +163,10 @@ aside ol li.you {
     bottom: -15px;
     right: 13px;
 }
+.infobubble.reversed:after {
+    content: '▲';
+    top: -15px;
+}
 .infobubble h3 {
     color: white;
     margin: 0;
