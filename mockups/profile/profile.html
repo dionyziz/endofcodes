@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>EndofCodes Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <base href='http://localhost/endofcodes/' />
+        <style>
+            div.avatar-container {
+                width: 100px;
+                height: 100px;
+                overflow: hidden;
+                position: relative;
+            }
+            div.avatar-container img {
+                position: absolute;
+            }
+        </style>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/bootstrap.min.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/general.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/header.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/footer.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/navigation.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/home.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/user/create.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/session/create.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/test.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/links.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="static/style/game/view.css" />
+        <meta charset="utf-8" />
+        <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right"><li><a 
+                            href="user/view?username=dionyziz3 ">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#" id="logout">Log out</a>
+                        </li><form id="logout-form" action="session/delete" method="post" ><p><input type="hidden" name="token" value="j1122DuUYHZLGzNQUjbOKQLUNz+11sSjvypilaB5Kng="  /></p></form></ul>
+            </div>
+        </div>
+        <div class="container" id="main">
+            <h2>dionyziz</h2>
+            <p>
+                <div class='avatar-container'>
+                    <img src="mockups/profile/doge.jpg" class='avatar' alt="Profile Picture" />
+                </div>
+            </p>
+            <p><img src="static/images/flags/uk.png" alt="England" width="100" height="100" /></p><p>dionyziz3</p>
+            <p>dionyziz3@gmail.com</p>
+            <p>Country: England</p>
+            <p>Score: *score*</p>
+            <p><a href="">Global</a> position: *pos*</p>
+            <p><a href="">Country</a> position: *pos*</p>
+            <p><a href="">Last match</a> position: *pos*</p>
+            <p><img src="static/images/facebook-logo.jpeg" alt="facebook link" width="40" height="40" /></p>
+            <p><img src="static/images/twitter-logo.png" alt="twitter link" width="40" height="40" /></p>
+            <p><img src="static/images/github-logo.png" alt="github link" width="40" height="40" /></p>
+            <p><img src="static/images/google+-logo.jpeg" alt="google+ link" width="40" height="40" /></p>
+            <p><a href="user/update">Edit Settings</a></p>
+        </div>
+        <footer id="footer" class="panel-footer"> 
+        </footer>
+        <script>
+            var $avatar = $( '.avatar' );
+            var h =  $avatar.height();
+            var w = $avatar.width();
+            if ( w > h ) {
+                $avatar.css( {
+                    height: '100px',
+                    left: Math.floor( ( 100 - w ) / 2 ) + 'px',
+                } );
+            }
+            else {
+                $avatar.css( 'width', '100px' );
+            }
+        </script>
+    </body>
+</html>
