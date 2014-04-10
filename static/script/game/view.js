@@ -29,9 +29,7 @@ $( document ).ready( function() {
     } );
     $( '.creature' ).mouseout( function() {
         var $infobubble = $( '.infobubble' );
-        if ( $infobubble.hasClass( 'reversed' ) ) {
-            $infobubble.removeClass( 'reversed' );
-        }
+        $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
     } );
 } );
