@@ -1,5 +1,5 @@
 $( document ).ready( function() {
-    $( '.creature' ).mouseover( function () {
+    function creatureMouseover() {
         var ARROW_HEIGHT = 14;
         var ARROW_WIDTH = 30;
         var id = this.getAttribute( 'data-creatureid' );
@@ -28,7 +28,8 @@ $( document ).ready( function() {
         }
         $infobubble.css( 'top', $this.position().top + positioning );
         $infobubble.css( 'left', $this.position().left - $infobubble.width() + ARROW_WIDTH );
-    } );
+    }
+    $( '.creature' ).mouseover( creatureMouseover );
     $( '.creature' ).mouseout( function() {
         var $infobubble = $( '.infobubble' );
         $infobubble.removeClass( 'reversed' );
@@ -59,10 +60,10 @@ $( document ).ready( function() {
                 var creature = creatures[ i ];
                 if ( creature.hp > 0 ) {
                     var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
-                    var username = $user.text();
+                    var username = $user.text().trim();
                     var color = $user.find( 'span.bubble' ).attr( 'data-color' );
                     creatureInfo = {
-                        creatureid: creature.id,
+                        creatureid: creature.creatureid,
                         username: username,
                         x: creature.x,
                         y: creature.y,
@@ -78,8 +79,9 @@ $( document ).ready( function() {
                         left: creature.x * 20 + 'px',
                         top: creature.y * 20 + 'px'
                     } );
+                    $creature.mouseover( creatureMouseover );
+                    $( '.gameboard' ).prepend( $creature );
                 }
-                $( '.gameboard' ).prepend( $creature );
             }
         } );
         return false;
