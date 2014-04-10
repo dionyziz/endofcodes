@@ -34,7 +34,7 @@ $( document ).ready( function() {
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
     } );
-    function fixRoundId( classname ) {
+    function fixRoundId( classname, value ) {
         var href = $( '.' + classname + ' a' ).attr( 'href' );
         var roundid;
         var attribute;
@@ -44,7 +44,7 @@ $( document ).ready( function() {
         for ( var i = 0; i < hrefArray.length; ++i ) {
             attribute = hrefArray[ i ].split( "=" );
             if ( attribute[ 0 ] == 'roundid' ) {
-                roundid = parseInt( attribute[ 1 ] ) + 1;
+                roundid = parseInt( attribute[ 1 ] ) + value;
             }
             else if ( attribute[ 0 ] == 'gameid' ) {
                 gameid = parseInt( attribute[ 1 ] );
@@ -52,12 +52,12 @@ $( document ).ready( function() {
         }
         $( '.' + classname + ' a' ).attr( 'href', "game/view?gameid=" + gameid + "&roundid=" + roundid );
     }
-    $( '.next a' ).click( function() {
-        $.getJSON( this.href, function( creatures ) {
+    function getMap( href, roundValue ) {
+        $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
 
-            fixRoundId( 'next' );
-            fixRoundId( 'previous' );
+            fixRoundId( 'next', roundValue );
+            fixRoundId( 'previous', roundValue );
 
             $( '.creature' ).remove();
             for ( var i = 0; i < creatures.length; ++i ) {
@@ -87,6 +87,13 @@ $( document ).ready( function() {
                 $( '.gameboard' ).prepend( $creature );
             }
         } );
+    }
+    $( '.next a' ).click( function() {
+        getMap( this.href, 1 );
+        return false;
+    } );
+    $( '.previous a' ).click( function() {
+        getMap( this.href, -1 );
         return false;
     } );
 } );
