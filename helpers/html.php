@@ -89,7 +89,7 @@
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $option_array, $name = '', $selected = '', $id = '', $attributes = '' ) {
+        public function createSelect( $optionArray, $name = '', $selected = '', $id = '', $attributes = '' ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -110,18 +110,16 @@
                     }
                 }
             ?>><?php
-            foreach ( $option_array as $option ) {
-                ?><option <?php
-                    if ( isset( $option[ 'value' ] ) ) {
-                        ?>value="<?php
-                            echo htmlspecialchars( $option[ 'value' ] );
-                        ?>"<?php
-                    }
-                    if ( $selected == $option[ 'content' ] ) {
+            foreach ( $optionArray as $value => $content ) {
+                ?><option 
+                    value="<?php
+                        echo htmlspecialchars( $value );
+                    ?>"<?php
+                    if ( $selected == $content ) {
                         ?> selected="selected"<?php
                     }
                 ?>><?php
-                    echo htmlspecialchars( $option[ 'content' ] );
+                    echo htmlspecialchars( $content );
                 ?></option><?php
             }
             ?></select></p><?php
@@ -221,5 +219,16 @@
             href="<?php
                 echo htmlspecialchars( "static/style/" . $path . ".css" );
             ?>" /><?php
+    }
+
+    function createSelectPrepare( $array, $first = '', $keys = '' ) {
+        if ( empty( $key ) ) {
+            $keys = $array;
+        }
+        $array = array_combine( $keys, $array );
+        if ( !empty( $first ) ) {
+            array_unshift( $array, $first );
+        }
+        return $array; 
     }
 ?>

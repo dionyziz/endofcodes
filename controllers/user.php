@@ -1,13 +1,13 @@
 <?php
     class UserController extends ControllerBase {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '',
-                                $countryid = '', $day = '', $month = '', $year = '' ) {
+                                $countryShortname = '', $day = '', $month = '', $year = '' ) {
             require_once 'models/country.php';
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', [ 'password_not_matched' => true ] );
             }
             try {
-                $country = new Country( $countryid );
+                $country = Country::findByShortname( $countryShortname );
             }
             catch ( ModelNotFoundException $e ) {
                 $country = new Country();
@@ -56,7 +56,7 @@
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
-                                $countryid = '', $email = '' ) {
+                                $countryShortname = '', $email = '' ) {
             require_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
@@ -75,7 +75,7 @@
             }
             $user->email = $email;
             try {
-                $user->country = new Country( $countryid );
+                $user->country = Country::findByShortname( $countryShortname );
             }
             catch ( ModelNotFoundException $e ) {
             }
