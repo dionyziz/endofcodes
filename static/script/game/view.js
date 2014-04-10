@@ -10,6 +10,7 @@ $( document ).ready( function() {
         var offsetTop = $this.offset().top - $( '.infobubble' ).height() - 14;
         var $infobubble = $( '.infobubble' );
         var positioning;
+
         $infobubble.show();
         $( '.player' ).text( username );
         $( '.creatureid' ).text( 'Creature ' + id );
@@ -21,7 +22,7 @@ $( document ).ready( function() {
             $infobubble.addClass( 'reversed' );
         }
         else {
-            positioning = - $infobubble.height() - 14;
+            positioning = -$infobubble.height() - 14;
         }
         $infobubble.css( 'top', $this.position().top + positioning );
         $infobubble.css( 'left', $this.position().left - $infobubble.width() + 30 );
