@@ -34,25 +34,30 @@ $( document ).ready( function() {
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
     } );
+    function fixRoundId( classname ) {
+        var href = $( '.' + classname + ' a' ).attr( 'href' );
+        var roundid;
+        var attribute;
+        var gameid;
+
+        hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
+        for ( var i = 0; i < hrefArray.length; ++i ) {
+            attribute = hrefArray[ i ].split( "=" );
+            if ( attribute[ 0 ] == 'roundid' ) {
+                roundid = parseInt( attribute[ 1 ] ) + 1;
+            }
+            else if ( attribute[ 0 ] == 'gameid' ) {
+                gameid = parseInt( attribute[ 1 ] );
+            }
+        }
+        $( '.' + classname + ' a' ).attr( 'href', "game/view?gameid=" + gameid + "&roundid=" + roundid );
+    }
     $( '.next a' ).click( function() {
         $.getJSON( this.href, function( creatures ) {
-            var href = $( '.next a' ).attr( 'href' );
-            var roundid;
-            var attribute;
-            var gameid;
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
 
-            hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
-            for ( var i = 0; i < hrefArray.length; ++i ) {
-                attribute = hrefArray[ i ].split( "=" );
-                if ( attribute[ 0 ] == 'roundid' ) {
-                    roundid = parseInt( attribute[ 1 ] ) + 1;
-                }
-                else if ( attribute[ 0 ] == 'gameid' ) {
-                    gameid = parseInt( attribute[ 1 ] );
-                }
-            }
-            $( '.next a' ).attr( 'href', "game/view?gameid=" + gameid + "&roundid=" + roundid );
+            fixRoundId( 'next' );
+            fixRoundId( 'previous' );
 
             $( '.creature' ).remove();
             for ( var i = 0; i < creatures.length; ++i ) {
