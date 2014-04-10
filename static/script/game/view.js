@@ -34,30 +34,33 @@ $( document ).ready( function() {
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
     } );
-    function fixRoundId( classname, value ) {
-        var href = $( '.' + classname + ' a' ).attr( 'href' );
-        var roundid;
-        var attribute;
-        var gameid;
-
-        hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
+    function findGameAndRoundId( href ) {
+        var hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
         for ( var i = 0; i < hrefArray.length; ++i ) {
             attribute = hrefArray[ i ].split( "=" );
             if ( attribute[ 0 ] == 'roundid' ) {
-                roundid = parseInt( attribute[ 1 ] ) + value;
+                roundid = parseInt( attribute[ 1 ] );
             }
             else if ( attribute[ 0 ] == 'gameid' ) {
                 gameid = parseInt( attribute[ 1 ] );
             }
         }
-        $( '.' + classname + ' a' ).attr( 'href', "game/view?gameid=" + gameid + "&roundid=" + roundid );
+        return {
+            gameid: gameid,
+            roundid: roundid
+        }
     }
     function getMap( href, roundValue ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
+            var gameInfo = findGameAndRoundId( href );
+            var nextHref = $( '.next a' ).attr( 'href' );
+            var previousHref = $( '.previous a' ).attr( 'href' );
+            var prefix = "game/view?gameid=" + gameInfo.gameid + "&roundid=";
 
-            fixRoundId( 'next', roundValue );
-            fixRoundId( 'previous', roundValue );
+            $( '.next a' ).attr( 'href', prefix + ( findGameAndRoundId( nextHref ).roundid + roundValue ) );
+            $( '.previous a' ).attr( 'href', prefix + ( findGameAndRoundId( previousHref ).roundid + roundValue ) );
+            $( '.round' ).text( 'Round ' + findGameAndRoundId( href ).roundid );
 
             $( '.creature' ).remove();
             for ( var i = 0; i < creatures.length; ++i ) {
