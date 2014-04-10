@@ -61,12 +61,39 @@
             $this->assertEquals( $game->created, $dbGame->created, 'Created in the db must be the same as the created during creation' );
             $this->assertSame( $game->id, $dbGame->id, 'Id in the db must be the same as the id during creation' );
         }
+        public function testGenesisNoUsers() {
+            $game = new Game();
+            $game->save();
+            $game->initiateAttributes();
+            $game->genesis();
+            $this->assertTrue( $game->ended, 'If there are no users the game must end' );
+
+            $this->assertEquals( 0, count( $game->rounds ), 'No round must be created during genesis' );
+            $dbGame = new Game( $game->id );
+            $this->assertTrue( $dbGame->ended, 'If there are no users the game must end' );
+        }
+        public function testGenesisOneUser() {
+            $game = new Game();
+            $game->users = [ $this->buildUser( 'vitsalis' ) ];
+            $game->save();
+            $game->initiateAttributes();
+            $game->genesis();
+            $this->assertTrue( $game->ended, 'If there is only one user the game must end' );
+
+            $this->assertEquals( 1, count( $game->rounds ), 'A round must be created even if there is only one user' );
+            $dbGame = new Game( $game->id );
+            $this->assertTrue( $dbGame->ended, 'If there is only one user the game must end' );
+        }
         public function testGenesis() {
             $game = $this->buildGame();
             $game->initiateAttributes();
             $game->genesis();
-            $this->assertEquals( count( $game->rounds ), 1, 'A round must be created during genesis' );
+            $this->assertEquals( 1, count( $game->rounds ), 'A round must be created during genesis' );
             $this->assertTrue( isset( $game->rounds[ 0 ] ), 'The genesis must have an index of 0' );
+            $this->assertFalse( $game->ended, 'If there are multiple users the game must not end' );
+            $dbGame = new Game( $game->id );
+            $this->assertFalse( $dbGame->ended, 'If there are multiple users the game must not end' );
+            $this->assertSame( $game->maxHp, $dbGame->maxHp, 'maxHp must be retrieved from the database' );
 
             $caught = false;
             try {
@@ -155,33 +182,6 @@
             $game = $this->buildGame();
 
             $this->assertEquals( 1, $game->id, 'Game id must be 1 when the first game is created' );
-        }
-        protected function buildGameWithRoundAndCreatures() {
-            $user1 = $this->buildUser( 'vitsalis' );
-            $user2 = $this->buildUser( 'vitsalissister' );
-            $user3 = $this->buildUser( 'vitsalissisterssecondcousin' );
-
-            $creature1 = $this->buildCreature( 1, 1, 1, $user1 );
-            $creature2 = $this->buildCreature( 2, 2, 2, $user2 );
-            $creature3 = $this->buildCreature( 3, 3, 3, $user3 );
-
-            $round1 = new Round();
-            $round1->id = 0;
-            $round1->creatures = [ 1 => $creature1, 2 => $creature2, 3 => $creature3 ];
-
-            $creature2Clone = clone $creature2;
-            $creature3Clone = clone $creature3;
-            $creature3Clone->alive = false;
-            $round2 = new Round();
-            $round2->id = 1;
-            $round2->creatures = [ 1 => $creature1, 2 => $creature2Clone, 3 => $creature3Clone ];
-
-            $game = new Game();
-            $game->users = [ 1 => $user1, 2 => $user2, 3 => $user3 ];
-            $game->rounds = [ 0 => $round1, 1 => $round2 ];
-            $round1->game = $round2->game = $game;
-
-            return $game;
         }
         public function testGetGlobalRatings() {
             $game = $this->buildGameWithRoundAndCreatures();

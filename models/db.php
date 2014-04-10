@@ -122,10 +122,10 @@
     function dbSelectOne( $table, $select = [ "*" ], $where = [] ) {
         $array = dbSelect( $table, $select, $where );
         if ( count( $array ) > 1 ) {
-            throw new DBException( 'select one with multiple results' );
+            throw new DBExceptionWrongCount( 1, 2 );
         }
         else if ( count( $array ) < 1 ) {
-            throw new DBException( 'select one with no results' );
+            throw new DBExceptionWrongCount( 1, 0 );
         }
         return $array[ 0 ];
     }
@@ -187,7 +187,18 @@
             parent::__construct( 'Database error: ' . $error );
         }
     }
-    
+
+    class DBExceptionWrongCount extends DBException {
+        public $expected;
+        public $actual;
+
+        public function __construct( $expected, $actual ) {
+            $this->expected = $expected;
+            $this->actual = $actual;
+            parent::__construct( "Database error: Expected $expected rows to be returned, but $actual were returned." );
+        }
+    }
+
     class MigrationException extends Exception {
         public function __construct( $error ) {
             parent::__construct( 'Migration error: ' . $error );

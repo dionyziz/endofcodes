@@ -65,6 +65,35 @@
             ];
             return $round;
         }
+        protected function buildGameWithRoundAndCreatures() {
+            $user1 = $this->buildUser( 'vitsalis' );
+            $user2 = $this->buildUser( 'vitsalissister' );
+            $user3 = $this->buildUser( 'vitsalissisterssecondcousin' );
+
+            $creature1 = $this->buildCreature( 1, 1, 1, $user1 );
+            $creature2 = $this->buildCreature( 2, 2, 2, $user2 );
+            $creature3 = $this->buildCreature( 3, 3, 3, $user3 );
+
+            $round1 = new Round();
+            $round1->id = 0;
+            $round1->creatures = [ 1 => $creature1, 2 => $creature2, 3 => $creature3 ];
+
+            $creature2Clone = clone $creature2;
+            $creature3Clone = clone $creature3;
+            $creature3Clone->alive = false;
+            $round2 = new Round();
+            $round2->id = 1;
+            $round2->creatures = [ 1 => $creature1, 2 => $creature2Clone, 3 => $creature3Clone ];
+
+            $game = new Game();
+            $game->users = [ 1 => $user1, 2 => $user2, 3 => $user3 ];
+            $game->rounds = [ 0 => $round1, 1 => $round2 ];
+            $round1->game = $round2->game = $game;
+            $round1->save();
+            $round2->save();
+
+            return $game;
+        }
         protected function buildGame() {
             $game = new Game();
             for ( $i = 1; $i <= 4; ++$i ) {
@@ -85,6 +114,22 @@
             }
             $error->save();
             return $error;
+        }
+        protected function rrmdir( $dir ) {
+            if ( is_dir( $dir ) ) {
+                $objects = scandir( $dir );
+                foreach ( $objects as $object ) {
+                    if ( $object != "." && $object != ".." ) {
+                        if ( filetype( $dir . "/" . $object ) == "dir" ) {
+                            $this->rrmdir( $dir . "/" . $object );
+                        }
+                        else {
+                            unlink( $dir . "/" . $object );
+                        }
+                    }
+                }
+                rmdir( $dir );
+            }
         }
     }
 ?>

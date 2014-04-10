@@ -36,11 +36,11 @@
         $self->createLabel( 'password_repeat', 'Repeat' );
         $self->createInput( 'password', 'password_repeat', 'password_repeat' );
         ?><p>Change country</p><?php
-        $countries_select_array = [ [ 'content' => 'Select Country' ] ];
+        $countries_select_array[] = 'Select Country';
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
+            $countries_select_array[ $country->shortname ] = $country->name;
         }
-        $self->createSelect( 'countryid', $countries_select_array );
+        $self->createSelect( $countries_select_array, 'countryShortname' );
         $self->createSubmit( 'Save settings' );
     } );
 

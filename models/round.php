@@ -17,7 +17,7 @@
                 'expected' => $expected
             ];
         }
-        public function __construct( $a = false, $b = false ) {
+        public function __construct( $a = false, $b = false, $genesis = false ) {
             if ( $a instanceof Round ) {
                 // Clone from existing round: new Round( $oldRound )
                 $oldRound = $a;
@@ -42,21 +42,60 @@
                     [ 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ],
                     compact( 'roundid', 'gameid' )
                 );
+                // map: creatureid => user
+                $usersMap = [];
+                // genesis is optional, if you want the constructor to run faster
+                if ( $genesis ) {
+                    foreach ( $genesis->creatures as $creature ) {
+                        if ( !isset( $usersMap[ $creature->id ] ) ) {
+                            $usersMap[ $creature->id ] = $creature->user;
+                        }
+                    }
+                }
                 foreach ( $creatures_info as $i => $creature_info ) {
-                    $id = $creature_info[ 'creatureid' ];
-                    $user_info = dbSelectOne(
-                        'creatures',
-                        [ 'userid' ],
-                        compact( 'id', 'gameid' )
-                    );
-                    $user = new User( $user_info[ 'userid' ] );
                     $creature = new Creature( $creature_info );
                     $creature->game = $game;
                     $creature->round = $this;
-                    $creature->user = $user;
+                    if ( isset( $usersMap[ $creature->id ] ) ) {
+                        $creature->user = $usersMap[ $creature->id ];
+                    }
+                    else {
+                        $id = $creature_info[ 'creatureid' ];
+                        $user_info = dbSelectOne(
+                            'creatures',
+                            [ 'userid' ],
+                            compact( 'id', 'gameid' )
+                        );
+                        $user = new User( $user_info[ 'userid' ] );
+                        $creature->user = $user;
+                    }
                     $this->creatures[ $creature->id ] = $creature;
                 }
             }
+        }
+        protected function getUsersAlive() {
+            $usersAlive = [];
+            foreach ( $this->creatures as $creature ) {
+                if ( $creature->alive && isset( $creature->user ) ) {
+                    $usersAlive[ $creature->user->id ] = $creature->user;
+                }
+            }
+            return $usersAlive;
+        }
+        public function isFinalRound() {
+            $usersAlive = $this->getUsersAlive();
+
+            return count( $usersAlive ) <= 1;
+        }
+        public function getWinnerId() {
+            if ( !$this->isFinalRound() ) {
+                throw new ModelValidationException( 'There is no winner if the game is not over' );
+            }
+            $usersAlive = $this->getUsersAlive();
+            if ( !empty( $usersAlive ) ) {
+                return end( $usersAlive )->id;
+            }
+            return false;
         }
 
         protected function create() {

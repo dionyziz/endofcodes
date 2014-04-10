@@ -12,6 +12,7 @@
         echo $config[ 'base' ];
         ?>' />
         <?php
+            includeStyle( "bootstrap.min" );
             includeStyle( "general" );
             includeStyle( "header" );
             includeStyle( "footer" );
@@ -20,12 +21,13 @@
             includeStyle( "user/create" );
             includeStyle( "session/create" );
             includeStyle( "test" );
-            includeStyle( "bootstrap.min" );
             includeStyle( "links" );
+            includeStyle( "game/view" );
         ?>
-        <script type="text/javascript" src="static/script/cssrefresh.js"></script>
         <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
         <script type="text/javascript" src="static/script/logout.js"></script>
+        <script type="text/javascript" src="static/script/game/view.js"></script>
+        <script type="text/javascript" src="static/script/prefixfree.min.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>
@@ -60,4 +62,4 @@
                ?></ul>
             </div>
         </div>
-        <div class="container">
+        <div class="container" id="main">
