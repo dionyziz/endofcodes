@@ -27,15 +27,19 @@
 ?>
 
 <aside>
-    <ol><?php
+    <ol class="playerList"><?php
         foreach ( $game->users as $user ) {
             ?><li<?php
                 if ( isset( $currentUser ) && $user->id == $currentUser->id ) {
                     ?> class='you'<?php
                 }
-            ?>><span class='<?php
+            ?> data-id="<?php
+                echo $user->id;
+            ?>"><span class='<?php
                 echo $playerColor[ $user->id ];
-            ?> bubble'></span> <?php
+            ?> bubble' data-color="<?php
+                echo $playerColor[ $user->id ];
+            ?>"></span> <?php
                 if ( !isset( $hasCreatures[ $user->id ] ) ) {
                     ?><del><?php
                         echo $user->username;
@@ -102,22 +106,22 @@
     <span class='round'>Round <?php
         echo $round->id;
     ?></span>
-    <span class="next"><?php
-        if ( isset( $game->rounds[ $round->id + 1 ] ) ) {
-            ?><p><a href="game/view?gameid=<?php
-                echo htmlspecialchars( $gameid );
-            ?>&amp;roundid=<?php
-                echo htmlspecialchars( $round->id + 1 );
-            ?>">Next round</a></p><?php
-        }
-    ?></span>
     <span class="previous"><?php
         if ( $round->id > 0 ) {
-            ?><p><a href="game/view?gameid=<?php
+            ?><a href="game/view?gameid=<?php
                 echo htmlspecialchars( $gameid );
             ?>&amp;roundid=<?php
                 echo htmlspecialchars( $round->id - 1 );
-            ?>">Previous round</a></p><?php
+            ?>">Previous</a><?php
+        }
+    ?></span>
+    <span class="next"><?php
+        if ( isset( $game->rounds[ $round->id + 1 ] ) ) {
+            ?><a href="game/view?gameid=<?php
+                echo htmlspecialchars( $gameid );
+            ?>&amp;roundid=<?php
+                echo htmlspecialchars( $round->id + 1 );
+            ?>">Next</a><?php
         }
     ?></span>
 </div>
