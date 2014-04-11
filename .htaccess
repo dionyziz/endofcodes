@@ -6,3 +6,5 @@ RewriteRule ^([a-z]+)/([a-z]+)$ index.php?resource=$1&method=$2 [L,QSA]
     Order Allow,Deny
     Deny from all
 </Files>
+
+RedirectMatch 404 /\.git
