@@ -18,6 +18,7 @@
         }
         $config = $config[ $env ];
         $config[ 'root' ] = getcwd();
+        $config[ 'base' ] = dirname( $_SERVER[ 'SCRIPT_NAME' ] ) . '/';
         return $config;
     }
 ?>
