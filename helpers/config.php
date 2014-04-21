@@ -17,8 +17,19 @@
             $config = mergeKeys( $config, $configLocal );
         }
         $config = $config[ $env ];
+
         $config[ 'root' ] = getcwd();
-        $config[ 'base' ] = dirname( $_SERVER[ 'SCRIPT_NAME' ] ) . '/';
+
+        $protocol = 'http';
+        if ( !empty( $s[ 'HTTPS' ] ) && $s[ 'HTTPS' ] == 'on' ) {
+            $protocol .= 's';
+        }
+        $index_path = $index_file = $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'SCRIPT_NAME' ];
+        $config[ 'base' ] = dirname( $index_path );
+        if ( substr( $config[ 'base' ], -1 ) != '/' ) {
+            $config[ 'base' ] .= '/';
+        }
+
         return $config;
     }
 ?>
