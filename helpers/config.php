@@ -10,6 +10,18 @@
         }
         return $config;
     }
+    function getBase() { 
+        $protocol = 'http';
+        if ( !empty( $_SERVER[ 'HTTPS' ] ) && $_SERVER[ 'HTTPS' ] == 'on' ) {
+            $protocol .= 's';
+        }
+        $base =  $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'SCRIPT_NAME' ];
+        $base = dirname( $index_path );
+        if ( substr( $config[ 'base' ], -1 ) != '/' ) {
+            $base .= '/';
+        }
+        return $base;
+    }
     function getConfig( $env ) {
         $config = require 'config/config.php';
         if ( file_exists( 'config/config-local.php' ) ) {
@@ -17,19 +29,8 @@
             $config = mergeKeys( $config, $configLocal );
         }
         $config = $config[ $env ];
-
         $config[ 'root' ] = getcwd();
-
-        $protocol = 'http';
-        if ( !empty( $s[ 'HTTPS' ] ) && $s[ 'HTTPS' ] == 'on' ) {
-            $protocol .= 's';
-        }
-        $index_path = $index_file = $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'SCRIPT_NAME' ];
-        $config[ 'base' ] = dirname( $index_path );
-        if ( substr( $config[ 'base' ], -1 ) != '/' ) {
-            $config[ 'base' ] .= '/';
-        }
-
+        $config[ 'base' ] = getBase();
         return $config;
     }
 ?>
