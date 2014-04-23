@@ -47,10 +47,8 @@
         }
 
         public static function findLast( $env = '' ) {
-            if ( !file_exists( static::$log ) ) {
-                touch( static::$log );
-            }
-            if ( !$logs = file_get_contents( static::$log ) ) {
+            if ( !file_exists( static::$log ) && !touch( static::$log ) 
+              || !$logs = file_get_contents( static::$log ) ) {
                 throw new ModelNotFoundException();
             }
             $array = json_decode( $logs, true );
