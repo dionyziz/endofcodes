@@ -59,8 +59,11 @@
             </tbody>
         </table><?php
     }
-    else {
+    elseif ( !empty( $game ) ) {
         ?><p>Game is still in progress</p><?php
+    }
+    else {
+        ?><p>No games yet. Why not [start a game now]?</p><?php
     }
     include 'views/footer.php';
 ?>
