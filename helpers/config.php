@@ -15,8 +15,7 @@
         if ( !empty( $_SERVER[ 'HTTPS' ] ) && $_SERVER[ 'HTTPS' ] == 'on' ) {
             $protocol .= 's';
         }
-        $base =  $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'SCRIPT_NAME' ];
-        $base = dirname( $index_path );
+        $base =  $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . dirname( $_SERVER[ 'SCRIPT_NAME' ] );
         if ( substr( $config[ 'base' ], -1 ) != '/' ) {
             $base .= '/';
         }
