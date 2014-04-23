@@ -15,11 +15,12 @@
         if ( !empty( $_SERVER[ 'HTTPS' ] ) && $_SERVER[ 'HTTPS' ] == 'on' ) {
             $protocol .= 's';
         }
-        $base =  $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . dirname( $_SERVER[ 'SCRIPT_NAME' ] );
-        if ( substr( $config[ 'base' ], -1 ) != '/' ) {
-            $base .= '/';
+        // All scripts are called by index.php so SCRIPT_NAME always points to index.php
+        $relativePath = dirname( $_SERVER[ 'SCRIPT_NAME' ] );
+        if ( substr( $relativePath, -1 ) != '/' ) {
+            $relativePath .= '/';
         }
-        return $base;
+        return $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $relativePath;
     }
     function getConfig( $env ) {
         $config = require 'config/config.php';
