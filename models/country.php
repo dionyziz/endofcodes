@@ -16,7 +16,7 @@
             return new Country( $countryInfo[ 'id' ] ); 
         }
 
-        public function __construct( $id = false, $name = '', $shortname = '' ) {
+        public function __construct( $id = false ) {
             global $config;
 
             if ( $id ) {
@@ -30,10 +30,6 @@
                 $this->id = $id;
                 $this->shortname = $row[ 'shortname' ];
                 $this->flag = $config[ 'paths' ][ 'flag_path' ] . strtolower( $this->shortname ) . '.' . $config[ 'files' ][ 'flag_extention' ];
-            }
-            else {
-                $this->name = $name;
-                $this->shortname = $shortname;
             }
         }
     }
