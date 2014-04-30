@@ -28,6 +28,7 @@
         <script type="text/javascript" src="static/script/logout.js"></script>
         <script type="text/javascript" src="static/script/game/view.js"></script>
         <script type="text/javascript" src="static/script/prefixfree.min.js"></script>
+        <script type="text/javascript" src="static/script/form_validation.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>
