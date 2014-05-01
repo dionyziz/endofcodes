@@ -36,22 +36,25 @@ $( document ).ready( function() {
         $infobubble.hide();
     } );
     function fixRoundId( classname ) {
-        var href = $( '.' + classname + ' a' ).attr( 'href' );
+        var $link = $( '.' + classname + ' a' );
+        var href = $link.attr( 'href' );
         var roundid;
         var attribute;
         var gameid;
+        var hrefArray = href.split( "?" )[ 1 ].split( "&" );
 
-        hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
         for ( var i = 0; i < hrefArray.length; ++i ) {
             attribute = hrefArray[ i ].split( "=" );
-            if ( attribute[ 0 ] == 'roundid' ) {
-                roundid = parseInt( attribute[ 1 ] ) + 1;
-            }
-            else if ( attribute[ 0 ] == 'gameid' ) {
-                gameid = parseInt( attribute[ 1 ] );
+            switch ( attribute[ 0 ] ) {
+                case 'roundid':
+                    roundid = parseInt( attribute[ 1 ] ) + 1;
+                    break;
+                case 'gameid':
+                    gameid = parseInt( attribute[ 1 ] );
+                    break;
             }
         }
-        $( '.' + classname + ' a' ).attr( 'href', "game/view?gameid=" + gameid + "&roundid=" + roundid );
+        $link.attr( 'href', "game/view?gameid=" + gameid + "&roundid=" + roundid );
     }
     $( '.next a' ).click( function() {
         $.getJSON( this.href, function( creatures ) {
