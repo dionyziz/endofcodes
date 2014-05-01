@@ -79,6 +79,8 @@ $( document ).ready( function() {
             var roundValue;
             var hasCreatures = [];
 
+            history.pushState( {}, "", href );
+
             if ( ( roundValue = findGameAndRoundId( nextHref ).roundid + roundAddition ) >= maxRounds ) {
                 $( '.next' ).hide();
             }
