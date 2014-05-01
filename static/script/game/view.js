@@ -34,4 +34,62 @@ $( document ).ready( function() {
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
     } );
+    function fixRoundId( classname ) {
+        var $link = $( '.' + classname + ' a' );
+        var href = $link.attr( 'href' );
+        var roundid;
+        var attribute;
+        var gameid;
+        var hrefArray = href.split( "?" )[ 1 ].split( "&" );
+
+        for ( var i = 0; i < hrefArray.length; ++i ) {
+            attribute = hrefArray[ i ].split( "=" );
+            switch ( attribute[ 0 ] ) {
+                case 'roundid':
+                    roundid = parseInt( attribute[ 1 ] ) + 1;
+                    break;
+                case 'gameid':
+                    gameid = parseInt( attribute[ 1 ] );
+                    break;
+            }
+        }
+        $link.attr( 'href', "game/view?gameid=" + gameid + "&roundid=" + roundid );
+    }
+    $( '.next a' ).click( function() {
+        $.getJSON( this.href, function( creatures ) {
+            var maxHp = $( '.creature' ).attr( 'data-maxHp' );
+
+            fixRoundId( 'next' );
+            fixRoundId( 'previous' );
+
+            $( '.creature' ).remove();
+            for ( var i = 0; i < creatures.length; ++i ) {
+                var creature = creatures[ i ];
+                if ( creature.hp > 0 ) {
+                    var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
+                    var username = $user.text();
+                    var color = $user.find( 'span.bubble' ).attr( 'data-color' );
+                    creatureInfo = {
+                        creatureid: creature.id,
+                        username: username,
+                        x: creature.x,
+                        y: creature.y,
+                        hp: creature.hp,
+                        maxHp: maxHp
+                    };
+                    $creature = $( '<div class="' + color + ' creature"></div>' );
+                    for ( var attribute in creatureInfo ) {
+                        var value = creatureInfo[ attribute ];
+                        $creature.attr( 'data-' + attribute, value );
+                    }
+                    $creature.css( {
+                        left: creature.x * 20 + 'px',
+                        top: creature.y * 20 + 'px'
+                    } );
+                }
+                $( '.gameboard' ).prepend( $creature );
+            }
+        } );
+        return false;
+    } );
 } );
