@@ -35,7 +35,8 @@ $( document ).ready( function() {
         $infobubble.hide();
     } );
     function findGameAndRoundId( href ) {
-        var hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
+        var hrefArray = href.split( "?" )[ 1 ].split( "&" );
+
         for ( var i = 0; i < hrefArray.length; ++i ) {
             attribute = hrefArray[ i ].split( "=" );
             switch ( attribute[ 0 ] ) {
