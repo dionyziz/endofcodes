@@ -106,24 +106,28 @@
     <span class='round'>Round <?php
         echo $round->id;
     ?></span>
-    <span class="previous"><?php
-        if ( $round->id > 0 ) {
-            ?><a href="game/view?gameid=<?php
-                echo htmlspecialchars( $gameid );
-            ?>&amp;roundid=<?php
-                echo htmlspecialchars( $round->id - 1 );
-            ?>">Previous</a><?php
+    <span class="previous"<?php
+        if ( !isset( $game->rounds[ $round->id - 1 ] ) ) {
+            ?> style="display: none"<?php
         }
-    ?></span>
-    <span class="next"><?php
-        if ( isset( $game->rounds[ $round->id + 1 ] ) ) {
-            ?><a href="game/view?gameid=<?php
-                echo htmlspecialchars( $gameid );
-            ?>&amp;roundid=<?php
-                echo htmlspecialchars( $round->id + 1 );
-            ?>">Next</a><?php
+    ?>>
+        <a href="game/view?gameid=<?php
+            echo htmlspecialchars( $gameid );
+        ?>&amp;roundid=<?php
+            echo htmlspecialchars( $round->id - 1 );
+        ?>">Previous</a>
+    </span>
+    <span class="next"<?php
+        if ( !isset( $game->rounds[ $round->id + 1 ] ) ) {
+            ?> style="display: none"<?php
         }
-    ?></span>
+    ?>>
+        <a href="game/view?gameid=<?php
+            echo htmlspecialchars( $gameid );
+        ?>&amp;roundid=<?php
+            echo htmlspecialchars( $round->id + 1 );
+        ?>">Next</a>
+    </span>
 </div>
 <?php
     require 'views/footer.php';

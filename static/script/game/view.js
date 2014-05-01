@@ -38,11 +38,13 @@ $( document ).ready( function() {
         var hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
         for ( var i = 0; i < hrefArray.length; ++i ) {
             attribute = hrefArray[ i ].split( "=" );
-            if ( attribute[ 0 ] == 'roundid' ) {
-                roundid = parseInt( attribute[ 1 ] );
-            }
-            else if ( attribute[ 0 ] == 'gameid' ) {
-                gameid = parseInt( attribute[ 1 ] );
+            switch ( attribute[ 0 ] ) {
+                case 'roundid':
+                    roundid = parseInt( attribute[ 1 ] );
+                    break;
+                case 'gameid':
+                    gameid = parseInt( attribute[ 1 ] );
+                    break;
             }
         }
         return {
@@ -50,16 +52,24 @@ $( document ).ready( function() {
             roundid: roundid
         }
     }
-    function getMap( href, roundValue ) {
+    function getMap( href, roundAddition ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
             var gameInfo = findGameAndRoundId( href );
             var nextHref = $( '.next a' ).attr( 'href' );
             var previousHref = $( '.previous a' ).attr( 'href' );
             var prefix = "game/view?gameid=" + gameInfo.gameid + "&roundid=";
+            var roundValue;
 
-            $( '.next a' ).attr( 'href', prefix + ( findGameAndRoundId( nextHref ).roundid + roundValue ) );
-            $( '.previous a' ).attr( 'href', prefix + ( findGameAndRoundId( previousHref ).roundid + roundValue ) );
+            $( '.next' ).show();
+            $( '.next a' ).attr( 'href', prefix + ( findGameAndRoundId( nextHref ).roundid + roundAddition ) );
+            if ( ( roundValue = findGameAndRoundId( previousHref ).roundid + roundAddition ) < 0 ) {
+                $( '.previous' ).hide();
+            }
+            else {
+                $( '.previous' ).show();
+            }
+            $( '.previous a' ).attr( 'href', prefix + roundValue ); 
             $( '.round' ).text( 'Round ' + findGameAndRoundId( href ).roundid );
 
             $( '.creature' ).remove();
