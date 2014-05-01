@@ -52,6 +52,22 @@ $( document ).ready( function() {
             roundid: roundid
         }
     }
+    function fixUserList( hasCreatures ) {
+        var $nodes = $( '.playerList li' );
+        for ( var i = 0; i < $nodes.length; ++i ) {
+            var $node = $nodes.eq( i );
+            var array = $node.html().split( '</span>' );
+            var name = array[ 1 ].trim();
+            var userid = $node.attr( 'data-id' );
+            if ( hasCreatures[ userid ] && name.indexOf( "<del>" ) != -1 ) {
+                name = name.substring( 5, name.indexOf( "</del>" ) );
+            }
+            else if ( !hasCreatures[ userid ] && name.indexOf( "<del>" ) ) {
+                name = "<del>" + name + "</del>";
+            }
+            $node.html( array[ 0 ] + "</span>" + name );
+        }
+    }
     function getMap( href, roundAddition ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
@@ -60,6 +76,7 @@ $( document ).ready( function() {
             var previousHref = $( '.previous a' ).attr( 'href' );
             var prefix = "game/view?gameid=" + gameInfo.gameid + "&roundid=";
             var roundValue;
+            var hasCreatures = [];
 
             $( '.next' ).show();
             $( '.next a' ).attr( 'href', prefix + ( findGameAndRoundId( nextHref ).roundid + roundAddition ) );
@@ -76,6 +93,7 @@ $( document ).ready( function() {
             for ( var i = 0; i < creatures.length; ++i ) {
                 var creature = creatures[ i ];
                 if ( creature.hp > 0 ) {
+                    hasCreatures[ creature.userid ] = true;
                     var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
                     var username = $user.text();
                     var color = $user.find( 'span.bubble' ).attr( 'data-color' );
@@ -99,6 +117,7 @@ $( document ).ready( function() {
                 }
                 $( '.gameboard' ).prepend( $creature );
             }
+            fixUserList( hasCreatures );
         } );
     }
     $( '.next a' ).click( function() {
