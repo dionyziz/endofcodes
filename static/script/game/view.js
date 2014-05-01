@@ -29,12 +29,13 @@ $( document ).ready( function() {
         $infobubble.css( 'top', $this.position().top + positioning );
         $infobubble.css( 'left', $this.position().left - $infobubble.width() + ARROW_WIDTH );
     }
-    $( '.creature' ).mouseover( creatureMouseover );
-    $( '.creature' ).mouseout( function() {
+    function creatureMouseOut() {
         var $infobubble = $( '.infobubble' );
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
-    } );
+    }
+    $( '.creature' ).mouseover( creatureMouseover );
+    $( '.creature' ).mouseout( creatureMouseOut );
     function fixRoundId( classname ) {
         var $link = $( '.' + classname + ' a' );
         var href = $link.attr( 'href' );
@@ -88,6 +89,7 @@ $( document ).ready( function() {
                         top: creature.y * 20 + 'px'
                     } );
                     $creature.mouseover( creatureMouseover );
+                    $creature.mouseout( creatureMouseOut );
                     $( '.gameboard' ).prepend( $creature );
                 }
             }
