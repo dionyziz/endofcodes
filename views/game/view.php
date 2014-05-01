@@ -42,11 +42,11 @@
             ?>"></span> <?php
                 if ( !isset( $hasCreatures[ $user->id ] ) ) {
                     ?><del><?php
-                        echo $user->username;
+                        echo htmlspecialchars( $user->username );
                     ?></del><?php
                 }
                 else {
-                    echo $user->username;
+                    echo htmlspecialchars( $user->username );
                 }
             ?></li><?php
         }
