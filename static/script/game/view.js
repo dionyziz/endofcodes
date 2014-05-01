@@ -40,8 +40,8 @@ $( document ).ready( function() {
         var roundid;
         var attribute;
         var gameid;
+        var hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
 
-        hrefArray = href.substr( href.indexOf( "?" ) + 1 ).split( "&" );
         for ( var i = 0; i < hrefArray.length; ++i ) {
             attribute = hrefArray[ i ].split( "=" );
             switch ( attribute[ 0 ] ) {
