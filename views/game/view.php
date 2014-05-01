@@ -2,7 +2,9 @@
     require 'views/header.php';
 ?>
 <div class='gamemeta'>
-    <h2>Game <?php
+    <h2 data-rounds="<?php
+        echo count( $game->rounds );
+    ?>">Game <?php
         echo $game->id;
     ?></h2>
     <strong><?php

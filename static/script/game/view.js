@@ -71,15 +71,21 @@ $( document ).ready( function() {
     function getMap( href, roundAddition ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
-            var gameInfo = findGameAndRoundId( href );
+            var maxRounds = $( '.gamemeta h2' ).attr( 'data-rounds' );
             var nextHref = $( '.next a' ).attr( 'href' );
             var previousHref = $( '.previous a' ).attr( 'href' );
+            var gameInfo = findGameAndRoundId( href );
             var prefix = "game/view?gameid=" + gameInfo.gameid + "&roundid=";
             var roundValue;
             var hasCreatures = [];
 
-            $( '.next' ).show();
-            $( '.next a' ).attr( 'href', prefix + ( findGameAndRoundId( nextHref ).roundid + roundAddition ) );
+            if ( ( roundValue = findGameAndRoundId( nextHref ).roundid + roundAddition ) >= maxRounds ) {
+                $( '.next' ).hide();
+            }
+            else {
+                $( '.next' ).show();
+            }
+            $( '.next a' ).attr( 'href', prefix + roundValue );
             if ( ( roundValue = findGameAndRoundId( previousHref ).roundid + roundAddition ) < 0 ) {
                 $( '.previous' ).hide();
             }
