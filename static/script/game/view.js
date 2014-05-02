@@ -56,8 +56,8 @@ $( document ).ready( function() {
     }
     function fixUserList( hasCreatures ) {
         var $nodes = $( '.playerList li' );
-        for ( var i = 0; i < $nodes.length; ++i ) {
-            var $node = $nodes.eq( i );
+        $.each( $nodes, function( index, value ) {
+            $node = $nodes.eq( index );
             var array = $node.html().split( '</span>' );
             var name = array[ 1 ].trim();
             var userid = $node.attr( 'data-id' );
@@ -68,7 +68,7 @@ $( document ).ready( function() {
                 name = "<del>" + name + "</del>";
             }
             $node.html( array[ 0 ] + "</span>" + name );
-        }
+        } );
     }
     function getMap( href, roundAddition ) {
         $.getJSON( href, function( creatures ) {
