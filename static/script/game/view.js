@@ -82,20 +82,12 @@ $( document ).ready( function() {
 
             history.pushState( {}, "", href );
 
-            if ( currentRoundid + 1 >= maxRounds ) {
-                $( '.next' ).hide();
-            }
-            else {
-                $( '.next' ).show();
-            }
+            $( '.next' ).toggle( currentRoundid + 1 < maxRounds );
             $( '.next a' ).attr( 'href', prefix + ( currentRoundid + 1 ) );
-            if ( currentRoundid - 1 < 0 ) {
-                $( '.previous' ).hide();
-            }
-            else {
-                $( '.previous' ).show();
-            }
+
+            $( '.previous' ).toggle( currentRoundid - 1 >= 0 );
             $( '.previous a' ).attr( 'href', prefix + ( currentRoundid - 1 ) );
+
             $( '.round' ).text( 'Round ' + findGameAndRoundId( href ).roundid );
 
             $( '.creature' ).remove();
