@@ -78,7 +78,7 @@ $( document ).ready( function() {
             var gameInfo = findGameAndRoundId( href );
             var prefix = "game/view?gameid=" + gameInfo.gameid + "&roundid=";
             var currentRoundid = gameInfo.roundid;
-            var hasCreatures = [];
+            var hasCreatures = new Array();
 
             history.pushState( {}, "", href );
 
