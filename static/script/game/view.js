@@ -58,16 +58,22 @@ $( document ).ready( function() {
         var $nodes = $( '.playerList li' );
         $.each( $nodes, function( index, value ) {
             $node = $nodes.eq( index );
-            var array = $node.html().split( '</span>' );
-            var name = array[ 1 ].trim();
             var userid = $node.attr( 'data-id' );
-            if ( hasCreatures[ userid ] && name.indexOf( "<del>" ) != -1 ) {
-                name = name.substring( 5, name.indexOf( "</del>" ) );
+            var $spanNode = $node.contents()[ 0 ];
+            var $nameNode = $node.contents()[ 1 ];
+            var $newNameNode;
+
+            if ( hasCreatures[ userid ] && $nameNode.nodeName == "DEL" ) {
+                $newNameNode = $nameNode.firstChild;
             }
-            else if ( !hasCreatures[ userid ] && name.indexOf( "<del>" ) ) {
-                name = "<del>" + name + "</del>";
+            else if ( !hasCreatures[ userid ] && $nameNode.nodeName != "DEL" ) {
+                $newNameNode = $( "<del>" + $nameNode.nodeValue + "</del>" );
             }
-            $node.html( array[ 0 ] + "</span>" + name );
+            else {
+                $newNameNode = $nameNode;
+            }
+            $nameNode.remove();
+            $node.append( $newNameNode );
         } );
     }
     function getMap( href, roundAddition ) {

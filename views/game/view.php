@@ -41,7 +41,7 @@
                 echo $playerColor[ $user->id ];
             ?> bubble' data-color="<?php
                 echo $playerColor[ $user->id ];
-            ?>"></span> <?php
+            ?>"></span><?php
                 if ( !isset( $hasCreatures[ $user->id ] ) ) {
                     ?><del><?php
                         echo htmlspecialchars( $user->username );
