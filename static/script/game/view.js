@@ -76,7 +76,7 @@ $( document ).ready( function() {
             $node.append( $newNameNode );
         } );
     }
-    function getMap( href, roundAddition ) {
+    function getMap( href, roundDelta ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
             var maxRounds = $( '.gamemeta h2' ).attr( 'data-rounds' );
@@ -89,14 +89,14 @@ $( document ).ready( function() {
 
             history.pushState( {}, "", href );
 
-            if ( ( roundValue = findGameAndRoundId( nextHref ).roundid + roundAddition ) >= maxRounds ) {
+            if ( ( roundValue = findGameAndRoundId( nextHref ).roundid + roundDelta ) >= maxRounds ) {
                 $( '.next' ).hide();
             }
             else {
                 $( '.next' ).show();
             }
             $( '.next a' ).attr( 'href', prefix + roundValue );
-            if ( ( roundValue = findGameAndRoundId( previousHref ).roundid + roundAddition ) < 0 ) {
+            if ( ( roundValue = findGameAndRoundId( previousHref ).roundid + roundDelta ) < 0 ) {
                 $( '.previous' ).hide();
             }
             else {
