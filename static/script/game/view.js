@@ -69,24 +69,25 @@ $( document ).ready( function() {
             $node.append( $newNameNode );
         } );
     }
+    function makeUrls( gameid, roundid ) {
+        var url = "game/view?gameid=" + gameid + "&roundid=";
+        $( ".next a" ).attr( 'href', url + ( roundid + 1 ) );
+        $( ".previous a" ).attr( 'href', url + ( roundid - 1 ) );
+    }
     function getMap( href ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
             var maxRounds = $( '.gamemeta h2' ).attr( 'data-rounds' );
-            var nextHref = $( '.next a' ).attr( 'href' );
-            var previousHref = $( '.previous a' ).attr( 'href' );
             var gameInfo = findGameAndRoundId( href );
-            var prefix = "game/view?gameid=" + gameInfo.gameid + "&roundid=";
-            var currentRoundid = gameInfo.roundid;
+            var gameid = gameInfo.gameid;
+            var roundid = gameInfo.roundid;
             var hasCreatures = new Array();
 
             history.pushState( {}, "", href );
 
-            $( '.next' ).toggle( currentRoundid + 1 < maxRounds );
-            $( '.next a' ).attr( 'href', prefix + ( currentRoundid + 1 ) );
-
-            $( '.previous' ).toggle( currentRoundid - 1 >= 0 );
-            $( '.previous a' ).attr( 'href', prefix + ( currentRoundid - 1 ) );
+            $( '.next' ).toggle( roundid + 1 < maxRounds );
+            $( '.previous' ).toggle( roundid - 1 >= 0 );
+            makeUrls( gameid, roundid );
 
             $( '.round' ).text( 'Round ' + findGameAndRoundId( href ).roundid );
 
