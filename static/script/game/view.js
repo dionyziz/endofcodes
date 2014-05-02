@@ -1,5 +1,5 @@
 $( document ).ready( function() {
-    function creatureMouseover() {
+    $( document ).on( "mouseover", ".creature", function() {
         var ARROW_HEIGHT = 14;
         var ARROW_WIDTH = 30;
         var id = this.getAttribute( 'data-creatureid' );
@@ -28,13 +28,12 @@ $( document ).ready( function() {
         }
         $infobubble.css( 'top', $this.position().top + positioning );
         $infobubble.css( 'left', $this.position().left - $infobubble.width() + ARROW_WIDTH );
-    }
-    function creatureMouseOut() {
+    } );
+    $( document ).on( "mouseout", ".creature", function() {
         var $infobubble = $( '.infobubble' );
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
-    }
-    $( '.creature' ).mouseover( creatureMouseover );
+    } );
     $( '.creature' ).mouseout( creatureMouseOut );
     function fixRoundId( classname ) {
         var $link = $( '.' + classname + ' a' );
@@ -88,8 +87,6 @@ $( document ).ready( function() {
                         left: creature.x * 20 + 'px',
                         top: creature.y * 20 + 'px'
                     } );
-                    $creature.mouseover( creatureMouseover );
-                    $creature.mouseout( creatureMouseOut );
                     $( '.gameboard' ).prepend( $creature );
                 }
             }
