@@ -60,16 +60,10 @@ $( document ).ready( function() {
             $node = $nodes.eq( index );
             var userid = $node.attr( 'data-id' );
             var $nameNode = $node.contents()[ 1 ];
-            var $newNameNode;
+            var $newNameNode = $( document.createTextNode( $node.text() ) );
 
-            if ( hasCreatures[ userid ] && $nameNode.nodeName == "DEL" ) {
-                $newNameNode = $nameNode.firstChild;
-            }
-            else if ( !hasCreatures[ userid ] && $nameNode.nodeName != "DEL" ) {
-                $newNameNode = $( "<del>" + $nameNode.nodeValue + "</del>" );
-            }
-            else {
-                $newNameNode = $nameNode;
+            if ( !hasCreatures[ userid ] && $nameNode.nodeName != "DEL" ) {
+                $newNameNode = $( "<del>" + $newNameNode.text() + "</del>" );
             }
             $nameNode.remove();
             $node.append( $newNameNode );
