@@ -36,6 +36,7 @@ $( document ).ready( function() {
     } );
     function findGameAndRoundId( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
+        var attribute, gameid, roundid;
 
         for ( var i = 0; i < hrefArray.length; ++i ) {
             attribute = hrefArray[ i ].split( "=" );
