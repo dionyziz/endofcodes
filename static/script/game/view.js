@@ -59,7 +59,6 @@ $( document ).ready( function() {
         $.each( $nodes, function( index, value ) {
             $node = $nodes.eq( index );
             var userid = $node.attr( 'data-id' );
-            var $spanNode = $node.contents()[ 0 ];
             var $nameNode = $node.contents()[ 1 ];
             var $newNameNode;
 
