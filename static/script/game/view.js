@@ -76,7 +76,7 @@ $( document ).ready( function() {
             $node.append( $newNameNode );
         } );
     }
-    function getMap( href, roundDelta ) {
+    function getMap( href ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
             var maxRounds = $( '.gamemeta h2' ).attr( 'data-rounds' );
@@ -84,25 +84,25 @@ $( document ).ready( function() {
             var previousHref = $( '.previous a' ).attr( 'href' );
             var gameInfo = findGameAndRoundId( href );
             var prefix = "game/view?gameid=" + gameInfo.gameid + "&roundid=";
-            var roundValue;
+            var currentRoundid = gameInfo.roundid;
             var hasCreatures = [];
 
             history.pushState( {}, "", href );
 
-            if ( ( roundValue = findGameAndRoundId( nextHref ).roundid + roundDelta ) >= maxRounds ) {
+            if ( currentRoundid + 1 >= maxRounds ) {
                 $( '.next' ).hide();
             }
             else {
                 $( '.next' ).show();
             }
-            $( '.next a' ).attr( 'href', prefix + roundValue );
-            if ( ( roundValue = findGameAndRoundId( previousHref ).roundid + roundDelta ) < 0 ) {
+            $( '.next a' ).attr( 'href', prefix + ( currentRoundid + 1 ) );
+            if ( currentRoundid - 1 < 0 ) {
                 $( '.previous' ).hide();
             }
             else {
                 $( '.previous' ).show();
             }
-            $( '.previous a' ).attr( 'href', prefix + roundValue ); 
+            $( '.previous a' ).attr( 'href', prefix + ( currentRoundid - 1 ) );
             $( '.round' ).text( 'Round ' + findGameAndRoundId( href ).roundid );
 
             $( '.creature' ).remove();
@@ -137,11 +137,11 @@ $( document ).ready( function() {
         } );
     }
     $( '.next a' ).click( function() {
-        getMap( this.href, 1 );
+        getMap( this.href );
         return false;
     } );
     $( '.previous a' ).click( function() {
-        getMap( this.href, -1 );
+        getMap( this.href );
         return false;
     } );
 } );
