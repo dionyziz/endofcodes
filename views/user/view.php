@@ -4,7 +4,7 @@
 <div class="text-center">
     <p><img src="<?php
                 echo $user->image->target_path;
-            ?>" alt="Profile Picture" width="100" height="100" /></p><?php
+            ?>" alt="Profile Picture" width="100" height="100" id="userImage" /></p><?php
 
     if ( isset( $user->country ) ) {
         ?><p><img src="<?php
@@ -54,15 +54,16 @@
                 } );
             }
             else {
+                ?><p id="uploading">Uploading. . .</p><?php
                 $form = new Form( 'image', 'create' );
-                $form->id = 'image-create';
+                $form->id = 'image-form';
                 $form->output( function( $self ) use( $image_invalid ) {
                     $self->createLabel( 'image', 'Upload an avatar' );
                     if ( isset( $image_invalid ) ) {
                         $self->createError( "This isn't an image" );
                     }
-                    $self->createInput( 'file', 'image', 'avatar-form' );
-                    $self->createSubmit( 'Upload' );
+                    $self->createInput( 'file', 'image', 'image' );
+                    $self->createSubmit( 'Upload', [ "id" => "imageSubmit" ]  );
                 } );
 
                 ?><p><a href="user/update">Edit Settings</a></p><?php
