@@ -45,6 +45,7 @@
     } );
 
     $form = new Form( 'image', 'create' );
+    $form->id = 'image-create';
     $form->output( function( $self ) use( $image_invalid ) {
         $self->createLabel( 'image', 'Upload an avatar' );
         if ( isset( $image_invalid ) ) {
