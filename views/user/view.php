@@ -54,6 +54,17 @@
                 } );
             }
             else {
+                $form = new Form( 'image', 'create' );
+                $form->id = 'image-create';
+                $form->output( function( $self ) use( $image_invalid ) {
+                    $self->createLabel( 'image', 'Upload an avatar' );
+                    if ( isset( $image_invalid ) ) {
+                        $self->createError( "This isn't an image" );
+                    }
+                    $self->createInput( 'file', 'image', 'avatar-form' );
+                    $self->createSubmit( 'Upload' );
+                } );
+
                 ?><p><a href="user/update">Edit Settings</a></p><?php
             }
         }
