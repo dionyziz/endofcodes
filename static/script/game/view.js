@@ -61,7 +61,7 @@ $( document ).ready( function() {
             var $nameNode = $node.contents()[ 1 ];
             var $newNameNode = $( document.createTextNode( $node.text() ) );
 
-            if ( !hasCreatures[ userid ] && $nameNode.nodeName != "DEL" ) {
+            if ( !hasCreatures[ userid ] ) {
                 $newNameNode = $( "<del>" + $newNameNode.text() + "</del>" );
             }
             $nameNode.remove();
