@@ -89,7 +89,7 @@ $( document ).ready( function() {
             $( '.previous' ).toggle( roundid - 1 >= 0 );
             makeUrls( gameid, roundid );
 
-            $( '.round' ).text( 'Round ' + findGameAndRoundId( href ).roundid );
+            $( '.round' ).text( 'Round ' + roundid );
 
             $( '.creature' ).remove();
             for ( var i = 0; i < creatures.length; ++i ) {
