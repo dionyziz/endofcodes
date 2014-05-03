@@ -68,10 +68,12 @@ $( document ).ready( function() {
             $node.append( $newNameNode );
         } );
     }
-    function makeUrls( gameid, roundid ) {
-        var url = "game/view?gameid=" + gameid + "&roundid=";
-        $( ".next a" ).attr( 'href', url + ( roundid + 1 ) );
-        $( ".previous a" ).attr( 'href', url + ( roundid - 1 ) );
+    function makeUrl( gameid, roundid ) {
+        return "game/view?gameid=" + gameid + "&roundid=" + roundid;
+    }
+    function fixUrls( gameid, roundid ) {
+        $( ".next a" ).attr( 'href', makeUrl( gameid, roundid + 1 ) );
+        $( ".previous a" ).attr( 'href', makeUrl( gameid, roundid - 1 ) );
     }
     function getMap( href ) {
         $.getJSON( href, function( creatures ) {
@@ -86,7 +88,7 @@ $( document ).ready( function() {
 
             $( '.next' ).toggle( roundid + 1 < maxRounds );
             $( '.previous' ).toggle( roundid - 1 >= 0 );
-            makeUrls( gameid, roundid );
+            fixUrls( gameid, roundid );
 
             $( '.round' ).text( 'Round ' + roundid );
 
