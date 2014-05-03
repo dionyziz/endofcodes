@@ -55,9 +55,8 @@ $( document ).ready( function() {
         }
     }
     function fixUserList( hasCreatures ) {
-        var $nodes = $( '.playerList li' );
-        $.each( $nodes, function( index, value ) {
-            $node = $nodes.eq( index );
+        $( '.playerList li' ).each( function( index, value ) {
+            $node = $( this );
             var userid = $node.attr( 'data-id' );
             var $nameNode = $node.contents()[ 1 ];
             var $newNameNode = $( document.createTextNode( $node.text() ) );
