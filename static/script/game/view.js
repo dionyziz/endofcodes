@@ -34,7 +34,6 @@ $( document ).ready( function() {
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
     } );
-    $( '.creature' ).mouseout( creatureMouseOut );
     function fixRoundId( classname ) {
         var $link = $( '.' + classname + ' a' );
         var href = $link.attr( 'href' );
