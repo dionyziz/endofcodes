@@ -24,7 +24,7 @@ $( document ).ready( function() {
             type: "POST",
             data: formdata,
             cache: false,
-            dataType: "json",
+            dataType: false,
             processData: false,
             contentType: false,
             success: function( res ) {
@@ -32,7 +32,6 @@ $( document ).ready( function() {
                 $( "#uploading" ).hide();
             },
             error: function( res ) {
-                console.log( res );
                 $( "#imageSubmit" ).show();
                 $( "#uploading" ).hide();
             }
