@@ -2,23 +2,29 @@ $( document ).ready( function() {
     function showUploadedImage( source ) {
         $( "#userImage" ).attr( "src", source );
     }
+    function createImageError() {
+        $( '#image-form' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )
+    }
+    function removeImageError() {
+        $( '#image-form .alert.alert-danger' ).remove();
+    }
+    function toggleSubmit() {
+        $( "#imageSubmit" ).toggle();
+        $( "#uploading" ).toggle();
+    }
     $( "#image-form" ).submit( function() {
         var image = document.getElementById( "image" ).files[ 0 ];
-        if ( !image ) {
-            $( '#image-form' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )
-            return false;
-        }
         var token = $( "input[type=hidden]" ).val();
         var formdata = new FormData();
-        var reader = new FileReader();
 
-        $( "#imageSubmit" ).hide();
-        $( "#uploading" ).show();
+        removeImageError();
 
-        reader.onloadend = function ( e ) {
-            showUploadedImage( e.target.result );
+        if ( !image ) {
+            createImageError();
+            return false;
         }
-        reader.readAsDataURL( image );
+
+        toggleSubmit();
 
         formdata.append( "image", image );
         formdata.append( "token", token );
@@ -28,14 +34,21 @@ $( document ).ready( function() {
             type: "POST",
             data: formdata,
             cache: false,
-            dataType: false,
+            dataType: "json",
             processData: false,
             contentType: false,
             success: function( res ) {
-                $( "#imageSubmit" ).show();
-                $( "#uploading" ).hide();
+                var reader = new FileReader();
+
+                reader.onloadend = function ( e ) {
+                    showUploadedImage( e.target.result );
+                }
+                reader.readAsDataURL( image );
+
+                toggleSubmit();
             },
-            error: function( res ) {
+            error: function( jqXHR, textStatus, errorThrown ) {
+                createImageError();
                 $( "#imageSubmit" ).show();
                 $( "#uploading" ).hide();
             }
