@@ -4,6 +4,10 @@ $( document ).ready( function() {
     }
     $( "#image-form" ).submit( function() {
         var image = document.getElementById( "image" ).files[ 0 ];
+        if ( !image ) {
+            $( '#image-form' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )
+            return false;
+        }
         var token = $( "input[type=hidden]" ).val();
         var formdata = new FormData();
         var reader = new FileReader();
