@@ -11,16 +11,17 @@
             if ( !filter_var( $boturl, FILTER_VALIDATE_URL ) ) {
                 go( 'bot', 'update', [ 'boturl_invalid' => true ] );
             }
-            $user = $_SESSION[ 'user' ];
-            $user->boturl = $boturl; 
-            $bot = new GraderBot( $user );
+            $userclone = clone $_SESSION[ 'user' ];
+            $userclone->boturl = $boturl;
+            $bot = new GraderBot( $userclone );
             try {
                 $bot->sendInitiateRequest(); 
+                $userclone->save();
+                $_SESSION[ 'user' ] = $userclone;
             }
             catch ( GraderBotException $e ) {
                 go( 'bot', 'update', [ 'bot_fail' => true, 'errorid' => $e->error->id ] );
             }
-            $user->save();
             go( 'bot', 'update' );
         }
         public function updateView( $boturl_empty, $boturl_invalid, $bot_fail, $errorid = false ) {
@@ -33,6 +34,7 @@
                     throw new HTTPUnauthorizedException();
                 }
             }
+            $user = $_SESSION[ 'user' ];
 
             require_once 'models/grader/bot.php';
             require_once 'views/bot/update.php';
