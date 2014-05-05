@@ -227,7 +227,7 @@
         }
         $array = array_combine( $keys, $array );
         if ( !empty( $first ) ) {
-            array_unshift( $array, $first );
+            $array = [ 'first' => $first ] + $array;
         }
         return $array; 
     }
