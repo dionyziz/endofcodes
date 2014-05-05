@@ -1,59 +1,62 @@
-$( document ).ready( function() {
-    function showUploadedImage( source ) {
+var UserView = {
+    showUploadedImage: function( source ) {
         $( "#userImage" ).attr( "src", source );
-    }
-    function createImageError() {
+    },
+    createImageError: function() {
         $( '#image-form' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )
-    }
-    function removeImageError() {
+    },
+    removeImageError: function() {
         $( '#image-form .alert.alert-danger' ).remove();
-    }
-    function toggleSubmit() {
+    },
+    toggleSubmit: function() {
         $( "#imageSubmit" ).toggle();
         $( "#uploading" ).toggle();
-    }
-    $( "#image-form" ).submit( function() {
-        var image = document.getElementById( "image" ).files[ 0 ];
-        var token = $( "input[type=hidden]" ).val();
-        var formData = new FormData();
+    },
+    ready: function() {
+        $( "#image-form" ).submit( function() {
+            var image = document.getElementById( "image" ).files[ 0 ];
+            var token = $( "input[type=hidden]" ).val();
+            var formData = new FormData();
 
-        removeImageError();
+            UserView.removeImageError();
 
-        if ( !image ) {
-            createImageError();
-            return false;
-        }
-
-        toggleSubmit();
-
-        formData.append( "image", image );
-        formData.append( "token", token );
-
-        $.ajax( {
-            url: "image/create",
-            type: "POST",
-            data: formData,
-            cache: false,
-            dataType: "json",
-            processData: false,
-            contentType: false,
-            success: function( res ) {
-                var reader = new FileReader();
-
-                reader.onloadend = function ( e ) {
-                    showUploadedImage( e.target.result );
-                }
-                reader.readAsDataURL( image );
-
-                toggleSubmit();
-            },
-            error: function( jqXHR, textStatus, errorThrown ) {
-                createImageError();
-                $( "#imageSubmit" ).show();
-                $( "#uploading" ).hide();
+            if ( !image ) {
+                UserView.createImageError();
+                return false;
             }
-        } );
 
-        return false;
-    } );
-} );
+            UserView.toggleSubmit();
+
+            formData.append( "image", image );
+            formData.append( "token", token );
+
+            $.ajax( {
+                url: "image/create",
+                type: "POST",
+                data: formData,
+                cache: false,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                success: function( res ) {
+                    var reader = new FileReader();
+
+                    reader.onloadend = function ( e ) {
+                        UserView.showUploadedImage( e.target.result );
+                    }
+                    reader.readAsDataURL( image );
+
+                    UserView.toggleSubmit();
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                    UserView.createImageError();
+                    $( "#imageSubmit" ).show();
+                    $( "#uploading" ).hide();
+                }
+            } );
+
+            return false;
+        } );
+    }
+}
+$( document ).ready( UserView.ready );
