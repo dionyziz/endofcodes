@@ -23,12 +23,14 @@
             includeStyle( "test" );
             includeStyle( "links" );
             includeStyle( "game/view" );
+            includeStyle( "user/view" );
         ?>
         <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
         <script type="text/javascript" src="static/script/logout.js"></script>
         <script type="text/javascript" src="static/script/game/view.js"></script>
         <script type="text/javascript" src="static/script/prefixfree.min.js"></script>
         <script type="text/javascript" src="static/script/form_validation.js"></script>
+        <script type="text/javascript" src="static/script/user/view.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>
