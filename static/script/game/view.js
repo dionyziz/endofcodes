@@ -52,7 +52,8 @@ var GameView = {
         } );
         return $creature;
     },
-    getMap: function( href ) {
+    getMap: function() {
+        var href = this.href;
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
             var maxRounds = $( '.gamemeta h2' ).attr( 'data-rounds' );
@@ -91,6 +92,7 @@ var GameView = {
             }
             GameView.fixUserList( hasCreatures );
         } );
+        return false;
     },
     ready: function() {
         $( document ).on( "mouseover", ".creature", function() {
@@ -128,14 +130,8 @@ var GameView = {
             $infobubble.removeClass( 'reversed' );
             $infobubble.hide();
         } );
-        $( '.next a' ).click( function() {
-            GameView.getMap( this.href );
-            return false;
-        } );
-        $( '.previous a' ).click( function() {
-            GameView.getMap( this.href );
-            return false;
-        } );
+        $( '.next a' ).click( GameView.getMap );
+        $( '.previous a' ).click( GameView.getMap );
     }
 }
 $( document ).ready( GameView.ready );
