@@ -119,7 +119,7 @@ var GameView = {
                 positioning = $this.height() + ARROW_HEIGHT;
                 $infobubble.addClass( 'reversed' );
             }
-            else {
+            else { // bubble doesn't fit on the screen
                 positioning = -$infobubble.height() - ARROW_HEIGHT;
             }
             $infobubble.css( 'top', $this.position().top + positioning );
