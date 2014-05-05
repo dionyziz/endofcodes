@@ -15,7 +15,7 @@ $( document ).ready( function() {
     $( "#image-form" ).submit( function() {
         var image = document.getElementById( "image" ).files[ 0 ];
         var token = $( "input[type=hidden]" ).val();
-        var formdata = new FormData();
+        var formData = new FormData();
 
         removeImageError();
 
@@ -26,13 +26,13 @@ $( document ).ready( function() {
 
         toggleSubmit();
 
-        formdata.append( "image", image );
-        formdata.append( "token", token );
+        formData.append( "image", image );
+        formData.append( "token", token );
 
         $.ajax( {
             url: "image/create",
             type: "POST",
-            data: formdata,
+            data: formData,
             cache: false,
             dataType: "json",
             processData: false,
