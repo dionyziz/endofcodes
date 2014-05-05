@@ -155,13 +155,15 @@
         }
 
         protected function onBeforeCreate() {
+            $day = intval( $this->dateOfBirth[ 'day' ] );
+            $month = intval( $this->dateOfBirth[ 'month' ] );
+            $year = intval( $this->dateOfBirth[ 'year' ] );
+            if ( !checkdate( $day, $month, $year ) ) {
+                $day = $month = $year = 0;
+            }
+            $dob = $this->dob = $year . '-' . $month . '-' . $day;
             $this->imageid = 0;
             $this->generateSessionId();
-            $dob = $this->dob = $this->prepareDob();
-        }
-
-        protected function onBeforeUpdate() {
-            $dob = $this->dob = $this->prepareDob();
         }
 
         protected function onSave() {
@@ -193,16 +195,6 @@
             $value = openssl_random_pseudo_bytes( 32 );
             $sessionid = base64_encode( $value );
             $this->sessionid = $sessionid;
-        }
-
-        protected function prepareDob() {
-            $day = intval( $this->dateOfBirth[ 'day' ] );
-            $month = intval( $this->dateOfBirth[ 'month' ] );
-            $year = intval( $this->dateOfBirth[ 'year' ] );
-            if ( !checkdate( $day, $month, $year ) ) {
-                $day = $month = $year = 0;
-            }
-            return $year . '-' . $month . '-' . $day;
         }
 
         public function authenticatesWithPassword( $password ) {
