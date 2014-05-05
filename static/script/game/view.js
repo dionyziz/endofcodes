@@ -59,7 +59,7 @@ var GameView = {
             var gameInfo = GameView.findGameAndRoundId( href );
             var gameid = gameInfo.gameid;
             var roundid = gameInfo.roundid;
-            var hasCreatures = new Array();
+            var hasCreatures = [];
 
             history.pushState( {}, "", href );
 
