@@ -40,6 +40,18 @@ var GameView = {
         $( ".next a" ).attr( 'href', this.makeUrl( gameid, roundid + 1 ) );
         $( ".previous a" ).attr( 'href', this.makeUrl( gameid, roundid - 1 ) );
     },
+    createCreature: function( creatureInfo, color ) {
+        var $creature = $( '<div class="' + color + ' creature"></div>' );
+        for ( var attribute in creatureInfo ) {
+            var value = creatureInfo[ attribute ];
+            $creature.attr( 'data-' + attribute, value );
+        }
+        $creature.css( {
+            left: creatureInfo.x * 20 + 'px',
+            top: creatureInfo.y * 20 + 'px'
+        } );
+        return $creature;
+    },
     getMap: function( href ) {
         $.getJSON( href, function( creatures ) {
             var maxHp = $( '.creature' ).attr( 'data-maxHp' );
@@ -73,15 +85,7 @@ var GameView = {
                         hp: creature.hp,
                         maxHp: maxHp
                     };
-                    $creature = $( '<div class="' + color + ' creature"></div>' );
-                    for ( var attribute in creatureInfo ) {
-                        var value = creatureInfo[ attribute ];
-                        $creature.attr( 'data-' + attribute, value );
-                    }
-                    $creature.css( {
-                        left: creature.x * 20 + 'px',
-                        top: creature.y * 20 + 'px'
-                    } );
+                    var $creature = GameView.createCreature( creatureInfo, color );
                 }
                 $( '.gameboard' ).prepend( $creature );
             }
