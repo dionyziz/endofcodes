@@ -27,7 +27,8 @@
             ],
             'forgot_password_exp_time' => 3600 * 24,
             'cli_max_width' => 120,
-            'email' => 'team@endofcodes.com'
+            'email' => 'team@endofcodes.com',
+            'botVersion' => '0.1.0'
         ],
         'test' => [
             'db' => [
@@ -56,7 +57,8 @@
             ],
             'forgot_password_exp_time' => 3600 * 24,
             'cli_max_width' => 120,
-            'email' => 'team@endofcodes.com'
+            'email' => 'team@endofcodes.com',
+            'botVersion' => '0.1.0'
         ]
     ];
 ?>
