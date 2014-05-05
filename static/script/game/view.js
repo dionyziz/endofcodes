@@ -29,7 +29,7 @@ var GameView = {
         }
 
         $( '.playerList li' ).each( function( index, value ) {
-            $node = $( this );
+            var $node = $( this );
             var userid = $node.attr( 'data-id' );
             var $nameNode = $node.contents()[ 1 ];
             var $newNameNode = $( document.createTextNode( $node.text() ) );
