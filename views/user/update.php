@@ -9,7 +9,9 @@
     ?><p><a href='bot/update'>Configure Bot.</a></p><?php
     $form = new Form( 'user', 'update' );
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong,
-                                          $password_new_not_matched, $password_new_small, $countries, $user ) {
+            $password_new_not_matched, $password_new_small, $countries, $user ) {
+        global $config;
+
         ?><p>Change email</p><?php
         $self->createLabel( 'email', 'Email' );
         if ( isset( $email_invalid ) ) {
@@ -41,6 +43,17 @@
             $countries_select_array[ $country->shortname ] = $country->name;
         }
         $self->createSelect( $countries_select_array, 'countryShortname' );
+        $self->createLabel( 'dob', 'Date of birth' );
+        $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
+        $self->createSelect( $days, 'day' );
+        $months = createSelectPrepare( range( 1, 12 ), 'Select Month' );
+        $self->createSelect( $months, 'month' );
+        $current_year = date( 'Y' );
+        $years = createSelectPrepare (
+            range( $current_year - $config[ 'age' ][ 'min' ], $current_year - $config[ 'age' ][ 'max' ] ),
+            'Select Year'
+        );
+        $self->createSelect( $years, 'year' );
         $self->createSubmit( 'Save settings' );
     } );
 
