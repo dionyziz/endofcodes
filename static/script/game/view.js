@@ -1,5 +1,5 @@
 $( document ).ready( function() {
-    $( '.creature' ).mouseover( function () {
+    $( document ).on( "mouseover", ".creature", function() {
         var ARROW_HEIGHT = 14;
         var ARROW_WIDTH = 30;
         var id = this.getAttribute( 'data-creatureid' );
@@ -29,7 +29,7 @@ $( document ).ready( function() {
         $infobubble.css( 'top', $this.position().top + positioning );
         $infobubble.css( 'left', $this.position().left - $infobubble.width() + ARROW_WIDTH );
     } );
-    $( '.creature' ).mouseout( function() {
+    $( document ).on( "mouseout", ".creature", function() {
         var $infobubble = $( '.infobubble' );
         $infobubble.removeClass( 'reversed' );
         $infobubble.hide();
@@ -70,7 +70,7 @@ $( document ).ready( function() {
                     var username = $user.text();
                     var color = $user.find( 'span.bubble' ).attr( 'data-color' );
                     creatureInfo = {
-                        creatureid: creature.id,
+                        creatureid: creature.creatureid,
                         username: username,
                         x: creature.x,
                         y: creature.y,
@@ -86,8 +86,8 @@ $( document ).ready( function() {
                         left: creature.x * 20 + 'px',
                         top: creature.y * 20 + 'px'
                     } );
+                    $( '.gameboard' ).prepend( $creature );
                 }
-                $( '.gameboard' ).prepend( $creature );
             }
         } );
         return false;
