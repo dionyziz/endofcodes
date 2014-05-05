@@ -157,11 +157,11 @@
         protected function onBeforeCreate() {
             $this->imageid = 0;
             $this->generateSessionId();
-            $dob = $this->dob = $this->prepareDob();
+            $this->prepareDob();
         }
 
         protected function onBeforeUpdate() {
-            $dob = $this->dob = $this->prepareDob();
+            $this->prepareDob();
         }
 
         protected function onSave() {
@@ -202,7 +202,7 @@
             if ( !checkdate( $day, $month, $year ) ) {
                 $day = $month = $year = 0;
             }
-            return $year . '-' . $month . '-' . $day;
+            $this->dob = $year . '-' . $month . '-' . $day;
         }
 
         public function authenticatesWithPassword( $password ) {
