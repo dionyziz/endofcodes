@@ -24,13 +24,13 @@
             require_once 'models/error.php';
 
             $this->requireLogin();
+            $user = $_SESSION[ 'user' ];
             if ( $errorid !== false ) {
                 $error = new Error( $errorid );
-                if ( $error->user->id !== $_SESSION[ 'user' ]->id ) {
+                if ( $error->user->id !== $user->id ) {
                     throw new HTTPUnauthorizedException();
                 }
             }
-            $user = $_SESSION[ 'user' ];
 
             require_once 'models/grader/bot.php';
             require_once 'views/bot/update.php';
