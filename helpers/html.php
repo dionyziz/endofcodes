@@ -221,13 +221,13 @@
             ?>" /><?php
     }
 
-    function createSelectPrepare( $array, $first = '', $keys = '' ) {
+    function createSelectPrepare( $array, $title = '', $keys = '' ) {
         if ( empty( $keys ) ) {
             $keys = $array;
         }
         $array = array_combine( $keys, $array );
-        if ( !empty( $first ) ) {
-            $array = [ 'first' => $first ] + $array;
+        if ( !empty( $title ) ) {
+            $array = compact( 'title' ) + $array;
         }
         return $array; 
     }
