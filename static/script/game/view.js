@@ -67,7 +67,7 @@ $( document ).ready( function() {
                 var creature = creatures[ i ];
                 if ( creature.hp > 0 ) {
                     var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
-                    var username = $user.text().trim();
+                    var username = $user.text();
                     var color = $user.find( 'span.bubble' ).attr( 'data-color' );
                     creatureInfo = {
                         creatureid: creature.creatureid,
