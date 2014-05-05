@@ -11,16 +11,12 @@
             if ( !filter_var( $boturl, FILTER_VALIDATE_URL ) ) {
                 go( 'bot', 'update', [ 'boturl_invalid' => true ] );
             }
-            $userclone = clone $_SESSION[ 'user' ];
-            $userclone->boturl = $boturl;
-            $bot = new GraderBot( $userclone );
+            $user = $_SESSION[ 'user' ];
             try {
-                $bot->sendInitiateRequest(); 
-                $userclone->save();
-                $_SESSION[ 'user' ] = $userclone;
+                $user->setBoturl( $boturl );
             }
-            catch ( GraderBotException $e ) {
-                go( 'bot', 'update', [ 'bot_fail' => true, 'errorid' => $e->error->id ] );
+            catch ( ModelValidationException $e ) {
+                go( 'bot', 'update', [ 'bot_fail' => true, 'errorid' => $e->error ] );
             }
             go( 'bot', 'update' );
         }
