@@ -1,5 +1,5 @@
 <?php
-    class htmlTest extends UnitTestWithFixtures {
+    class HTMLHelperTest extends UnitTestWithFixtures {
         public function testCreateSelectPrepare() {
             $test = [ 'a', 'b' ];
             $keys = [ 'key1', 'key2' ];
@@ -30,5 +30,5 @@
         } 
     }
 
-    return new htmlTest();
+    return new HTMLHelperTest();
 ?>
