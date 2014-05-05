@@ -19,7 +19,15 @@ var GameView = {
             roundid: roundid
         }
     },
-    fixUserList: function( hasCreatures ) {
+    fixUserList: function( creatures ) {
+        var hasCreatures = [];
+        for ( var i = 0; i < creatures.length; ++i ) {
+            creature = creatures[ i ];
+            if ( creature.hp > 0 ) {
+                hasCreatures[ creature.userid ] = true;
+            }
+        }
+
         $( '.playerList li' ).each( function( index, value ) {
             $node = $( this );
             var userid = $node.attr( 'data-id' );
@@ -52,45 +60,48 @@ var GameView = {
         } );
         return $creature;
     },
+    processCreatures: function( creatures ) {
+        var maxHp = $( '.creature' ).attr( 'data-maxHp' );
+
+        $( '.creature' ).remove();
+        for ( var i = 0; i < creatures.length; ++i ) {
+            var creature = creatures[ i ];
+            if ( creature.hp > 0 ) {
+                var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
+                var username = $user.text();
+                var color = $user.find( 'span.bubble' ).attr( 'data-color' );
+                creatureInfo = {
+                    creatureid: creature.creatureid,
+                    username: username,
+                    x: creature.x,
+                    y: creature.y,
+                    hp: creature.hp,
+                    maxHp: maxHp
+                };
+                var $creature = GameView.createCreature( creatureInfo, color );
+                $( '.gameboard' ).prepend( $creature );
+            }
+        }
+    },
     getMap: function() {
         var href = this.href;
         $.getJSON( href, function( creatures ) {
-            var maxHp = $( '.creature' ).attr( 'data-maxHp' );
             var maxRounds = $( '.gamemeta h2' ).attr( 'data-rounds' );
             var gameInfo = GameView.findGameAndRoundId( href );
             var gameid = gameInfo.gameid;
             var roundid = gameInfo.roundid;
-            var hasCreatures = [];
 
             history.pushState( {}, "", href );
+
+            $( '.round' ).text( 'Round ' + roundid );
 
             $( '.next' ).toggle( roundid + 1 < maxRounds );
             $( '.previous' ).toggle( roundid - 1 >= 0 );
             GameView.fixUrls( gameid, roundid );
 
-            $( '.round' ).text( 'Round ' + roundid );
+            GameView.processCreatures( creatures );
 
-            $( '.creature' ).remove();
-            for ( var i = 0; i < creatures.length; ++i ) {
-                var creature = creatures[ i ];
-                if ( creature.hp > 0 ) {
-                    hasCreatures[ creature.userid ] = true;
-                    var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
-                    var username = $user.text();
-                    var color = $user.find( 'span.bubble' ).attr( 'data-color' );
-                    creatureInfo = {
-                        creatureid: creature.creatureid,
-                        username: username,
-                        x: creature.x,
-                        y: creature.y,
-                        hp: creature.hp,
-                        maxHp: maxHp
-                    };
-                    var $creature = GameView.createCreature( creatureInfo, color );
-                    $( '.gameboard' ).prepend( $creature );
-                }
-            }
-            GameView.fixUserList( hasCreatures );
+            GameView.fixUserList( creatures );
         } );
         return false;
     },
