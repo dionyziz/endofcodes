@@ -222,7 +222,7 @@
     }
 
     function createSelectPrepare( $array, $first = '', $keys = '' ) {
-        if ( empty( $key ) ) {
+        if ( empty( $keys ) ) {
             $keys = $array;
         }
         $array = array_combine( $keys, $array );
