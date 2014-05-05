@@ -54,7 +54,7 @@
                 } );
             }
             else {
-                ?><p id="uploading">Uploading. . .</p><?php
+                ?><p id="uploading">Uploading...</p><?php
                 $form = new Form( 'image', 'create' );
                 $form->id = 'image-form';
                 $form->output( function( $self ) use( $image_invalid ) {
