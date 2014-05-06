@@ -29,7 +29,7 @@
             go();
         }
 
-        public function view( $username ) {
+        public function view( $username, $image_invalid ) {
             if ( $username === NULL ) {
                 throw new HTTPNotFoundException();
             }

@@ -44,16 +44,6 @@
         $self->createSubmit( 'Save settings' );
     } );
 
-    $form = new Form( 'image', 'create' );
-    $form->output( function( $self ) use( $image_invalid ) {
-        $self->createLabel( 'image', 'Upload an avatar' );
-        if ( isset( $image_invalid ) ) {
-            $self->createError( "This isn't an image" );
-        }
-        $self->createInput( 'file', 'image', 'avatar-form' );
-        $self->createSubmit( 'Upload' );
-    } );
-
     $form = new Form( 'user', 'delete' );
     $form->output( function( $self ) {
         $self->createSubmit( 'Delete your account' );
