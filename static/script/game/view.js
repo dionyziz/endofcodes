@@ -1,5 +1,6 @@
 var GameView = {
     roundCount: 0,
+    maxHp: 0,
     findGameAndRoundId: function( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
         var attribute, gameid, roundid;
@@ -62,8 +63,6 @@ var GameView = {
         return $creature;
     },
     processCreatures: function( creatures ) {
-        var maxHp = $( '.creature' ).attr( 'data-maxHp' );
-
         $( '.creature' ).remove();
         for ( var i = 0; i < creatures.length; ++i ) {
             var creature = creatures[ i ];
@@ -76,8 +75,7 @@ var GameView = {
                     username: username,
                     x: creature.x,
                     y: creature.y,
-                    hp: creature.hp,
-                    maxHp: maxHp
+                    hp: creature.hp
                 };
                 var $creature = GameView.createCreature( creatureInfo, color );
                 $( '.gameboard' ).prepend( $creature );
@@ -107,6 +105,7 @@ var GameView = {
     },
     ready: function() {
         GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
+        GameView.maxHp = $( '.gamemeta h2' ).attr( 'data-maxHp' );
         $( document ).on( "mouseover", ".creature", function() {
             var ARROW_HEIGHT = 14;
             var ARROW_WIDTH = 30;
@@ -115,7 +114,6 @@ var GameView = {
             var x = this.getAttribute( 'data-x' );
             var y = this.getAttribute( 'data-y' );
             var hp = this.getAttribute( 'data-hp' );
-            var maxHp = this.getAttribute( 'data-maxHp' );
             var $this = $( this );
             var offsetTop = $this.offset().top - $( '.infobubble' ).height() - 14;
             var $infobubble = $( '.infobubble' );
@@ -125,8 +123,8 @@ var GameView = {
             $( '.player' ).text( username );
             $( '.creatureid' ).text( 'Creature ' + id );
             $( '.location' ).text( x + ', ' + y );
-            $( '.numeric' ).text( hp + ' / ' + maxHp );
-            $( '.damage' ).css( 'width', Math.floor( 100 * ( maxHp - hp ) / maxHp ) + '%' );
+            $( '.numeric' ).text( hp + ' / ' + GameView.maxHp );
+            $( '.damage' ).css( 'width', Math.floor( 100 * ( GameView.maxHp - hp ) / GameView.maxHp ) + '%' );
             if ( offsetTop < 0 ) {
                 positioning = $this.height() + ARROW_HEIGHT;
                 $infobubble.addClass( 'reversed' );
