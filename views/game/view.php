@@ -4,6 +4,8 @@
 <div class='gamemeta'>
     <h2 data-rounds="<?php
         echo count( $game->rounds );
+    ?>" data-maxHp="<?php
+        echo $game->maxHp;
     ?>">Game <?php
         echo $game->id;
     ?></h2>
@@ -69,8 +71,7 @@
                         'username' => $creature->user->username,
                         'x' => $creature->locationx,
                         'y' => $creature->locationy,
-                        'hp' => $creature->hp,
-                        'maxHp' => $game->maxHp
+                        'hp' => $creature->hp
                     ];
                     ?><div class="<?php
                         echo $playerColor[ $creature->user->id ];
