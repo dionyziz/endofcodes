@@ -12,24 +12,22 @@
                 go( 'bot', 'update', [ 'boturl_invalid' => true ] );
             }
             $user = $_SESSION[ 'user' ];
-            $user->boturl = $boturl; 
-            $bot = new GraderBot( $user );
             try {
-                $bot->sendInitiateRequest(); 
+                $user->setBoturl( $boturl );
             }
-            catch ( GraderBotException $e ) {
-                go( 'bot', 'update', [ 'bot_fail' => true, 'errorid' => $e->error->id ] );
+            catch ( ModelValidationException $e ) {
+                go( 'bot', 'update', [ 'bot_fail' => true, 'errorid' => $e->error ] );
             }
-            $user->save();
             go( 'bot', 'update' );
         }
         public function updateView( $boturl_empty, $boturl_invalid, $bot_fail, $errorid = false ) {
             require_once 'models/error.php';
 
             $this->requireLogin();
+            $user = $_SESSION[ 'user' ];
             if ( $errorid !== false ) {
                 $error = new Error( $errorid );
-                if ( $error->user->id !== $_SESSION[ 'user' ]->id ) {
+                if ( $error->user->id !== $user->id ) {
                     throw new HTTPUnauthorizedException();
                 }
             }

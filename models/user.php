@@ -155,15 +155,13 @@
         }
 
         protected function onBeforeCreate() {
-            $day = intval( $this->dateOfBirth[ 'day' ] );
-            $month = intval( $this->dateOfBirth[ 'month' ] );
-            $year = intval( $this->dateOfBirth[ 'year' ] );
-            if ( !checkdate( $day, $month, $year ) ) {
-                $day = $month = $year = 0;
-            }
-            $dob = $this->dob = $year . '-' . $month . '-' . $day;
+            $this->prepareDob();
             $this->imageid = 0;
             $this->generateSessionId();
+        }
+
+        protected function onBeforeUpdate() {
+            $this->prepareDob();
         }
 
         protected function onSave() {
@@ -195,6 +193,16 @@
             $value = openssl_random_pseudo_bytes( 32 );
             $sessionid = base64_encode( $value );
             $this->sessionid = $sessionid;
+        }
+
+        protected function prepareDob() {
+            $day = intval( $this->dateOfBirth[ 'day' ] );
+            $month = intval( $this->dateOfBirth[ 'month' ] );
+            $year = intval( $this->dateOfBirth[ 'year' ] );
+            if ( !checkdate( $day, $month, $year ) ) {
+                $day = $month = $year = 0;
+            }
+            $this->dob = $year . '-' . $month . '-' . $day;
         }
 
         public function authenticatesWithPassword( $password ) {
@@ -260,6 +268,21 @@
             if ( $period > $config[ 'forgot_password_exp_time' ] ) {
                 throw new ModelValidationException( 'link_expired' );
             } 
+        }
+
+        public function setBoturl( $boturl ) {
+            $oldBoturl = $this->boturl;
+            $this->boturl = $boturl;
+
+            $bot = new GraderBot( $this );
+            try {
+                $bot->sendInitiateRequest();
+                $this->save();
+            }
+            catch ( GraderBotException $e ) {
+                $this->boturl = $oldBoturl;
+                throw new ModelValidationException( $e->error->id );
+            }
         }
     }
 ?>
