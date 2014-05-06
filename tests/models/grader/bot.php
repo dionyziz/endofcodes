@@ -210,7 +210,7 @@
         protected function makeExpectedJson() {
             return json_encode( [
                 'botname' => 'your_botname',
-                'version' => '0.1.0',
+                'version' => 'your_botversion',
                 'username' => 'vitsalis'
             ] );
         }
