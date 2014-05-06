@@ -1,4 +1,6 @@
 var GameView = {
+    ARROW_HEIGHT: 14,
+    ARROW_WIDTH: 30,
     roundCount: 0,
     maxHp: 0,
     findGameAndRoundId: function( href ) {
@@ -107,8 +109,6 @@ var GameView = {
         GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
         GameView.maxHp = $( '.gamemeta h2' ).attr( 'data-maxHp' );
         $( document ).on( "mouseover", ".creature", function() {
-            var ARROW_HEIGHT = 14;
-            var ARROW_WIDTH = 30;
             var id = this.getAttribute( 'data-creatureid' );
             var username = this.getAttribute( 'data-username' );
             var x = this.getAttribute( 'data-x' );
@@ -126,14 +126,14 @@ var GameView = {
             $( '.numeric' ).text( hp + ' / ' + GameView.maxHp );
             $( '.damage' ).css( 'width', Math.floor( 100 * ( GameView.maxHp - hp ) / GameView.maxHp ) + '%' );
             if ( offsetTop < 0 ) {
-                positioning = $this.height() + ARROW_HEIGHT;
+                positioning = $this.height() + GameView.ARROW_HEIGHT;
                 $infobubble.addClass( 'reversed' );
             }
             else { // bubble doesn't fit on the screen
-                positioning = -$infobubble.height() - ARROW_HEIGHT;
+                positioning = -$infobubble.height() - GameView.ARROW_HEIGHT;
             }
             $infobubble.css( 'top', $this.position().top + positioning );
-            $infobubble.css( 'left', $this.position().left - $infobubble.width() + ARROW_WIDTH );
+            $infobubble.css( 'left', $this.position().left - $infobubble.width() + GameView.ARROW_WIDTH );
         } );
         $( document ).on( "mouseout", ".creature", function() {
             var $infobubble = $( '.infobubble' );
