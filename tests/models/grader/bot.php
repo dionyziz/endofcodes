@@ -110,6 +110,8 @@
 
             $this->assertEquals( 1, count( $bot->errors ), 'Bot that replies with incorrect username should have an error reported' );
             $this->assertEquals( 'initiate_username_mismatch', $bot->errors[ 0 ][ 'description' ], 'Bot that replies with incorrect username should have a "initiate_username_mismatch" error reported' );
+            $this->assertEquals( $bot->user->username, $bot->errors[ 0 ][ 'expected' ], 'Expected must hold the expected username' );
+            $this->assertEquals( 'god', $bot->errors[ 0 ][ 'actual' ], 'actual must hold the actual username' );
         }
         protected function initiateAndGetErrors( $mock_error ) {
             $bot = $this->buildBot( 'vitsalis' );
@@ -205,54 +207,77 @@
             $this->assertFalse( $result[ 'caught' ], 'A GraderBotException must not be caught if bot responds with valid json' );
             $this->assertTrue( empty( $result[ 'errors' ] ), 'There should be no errors if the json is valid' );
         }
+        protected function makeExpectedJson() {
+            return json_encode( [
+                'botname' => 'your_botname',
+                'version' => 'your_botversion',
+                'username' => 'vitsalis'
+            ] );
+        }
         public function testInitiateRespondInvalidJson() {
             $result = $this->initiateWithJsonAndGetErrors( '{ invalid_json }' );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotExcpetion must be caught when response has invalid json' );
             $this->assertEquals( 'initiate_invalid_json', $result[ 'errors' ][ 0 ][ 'description' ], 'Bot who has invalid json as a response must have a "initiate_invalid_json" error' );
+            $this->assertEquals( $this->makeExpectedJson(), $result[ 'errors' ][ 0 ][ 'expected' ], 'Bot must send sample json as expected' );
+            $this->assertEquals( '{ invalid_json }', $result[ 'errors' ][ 0 ][ 'actual' ], 'Bot must send the invalid json as actual' );
         }
-        protected function assertInitiationThrows( $array, $error ) {
+        protected function assertInitiationThrows( $array, $error, $expected, $actual ) {
             $result = $this->initiateWithJsonAndGetErrors( json_encode( $array ) );
 
             $this->assertTrue( $result[ 'caught' ], 'A GraderBotException is expected with error ' . $error . ' but was not caught' );
             $this->assertEquals( $error, $result[ 'errors' ][ 0 ][ 'description' ], 'Error must be ' . $error );
+            $this->assertEquals( $actual, $result[ 'errors' ][ 0 ][ 'actual' ], 'Actual must be ' . $actual );
+            $this->assertEquals( $expected, $result[ 'errors' ][ 0 ][ 'expected' ], 'expected must be ' . $expected );
         }
         public function testInitiateRespondWithoutBotname() {
+            $jsonDecoded = [
+                'version' => '0.1.0',
+                'username' => 'vitsalis'
+            ];
             $this->assertInitiationThrows(
-                [
-                    'version' => '0.1.0',
-                    'username' => 'vitsalis'
-                ], 
-                'initiate_botname_not_set'
+                $jsonDecoded,
+                'initiate_botname_not_set',
+                $this->makeExpectedJson(),
+                json_encode( $jsonDecoded )
             );
         }
         public function testInitiateRespondWithoutVersion() {
+            $jsonDecoded = [
+                'botname' => 'suprabot',
+                'username' => 'vitsalis'
+            ];
             $this->assertInitiationThrows(
-                [
-                    'botname' => 'suprabot',
-                    'username' => 'vitsalis'
-                ], 
-                'initiate_version_not_set'
+                $jsonDecoded,
+                'initiate_version_not_set',
+                $this->makeExpectedJson(),
+                json_encode( $jsonDecoded )
             );
         }
         public function testIniatiateRespondWithoutUsername() {
+            $jsonDecoded = [
+                'botname' => 'suprabot',
+                'version' => '0.1.0'
+            ];
             $this->assertInitiationThrows(
-                [
-                    'botname' => 'suprabot',
-                    'version' => '0.1.0'
-                ], 
-                'initiate_username_not_set'
+                $jsonDecoded,
+                'initiate_username_not_set',
+                $this->makeExpectedJson(),
+                json_encode( $jsonDecoded )
             );
         }
         public function testInitiateRespondAdditionalData() {
+            $jsonDecoded = [
+                'botname' => 'suprabot',
+                'version' => '0.1.0',
+                'username' => 'vitsalis',
+                'additional' => 'shit'
+            ];
             $this->assertInitiationThrows(
-                [
-                    'botname' => 'suprabot',
-                    'version' => '0.1.0',
-                    'username' => 'vitsalis',
-                    'additional' => 'shit'
-                ], 
-                'initiate_additional_data'
+                $jsonDecoded,
+                'initiate_additional_data',
+                $this->makeExpectedJson(),
+                json_encode( $jsonDecoded )
             );
         }
         protected function gameRequestWithJsonAndGetErrors( $json ) {

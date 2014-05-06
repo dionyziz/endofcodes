@@ -15,7 +15,11 @@
             'initiate_http_code_not_ok' => 'Your bot is running, but responded with an invalid HTTP code. Did you write code to handle initiation?',
             'initiate_invalid_json' => 'Your bot is not sending valid JSON. Did you write code to generate JSON correctly?',
             'initiate_invalid_json_dictionary' => 'You must set the bot name, version, and your username. Did you build the correct JSON dictionary?',
-            'initiate_username_mismatch' => 'Your bot is not using your username. Did you set your username correctly?'
+            'initiate_username_mismatch' => 'Your bot is not using your username. Did you set your username correctly?',
+            'initiate_botname_not_set' => 'Your bot is not setting a botname.',
+            'initiate_username_not_set' => 'Your bot is not setting a username.',
+            'initiate_version_not_set' => 'Your bot is not setting a version.',
+            'initiate_additional_data' => 'Your bot is sending more data than expected.'
         ];
         ?><p class='error'><?php
         if ( isset( $errors[ $error->description ] ) ) {

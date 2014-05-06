@@ -91,6 +91,11 @@
                 }
                 throw $e;
             }
+            $expectedJson = json_encode( [
+                'botname' => 'your_botname',
+                'version' => 'your_botversion',
+                'username' => $this->user->username
+            ] );
 
             if ( $ch->responseCode !== 200 ) {
                 $this->reportError( 'initiate_http_code_not_ok', '200', $ch->responseCode );
@@ -98,19 +103,19 @@
 
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->reportError( 'initiate_invalid_json' );
+                $this->reportError( 'initiate_invalid_json', $expectedJson, $ch->response );
             }
             $requiredAttributes = [ 'botname', 'version', 'username' ];
             foreach ( $requiredAttributes as $attribute ) {
                 if ( !isset( $decodedResponse->$attribute ) ) {
-                    $this->reportError( 'initiate_' . $attribute . '_not_set' );
+                    $this->reportError( 'initiate_' . $attribute . '_not_set', $expectedJson, $ch->response );
                 }
             }
             if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
-                $this->reportError( 'initiate_additional_data' );
+                $this->reportError( 'initiate_additional_data', $expectedJson, $ch->response );
             }
             if ( $this->user->username !== $decodedResponse->username ) {
-                $this->reportError( 'initiate_username_mismatch' );
+                $this->reportError( 'initiate_username_mismatch', $this->user->username, $decodedResponse->username );
             }
             $this->version = $decodedResponse->version;
             $this->botname = $decodedResponse->botname;
