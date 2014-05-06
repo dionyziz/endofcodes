@@ -1,4 +1,5 @@
 var GameView = {
+    roundCount: 0,
     findGameAndRoundId: function( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
         var attribute, gameid, roundid;
@@ -86,7 +87,6 @@ var GameView = {
     getMap: function() {
         var href = this.href;
         $.getJSON( href, function( creatures ) {
-            var maxRounds = $( '.gamemeta h2' ).attr( 'data-rounds' );
             var gameInfo = GameView.findGameAndRoundId( href );
             var gameid = gameInfo.gameid;
             var roundid = gameInfo.roundid;
@@ -95,7 +95,7 @@ var GameView = {
 
             $( '.round' ).text( 'Round ' + roundid );
 
-            $( '.next' ).toggle( roundid + 1 < maxRounds );
+            $( '.next' ).toggle( roundid + 1 < GameView.roundCount );
             $( '.previous' ).toggle( roundid - 1 >= 0 );
             GameView.fixUrls( gameid, roundid );
 
@@ -106,6 +106,7 @@ var GameView = {
         return false;
     },
     ready: function() {
+        GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
         $( document ).on( "mouseover", ".creature", function() {
             var ARROW_HEIGHT = 14;
             var ARROW_WIDTH = 30;
