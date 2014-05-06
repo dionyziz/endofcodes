@@ -23,7 +23,7 @@
                 'createPrepareSelect must combine the array with the keys in order' );
 
             $res3 = createSelectPrepare( $test, 'testTitle' ); 
-            $this->assertEquals( $res3[ 'first' ], 'testTitle',  
+            $this->assertEquals( $res3[ 'title' ], 'testTitle',  
                 'createPrepareSelect must hold in the key "first" the value given as a second parameter' );
             $this->assertEquals( array_shift( array_slice( $res3, 0, 1 ) ), 'testTitle',  
                 'createPrepareSelect must return an array with first element the value given as a second parameter' );
