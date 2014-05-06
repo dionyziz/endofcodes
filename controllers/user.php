@@ -56,7 +56,7 @@
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
-                                $countryShortname = '', $email = '' ) {
+                                $countryShortname = '', $email = '', $day = '', $month = '', $year = '' ) {
             require_once 'models/country.php';
             if ( !isset( $_SESSION[ 'user' ] ) ) {
                 throw new HTTPUnauthorizedException();
@@ -74,6 +74,7 @@
                 }
             }
             $user->email = $email;
+            $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->country = Country::findByShortname( $countryShortname );
             }
