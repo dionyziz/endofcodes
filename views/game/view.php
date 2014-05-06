@@ -2,7 +2,11 @@
     require 'views/header.php';
 ?>
 <div class='gamemeta'>
-    <h2>Game <?php
+    <h2 data-rounds="<?php
+        echo count( $game->rounds );
+    ?>" data-maxHp="<?php
+        echo $game->maxHp;
+    ?>">Game <?php
         echo $game->id;
     ?></h2>
     <strong><?php
@@ -39,14 +43,14 @@
                 echo $playerColor[ $user->id ];
             ?> bubble' data-color="<?php
                 echo $playerColor[ $user->id ];
-            ?>"></span> <?php
+            ?>"></span><?php
                 if ( !isset( $hasCreatures[ $user->id ] ) ) {
                     ?><del><?php
-                        echo $user->username;
+                        echo htmlspecialchars( $user->username );
                     ?></del><?php
                 }
                 else {
-                    echo $user->username;
+                    echo htmlspecialchars( $user->username );
                 }
             ?></li><?php
         }
@@ -67,8 +71,7 @@
                         'username' => $creature->user->username,
                         'x' => $creature->locationx,
                         'y' => $creature->locationy,
-                        'hp' => $creature->hp,
-                        'maxHp' => $game->maxHp
+                        'hp' => $creature->hp
                     ];
                     ?><div class="<?php
                         echo $playerColor[ $creature->user->id ];
@@ -106,24 +109,28 @@
     <span class='round'>Round <?php
         echo $round->id;
     ?></span>
-    <span class="previous"><?php
-        if ( $round->id > 0 ) {
-            ?><a href="game/view?gameid=<?php
-                echo htmlspecialchars( $gameid );
-            ?>&amp;roundid=<?php
-                echo htmlspecialchars( $round->id - 1 );
-            ?>">Previous</a><?php
+    <span class="previous"<?php
+        if ( !isset( $game->rounds[ $round->id - 1 ] ) ) {
+            ?> style="display: none"<?php
         }
-    ?></span>
-    <span class="next"><?php
-        if ( isset( $game->rounds[ $round->id + 1 ] ) ) {
-            ?><a href="game/view?gameid=<?php
-                echo htmlspecialchars( $gameid );
-            ?>&amp;roundid=<?php
-                echo htmlspecialchars( $round->id + 1 );
-            ?>">Next</a><?php
+    ?>>
+        <a href="game/view?gameid=<?php
+            echo htmlspecialchars( $gameid );
+        ?>&amp;roundid=<?php
+            echo htmlspecialchars( $round->id - 1 );
+        ?>">Previous</a>
+    </span>
+    <span class="next"<?php
+        if ( !isset( $game->rounds[ $round->id + 1 ] ) ) {
+            ?> style="display: none"<?php
         }
-    ?></span>
+    ?>>
+        <a href="game/view?gameid=<?php
+            echo htmlspecialchars( $gameid );
+        ?>&amp;roundid=<?php
+            echo htmlspecialchars( $round->id + 1 );
+        ?>">Next</a>
+    </span>
 </div>
 <?php
     require 'views/footer.php';

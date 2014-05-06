@@ -17,9 +17,15 @@
                 $user->save();
             }
             catch ( ModelValidationException $e ) {
-                go( 'user', 'update', [ $e->error => true ] );
+                if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                    throw new HTTPBadRequestException();
+                }
+                go( 'user', 'view', [ 'username' => $user->username, $e->error => true ] );
             }
-            go( 'user', 'view', [ 'username' => $user->username ] );
+            if ( !isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                go( 'user', 'view', [ 'username' => $user->username ] );
+            }
+            echo json_encode( [] );
         }
     }
 ?>
