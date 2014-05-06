@@ -59,7 +59,7 @@
             </tbody>
         </table><?php
     }
-    else if( !empty( $game ) ) {
+    else if ( !empty( $game ) ) {
         ?><p>Game is still in progress</p><?php
     }
     else {
