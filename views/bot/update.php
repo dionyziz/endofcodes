@@ -19,7 +19,7 @@
             'initiate_botname_not_set' => 'Your bot is not setting a botname.',
             'initiate_username_not_set' => 'Your bot is not setting a username.',
             'initiate_version_not_set' => 'Your bot is not setting a version.',
-            'initiate_additional_data' => 'Your bot is sending more data than it is expected.'
+            'initiate_additional_data' => 'Your bot is sending more data than expected.'
         ];
         ?><p class='error'><?php
         if ( isset( $errors[ $error->description ] ) ) {
