@@ -77,8 +77,6 @@
             return $ch;
         }
         public function sendInitiateRequest() {
-            global $config;
-
             try {
                 $ch = $this->httpRequest( 'bot', 'create' );
             }
@@ -95,7 +93,7 @@
             }
             $expectedJson = json_encode( [
                 'botname' => 'your_botname',
-                'version' => $config[ 'botVersion' ],
+                'version' => 'your_botversion',
                 'username' => $this->user->username
             ] );
 
