@@ -261,5 +261,20 @@
                 throw new ModelValidationException( 'link_expired' );
             } 
         }
+
+        public function setBoturl( $boturl ) {
+            $oldBoturl = $this->boturl;
+            $this->boturl = $boturl;
+
+            $bot = new GraderBot( $this );
+            try {
+                $bot->sendInitiateRequest();
+                $this->save();
+            }
+            catch ( GraderBotException $e ) {
+                $this->boturl = $oldBoturl;
+                throw new ModelValidationException( $e->error->id );
+            }
+        }
     }
 ?>

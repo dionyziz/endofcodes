@@ -1,6 +1,7 @@
 <?php
     require_once 'models/user.php';
     require_once 'models/country.php';
+    require_once 'models/grader/bot.php';
 
     class UserTest extends UnitTestWithFixtures {
         public function testCreate() {
@@ -224,6 +225,24 @@
 
             $this->assertTrue( isset( $dbUser->winCount ), 'winCount must be set for each user' );
             $this->assertSame( 1, $winCount, 'winCount must represent the number of wins a user has' );
+        }
+        public function testSetBoturl() {
+            $user = $this->buildUser( 'vitsalis' );
+            $currentBoturl = $user->boturl;
+            $caught = false;
+            $error = '';
+
+            try {
+                $user->setBoturl( 'invalid_boturl' );
+            }
+            catch ( ModelValidationException $e ) {
+                $caught = true;
+                $error = $e->error;
+            }
+
+            $this->assertTrue( $caught, 'A ModelValidationException must be thrown if the boturl is invalid' );
+            $this->assertTrue( $error != '', 'An error must be given' );
+            $this->assertEquals( $currentBoturl, $user->boturl, "The user's boturl must not change" );
         }
     }
 

@@ -4,7 +4,7 @@
 
 <div class="text-center">
     <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
-    if ( !$bot_fail ) {
+    if ( !$bot_fail && $user->boturl != '' ) {
         ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
     else if ( $bot_fail ) {
@@ -41,7 +41,7 @@
         }
     }
     $form = new Form( 'bot', 'update' );
-    $form->output( function( $self ) use( $boturl_empty, $boturl_invalid ) {
+    $form->output( function( $self ) use( $boturl_empty, $boturl_invalid, $user ) {
         $self->createLabel( 'boturl', 'Bot URL' );
         if ( $boturl_empty ) {
             $self->createError( 'Please enter your bot URL' );
@@ -49,7 +49,7 @@
         if ( $boturl_invalid ) {
             $self->createError( 'Please enter a valid HTTP URL' );
         }
-        $self->createInput( 'text', 'boturl', 'boturl', $_SESSION[ 'user' ]->boturl );
+        $self->createInput( 'text', 'boturl', 'boturl', $user->boturl );
         $self->createInput( 'submit', '', '', 'Save bot settings' );
     } );
 ?></div>
