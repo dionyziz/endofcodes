@@ -51,7 +51,10 @@
             if ( !file_exists( static::$log ) ) {
                 $touched = touch( static::$log );
             }
-            if ( $touched && !$logs = file_get_contents( static::$log ) ) {
+            if ( $touched ) {
+                $logs = file_get_contents( static::$log );
+            }
+            if ( empty( $logs ) ) {
                 throw new ModelNotFoundException();
             }
             $array = json_decode( $logs, true );
