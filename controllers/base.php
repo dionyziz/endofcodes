@@ -9,8 +9,7 @@
             $resource = basename( $resource );
             $filename = 'controllers/' . $resource . '.php';
             if ( !file_exists( $filename ) ) {
-                $resource = 'dashboard';
-                $filename = 'controllers/' . $resource . '.php';
+                throw new HTTPNotFoundException();
             }
             require_once $filename;
             $controllername = ucfirst( $resource ) . 'Controller';
