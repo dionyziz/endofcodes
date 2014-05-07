@@ -17,28 +17,28 @@
         if ( isset( $username_wrong ) ) {
             $self->createError( "Username doesn't exist." );
         }
-        $self->createInput( 'text', 'username', '', '', [ 'placeholder' => 'Username' ] );
+        $self->createInput( 'text', 'username', '', '', [ 'class' => 'form-control input-lg', 'placeholder' => 'Username' ] );
         if ( isset( $password_wrong ) ) {
             $self->createError( "Password is incorrect." );
         }
-        $self->createInput( 'password', 'password', '', '', [ 'placeholder' => 'Password' ] );
+        $self->createInput( 'password', 'password', '', '', [ 'class' => 'form-control input-lg', 'placeholder' => 'Password' ] );
         ?><p id="check"><?php 
             $self->createInput( 'checkbox', 'persistent', '', '', [ 'checked' => true ] ); 
             ?>Remember me
             <a id='forgot' href="forgotpasswordrequest/create">Forgot password?</a>
         </p>
         <p><?php 
-            $self->createSubmit( 'login', [ 'class' => 'uppercase' ] ); 
+            $self->createSubmit( 'Login', [ 'class' => 'btn btn-primary' ] ); 
         ?></p><?php
     } );
-    ?><p><span class="round uppercase">or</span></p>
+    ?><p><span class="round uppercase">OR</span></p>
     <p>
         <p class="google-before rounded"><span class="fontawesome-google-plus"></span></p>
-        <button class="google rounded-left uppercase">login with google+</button>
+        <button class="google rounded-left btn btn-primary">Login with Google+</button>
     </p>
     <p>
         <p class="github-before rounded"><span class="fontawesome-github"></span></p>
-        <button class="github rounded-left uppercase">login with github</button>
+        <button class="github rounded-left btn btn-primary">Login with GitHub</button>
     </p>
 </div>
 <p class='text-center'>New to End Of Codes? <a href='user/create'>Create an account</a></p>
