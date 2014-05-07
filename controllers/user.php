@@ -44,12 +44,15 @@
                 throw new HTTPNotFoundException();
             }
             if ( isset( $_SESSION[ 'user' ] ) ) {
-                try {
-                    $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id );
-                    $followExists = true;
-                }
-                catch ( ModelNotFoundException $e ) {
-                    $followExists = false;
+                $notSameUser = $_SESSION[ 'user' ]->id != $user->id;
+                if ( $notSameUser ) {
+                    try {
+                        $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id );
+                        $followExists = true;
+                    }
+                    catch ( ModelNotFoundException $e ) {
+                        $followExists = false;
+                    }
                 }
             }
             require_once 'views/user/view.php';
