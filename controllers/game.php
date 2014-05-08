@@ -61,7 +61,7 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $currentUser = $_SESSION[ 'user' ];
             }
-            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+            if ( $this->outputFormat == 'json' ) {
                 require_once 'models/grader/serializer.php';
                 $mapJson = GraderSerializer::serializeCreatureList( $round->creatures );
                 require 'views/game/view.json.php';
