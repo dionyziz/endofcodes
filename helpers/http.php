@@ -45,6 +45,7 @@
         public $error;
 
         public function __construct( $error, $description = "" ) {
+            $this->error = $error;
             if ( !empty( $description ) ) {
                 $this->header = "HTTP/1.1 $error $description";
             }
