@@ -24,7 +24,7 @@
         $self->createInput( 'password', 'password', '', '', [ 'class' => 'form-control input-lg', 'placeholder' => 'Password' ] );
         ?><p id="check"><?php 
             $self->createInput( 'checkbox', 'persistent', '', '', [ 'checked' => true ] ); 
-            ?>Remember me
+            ?><span id='remember'>Remember me</span>
             <a id='forgot' href="forgotpasswordrequest/create">Forgot password?</a>
         </p>
         <p><?php 

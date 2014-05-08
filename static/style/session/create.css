@@ -9,6 +9,7 @@
 }
 #title {
     margin-bottom: 35px;
+    font-size: 24px;
 }
 #forgot {
     font-size: 16px;
@@ -100,4 +101,7 @@
     color: #f4f4f4;
     height: 43px;
     width: 250px;
+}
+#remember {
+    margin-left: 5px;
 }
