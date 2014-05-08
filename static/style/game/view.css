@@ -1,4 +1,30 @@
 @charset "UTF-8";
+#logout-form {
+    display: none;
+}
+.navbar .glyphicon.settings-icon {
+    top: 3px;
+}
+.next a, .next a:link, .next a:visited,
+.previous a, .previous a:link, .previous a:visited {
+    color: black;
+    font-size: 20pt;
+}
+.navbar li img {
+    margin-left: 5px;
+    border-radius: 100px;
+    position: absolute;
+    left: -26px;
+    top: 10px;
+}
+.navbar .glyphicon.settings-icon {
+    top: 3px;
+}
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('../../static/fonts/glyphicons-halflings-regular.eot');
+    src: url('../../static/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../static/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../../static/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../../static/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
 div.game {
     border: 1px solid #999;
     position: static;

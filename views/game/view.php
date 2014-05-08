@@ -118,7 +118,7 @@
             echo htmlspecialchars( $gameid );
         ?>&amp;roundid=<?php
             echo htmlspecialchars( $round->id - 1 );
-        ?>">Previous</a>
+        ?>"><span class="glyphicon glyphicon-chevron-left"></span></a>
     </span>
     <span class="next"<?php
         if ( !isset( $game->rounds[ $round->id + 1 ] ) ) {
@@ -129,7 +129,7 @@
             echo htmlspecialchars( $gameid );
         ?>&amp;roundid=<?php
             echo htmlspecialchars( $round->id + 1 );
-        ?>">Next</a>
+        ?>"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </span>
 </div>
 <?php
