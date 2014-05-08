@@ -105,8 +105,10 @@
     </div>
 </div>
 
-<div class='time'>
-    <span class='round'>Round <?php
+<div class='time' style="width:<?php
+    echo $game->width * 20;
+?>px">
+    <span class='roundid'>Round <?php
         echo $round->id;
     ?></span>
     <span class="previous"<?php
