@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>EndofCodes Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/bootstrap.min.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/general.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/header.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/footer.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/navigation.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/home.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/user/create.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/session/create.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/test.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/links.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/game/view.css" />
+        <style>
+            #logout-form {
+                display: none;
+            }
+            .navbar li img {
+                margin-left: 5px;
+                border-radius: 100px;
+                position: absolute;
+                left: -26px;
+                top: 10px;
+            }
+            .navbar .glyphicon.settings-icon {
+                top: 3px;
+            }
+            @font-face {
+                font-family: 'Glyphicons Halflings';
+                src: url('../../static/fonts/glyphicons-halflings-regular.eot');
+                src: url('../../static/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../static/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../../static/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../../static/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+            }
+        </style>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="../../static/script/bootstrap.min.js"></script>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/logout.js"></script>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/game/view.js"></script>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/prefixfree.min.js"></script>
+        <script type="text/javascript">
+            $( document ).ready( function() {
+                var height, width;
+                var $avatar = $( '.avatar' );
+                var $image = $( '.avatar img' );
+                var imgWidth = $image.width();
+                var imgHeight = $image.height();
+
+                height = width = 168;
+
+                if ( imgWidth > imgHeight ) {
+                    $image.height( height );
+                    $image.css( 'top', 0 );
+                    $image.css( 'left', -Math.floor( ( $image.width() - width ) / 2 ) );
+                }
+                else {
+                    $image.width( width );
+                    $image.css( 'left', 0 );
+                    $image.css( 'top', -Math.floor( ( $image.height() - height ) / 2 ) );
+                }
+            } );
+        </script>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href=""><img src="dionyziz.jpg" width="30" height="30" />dionyziz</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="settings-icon glyphicon glyphicon-cog"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li role="presentation">
+                                <a href="">Settings</a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <a href="#" id="logout">Sign out</a>
+                            </li>
+                            <form id="logout-form" action="session/delete" method="post" >
+                                <p><input type="hidden" name="token" value="cGC6TYpl/4l95HQ2ZF6XVlc4cMAdqNSDv22oRmrbcPk="  /></p>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <footer id="footer" class="panel-footer">
+            <ul class="social-buttons">
+                <li>
+                    <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dionyziz&amp;repo=endofcodes&amp;type=watch&amp;count=true" title="Star on GitHub" /></iframe>
+                </li>
+                <li>
+                    <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dionyziz&amp;repo=endofcodes&amp;type=fork&amp;count=true" title="Fork on GitHub"></iframe>
+                </li>
+            </ul>
+        </footer>
+    </body>
+</html>
