@@ -115,12 +115,12 @@ aside {
     float: right;
     width: 210px;
 }
-aside ol {
-    border-top: 1px solid #eee;
-}
 aside li {
     white-space: nowrap;
     overflow: hidden;
+}
+aside li:first-child {
+    border-top: 1px solid #eee;
 }
 .bubble {
     border-radius: 50px;
