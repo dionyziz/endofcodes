@@ -33,6 +33,10 @@
     float: left;
     padding: 0 10px;
 }
+.upper-header li.country img {
+    width: 30px;
+    height: 15px;
+}
 .upper-header li.name {
     height: 84px;
 }
@@ -86,4 +90,7 @@ ul.contact li {
 }
 ul.contact li {
     display: inline;
+}
+.profile-body ul.contact li img {
+    width: 30px;
 }
