@@ -2,8 +2,16 @@
     require 'views/header.php';
 ?>
 <div class="text-center">
+    <?php
+        $form = new Form( 'image', 'create' );
+        $form->id = 'image-form';
+        $form->output( function( $self ) {
+            $self->createInput( 'file', 'image', 'image' );
+        } );
+    ?>
     <div class="profile-header">
         <div class="avatar">
+            <a href="" id="upload-link">Upload an image</a>
             <img src="<?php
                 echo $user->image->target_path;
             ?>" alt="Profile Picture" />

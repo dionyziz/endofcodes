@@ -87,3 +87,15 @@ ul.contact li {
 ul.contact li {
     display: inline;
 }
+#image-form {
+    display: none;
+}
+#upload-link {
+    display: none;
+    font-size: 12pt;
+    top: 130px;
+    left: 21px;
+    width: 124px;
+    z-index: 100;
+    position: absolute;
+}

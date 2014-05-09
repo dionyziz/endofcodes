@@ -25,7 +25,7 @@
             if ( !isset( $this->acceptTypes[ 'application/json' ] ) ) {
                 go( 'user', 'view', [ 'username' => $user->username ] );
             }
-            echo json_encode( [] );
+            echo json_encode( $user->image->target_path );
         }
     }
 ?>

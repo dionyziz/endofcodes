@@ -1,23 +1,23 @@
 var UserView = {
     showUploadedImage: function( source ) {
-        $( "#userImage" ).attr( "src", source );
+        $( ".avatar img" ).remove();
+        $image = $( '<img src="' + source + '" alt="Profile Picture" />' );
+        $image.load( function() {
+            UserView.fixImageSize( $image );
+        } );
+        $( ".avatar" ).append( $image );
     },
     createImageError: function() {
-        $( '#image-form' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )
+        $( '.text-center' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )
     },
     removeImageError: function() {
-        $( '#image-form .alert.alert-danger' ).remove();
+        $( '.text-center .alert.alert-danger' ).remove();
     },
-    toggleSubmit: function() {
-        $( "#imageSubmit" ).toggle();
-        $( "#uploading" ).toggle();
-    },
-    ready: function() {
+    fixImageSize: function( $image ) {
         var height, width;
-        var $avatar = $( '.avatar' );
-        var $image = $( '.avatar img' );
         var imgWidth = $image.width();
         var imgHeight = $image.height();
+        console.log( 'Width: ' + imgWidth + ' height: ' + imgHeight );
 
         height = width = 168;
 
@@ -31,7 +31,23 @@ var UserView = {
             $image.css( 'left', 0 );
             $image.css( 'top', -Math.floor( ( $image.height() - height ) / 2 ) );
         }
-        $( "#image-form" ).submit( function() {
+    },
+    ready: function() {
+        var $image = $( '.avatar img' );
+
+        UserView.fixImageSize( $image );
+
+        $( ".avatar" ).mouseover( function() {
+            $( "#upload-link" ).show();
+        } );
+        $( ".avatar" ).mouseout( function() {
+            $( "#upload-link" ).hide();
+        } );
+        $( "#upload-link" ).click( function() {
+            $( "#image" ).trigger( 'click' );
+            return false;
+        } );
+        $( "#image" ).change( function() {
             var image = document.getElementById( "image" ).files[ 0 ];
             var token = $( "input[type=hidden]" ).val();
             var formData = new FormData();
@@ -42,8 +58,6 @@ var UserView = {
                 UserView.createImageError();
                 return false;
             }
-
-            UserView.toggleSubmit();
 
             formData.append( "image", image );
             formData.append( "token", token );
@@ -56,15 +70,13 @@ var UserView = {
                 dataType: "json",
                 processData: false,
                 contentType: false,
-                success: function( res ) {
+                success: function( targetPath ) {
                     var reader = new FileReader();
 
                     reader.onloadend = function ( e ) {
-                        UserView.showUploadedImage( e.target.result );
+                        UserView.showUploadedImage( targetPath );
                     }
                     reader.readAsDataURL( image );
-
-                    UserView.toggleSubmit();
                 },
                 error: function( jqXHR, textStatus, errorThrown ) {
                     UserView.createImageError();
