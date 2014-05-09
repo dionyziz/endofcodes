@@ -38,7 +38,9 @@
             ?>
             <p class='when'>This week:</p>
             <ul>
-                <li>23rd in Greece</li>
+                <li>23rd in <?php
+                    echo $user->country->name;
+                ?></li>
                 <li>152nd worldwide</li>
             </ul>
         </div>
