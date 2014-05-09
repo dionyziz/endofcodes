@@ -3,6 +3,8 @@
     <head>
         <title>End Of Codes</title>
         <link rel="stylesheet" type="text/css" href="../static/style/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="bootstrap-social.css">
         <link rel="stylesheet" type="text/css" href="../static/style/general.css">
         <link rel="stylesheet" type="text/css" href="../static/style/header.css">
         <link rel="stylesheet" type="text/css" href="../static/style/footer.css">
@@ -10,50 +12,76 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <style>
+            @import "bootstrap-social.less";
             .jumbotron {
-                width: 1253px;
-                margin: auto;
-                -webkit-border-radius: 11px;
-                height: 415px;
+                width: 100%;
+                height: 435px;
                 margin-bottom: 20px;
+                background-color: rgb(224, 229, 236);
             } 
             #descr {
                 float: left;
                 width: 565px;
+                margin-top: 26px;
             }
             #descr h1 {
-                font-size: 42px;
+                font-size: 41px;
+                color: royalblue;
+                font-family: serif;
                 margin-bottom: 10px;
+                font-size: 41px;
+                margin-left: 25px;
+                width: 100%;
+            }
+            #descr ul {
+                margin-left: 150px;
+                margin-top: 20px;
+                font-size: 23px;
             }
             #form {
                 float: right;
-                margin-top: 30px;
+                margin-top: 20px;
                 margin-right: 113px;
                 width: 28%;
             }
             form {
                 margin-left: 28px;
             }
-            
             #form form input {
                 margin-bottom: 20px;
                 width: 280px;
+                height: 42px;
             }
             #form form button {
                 width: 200px;
                 margin-left: 40px;
                 margin-bottom: 20px;
+                background-color: teal;
+                color: beige;
+                font-size: 17px;
+                height: 40px;
             }
             #form p {
                 text-align: center;
             }
-            #form ul {
-                font-size: 24px; 
-                margin-left: 10px;
+            #form a {
+                width: 125px;
             }
             #last {
                 float: left;
-                margin-left: 20px;
+                margin-left: 15%;
+                margin-top: 35px;
+            }
+            #last table {
+                font-size: 17px;
+            }
+            #last table th {
+                padding-right: 0px;
+            }
+            #screenshot {
+                float: right;
+                margin-top: 113px;
+                margin-right: 15%;
             }
         </style>
     </head>
@@ -76,38 +104,93 @@
         </div>
         <div class='jumbotron'>
             <div id='descr'>
-                <h1>Welcome to the alpha version of the first programming war</h1>
-                <p>End of Codes is a programming game. The project’s goal is to make a game targetting programmers in which each player has to use code to program a strategy for their bot to try and eliminate other players. The game aims to be a competitive programming platform in which programmers can compete for good rankings.</p>    
+                <h1 class='text-center'>Programming Fighting</h1>
+                <ul>
+                    <li>A game targetting programmers</li>
+                    <li>Code your bot</li>
+                    <li>Try to eliminate other players</li>
+                    <li>Get good rankings</li>
+                </ul>
             </div>
             <div id='form'>
                 <form role='form'>
                     <input type="username" class="form-control" id="exampleInputPassword1" placeholder="Username">
                     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
                     <input type="email" class="form-control" id="exampleInputPassword1" placeholder="Email">
-                    <button type="Register" class="btn btn-default">Submit</button>
+                    <button type="Register" class="btn btn-default">Register</button>
                 </form>
                 <p>Or use:</p>
                 <ul class='list-inline text-center'>
                 <li>
-                    <button 
-                        style=' border: none; -webkit-border-radius: 5px; height: 40px; width: 139px; ' 
-                        class="google">
-                            Google
-                    </button>
+                <a class="btn btn-block btn-social btn-google-plus">
+                    <i class="fa fa-google-plus"></i>Google
+                </a>
                 </li>
                 <li>
-                    <button 
-                        style=' border: none; -webkit-border-radius: 5px; height: 40px; width: 139px; ' 
-                        class="github">
-                            Github
-                    </button>
+                <a class="btn btn-block btn-social btn-github">
+                    <i class="fa fa-github"></i>Github
+                </a>
                 </li>
                 </ul>
             </div>
         </div>
-        <p class="lead text-center">What are you waiting for? Let the battle begin.</p>
         <div id='last'>
-            <h2>Last Game ratings<h2>
+            <h2 class='text-center'>Ratings<h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Country</th>
+                        <th>Games won</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <a href="user/view?username=dionyziz">dionyziz</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <a href="user/view?username=vitsalis">vitsalis</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr> 
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            <a href="user/view?username=dionyziz">dionyziz</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>
+                            <a href="user/view?username=dionyziz">dionyziz</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>
+                            <a href="user/view?username=vitsalis">vitsalis</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr> 
+                </tbody>
+            </table> 
+        </div>
+        <div id='screenshot'>
+            <img src='screenshot.png' alt='screenshot' />
         </div>
         <footer id="footer" class="panel-footer"> 
             <ul class="social-buttons">
