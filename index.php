@@ -5,10 +5,10 @@
         $resource = $_GET[ 'resource' ];
     }
     else {
-        $resource = '';
+        $resource = 'dashboard';
     }
-    $controller = controllerBase::findController( $resource );
     try {
+        $controller = controllerBase::findController( $resource );
         $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
     }
     catch ( NotImplemented $e ) {

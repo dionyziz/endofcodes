@@ -1,6 +1,7 @@
 RewriteEngine on
 
-RewriteRule ^([a-z]+)/([a-z]+)$ index.php?resource=$1&method=$2 [L,QSA]
+RewriteRule ^([a-z]+)/([a-z]+)/?$ index.php?resource=$1&method=$2 [L,QSA]
+RewriteRule ^([a-z]+)/?$ index.php?resource=$1 [L,QSA]
 
 <Files "run">
     Order Allow,Deny
