@@ -94,7 +94,7 @@
         <div class='infobubble'>
             <span class='hp'>
                 <span class='numeric'></span>
-                <span class='damage' style=''></span>
+                <span class='damage'></span>
             </span>
             <div class='stats'>
                 <h3 class="creatureid"></h3>
