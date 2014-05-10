@@ -38,7 +38,9 @@ var UserView = {
         UserView.fixImageSize( $image );
 
         $( ".avatar" ).mouseover( function() {
-            $( "#upload-link" ).show();
+            if ( $( ".profile-header" ).attr( 'data-sameUser' ) == 'yes' ) {
+                $( "#upload-link" ).show();
+            }
         } );
         $( ".avatar" ).mouseout( function() {
             $( "#upload-link" ).hide();

@@ -9,7 +9,14 @@
             $self->createInput( 'file', 'image', 'image' );
         } );
     ?>
-    <div class="profile-header">
+    <div class="profile-header" data-sameUser="<?php
+        if ( $notSameUser ) {
+            echo "no";
+        }
+        else {
+            echo "yes";
+        }
+    ?>">
         <div class="avatar">
             <a href="" id="upload-link">Upload an image</a>
             <img src="<?php
