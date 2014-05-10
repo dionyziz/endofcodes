@@ -93,7 +93,7 @@ var GameView = {
 
             history.pushState( {}, "", href );
 
-            $( '.round' ).text( 'Round ' + roundid );
+            $( '.roundid' ).text( 'Round ' + roundid );
 
             $( '.next' ).toggle( roundid + 1 < GameView.roundCount );
             $( '.previous' ).toggle( roundid - 1 >= 0 );
