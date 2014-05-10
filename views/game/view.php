@@ -57,11 +57,11 @@
     ?></ol>
 </aside>
 
-<div class='game' style="width:<?php
+<div class='game' data-width="<?php
     echo $game->width * 20;
-?>px; height:<?php
+?>" data-height="<?php
     echo $game->height * 20;
-?>px;">
+?>">
     <div class='gameboard'>
         <?php
             foreach ( $round->creatures as $creature ) {
@@ -105,9 +105,9 @@
     </div>
 </div>
 
-<div class='time' style="width:<?php
+<div class='time' data-width="<?php
     echo $game->width * 20;
-?>px">
+?>">
     <span class='roundid'>Round <?php
         echo $round->id;
     ?></span>

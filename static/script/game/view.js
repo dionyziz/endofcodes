@@ -105,7 +105,17 @@ var GameView = {
         } );
         return false;
     },
+    fixWidthAndHeight: function( $element ) {
+        if ( $element.attr( 'data-width' ) ) {
+            $element.css( 'width', $element.attr( 'data-width' ) );
+        }
+        if ( $element.attr( 'data-height' ) ) {
+            $element.css( 'height', $element.attr( 'data-height' ) );
+        }
+    },
     ready: function() {
+        GameView.fixWidthAndHeight( $( '.game' ) );
+        GameView.fixWidthAndHeight( $( '.time' ) );
         GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
         GameView.maxHp = $( '.gamemeta h2' ).attr( 'data-maxHp' );
         $( document ).on( "mouseover", ".creature", function() {
