@@ -58,9 +58,9 @@
 </aside>
 
 <div class='game' style="width:<?php
-    echo $game->width * 20;
+    echo $game->width * $positionMultiplier;
 ?>px; height:<?php
-    echo $game->height * 20;
+    echo $game->height * $positionMultiplier;
 ?>px;">
     <div class='gameboard'>
         <?php
@@ -84,9 +84,9 @@
                             ?>' <?php
                         }
                     ?>style="left: <?php
-                        echo $creature->locationx * 20;
+                        echo $creature->locationx * $positionMultiplier;
                     ?>px; top: <?php
-                        echo $creature->locationy * 20;
+                        echo $creature->locationy * $positionMultiplier;
                     ?>px;"></div><?php
                 }
             }

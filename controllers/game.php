@@ -61,6 +61,7 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $currentUser = $_SESSION[ 'user' ];
             }
+            $positionMultiplier = 20;
             if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
                 require_once 'models/grader/serializer.php';
                 $mapJson = GraderSerializer::serializeCreatureList( $round->creatures );
