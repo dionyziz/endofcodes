@@ -69,6 +69,7 @@
                     $creatureInfo = [
                         'creatureid' => $creature->id,
                         'username' => $creature->user->username,
+                        'userid' => $creature->user->id,
                         'x' => $creature->locationx,
                         'y' => $creature->locationy,
                         'hp' => $creature->hp

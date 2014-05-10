@@ -64,25 +64,40 @@ var GameView = {
         } );
         return $creature;
     },
+    findUser: function( userid ) {
+        return $( '.playerList li[data-id=' + userid + ']' );
+    },
+    findUserColor: function( $user ) {
+        return $user.find( 'span.bubble' ).attr( 'data-color' );
+    },
     processCreatures: function( creatures ) {
         $( '.creature' ).remove();
         for ( var i = 0; i < creatures.length; ++i ) {
             var creature = creatures[ i ];
             if ( creature.hp > 0 ) {
-                var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
+                var $user = GameView.findUser( creature.userid );
                 var username = $user.text();
-                var color = $user.find( 'span.bubble' ).attr( 'data-color' );
+                var color = GameView.findUserColor( $user );
                 creatureInfo = {
                     creatureid: creature.creatureid,
                     username: username,
                     x: creature.x,
                     y: creature.y,
-                    hp: creature.hp
+                    hp: creature.hp,
+                    userid: creature.userid
                 };
                 var $creature = GameView.createCreature( creatureInfo, color );
                 $( '.gameboard' ).prepend( $creature );
             }
         }
+    },
+    changeCreaturesColor: function( userid, color ) {
+        $( '.creature' ).each( function( index, value ) {
+            var $creature = $( this );
+            if ( $creature.attr( 'data-userid' ) == userid ) {
+                $creature.css( 'background', color );
+            }
+        } );
     },
     getMap: function() {
         var href = this.href;
@@ -93,7 +108,7 @@ var GameView = {
 
             history.pushState( {}, "", href );
 
-            $( '.round' ).text( 'Round ' + roundid );
+            $( '.roundid' ).text( 'Round ' + roundid );
 
             $( '.next' ).toggle( roundid + 1 < GameView.roundCount );
             $( '.previous' ).toggle( roundid - 1 >= 0 );
@@ -149,6 +164,40 @@ var GameView = {
             var $infobubble = $( '.infobubble' );
             $infobubble.removeClass( 'reversed' );
             $infobubble.hide();
+        } );
+        $( '.playerList li' ).mouseover( function() {
+            var userid = $( this ).attr( 'data-id' );
+            $( this ).css( 'background-color', 'black' );
+
+            GameView.changeCreaturesColor( userid, 'black' );
+        } );
+        $( '.playerList li' ).mouseout( function() {
+            var userid = $( this ).attr( 'data-id' );
+            var $user = GameView.findUser( userid );
+            var color = GameView.findUserColor( $user );
+            var code;
+
+            $( this ).css( 'background-color', 'none' );
+
+            switch ( color ) {
+                case 'red':
+                    code = "#f85032";
+                    break;
+                case 'yellow':
+                    code = "#fceabb";
+                    break;
+                case 'black':
+                    code = "#45484d";
+                    break;
+                case 'green':
+                    code = "#bfd255";
+                    break;
+                case 'blue':
+                    code = "#3b679e";
+                    break;
+            }
+
+            GameView.changeCreaturesColor( userid, code );
         } );
         $( '.next a' ).click( GameView.getMap );
         $( '.previous a' ).click( GameView.getMap );
