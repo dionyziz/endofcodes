@@ -1,6 +1,3 @@
-#uploading {
-    display: none;
-}
 .avatar {
     width: 168px;
     height: 168px;
@@ -91,11 +88,17 @@ ul.contact li {
     display: none;
 }
 #upload-link {
+    text-decoration: none;
     display: none;
     font-size: 12pt;
     top: 130px;
-    left: 21px;
-    width: 124px;
+    left: 0;
+    width: 167px;
+    height: 37px;
     z-index: 100;
+    padding-top: 5px;
     position: absolute;
+    text-shadow: 1px 1px black;
+    color: white;
+    background-color: rgba( 0, 0, 0, 0.5 );
 }
