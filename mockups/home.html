@@ -14,7 +14,6 @@
         <style>
             @import "bootstrap-social.less";
             .jumbotron {
-                width: 100%;
                 height: 435px;
                 margin-bottom: 20px;
                 background-color: rgb(224, 229, 236);
@@ -41,28 +40,25 @@
             #form {
                 float: right;
                 margin-top: 20px;
-                margin-right: 113px;
-                width: 28%;
-            }
-            form {
-                margin-left: 28px;
+                margin-right: 10%;
             }
             #form form input {
                 margin-bottom: 20px;
                 width: 280px;
                 height: 42px;
             }
-            #form form button {
+            #form input[type='submit']  {
                 width: 200px;
                 margin-left: 40px;
                 margin-bottom: 20px;
-                background-color: teal;
-                color: beige;
                 font-size: 17px;
                 height: 40px;
             }
             #form p {
                 text-align: center;
+            }
+            #form ul {
+                margin-left: 4px; 
             }
             #form a {
                 width: 125px;
@@ -114,13 +110,13 @@
             </div>
             <div id='form'>
                 <form role='form'>
-                    <input type="username" class="form-control" id="exampleInputPassword1" placeholder="Username">
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    <input type="email" class="form-control" id="exampleInputPassword1" placeholder="Email">
-                    <button type="Register" class="btn btn-default">Register</button>
+                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Username">
+                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="text" class="form-control" placeholder="Email">
+                    <input type="submit" class="btn btn-primary" value='Create Account' placeholder="Email">
                 </form>
                 <p>Or use:</p>
-                <ul class='list-inline text-center'>
+                <ul class='list-inline'>
                 <li>
                 <a class="btn btn-block btn-social btn-google-plus">
                     <i class="fa fa-google-plus"></i>Google
@@ -135,7 +131,9 @@
             </div>
         </div>
         <div id='last'>
-            <h2 class='text-center'>Ratings<h2>
+            <h2 class=text-center>
+                <a href="game/view?gameid=2">Last game</a> Ratings
+            </h2>
             <table class="table table-striped">
                 <thead>
                     <tr>
