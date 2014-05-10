@@ -1,4 +1,7 @@
 var UserView = {
+    uploading: false,
+    UploadLinkOpacityMax: 0.8,
+    UploadLinkOpacityMin: 0.5,
     showUploadedImage: function( source ) {
         $( ".avatar img" ).remove();
         $image = $( '<img src="' + source + '" alt="Profile Picture" />' );
@@ -17,7 +20,6 @@ var UserView = {
         var height, width;
         var imgWidth = $image.width();
         var imgHeight = $image.height();
-        console.log( 'Width: ' + imgWidth + ' height: ' + imgHeight );
 
         height = width = 168;
 
@@ -31,6 +33,36 @@ var UserView = {
             $image.css( 'left', 0 );
             $image.css( 'top', -Math.floor( ( $image.height() - height ) / 2 ) );
         }
+    },
+    fixUploadLinkOpacity: function( opacity ) {
+        $( "#upload-link" ).css( 'background-color', 'rgba(0,0,0,' + opacity + ')' );
+    },
+    animateImage: function( makeOpacityBigger ) {
+        var speed = 50;
+
+        if ( UserView.uploading ) {
+            var opacity;
+            if ( makeOpacityBigger ) {
+                opacity = UserView.UploadLinkOpacityMax;
+            }
+            else {
+                opacity = UserView.UploadLinkOpacityMin;
+            }
+            UserView.fixUploadLinkOpacity( opacity );
+            setTimeout( function() {
+                UserView.animateImage( !makeOpacityBigger );
+            }, speed );
+        }
+    },
+    finishUploadAnimation: function() {
+        $( "#upload-link" ).hide();
+        UserView.uploading = false;
+        UserView.fixUploadLinkOpacity( UserView.UploadLinkOpacityMin );
+    },
+    startUploadAnimation: function() {
+        $( "#upload-link" ).show();
+        UserView.uploading = true;
+        UserView.animateImage( true );
     },
     ready: function() {
         var $image = $( '.avatar img' );
@@ -57,12 +89,13 @@ var UserView = {
             UserView.removeImageError();
 
             if ( !image ) {
-                UserView.createImageError();
                 return false;
             }
 
             formData.append( "image", image );
             formData.append( "token", token );
+
+            UserView.startUploadAnimation();
 
             $.ajax( {
                 url: "image/create",
@@ -75,12 +108,16 @@ var UserView = {
                 success: function( targetPath ) {
                     var reader = new FileReader();
 
+                    UserView.finishUploadAnimation();
+
                     reader.onloadend = function ( e ) {
                         UserView.showUploadedImage( targetPath );
                     }
                     reader.readAsDataURL( image );
                 },
                 error: function( jqXHR, textStatus, errorThrown ) {
+                    UserView.finishUploadAnimation();
+
                     UserView.createImageError();
                     $( "#imageSubmit" ).show();
                     $( "#uploading" ).hide();
