@@ -18,6 +18,7 @@ End of Codes was developed by:
  * Dimitris Lamprinos <pkakelas@gmail.com>
  * Dionysis Zindros <dionyziz@gmail.com>
  * Vangelis Mamalakis <baggos12@gmail.com>
+ * Kostis Karantias <gtklocker@gmail.com>
 
 If you're interested in contributing, just fork, fix a bug or build a feature, and pull request.
 
