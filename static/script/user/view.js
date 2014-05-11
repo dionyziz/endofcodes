@@ -65,9 +65,9 @@ var UserView = {
         UserView.animateImage( true );
     },
     ready: function() {
-        var $image = $( '.avatar img' );
-
-        UserView.fixImageSize( $image );
+        $( '.avatar img' ).load( function() {
+            UserView.fixImageSize( $( '.avatar img' ) );
+        } );
 
         $( ".avatar" ).mouseover( function() {
             if ( $( ".profile-header" ).attr( 'data-sameUser' ) == 'yes' ) {
@@ -119,8 +119,6 @@ var UserView = {
                     UserView.finishUploadAnimation();
 
                     UserView.createImageError();
-                    $( "#imageSubmit" ).show();
-                    $( "#uploading" ).hide();
                 }
             } );
 
