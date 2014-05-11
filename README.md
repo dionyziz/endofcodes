@@ -37,10 +37,10 @@ End of Codes has been tested under MySQL 5.5 and 5.6 and Apache 2.2, but it may 
 
 ### Environment Setup
 
-- Create a new database called 'endofcodes'. 
-- Import the **database/db_schema.sql** into the db through phpMyAdmin, or dump it through the command line. Like so: `mysql -u user -p pass endofcodes < absolute/path/to/dump/db_schema.sql` 
+* Create a new database called 'endofcodes'. 
+* Import the **database/db_schema.sql** into the db through phpMyAdmin, or dump it through the command line. Like so: `mysql -u user -p pass endofcodes < absolute/path/to/dump/db_schema.sql` 
 
-- Open **config/config.php** and set your 'user' and 'pass' for an existing user in the database.
+* Open **config/config.php** and set your 'user' and 'pass' for an existing user in the database.
 Note: this applies just to the 'development' environment!
 ```
 'development' => [
@@ -53,8 +53,8 @@ Note: this applies just to the 'development' environment!
 ```
 
 ### Vhost Setup
-- Vhost is a custom domain name on your local server, that points to a directory. This way you can identify and access your local projects through reasonable naming in the browser.
-- If you're on Mac, w/ MAMP & Ports set to MySQL defaults, open **/private/etc/hosts** and add `127.0.0.1  endofgames.loc`. Like so:
+* Vhost is a custom domain name on your local server, that points to a directory. This way you can identify and access your local projects through reasonable naming in the browser.
+* If you're on Mac, w/ MAMP & Ports set to MySQL defaults, open **/private/etc/hosts** and add `127.0.0.1  endofgames.loc`. Like so:
 
 ```
 127.0.0.1       localhost
@@ -65,27 +65,27 @@ Open **Applications/MAMP/conf/apache/httpd.conf** and uncomment the line `#Inclu
 Next open **Applications/MAMP/conf/apache/extra/httpd-vhosts.conf** and add this: 
 ```
 <VirtualHost *:80>
-ServerName endofcodes.loc
-DocumentRoot absolute/path/to/folder/endofcodes
-<Directory absolute/path/to/folder/endofcodes>
-Options Indexes FollowSymLinks
-AllowOverride All
-Order allow,deny
-Allow from all
-#Require all granted
-</Directory>
-ErrorLog endofcodes.log
-CustomLog endofcodes.log combined
+    ServerName endofcodes.loc
+    DocumentRoot absolute/path/to/folder/endofcodes
+    <Directory absolute/path/to/folder/endofcodes>
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+    #Require all granted
+    </Directory>
+    ErrorLog endofcodes.log
+    CustomLog endofcodes.log combined
 </VirtualHost> 
 ```
 Restart MAMP and open http://endofcodes.loc in the broswer.
 
-- If you're on Linux [this](https://www.digitalocean.com/community/articles/how-to-set-up-apache-virtual-hosts-on-ubuntu-12-04-lts) tutorial explains a similar process.
+* If you're on Linux [this](https://www.digitalocean.com/community/articles/how-to-set-up-apache-virtual-hosts-on-ubuntu-12-04-lts) tutorial explains a similar process.
 
 
 Blog
 ====
-You can read more about the development of the game on our [blog](http://blog.endofcodes.com)
+You can read more about the development of the game on our [blog](http://blog.endofcodes.com).
 
 License
 =======
