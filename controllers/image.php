@@ -23,12 +23,11 @@
                 go( 'user', 'view', [ 'username' => $user->username, $e->error => true ] );
             }
             if ( $this->outputFormat == 'json' ) {
-                echo json_encode( [] );
+                echo json_encode( $user->image->target_path );
             }
             else {
                 go( 'user', 'view', [ 'username' => $user->username ] );
             }
-            echo json_encode( $user->image->target_path );
         }
     }
 ?>
