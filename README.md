@@ -10,6 +10,8 @@ Each creature attacked loses health points until it dies. The last player to rem
 
 When the game is ready, you can play on [endofcodes.com](http://endofcodes.com/).
 
+End of Codes is written in HTML, CSS, Javascript, PHP, and MySQL.
+
 Contributors
 ============
 End of Codes was developed by:
@@ -20,11 +22,10 @@ End of Codes was developed by:
 
 If you're interested in contributing, just fork, fix a bug or build a feature, and pull request.
 
-Configuration
+Installation
 ==========
-End of Codes is written in HTML, CSS, Javascript, PHP, and MySQL.
 
-### Requires
+### Requirements
 
  * PHP 5.5+
  * MySQL
@@ -37,6 +38,7 @@ End of Codes has been tested under MySQL 5.5 and 5.6 and Apache 2.2, but it may 
 
 ### Environment Setup
 
+* Fork the repository & Clone it on your machine. This will automatically create a new folder (in the current working directory) containing the repo.
 * Create a new database called 'endofcodes'. 
 * Import the **database/db_schema.sql** into the db through phpMyAdmin, or dump it through the command line. Like so: `mysql -u user -p pass endofcodes < absolute/path/to/dump/db_schema.sql` 
 
