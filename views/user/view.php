@@ -33,7 +33,7 @@
                         echo $user->country->flag;
                     ?>" alt="<?php
                         echo htmlspecialchars( $user->country->name );
-                    ?>" width="30" height="15" />
+                    ?>" />
                     <?php
                         echo htmlspecialchars( $user->country->name );
                     ?>
@@ -69,8 +69,8 @@
             <li><a href=""><img src="http://www.defaulticon.com/v1/assets/icons/png/16x16/mail.png" alt="mail" /> <?php
                 echo $user->email;
             ?></a></li>
-            <li><a href=""><img src="http://endofcodes.com/static/images/github-logo.png" width="30" /></a></li>
-            <li><a href=""><img src="http://endofcodes.com/static/images/facebook-logo.jpeg" width="30" /></a></li>
+            <li><a href=""><img src="http://endofcodes.com/static/images/github-logo.png" /></a></li>
+            <li><a href=""><img src="http://endofcodes.com/static/images/facebook-logo.jpeg" /></a></li>
         </ul>
     </div>
 </div>

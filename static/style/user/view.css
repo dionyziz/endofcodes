@@ -30,6 +30,10 @@
     float: left;
     padding: 0 10px;
 }
+.upper-header li.country img {
+    width: 30px;
+    height: 15px;
+}
 .upper-header li.name {
     height: 84px;
 }
@@ -101,4 +105,7 @@ ul.contact li {
     text-shadow: 1px 1px black;
     color: white;
     background-color: rgba( 0, 0, 0, 0.5 );
+}
+.profile-body ul.contact li img {
+    width: 30px;
 }
