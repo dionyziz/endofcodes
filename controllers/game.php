@@ -84,7 +84,7 @@
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
-            $this->view = 'game/update';
+            require 'views/game/update.php';
         }
     }
 ?>
