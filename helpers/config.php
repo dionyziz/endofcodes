@@ -9,6 +9,10 @@
         if ( substr( $relativePath, -1 ) != '/' ) {
             $relativePath .= '/';
         }
+        if ( !isset( $_SERVER[ 'HTTP_HOST' ] ) ) {
+            // using CLI
+            return '';
+        }
         return $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $relativePath;
     }
     function getConfig( $env ) {

@@ -17,15 +17,17 @@
                 $user->save();
             }
             catch ( ModelValidationException $e ) {
-                if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                if ( $this->outputFormat == 'json' ) {
                     throw new HTTPBadRequestException();
                 }
                 go( 'user', 'view', [ 'username' => $user->username, $e->error => true ] );
             }
-            if ( !isset( $this->acceptTypes[ 'application/json' ] ) ) {
+            if ( $this->outputFormat == 'json' ) {
+                echo json_encode( [] );
+            }
+            else {
                 go( 'user', 'view', [ 'username' => $user->username ] );
             }
-            echo json_encode( [] );
         }
     }
 ?>
