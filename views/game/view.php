@@ -58,9 +58,9 @@
 </aside>
 
 <div class='game' data-width="<?php
-    echo $game->width * 20;
+    echo $game->width;
 ?>" data-height="<?php
-    echo $game->height * 20;
+    echo $game->height;
 ?>">
     <div class='gameboard'>
         <?php
@@ -94,7 +94,7 @@
         <div class='infobubble'>
             <span class='hp'>
                 <span class='numeric'></span>
-                <span class='damage' style=''></span>
+                <span class='damage'></span>
             </span>
             <div class='stats'>
                 <h3 class="creatureid"></h3>
@@ -106,7 +106,7 @@
 </div>
 
 <div class='time' data-width="<?php
-    echo $game->width * 20;
+    echo $game->width;
 ?>">
     <span class='roundid'>Round <?php
         echo $round->id;
