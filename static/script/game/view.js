@@ -3,7 +3,7 @@ var GameView = {
     ARROW_WIDTH: 30,
     roundCount: 0,
     maxHp: 0,
-    pixelMultiplier: 20,
+    PIXEL_MULTIPLIER: 20,
     findGameAndRoundId: function( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
         var attribute, gameid, roundid;
@@ -108,7 +108,7 @@ var GameView = {
     },
     fixPlane: function( $element, attributes ) {
         $.each( attributes, function( index, value ) {
-            $element.css( index, value * GameView.pixelMultiplier );
+            $element.css( index, value * GameView.PIXEL_MULTIPLIER );
         } );
     },
     ready: function() {
