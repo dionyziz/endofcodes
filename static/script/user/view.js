@@ -4,6 +4,7 @@ var UserView = {
     UPLOAD_LINK_OPACITY_MIN: 0.5,
     IMAGE_HEIGHT: 168,
     IMAGE_WIDTH: 168,
+    SPEED: 50,
     showUploadedImage: function( source ) {
         $( ".avatar img" ).remove();
         $image = $( '<img src="' + source + '" alt="Profile Picture" />' );
@@ -37,8 +38,6 @@ var UserView = {
         $( "#upload-link" ).css( 'background-color', 'rgba(0,0,0,' + opacity + ')' );
     },
     animateImage: function( makeOpacityBigger ) {
-        var speed = 50;
-
         if ( UserView.uploading ) {
             var opacity;
             if ( makeOpacityBigger ) {
@@ -50,7 +49,7 @@ var UserView = {
             UserView.fixUploadLinkOpacity( opacity );
             setTimeout( function() {
                 UserView.animateImage( !makeOpacityBigger );
-            }, speed );
+            }, UserView.SPEED );
         }
     },
     finishUploadAnimation: function() {
