@@ -105,9 +105,7 @@
     </div>
 </div>
 
-<div class='time' data-width="<?php
-    echo $game->width;
-?>">
+<div class='time'>
     <span class='roundid'>Round <?php
         echo $round->id;
     ?></span>

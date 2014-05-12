@@ -106,17 +106,23 @@ var GameView = {
         } );
         return false;
     },
-    fixWidthAndHeight: function( $element ) {
-        if ( $element.attr( 'data-width' ) ) {
-            $element.css( 'width', $element.attr( 'data-width' ) * GameView.PIXEL_MULTIPLIER );
-        }
-        if ( $element.attr( 'data-height' ) ) {
-            $element.css( 'height', $element.attr( 'data-height' ) * GameView.PIXEL_MULTIPLIER );
-        }
+    fixPlane: function( $element, attributes ) {
+        $.each( attributes, function( index, value ) {
+            $element.css( index, value * GameView.pixelMultiplier );
+        } );
     },
     ready: function() {
-        GameView.fixWidthAndHeight( $( '.game' ) );
-        GameView.fixWidthAndHeight( $( '.time' ) );
+        var $game = $( '.game' );
+        var width = $game.attr( 'data-width' );
+        var height = $game.attr( 'data-height' );
+
+        GameView.fixPlane( $game, {
+            "width": width,
+            "height": height
+        } );
+        GameView.fixPlane( $( '.time' ), {
+            "width": width
+        } );
         GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
         GameView.maxHp = $( '.gamemeta h2' ).attr( 'data-maxHp' );
         $( document ).on( "mouseover", ".creature", function() {
