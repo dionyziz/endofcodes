@@ -3,7 +3,7 @@ var GameView = {
     ARROW_WIDTH: 30,
     roundCount: 0,
     maxHp: 0,
-    pixelMultiplier: 20,
+    PIXEL_MULTIPLIER: 20,
     findGameAndRoundId: function( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
         var attribute, gameid, roundid;
@@ -108,10 +108,10 @@ var GameView = {
     },
     fixWidthAndHeight: function( $element ) {
         if ( $element.attr( 'data-width' ) ) {
-            $element.css( 'width', $element.attr( 'data-width' ) * GameView.pixelMultiplier );
+            $element.css( 'width', $element.attr( 'data-width' ) * GameView.PIXEL_MULTIPLIER );
         }
         if ( $element.attr( 'data-height' ) ) {
-            $element.css( 'height', $element.attr( 'data-height' ) * GameView.pixelMultiplier );
+            $element.css( 'height', $element.attr( 'data-height' ) * GameView.PIXEL_MULTIPLIER );
         }
     },
     ready: function() {
