@@ -117,11 +117,11 @@ var GameView = {
         var height = $game.attr( 'data-height' );
 
         GameView.fixPlane( $game, {
-            "width": width,
-            "height": height
+            width: width,
+            height: height
         } );
         GameView.fixPlane( $( '.time' ), {
-            "width": width
+            width: width
         } );
         GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
         GameView.maxHp = $( '.gamemeta h2' ).attr( 'data-maxHp' );
