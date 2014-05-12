@@ -1,7 +1,9 @@
 var UserView = {
     uploading: false,
-    UploadLinkOpacityMax: 0.8,
-    UploadLinkOpacityMin: 0.5,
+    UPLOAD_LINK_OPACITY_MAX: 0.8,
+    UPLOAD_LINK_OPACITY_MIN: 0.5,
+    IMAGE_HEIGHT: 168,
+    IMAGE_WIDTH: 168,
     showUploadedImage: function( source ) {
         $( ".avatar img" ).remove();
         $image = $( '<img src="' + source + '" alt="Profile Picture" />' );
@@ -17,21 +19,18 @@ var UserView = {
         $( '.text-center .alert.alert-danger' ).remove();
     },
     fixImageSize: function( $image ) {
-        var height, width;
         var imgWidth = $image.width();
         var imgHeight = $image.height();
 
-        height = width = 168;
-
         if ( imgWidth > imgHeight ) {
-            $image.height( height );
+            $image.height( UserView.IMAGE_HEIGHT );
             $image.css( 'top', 0 );
-            $image.css( 'left', -Math.floor( ( $image.width() - width ) / 2 ) );
+            $image.css( 'left', -Math.floor( ( $image.width() - UserView.IMAGE_WIDTH ) / 2 ) );
         }
         else {
-            $image.width( width );
+            $image.width( UserView.IMAGE_WIDTH );
             $image.css( 'left', 0 );
-            $image.css( 'top', -Math.floor( ( $image.height() - height ) / 2 ) );
+            $image.css( 'top', -Math.floor( ( $image.height() - UserView.IMAGE_HEIGHT ) / 2 ) );
         }
     },
     fixUploadLinkOpacity: function( opacity ) {
@@ -43,10 +42,10 @@ var UserView = {
         if ( UserView.uploading ) {
             var opacity;
             if ( makeOpacityBigger ) {
-                opacity = UserView.UploadLinkOpacityMax;
+                opacity = UserView.UPLOAD_LINK_OPACITY_MAX;
             }
             else {
-                opacity = UserView.UploadLinkOpacityMin;
+                opacity = UserView.UPLOAD_LINK_OPACITY_MIN;
             }
             UserView.fixUploadLinkOpacity( opacity );
             setTimeout( function() {
@@ -57,7 +56,7 @@ var UserView = {
     finishUploadAnimation: function() {
         $( "#upload-link" ).hide();
         UserView.uploading = false;
-        UserView.fixUploadLinkOpacity( UserView.UploadLinkOpacityMin );
+        UserView.fixUploadLinkOpacity( UserView.UPLOAD_LINK_OPACITY_MIN );
     },
     startUploadAnimation: function() {
         $( "#upload-link" ).show();
