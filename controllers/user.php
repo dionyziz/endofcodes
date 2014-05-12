@@ -74,6 +74,7 @@
                 }
             }
             $user->email = $email;
+            $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->country = Country::findByShortname( $countryShortname );
             }
