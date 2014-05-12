@@ -107,8 +107,8 @@ var GameView = {
         return false;
     },
     fixPlane: function( $element, attributes ) {
-        $.each( attributes, function( index, value ) {
-            $element.css( index, value * GameView.PIXEL_MULTIPLIER );
+        $.each( attributes, function( key, value ) {
+            $element.css( key, value * GameView.PIXEL_MULTIPLIER );
         } );
     },
     ready: function() {
