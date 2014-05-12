@@ -68,7 +68,6 @@ var UserView = {
         $( '.avatar img' ).load( function() {
             UserView.fixImageSize( $( '.avatar img' ) );
         } );
-
         $( ".avatar" ).mouseover( function() {
             if ( $( ".profile-header" ).attr( 'data-sameUser' ) == 'yes' ) {
                 $( "#upload-link" ).show();
@@ -79,6 +78,14 @@ var UserView = {
         } );
         $( "#upload-link" ).click( function() {
             $( "#image" ).trigger( 'click' );
+            return false;
+        } );
+        $( '#unfollow' ).click( function() {
+            $( '#unfollow-form' ).submit();
+            return false;
+        } );
+        $( '#follow' ).click( function() {
+            $( '#follow-form' ).submit();
             return false;
         } );
         $( "#image" ).change( function() {

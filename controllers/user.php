@@ -44,8 +44,8 @@
                 throw new HTTPNotFoundException();
             }
             if ( isset( $_SESSION[ 'user' ] ) ) {
-                $notSameUser = $_SESSION[ 'user' ]->id != $user->id;
-                if ( $notSameUser ) {
+                $sameUser = $_SESSION[ 'user' ]->id == $user->id;
+                if ( !$sameUser ) {
                     try {
                         $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id );
                         $followExists = true;
