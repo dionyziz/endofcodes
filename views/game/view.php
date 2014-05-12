@@ -57,11 +57,11 @@
     ?></ol>
 </aside>
 
-<div class='game' style="width:<?php
-    echo $game->width * 20;
-?>px; height:<?php
-    echo $game->height * 20;
-?>px;">
+<div class='game' data-width="<?php
+    echo $game->width;
+?>" data-height="<?php
+    echo $game->height;
+?>">
     <div class='gameboard'>
         <?php
             foreach ( $round->creatures as $creature ) {
@@ -94,7 +94,7 @@
         <div class='infobubble'>
             <span class='hp'>
                 <span class='numeric'></span>
-                <span class='damage' style=''></span>
+                <span class='damage'></span>
             </span>
             <div class='stats'>
                 <h3 class="creatureid"></h3>
@@ -106,7 +106,7 @@
 </div>
 
 <div class='time'>
-    <span class='round'>Round <?php
+    <span class='roundid'>Round <?php
         echo $round->id;
     ?></span>
     <span class="previous"<?php
@@ -118,7 +118,7 @@
             echo htmlspecialchars( $gameid );
         ?>&amp;roundid=<?php
             echo htmlspecialchars( $round->id - 1 );
-        ?>">Previous</a>
+        ?>"><span class="glyphicon glyphicon-chevron-left"></span></a>
     </span>
     <span class="next"<?php
         if ( !isset( $game->rounds[ $round->id + 1 ] ) ) {
@@ -129,7 +129,7 @@
             echo htmlspecialchars( $gameid );
         ?>&amp;roundid=<?php
             echo htmlspecialchars( $round->id + 1 );
-        ?>">Next</a>
+        ?>"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </span>
 </div>
 <?php
