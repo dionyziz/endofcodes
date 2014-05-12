@@ -1,3 +1,16 @@
-.breadcrumbs {
-    margin: 10px 0 0 0;
+.navbar li img {
+    margin-left: 5px;
+    border-radius: 100px;
+    position: absolute;
+    left: -26px;
+    top: 10px;
+}
+.navbar .glyphicon.settings-icon {
+    top: 3px;
+}
+#logout-form {
+    display: none;
+}
+.navbar .glyphicon.settings-icon {
+    top: 3px;
 }

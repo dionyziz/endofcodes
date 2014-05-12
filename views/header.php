@@ -15,7 +15,6 @@
         <?php
             includeStyle( "bootstrap.min" );
             includeStyle( "general" );
-            includeStyle( "header" );
             includeStyle( "footer" );
             includeStyle( "navigation" );
             includeStyle( "home" );

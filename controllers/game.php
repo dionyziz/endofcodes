@@ -42,7 +42,7 @@
 
             go( 'game', 'update', compact( 'gameid' ) );
         }
-        public function view( $gameid, $roundid = false ) {
+        public function view( $gameid, $roundid = false, $all = false ) {
             try {
                 $game = new Game( $gameid );
             }
@@ -61,13 +61,20 @@
             if ( isset( $_SESSION[ 'user' ] ) ) {
                 $currentUser = $_SESSION[ 'user' ];
             }
-            if ( $this->outputFormat == 'json' ) {
-                require_once 'models/grader/serializer.php';
-                $mapJson = GraderSerializer::serializeCreatureList( $round->creatures );
-                require 'views/game/view.json.php';
-            }
-            else {
-                require 'views/game/view.php';
+            switch ( $this->outputFormat ) {
+                case 'json':
+                case 'text':
+                    require_once 'models/grader/serializer.php';
+                    if ( $all ) {
+                        $mapJson = GraderSerializer::serializeRoundList( $game->rounds );
+                    }
+                    else {
+                        $mapJson = GraderSerializer::serializeCreatureList( $round->creatures );
+                    }
+                    require 'views/game/view.json.php';
+                    break;
+                default:
+                    require 'views/game/view.php';
             }
         }
         public function updateView( $gameid ) {
