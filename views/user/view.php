@@ -20,7 +20,12 @@
         <div class="avatar">
             <a href="" id="upload-link">Upload an image</a>
             <img src="<?php
-                echo $user->image->target_path;
+                if ( isset( $user->image->target_path ) ) {
+                    echo $user->image->target_path;
+                }
+                else {
+                    ?>static/images/default-profile.jpg<?php
+                }
             ?>" alt="Profile Picture" />
         </div>
         <div class="upper-header">
