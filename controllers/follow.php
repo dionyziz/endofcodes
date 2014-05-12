@@ -4,6 +4,9 @@
         public function create( $followerid, $followedid ) {
             $followerid = intval( $followerid );
             $followedid = intval( $followedid );
+            if ( $followerid != $_SESSION[ 'user' ]->id ) {
+                throw new HTTPUnauthorizedException();
+            }
             $follower = new User( $followerid );
             $followed = new User( $followedid );
             $follow = new Follow();
@@ -16,7 +19,7 @@
         public function delete( $followerid, $followedid ) {
             $followerid = intval( $followerid );
             $followedid = intval( $followedid );
-            if ( $followerid !== $_SESSION[ 'user' ]->id ) {
+            if ( $followerid != $_SESSION[ 'user' ]->id ) {
                 throw new HTTPUnauthorizedException();
             }
             $follow = new Follow( $followerid, $followedid );

@@ -31,6 +31,14 @@ var UserView = {
             $image.css( 'left', 0 );
             $image.css( 'top', -Math.floor( ( $image.height() - height ) / 2 ) );
         }
+        $( '#unfollow' ).click( function() {
+            $( '#unfollow-form' ).submit();
+            return false;
+        } );
+        $( '#follow' ).click( function() {
+            $( '#follow-form' ).submit();
+            return false;
+        } );
         $( "#image-form" ).submit( function() {
             var image = document.getElementById( "image" ).files[ 0 ];
             var token = $( "input[type=hidden]" ).val();
