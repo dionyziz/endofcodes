@@ -21,7 +21,7 @@
         exit( $controller->dispatch( [ 'method' => $method ], $vars, [], 'POST' ) );
     }
     catch ( HTTPErrorException $e ) {
-        die( 'An HTTP error occuρred: '. $e->header );
+        die( 'An HTTP error occurred: '. $e->header );
     }
     catch ( NotImplemented $e ) {
         die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() . "\n" );
