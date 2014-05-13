@@ -11,7 +11,7 @@
         <div class="upper-header">
             <ul>
                 <li class="name"><?php
-                    echo $user->username;
+                    echo htmlspecialchars( $user->username );
                 ?></li>
                 <?php
                     if ( isset( $user->country->name ) ) {
@@ -61,11 +61,13 @@
         </div>
     </div>
     <div class="profile-body"><?php
-        if ( isset( $_SESSION[ 'user' ] ) && $sameUser && $user->boturl != '' ) {
-            ?><p class='bot-status bg-success'><img src="http://endofcodes.com/static/images/check.png" alt="check" /> Your bot is working correctly</p><?php
-        }
-        else if ( $sameUser ) {
-            ?><p>You don't have a bot. <a href="bot/update">Add one.</a></p><?php
+        if ( isset( $_SESSION[ 'user' ] ) && $sameUser ) {
+            if ( $user->boturl == '' ) {
+                ?><p>You don't have a bot. <a href="bot/update">Add one.</a></p><?php
+            }
+            else {
+                ?><p class='bot-status bg-success'><img src="http://endofcodes.com/static/images/check.png" alt="check" /> Your bot is working correctly</p><?php
+            }
         }
     ?>
 
