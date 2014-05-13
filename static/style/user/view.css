@@ -104,12 +104,24 @@ ul.contact li {
     position: absolute;
     text-shadow: 1px 1px black;
     color: white;
-    background-color: rgba( 0, 0, 0, 0.5 );
+    background-color: rgba(0,0,0,0.5);
 }
 .uploading.animate {
     -webkit-animation: pulse 1s infinite;
+    -moz-animation: pulse 1s infinite;
 }
 @-webkit-keyframes pulse {
+    0% {
+        background-color: rgba(0,0,0,0.5);
+    }
+    50% {
+        background-color: rgba(0,0,0,0.8);
+    }
+    100% {
+        background-color: rgba(0,0,0,0.5);
+    }
+}
+@-moz-keyframes pulse {
     0% {
         background-color: rgba(0,0,0,0.5);
     }
