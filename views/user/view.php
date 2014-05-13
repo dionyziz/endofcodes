@@ -2,74 +2,83 @@
     require 'views/header.php';
 ?>
 <div class="text-center">
-    <p><img src="<?php
+    <div class="profile-header">
+        <div class="avatar">
+            <img src="<?php
                 echo $user->image->target_path;
-            ?>" alt="Profile Picture" width="100" height="100" id="userImage" /></p><?php
-
-    if ( isset( $user->country ) ) {
-        ?><p><img src="<?php
-                echo $user->country->flag;
-            ?>" alt="<?php
-                echo htmlspecialchars( $user->country->name );
-            ?>" width="100" height="100" /></p><?php
-    }
-    ?><p><?php
-        echo htmlspecialchars( $user->username );
-    ?></p>
-
-    <p><?php
-        echo htmlspecialchars( $user->email );
-    ?></p><?php
-
-    if ( isset( $user->country ) ) {
-        ?><p>Country: <?php
-            echo htmlspecialchars( $user->country->name );
-        ?></p><?php
-    }
-
-    ?><p>Score: *score*</p>
-    <p><a href="">Global</a> position: *pos*</p>
-    <p><a href="">Country</a> position: *pos*</p>
-    <p><a href="">Last match</a> position: *pos*</p>
-    <p><img src="static/images/facebook-logo.jpeg" alt="facebook link" width="40" height="40" /></p>
-    <p><img src="static/images/twitter-logo.png" alt="twitter link" width="40" height="40" /></p>
-    <p><img src="static/images/github-logo.png" alt="github link" width="40" height="40" /></p>
-    <p><img src="static/images/google+-logo.jpeg" alt="google+ link" width="40" height="40" /></p>
-    <?php
-        if ( isset( $_SESSION[ 'user' ] ) ) {
-            if ( $_SESSION[ 'user' ]->id != $user->id ) {
-                if ( !$followExists ) {
-                    $formMethod = 'create';
-                    $submitValue = 'Follow';
+            ?>" alt="Profile Picture" />
+        </div>
+        <div class="upper-header">
+            <ul>
+                <li class="name"><?php
+                    echo htmlspecialchars( $user->username );
+                ?></li>
+                <?php
+                    if ( isset( $user->country->name ) ) {
+                        ?><li class="country">
+                            <img src="<?php
+                                echo $user->country->flag;
+                            ?>" alt="<?php
+                                echo htmlspecialchars( $user->country->name );
+                            ?>" />
+                            <?php
+                                echo htmlspecialchars( $user->country->name );
+                            ?>
+                        </li><?php
+                    }
+                ?>
+            </ul>
+        </div>
+        <div class="lower-header">
+            <?php
+                if ( isset( $_SESSION[ 'user' ] ) && !$sameUser ) {
+                    if ( $followExists ) {
+                        ?><a href="#" id="unfollow"><button class="btn btn-primary follow">Unfollow</button></a><?php
+                        $formId = 'unfollow-form';
+                        $followMethod = 'delete';
+                    }
+                    else {
+                        ?><a href="#" id="follow"><button class="btn btn-primary follow">Follow</button></a><?php
+                        $formId = 'follow-form';
+                        $followMethod = 'create';
+                    }
+                    $form = new Form( 'follow', $followMethod );
+                    $form->id = $formId;
+                    $form->output( function( $self ) use( $user ) {
+                        $self->createInput( 'hidden', 'followedid', '', $user->id );
+                    } );
                 }
-                else {
-                    $formMethod = 'delete';
-                    $submitValue = 'Unfollow';
-                }
-                $form = new Form( 'follow', $formMethod );
-                $form->output( function( $self ) use( $user, $submitValue ) {
-                    $self->createInput( 'hidden', 'followerid', '', $_SESSION[ 'user' ]->id );
-                    $self->createInput( 'hidden', 'followedid', '', $user->id );
-                    $self->createInput( 'submit', '', '', $submitValue );
-                } );
+            ?>
+            <!--
+            <p class='when'>This week:</p>
+            <ul>
+                <li>23rd in <?php
+                    echo $user->country->name;
+                ?></li>
+                <li>152nd worldwide</li>
+            </ul>
+            -->
+        </div>
+    </div>
+    <div class="profile-body"><?php
+        if ( isset( $_SESSION[ 'user' ] ) && $sameUser ) {
+            if ( $user->boturl == '' ) {
+                ?><p>You don't have a bot. <a href="bot/update">Add one.</a></p><?php
             }
             else {
-                ?><p id="uploading">Uploading...</p><?php
-                $form = new Form( 'image', 'create' );
-                $form->id = 'image-form';
-                $form->output( function( $self ) use( $image_invalid ) {
-                    $self->createLabel( 'image', 'Upload an avatar' );
-                    if ( isset( $image_invalid ) ) {
-                        $self->createError( "This isn't an image" );
-                    }
-                    $self->createInput( 'file', 'image', 'image' );
-                    $self->createSubmit( 'Upload', [ "id" => "imageSubmit" ]  );
-                } );
-
-                ?><p><a href="user/update">Edit Settings</a></p><?php
+                ?><p class='bot-status bg-success'><img src="http://endofcodes.com/static/images/check.png" alt="check" /> Your bot is working correctly</p><?php
             }
         }
     ?>
+
+        <ul class='contact'>
+            <li><a href=""><img src="http://www.defaulticon.com/v1/assets/icons/png/16x16/mail.png" alt="mail" /> <?php
+                echo $user->email;
+            ?></a></li>
+            <li><a href=""><img src="http://endofcodes.com/static/images/github-logo.png" /></a></li>
+            <li><a href=""><img src="http://endofcodes.com/static/images/facebook-logo.jpeg" /></a></li>
+        </ul>
+    </div>
 </div>
 <?php
     require 'views/footer.php';
