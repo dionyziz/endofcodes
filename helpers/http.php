@@ -42,8 +42,10 @@
 
     class HTTPErrorException extends Exception {
         public $header;
+        public $error;
 
         public function __construct( $error, $description = "" ) {
+            $this->error = $error;
             if ( !empty( $description ) ) {
                 $this->header = "HTTP/1.1 $error $description";
             }
@@ -51,6 +53,10 @@
                 $this->header = "HTTP/1.1 $error";
             }
             parent::__construct( $this->header );
+            
+        }
+        public function outputErrorPage() {
+            $error = $this->error;
             require_once "views/http/$error.php";
         }
     }

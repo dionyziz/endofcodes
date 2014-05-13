@@ -1,11 +1,24 @@
 .username {
     color: black;
 }
-
 .importantnum {
     color: blue;
 }
-
 #image {
     margin-left: 46%;
+}
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('../../static/fonts/glyphicons-halflings-regular.eot');
+    src: url('../../static/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../static/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../../static/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../../static/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+ul, li {
+    padding: 0;
+    margin: 0;
+}
+h1 {
+    font-size: 120%;
+}
+#logout-form {
+    display: none;
 }

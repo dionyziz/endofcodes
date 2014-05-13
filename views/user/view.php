@@ -31,7 +31,7 @@
         <div class="upper-header">
             <ul>
                 <li class="name"><?php
-                    echo $user->username;
+                    echo htmlspecialchars( $user->username );
                 ?></li>
                 <?php
                     if ( isset( $user->country->name ) ) {
@@ -65,7 +65,6 @@
                     $form = new Form( 'follow', $followMethod );
                     $form->id = $formId;
                     $form->output( function( $self ) use( $user ) {
-                        $self->createInput( 'hidden', 'followerid', '', $_SESSION[ 'user' ]->id );
                         $self->createInput( 'hidden', 'followedid', '', $user->id );
                     } );
                 }
@@ -82,9 +81,15 @@
         </div>
     </div>
     <div class="profile-body"><?php
-        if ( isset( $_SESSION[ 'user' ] ) && $sameUser && $user->boturl != '' ) {
-            ?><p class='bot-status bg-success'><img src="http://endofcodes.com/static/images/check.png" alt="check" /> Your bot is working correctly</p><?php
-        }?>
+        if ( isset( $_SESSION[ 'user' ] ) && $sameUser ) {
+            if ( $user->boturl == '' ) {
+                ?><p>You don't have a bot. <a href="bot/update">Add one.</a></p><?php
+            }
+            else {
+                ?><p class='bot-status bg-success'><img src="http://endofcodes.com/static/images/check.png" alt="check" /> Your bot is working correctly</p><?php
+            }
+        }
+    ?>
 
         <ul class='contact'>
             <li><a href=""><img src="http://www.defaulticon.com/v1/assets/icons/png/16x16/mail.png" alt="mail" /> <?php

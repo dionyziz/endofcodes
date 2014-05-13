@@ -7,8 +7,7 @@
 </div>
 <?php
     if ( !empty( $game ) && $game->ended ) {
-        ?><h2 id="ratings-title"><a href='game/view?gameid=
-        <?php
+        ?><h2 id="ratings-title"><a href='game/view?gameid=<?php
             echo $game->id;
         ?>'>Last game</a> ratings</h2>
         <table class="table table-striped">
