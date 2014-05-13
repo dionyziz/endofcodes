@@ -47,7 +47,7 @@ var UserView = {
             UserView.fixImageSize( $( '.avatar img' ) );
         } );
         $( ".avatar" ).mouseover( function() {
-            if ( $( ".profile-header" ).attr( 'data-sameUser' ) != 'yes' || UserView.uploading ) {
+            if ( $( ".profile-header" ).attr( 'data-sameUser' ) == 'no' || UserView.uploading ) {
                 return;
             }
             $( ".upload-link" ).show();
