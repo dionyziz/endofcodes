@@ -1,6 +1,3 @@
-#uploading {
-    display: none;
-}
 .avatar {
     width: 168px;
     height: 168px;
@@ -90,6 +87,50 @@ ul.contact li {
 }
 ul.contact li {
     display: inline;
+}
+#image-form {
+    display: none;
+}
+.upload-link, .upload-link:visited, .uploading {
+    text-decoration: none;
+    display: none;
+    font-size: 12pt;
+    top: 130px;
+    left: 0;
+    width: 167px;
+    height: 37px;
+    z-index: 100;
+    padding-top: 5px;
+    position: absolute;
+    text-shadow: 1px 1px black;
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+}
+.uploading.animate {
+    -webkit-animation: pulse 1s infinite;
+    -moz-animation: pulse 1s infinite;
+}
+@-webkit-keyframes pulse {
+    0% {
+        background-color: rgba(0,0,0,0.5);
+    }
+    50% {
+        background-color: rgba(0,0,0,0.8);
+    }
+    100% {
+        background-color: rgba(0,0,0,0.5);
+    }
+}
+@-moz-keyframes pulse {
+    0% {
+        background-color: rgba(0,0,0,0.5);
+    }
+    50% {
+        background-color: rgba(0,0,0,0.8);
+    }
+    100% {
+        background-color: rgba(0,0,0,0.5);
+    }
 }
 .profile-body ul.contact li img {
     width: 30px;

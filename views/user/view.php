@@ -2,10 +2,31 @@
     require 'views/header.php';
 ?>
 <div class="text-center">
-    <div class="profile-header">
+    <?php
+        $form = new Form( 'image', 'create' );
+        $form->id = 'image-form';
+        $form->output( function( $self ) {
+            $self->createInput( 'file', 'image', 'image' );
+        } );
+    ?>
+    <div class="profile-header" data-sameUser="<?php
+        if ( $sameUser ) {
+            echo "yes";
+        }
+        else {
+            echo "no";
+        }
+    ?>">
         <div class="avatar">
+            <a href="" class="upload-link">Upload an image</a>
+            <span class="uploading">Uploading...</span>
             <img src="<?php
-                echo $user->image->target_path;
+                if ( isset( $user->image->target_path ) ) {
+                    echo $user->image->target_path;
+                }
+                else {
+                    ?>static/images/default-profile.jpg<?php
+                }
             ?>" alt="Profile Picture" />
         </div>
         <div class="upper-header">
