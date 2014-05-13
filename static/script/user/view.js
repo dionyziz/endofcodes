@@ -13,6 +13,32 @@ var UserView = {
         $( "#uploading" ).toggle();
     },
     ready: function() {
+        var height, width;
+        var $avatar = $( '.avatar' );
+        var $image = $( '.avatar img' );
+        var imgWidth = $image.width();
+        var imgHeight = $image.height();
+
+        height = width = 168;
+
+        if ( imgWidth > imgHeight ) {
+            $image.height( height );
+            $image.css( 'top', 0 );
+            $image.css( 'left', -Math.floor( ( $image.width() - width ) / 2 ) );
+        }
+        else {
+            $image.width( width );
+            $image.css( 'left', 0 );
+            $image.css( 'top', -Math.floor( ( $image.height() - height ) / 2 ) );
+        }
+        $( '#unfollow' ).click( function() {
+            $( '#unfollow-form' ).submit();
+            return false;
+        } );
+        $( '#follow' ).click( function() {
+            $( '#follow-form' ).submit();
+            return false;
+        } );
         $( "#image-form" ).submit( function() {
             var image = document.getElementById( "image" ).files[ 0 ];
             var token = $( "input[type=hidden]" ).val();

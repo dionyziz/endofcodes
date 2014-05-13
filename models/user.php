@@ -155,9 +155,9 @@
         }
 
         protected function onBeforeCreate() {
+            $this->prepareDob();
             $this->imageid = 0;
             $this->generateSessionId();
-            $this->prepareDob();
         }
 
         protected function onBeforeUpdate() {

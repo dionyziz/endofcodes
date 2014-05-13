@@ -1,4 +1,9 @@
 @charset "UTF-8";
+.next a, .next a:link, .next a:visited,
+.previous a, .previous a:link, .previous a:visited {
+    color: black;
+    font-size: 15pt;
+}
 div.game {
     border: 1px solid #999;
     position: static;
@@ -105,22 +110,20 @@ div.gameboard {
     margin-right: 210px;
     margin-left: 10px;
 }
-.time .round {
+.time .roundid {
     float: right;
-    position: relative;
-    top: 5px;
     font-size: 90%;
 }
 aside {
     float: right;
     width: 210px;
 }
-aside ol {
-    border-top: 1px solid #eee;
-}
 aside li {
     white-space: nowrap;
     overflow: hidden;
+}
+aside li:first-child {
+    border-top: 1px solid #eee;
 }
 .bubble {
     border-radius: 50px;
