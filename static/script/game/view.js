@@ -107,8 +107,8 @@ var GameView = {
         return false;
     },
     fixPlane: function( $element, attributes ) {
-        $.each( attributes, function( index, value ) {
-            $element.css( index, value * GameView.pixelMultiplier );
+        $.each( attributes, function( key, value ) {
+            $element.css( key, value * GameView.PIXEL_MULTIPLIER );
         } );
     },
     ready: function() {
@@ -117,11 +117,11 @@ var GameView = {
         var height = $game.attr( 'data-height' );
 
         GameView.fixPlane( $game, {
-            "width": width,
-            "height": height
+            width: width,
+            height: height
         } );
         GameView.fixPlane( $( '.time' ), {
-            "width": width
+            width: width
         } );
         GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
         GameView.maxHp = $( '.gamemeta h2' ).attr( 'data-maxHp' );
