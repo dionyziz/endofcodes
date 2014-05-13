@@ -6,7 +6,7 @@
                 throw new HTTPUnauthorizedException();
             }
 
-            $followedid = intval( $followedid );
+            $followedid = $followedid;
             $follower = $_SESSION[ 'user' ];
             $followed = new User( $followedid );
             $follow = new Follow();
@@ -22,7 +22,7 @@
             }
 
             $followerid = $_SESSION[ 'user' ]->id;
-            $followedid = intval( $followedid );
+            $followedid = $followedid;
             $follow = new Follow( $followerid, $followedid );
             $follower = $follow->follower;
             $followed = $follow->followed;
