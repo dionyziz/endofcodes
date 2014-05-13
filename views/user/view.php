@@ -45,7 +45,6 @@
                     $form = new Form( 'follow', $followMethod );
                     $form->id = $formId;
                     $form->output( function( $self ) use( $user ) {
-                        $self->createInput( 'hidden', 'followerid', '', $_SESSION[ 'user' ]->id );
                         $self->createInput( 'hidden', 'followedid', '', $user->id );
                     } );
                 }
