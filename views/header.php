@@ -48,13 +48,13 @@
                 <ul class="nav navbar-nav navbar-right">
                     <?php
                         if ( isset( $_SESSION[ 'user' ] ) ) {
-                            $user = $_SESSION[ 'user' ];
+                            $currentUser = $_SESSION[ 'user' ];
                             ?><li><a href="user/view?username=<?php
-                                echo $user->username;
+                                echo $currentUser->username;
                             ?>"><img src="<?php
-                                echo $user->image->target_path;
+                                echo $currentUser->image->target_path;
                             ?>" /><?php
-                                echo $user->username;
+                                echo $currentUser->username;
                             ?></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
