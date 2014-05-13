@@ -53,7 +53,7 @@
                                 echo $user->username;
                             ?>"><img src="<?php
                                 echo $user->image->target_path;
-                            ?>" width="30" height="30" /><?php
+                            ?>" /><?php
                                 echo $user->username;
                             ?></a></li>
                             <li class="dropdown">
