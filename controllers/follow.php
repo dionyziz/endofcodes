@@ -12,7 +12,6 @@
                 throw new HTTPBadRequestException();
             }
 
-            $followedid = $followedid;
             $follower = $_SESSION[ 'user' ];
             try {
                 $followed = new User( $followedid );
@@ -37,7 +36,6 @@
             }
 
             $followerid = $_SESSION[ 'user' ]->id;
-            $followedid = $followedid;
             try {
                 $follow = new Follow( $followerid, $followedid );
             }
