@@ -29,6 +29,15 @@
             $this->followedid = $this->followed->id;
         }
 
+        protected function onBeforeSave() {
+            if ( !is_int( $this->follower->id ) ) {
+                throw new ModelValidationException( 'followerid_not_valid' );
+            }
+            if ( !is_int( $this->followed->id ) ) {
+                throw new ModelValidationException( 'followedid_not_valid' );
+            }
+        }
+
         public function delete() {
             $followerid = $this->follower->id;
             $followedid = $this->followed->id;
