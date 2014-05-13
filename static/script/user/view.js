@@ -1,10 +1,7 @@
 var UserView = {
     uploading: false,
-    UPLOAD_LINK_OPACITY_MAX: 0.8,
-    UPLOAD_LINK_OPACITY_MIN: 0.5,
     IMAGE_HEIGHT: 168,
     IMAGE_WIDTH: 168,
-    SPEED: 50,
     showUploadedImage: function( source ) {
         $( ".avatar img" ).remove();
         $image = $( '<img src="' + source + '" alt="Profile Picture" />' );
