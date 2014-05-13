@@ -63,7 +63,11 @@
     <div class="profile-body"><?php
         if ( isset( $_SESSION[ 'user' ] ) && $sameUser && $user->boturl != '' ) {
             ?><p class='bot-status bg-success'><img src="http://endofcodes.com/static/images/check.png" alt="check" /> Your bot is working correctly</p><?php
-        }?>
+        }
+        else if ( $sameUser ) {
+            ?><p>You don't have a bot. <a href="bot/update">Add one.</a></p><?php
+        }
+    ?>
 
         <ul class='contact'>
             <li><a href=""><img src="http://www.defaulticon.com/v1/assets/icons/png/16x16/mail.png" alt="mail" /> <?php
