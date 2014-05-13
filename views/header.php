@@ -66,12 +66,12 @@
                                     </li>
                                     <li role="presentation">
                                         <a href="#" id="logout">Sign out</a>
+                                        <?php
+                                            $form = new Form( 'session', 'delete' );
+                                            $form->id = 'logout-form';
+                                            $form->output();
+                                        ?>
                                     </li>
-                                    <?php
-                                        $form = new Form( 'session', 'delete' );
-                                        $form->id = 'logout-form';
-                                        $form->output();
-                                    ?>
                                 </ul>
                             </li><?php
                         }
