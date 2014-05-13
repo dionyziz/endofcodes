@@ -23,5 +23,6 @@
     }
     catch ( HTTPErrorException $e ) {
         header( $e->header );
+        $e->outputErrorPage();
     }
 ?>
