@@ -44,6 +44,30 @@ $( document ).ready( function() {
         }
     }); 
 
+    $( '#login-form' ).submit( function() {
+        var form = $("#login-form"); // or $("form"), or any selector matching an element containing your input fields
+        var username = $( "[name='username']", form ).val();
+        var password = $( "[name='password']", form ).val();
+        var token = $( "[name='token']", form ).val();
+        if ( username == '' ) {
+            createError( '#login-form', 'Please type a username' );
+            return false;
+        }
+        $.ajax({ 
+            type: "POST",
+            url: "session/create",
+            data: { username: username, password: password, token: token },
+            complete: function( xhr ) { 
+                alert( xhr.status );
+            } 
+        }); 
+        if ( password == '' ) {
+            createError( '#login-form', 'Please type a password' );
+            return false;
+        }
+        return false;
+    });
+
     function createError( form, description ) {
         $( '.alert' ).remove();
         $( form ).prepend( "<div class='alert alert-danger'>" + description + "</div>" );
