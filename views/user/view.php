@@ -18,7 +18,8 @@
         }
     ?>">
         <div class="avatar">
-            <a href="" id="upload-link">Upload an image</a>
+            <a href="" class="upload-link">Upload an image</a>
+            <span class="uploading">Uploading...</span>
             <img src="<?php
                 if ( isset( $user->image->target_path ) ) {
                     echo $user->image->target_path;

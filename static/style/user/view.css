@@ -91,7 +91,7 @@ ul.contact li {
 #image-form {
     display: none;
 }
-#upload-link {
+.upload-link, .upload-link:visited, .uploading {
     text-decoration: none;
     display: none;
     font-size: 12pt;
@@ -105,6 +105,20 @@ ul.contact li {
     text-shadow: 1px 1px black;
     color: white;
     background-color: rgba( 0, 0, 0, 0.5 );
+}
+.uploading.animate {
+    -webkit-animation: pulse 1s infinite;
+}
+@-webkit-keyframes pulse {
+    0% {
+        background-color: rgba(0,0,0,0.5);
+    }
+    50% {
+        background-color: rgba(0,0,0,0.8);
+    }
+    100% {
+        background-color: rgba(0,0,0,0.5);
+    }
 }
 .profile-body ul.contact li img {
     width: 30px;

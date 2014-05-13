@@ -34,47 +34,34 @@ var UserView = {
             $image.css( 'top', -Math.floor( ( $image.height() - UserView.IMAGE_HEIGHT ) / 2 ) );
         }
     },
-    fixUploadLinkOpacity: function( opacity ) {
-        $( "#upload-link" ).css( 'background-color', 'rgba(0,0,0,' + opacity + ')' );
-    },
-    animateImage: function( makeOpacityBigger ) {
-        if ( UserView.uploading ) {
-            var opacity;
-            if ( makeOpacityBigger ) {
-                opacity = UserView.UPLOAD_LINK_OPACITY_MAX;
-            }
-            else {
-                opacity = UserView.UPLOAD_LINK_OPACITY_MIN;
-            }
-            UserView.fixUploadLinkOpacity( opacity );
-            setTimeout( function() {
-                UserView.animateImage( !makeOpacityBigger );
-            }, UserView.SPEED );
-        }
-    },
     finishUploadAnimation: function() {
-        $( "#upload-link" ).hide();
+        $( ".uploading" ).hide();
+        $( ".uploading" ).removeClass( 'animate' );
         UserView.uploading = false;
-        UserView.fixUploadLinkOpacity( UserView.UPLOAD_LINK_OPACITY_MIN );
     },
     startUploadAnimation: function() {
-        $( "#upload-link" ).show();
+        $( ".upload-link" ).hide();
+        $( ".uploading" ).show();
+        $( ".uploading" ).addClass( 'animate' );
         UserView.uploading = true;
-        UserView.animateImage( true );
     },
     ready: function() {
         $( '.avatar img' ).load( function() {
             UserView.fixImageSize( $( '.avatar img' ) );
         } );
         $( ".avatar" ).mouseover( function() {
-            if ( $( ".profile-header" ).attr( 'data-sameUser' ) == 'yes' ) {
-                $( "#upload-link" ).show();
+            if ( $( ".profile-header" ).attr( 'data-sameUser' ) != 'yes' || UserView.uploading ) {
+                return;
             }
+            $( ".upload-link" ).show();
         } );
         $( ".avatar" ).mouseout( function() {
-            $( "#upload-link" ).hide();
+            if ( UserView.uploading ) {
+                return;
+            }
+            $( ".upload-link" ).hide();
         } );
-        $( "#upload-link" ).click( function() {
+        $( ".upload-link" ).click( function() {
             $( "#image" ).trigger( 'click' );
             return false;
         } );
