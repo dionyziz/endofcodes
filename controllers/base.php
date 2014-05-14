@@ -69,7 +69,7 @@
                     $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    throw new HTTPUnauthorizedException();
+                    return;
                 }
                 $_SESSION[ 'user' ] = $user;
             }
