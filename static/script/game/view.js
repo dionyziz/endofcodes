@@ -123,7 +123,7 @@ var GameView = {
         var userid = user.getAttribute( 'data-id' );
 
         $creatures.each( function( index, value ) {
-            var $creature = $creatures.eq( index );
+            var $creature = $( this );
 
             if ( $creature.attr( 'data-userid' ) == userid ) {
                 if ( addShadow ) {
