@@ -53,18 +53,28 @@ $( document ).ready( function() {
             createError( '#login-form', 'Please type a username' );
             return false;
         }
-        $.ajax({ 
-            type: "POST",
-            url: "session/create",
-            data: { username: username, password: password, token: token },
-            complete: function( xhr ) { 
-                alert( xhr.status );
-            } 
-        }); 
         if ( password == '' ) {
             createError( '#login-form', 'Please type a password' );
             return false;
         }
+        $.ajax({ 
+            type: "POST",
+            url: "session/create",
+            data: { username: username, password: password, token: token },
+            dataType: "json",
+            async: true,
+            statusCode: { 
+                404: function() {
+                    createError( '#login-form', "Username doesn't exist" );
+                },
+                401: function() { 
+                    createError( '#login-form', 'Password is incorrect' );
+                },
+                200: function() {
+                    window.location.replace( 'dashboard' );
+                }
+            }
+        }); 
         return false;
     });
 
