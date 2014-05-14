@@ -119,21 +119,9 @@ var GameView = {
         } );
     },
     highlightCreatures: function( user, addShadow ) {
-        var $creatures = $( '.creature' );
         var userid = user.getAttribute( 'data-id' );
 
-        $creatures.each( function( index, value ) {
-            var $creature = $( this );
-
-            if ( $creature.attr( 'data-userid' ) == userid ) {
-                if ( addShadow ) {
-                    $creature.addClass( 'highlight' );
-                }
-                else {
-                    $creature.removeClass( 'highlight' );
-                }
-            }
-        } );
+        $( '.creature[data-userid=' + userid + ']' ).toggleClass( 'highlight', addShadow );
     },
     ready: function() {
         var $game = $( '.game' );
