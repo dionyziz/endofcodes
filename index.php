@@ -9,6 +9,7 @@
     }
     try {
         $controller = controllerBase::findController( $resource );
+        $controller->init();
         $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
     }
     catch ( NotImplemented $e ) {
@@ -21,6 +22,14 @@
 
         header( 'Location: ' . $config[ 'base' ] . $url );
     }
+    // catch ( DBException $e ) {
+    //     $resource = 'dbconfig';
+    //     $parameters = [ 'method' => 'create',
+    //                     'error'  => $e->error,
+    //                     'DbSaid' => $e->DbSaid ];
+    //     $controller = controllerBase::findController( $resource );
+    //     $controller->dispatch( $parameters, $_POST, [], $_SERVER[ 'REQUEST_METHOD' ] );
+    // }
     catch ( HTTPErrorException $e ) {
         header( $e->header );
         $e->outputErrorPage();

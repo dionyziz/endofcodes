@@ -20,7 +20,7 @@
         $finalsql = strtr( $sql, $bind );
         $res = mysql_query( $finalsql );
         if ( $res === false ) {
-            throw new DBException( mysql_error() );
+            throw new DBException( '', mysql_error() );
         }
         return $res;
     }
@@ -183,8 +183,12 @@
     }  
 
     class DBException extends Exception {
-        public function __construct( $error ) {
-            parent::__construct( 'Database error: ' . $error );
+        public $error;
+        public $DbSaid;
+        public function __construct( $error, $DbSaid ) {
+            $this->error = $error;
+            $this->DbSaid = $DbSaid;
+            parent::__construct( 'Database error: ' . $error . ' MySQL said: ' . $DbSaid );
         }
     }
 

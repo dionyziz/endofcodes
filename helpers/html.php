@@ -169,12 +169,12 @@
                 $this->formMethod = 'get';
             }
             ?><form <?php
-                if ( isset( $this->id ) ) {
+                if ( !empty( $this->id ) ) {
                     ?>id="<?php
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
                 }
-                if ( isset( $this->attributes ) ) {
+                if ( !empty( $this->attributes ) ) {
                     foreach( $this->attributes as $key => $value ) {
                         echo $key; 
                         ?>="<?php

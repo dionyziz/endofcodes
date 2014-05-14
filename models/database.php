@@ -1,12 +1,41 @@
 <?php
-    function throwDBException( $message ) {
-        throw new DBException( $message );
-    }
     function dbInit() {
         global $config;
 
-        mysql_connect( $config[ 'db' ][ 'host' ], $config[ 'db' ][ 'user' ], $config[ 'db' ][ 'pass' ] ) or throwDBException( 'Failed to connect to MySQL: ' . mysql_error() );
+        $dbConnected = mysql_connect( $config[ 'db' ][ 'host' ], 
+        	           $config[ 'db' ][ 'user' ], 
+        	           $config[ 'db' ][ 'pass' ] );
+       	if ( !$dbConnected ) { 
+        	throw new DBException( 'Failed to connect to MySQL.', mysql_error() );
+    	}
+        $dbSelected = mysql_select_db( $config[ 'db' ][ 'dbname' ] );
+        if ( !$dbSelected ) { 
+        	throw new DBException( 'Failed to select MySQL database.', mysql_error() );
+    	}
+    } 
+    function createConfig( $entries, $environment ) {
+    	$entries = ['db' => $entries];
+    	$entries = [$environment => $entries];
 
-        mysql_select_db( $config[ 'db' ][ 'dbname' ] ) or throwDBException( 'Failed to select MySQL database: ' . mysql_error() );
+    	$path = 'config/config-local.php';
+    	$config = array();
+		if ( file_exists( $path ) ) {
+            $config = require $path;
+            $config = array_replace_recursive( $config, $entries );
+        }
+        $config = array_replace_recursive( $config, $entries );
+
+    	$content = '<?php' . PHP_EOL . 'return ' . var_export($config, true) . ';';
+
+    	if ( !file_exists($path) ) {
+    		touch( $path );
+    	}
+    	if ( is_writable( $path ) ) {
+    		$configSaved = is_numeric( file_put_contents( $path, $content ) );
+    	}
+    	if ( empty( $configSaved ) ) {
+    		return $content;
+    	}
+    	return false; //Success
     }
 ?>

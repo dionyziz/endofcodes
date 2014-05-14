@@ -4,6 +4,7 @@
         protected $acceptTypes = [];
         public $trusted = false;
         public $outputFormat = 'html';
+        public $resource;
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -15,6 +16,7 @@
             $controllername = ucfirst( $resource ) . 'Controller';
             $controller = new $controllername();
 
+            $controller->resource = $resource;
             return $controller;
         }
         protected function protectFromForgery( $token = '', $httpRequestMethod = '' ) {
@@ -125,24 +127,31 @@
                 $this->outputFormat = 'json';
             }
         }
-        protected function init() {
+        public function init() {
             $this->loadConfig();
             $this->readHTTPAccept();
-            dbInit();
+            try {
+                $this->resource == 'dbconfig' or dbInit();
+            }
+            catch ( DBException $e ) {
+                $resource = 'dbconfig';
+                $method = 'create';
+                $url = $resource . '/' . $method . '?' . 'error=' . $e->error . '&DbSaid=' . $e->DbSaid;
+                throw new RedirectException( $url );
+            }
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
             $this->init();
             $this->sessionCheck();
-
+            
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';
             }
             $method = $this->getControllerMethod( $get[ 'method' ], $httpRequestMethod );
             $vars = $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
-            if ( !isset( $vars[ 'token' ] ) ) {
-                $token = '';
-            }
-            else {
+            
+            $token = '';
+            if ( isset( $vars[ 'token' ] ) ) {
                 $token = $vars[ 'token' ];
             }
             $this->protectFromForgery( $token, $httpRequestMethod );
