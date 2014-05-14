@@ -3,6 +3,7 @@ var GameView = {
     ARROW_WIDTH: 30,
     roundCount: 0,
     maxHp: 0,
+    PIXEL_MULTIPLIER: 20,
     findGameAndRoundId: function( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
         var attribute, gameid, roundid;
@@ -120,17 +121,23 @@ var GameView = {
         } );
         return false;
     },
-    fixWidthAndHeight: function( $element ) {
-        if ( $element.attr( 'data-width' ) ) {
-            $element.css( 'width', $element.attr( 'data-width' ) );
-        }
-        if ( $element.attr( 'data-height' ) ) {
-            $element.css( 'height', $element.attr( 'data-height' ) );
-        }
+    fixPlane: function( $element, attributes ) {
+        $.each( attributes, function( key, value ) {
+            $element.css( key, value * GameView.PIXEL_MULTIPLIER );
+        } );
     },
     ready: function() {
-        GameView.fixWidthAndHeight( $( '.game' ) );
-        GameView.fixWidthAndHeight( $( '.time' ) );
+        var $game = $( '.game' );
+        var width = $game.attr( 'data-width' );
+        var height = $game.attr( 'data-height' );
+
+        GameView.fixPlane( $game, {
+            width: width,
+            height: height
+        } );
+        GameView.fixPlane( $( '.time' ), {
+            width: width
+        } );
         GameView.roundCount = $( '.gamemeta h2' ).attr( 'data-rounds' );
         GameView.maxHp = $( '.gamemeta h2' ).attr( 'data-maxHp' );
         $( document ).on( "mouseover", ".creature", function() {

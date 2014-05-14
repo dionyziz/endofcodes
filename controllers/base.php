@@ -69,7 +69,7 @@
                     $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    throw new HTTPUnauthorizedException();
+                    return;
                 }
                 $_SESSION[ 'user' ] = $user;
             }
@@ -105,6 +105,9 @@
             $config = getConfig( $env );
         }
         protected function readHTTPAccept() {
+            if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
+                return;
+            }
             $accept = strtolower( str_replace( ' ', '', $_SERVER[ 'HTTP_ACCEPT' ] ) );
             $accept = explode( ',', $accept );
             $acceptTypes = [];
@@ -118,6 +121,9 @@
                 $acceptTypes[ $a ] = true;
             }
             $this->acceptTypes = $acceptTypes;
+            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                $this->outputFormat = 'json';
+            }
         }
         protected function init() {
             $this->loadConfig();

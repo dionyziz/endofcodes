@@ -36,6 +36,15 @@
             $this->assertEquals( 2, $players[ 1 ]->userid, 'All players must exist in exported request params' );
             $this->assertEquals( 3, $players[ 2 ]->userid, 'All players must exist in exported request params' );
             $this->assertEquals( 4, $players[ 3 ]->userid, 'All players must exist in exported request params' );
+
+            $this->assertFalse( isset( $requestParams[ 'rounds' ] ), 'When includeRounds is not defined the attribute rounds must not be set' );
+        }
+        public function testSerializeRoundList() {
+            $rounds = [ $this->buildRound() ];
+            $requestParams = json_decode( GraderSerializer::serializeRoundList( $rounds ), true );
+            $this->assertTrue( is_array( $requestParams ), 'decoded json must be an array' );
+            $this->assertEquals( 1, count( $requestParams ), 'The correct number of rounds must be encoded' );
+            $this->assertEquals( count( $rounds[ 0 ]->creatures ), count( $requestParams[ 1 ] ), 'Rounds must be encoded correclty' );
         }
         public function testRoundRequestParams() {
             $round = $this->buildRound();

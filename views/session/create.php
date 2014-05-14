@@ -34,7 +34,7 @@
     ?><p><span class="round uppercase">OR</span></p>
     <p>
         <p class="google-before rounded"><span class="fontawesome-google-plus"></span></p>
-        <button class="google rounded-left btn btn-primary">Login with Google+</button>
+        <button class="google rounded-left btn btn-primary">Login with Google</button>
     </p>
     <p>
         <p class="github-before rounded"><span class="fontawesome-github"></span></p>

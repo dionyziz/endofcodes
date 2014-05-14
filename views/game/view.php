@@ -58,9 +58,9 @@
 </aside>
 
 <div class='game' data-width="<?php
-    echo $game->width * 20;
+    echo $game->width;
 ?>" data-height="<?php
-    echo $game->height * 20;
+    echo $game->height;
 ?>">
     <div class='gameboard'>
         <?php
@@ -106,9 +106,7 @@
     </div>
 </div>
 
-<div class='time' data-width="<?php
-    echo $game->width * 20;
-?>">
+<div class='time'>
     <span class='roundid'>Round <?php
         echo $round->id;
     ?></span>
