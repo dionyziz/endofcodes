@@ -92,14 +92,6 @@ var GameView = {
             }
         }
     },
-    changeCreaturesColor: function( userid, color ) {
-        $( '.creature' ).each( function( index, value ) {
-            var $creature = $( this );
-            if ( $creature.attr( 'data-userid' ) == userid ) {
-                $creature.css( 'background', color );
-            }
-        } );
-    },
     getMap: function() {
         var href = this.href;
         $.getJSON( href, function( creatures ) {
@@ -124,6 +116,23 @@ var GameView = {
     fixPlane: function( $element, attributes ) {
         $.each( attributes, function( key, value ) {
             $element.css( key, value * GameView.PIXEL_MULTIPLIER );
+        } );
+    },
+    highlightCreatures: function( user, addShadow ) {
+        var $creatures = $( '.creature' );
+        var userid = user.getAttribute( 'data-id' );
+
+        $creatures.each( function( index, value ) {
+            var $creature = $creatures.eq( index );
+
+            if ( $creature.attr( 'data-userid' ) == userid ) {
+                if ( addShadow ) {
+                    $creature.addClass( 'highlight' );
+                }
+                else {
+                    $creature.removeClass( 'highlight' );
+                }
+            }
         } );
     },
     ready: function() {
@@ -173,38 +182,10 @@ var GameView = {
             $infobubble.hide();
         } );
         $( '.playerList li' ).mouseover( function() {
-            var userid = $( this ).attr( 'data-id' );
-            $( this ).css( 'background-color', 'black' );
-
-            GameView.changeCreaturesColor( userid, 'black' );
+            GameView.highlightCreatures( this, true );
         } );
         $( '.playerList li' ).mouseout( function() {
-            var userid = $( this ).attr( 'data-id' );
-            var $user = GameView.findUser( userid );
-            var color = GameView.findUserColor( $user );
-            var code;
-
-            $( this ).css( 'background-color', 'none' );
-
-            switch ( color ) {
-                case 'red':
-                    code = "#f85032";
-                    break;
-                case 'yellow':
-                    code = "#fceabb";
-                    break;
-                case 'black':
-                    code = "#45484d";
-                    break;
-                case 'green':
-                    code = "#bfd255";
-                    break;
-                case 'blue':
-                    code = "#3b679e";
-                    break;
-            }
-
-            GameView.changeCreaturesColor( userid, code );
+            GameView.highlightCreatures( this, false );
         } );
         $( '.next a' ).click( GameView.getMap );
         $( '.previous a' ).click( GameView.getMap );
