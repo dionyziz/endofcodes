@@ -65,20 +65,27 @@ var GameView = {
         } );
         return $creature;
     },
+    findUser: function( userid ) {
+        return $( '.playerList li[data-id=' + userid + ']' );
+    },
+    findUserColor: function( $user ) {
+        return $user.find( 'span.bubble' ).attr( 'data-color' );
+    },
     processCreatures: function( creatures ) {
         $( '.creature' ).remove();
         for ( var i = 0; i < creatures.length; ++i ) {
             var creature = creatures[ i ];
             if ( creature.hp > 0 ) {
-                var $user = $( '.playerList li[data-id=' + creature.userid + ']' );
+                var $user = GameView.findUser( creature.userid );
                 var username = $user.text();
-                var color = $user.find( 'span.bubble' ).attr( 'data-color' );
+                var color = GameView.findUserColor( $user );
                 creatureInfo = {
                     creatureid: creature.creatureid,
                     username: username,
                     x: creature.x,
                     y: creature.y,
-                    hp: creature.hp
+                    hp: creature.hp,
+                    userid: creature.userid
                 };
                 var $creature = GameView.createCreature( creatureInfo, color );
                 $( '.gameboard' ).prepend( $creature );
@@ -110,6 +117,11 @@ var GameView = {
         $.each( attributes, function( key, value ) {
             $element.css( key, value * GameView.PIXEL_MULTIPLIER );
         } );
+    },
+    highlightCreatures: function( user, addShadow ) {
+        var userid = user.getAttribute( 'data-id' );
+
+        $( '.creature[data-userid=' + userid + ']' ).toggleClass( 'highlight', addShadow );
     },
     ready: function() {
         var $game = $( '.game' );
@@ -156,6 +168,12 @@ var GameView = {
             var $infobubble = $( '.infobubble' );
             $infobubble.removeClass( 'reversed' );
             $infobubble.hide();
+        } );
+        $( '.playerList li' ).mouseover( function() {
+            GameView.highlightCreatures( this, true );
+        } );
+        $( '.playerList li' ).mouseout( function() {
+            GameView.highlightCreatures( this, false );
         } );
         $( '.next a' ).click( GameView.getMap );
         $( '.previous a' ).click( GameView.getMap );
