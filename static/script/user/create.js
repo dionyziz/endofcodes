@@ -1,6 +1,5 @@
 $( document ).ready( function() { 
     $( '#register-form' ).submit( function() {
-        $.getScript( 'static/script/error.js' );
         var username = $( '#username' ).val();  
         var password = $( '#password' ).val();  
         var passwordRepeat = $( '#password_repeat' ).val();  
