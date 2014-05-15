@@ -1,3 +1,137 @@
-#uploading {
+.avatar {
+    width: 168px;
+    height: 168px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    position: relative;
+    float: left;
+}
+.avatar img {
+    position: absolute;
+}
+.profile-header {
+    height: 170px;
+}
+.profile-body {
+    clear: both;
+}
+.upper-header {
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+    height: 84px;
+    line-height: 120px;
+}
+.upper-header ul {
+    list-style: none;
+}
+.upper-header li {
+    font-size: 20pt;
+    float: left;
+    padding: 0 10px;
+}
+.upper-header li.country img {
+    width: 30px;
+    height: 15px;
+}
+.upper-header li.name {
+    height: 84px;
+}
+.upper-header li.country {
+    float: right;
+    font-size: 11pt;
+    line-height: 137px;
+    color: #777;
+    padding-right: 0;
+}
+.lower-header {
+    text-align: left;
+    font-size: 12pt;
+    margin: 7px 0 0 178px;
+}
+.lower-header button {
+    float: right;
+}
+.lower-header .when {
+    color: #999;
+}
+.lower-header ul {
+    list-style: none;
+}
+.lower-header p {
+    float: left;
+    margin-right: 5px;
+}
+.lower-header li {
+    display: inline;
+}
+.lower-header li:after {
+    content: "•";
+    margin-left: 5px;
+}
+.lower-header li:last-child:after {
+    content: "";
+}
+.bot-status {
+    padding: 5px;
+    margin: 15px auto;
+    clear: both;
+    width: 300px;
+    border-radius: 5px;
+}
+ul.contact {
+    list-style: none;
+}
+ul.contact li {
+    text-align: left;
+}
+ul.contact li {
+    display: inline;
+}
+#image-form {
     display: none;
+}
+.upload-link, .upload-link:visited, .uploading {
+    text-decoration: none;
+    display: none;
+    font-size: 12pt;
+    top: 130px;
+    left: 0;
+    width: 167px;
+    height: 37px;
+    z-index: 100;
+    padding-top: 5px;
+    position: absolute;
+    text-shadow: 1px 1px black;
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+}
+.uploading.animate {
+    -webkit-animation: pulse 1s infinite;
+    -moz-animation: pulse 1s infinite;
+}
+@-webkit-keyframes pulse {
+    0% {
+        background-color: rgba(0,0,0,0.5);
+    }
+    50% {
+        background-color: rgba(0,0,0,0.8);
+    }
+    100% {
+        background-color: rgba(0,0,0,0.5);
+    }
+}
+@-moz-keyframes pulse {
+    0% {
+        background-color: rgba(0,0,0,0.5);
+    }
+    50% {
+        background-color: rgba(0,0,0,0.8);
+    }
+    100% {
+        background-color: rgba(0,0,0,0.5);
+    }
+}
+.profile-body ul.contact li img {
+    width: 30px;
 }

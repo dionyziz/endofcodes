@@ -4,6 +4,8 @@
     position: absolute;
     left: -26px;
     top: 10px;
+    width: 30px;
+    height: 30px;
 }
 .navbar .glyphicon.settings-icon {
     top: 3px;
