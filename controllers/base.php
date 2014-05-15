@@ -131,7 +131,9 @@
             $this->loadConfig();
             $this->readHTTPAccept();
             try {
-                $this->resource == 'dbconfig' or dbInit();
+                if ( $this->resource != 'dbconfig' ) {
+                    dbInit();
+                }
             }
             catch ( DBException $e ) {
                 $resource = 'dbconfig';
@@ -143,7 +145,7 @@
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
             $this->init();
             $this->sessionCheck();
-            
+
             if ( !isset( $get[ 'method' ] ) ) {
                 $get[ 'method' ] = '';
             }
