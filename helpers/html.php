@@ -175,7 +175,7 @@
                     ?>" <?php
                 }
                 if ( !empty( $this->attributes ) ) {
-                    foreach( $this->attributes as $key => $value ) {
+                    foreach ( $this->attributes as $key => $value ) {
                         echo $key; 
                         ?>="<?php
                             echo htmlspecialchars( $value );

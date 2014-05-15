@@ -1,26 +1,30 @@
 <?php
     class DbconfigController extends ControllerBase {
-        public function create($user, $pass, $dbname) {
+        protected function dbInit() {}
+
+        public function create( $user, $pass, $dbname ) {
             require_once 'models/database.php';
 
             $entries = [ 'user'   => $user, 
-            			 'pass'   => $pass,
-            			 'dbname' => $dbname ];
+                         'pass'   => $pass,
+                         'dbname' => $dbname ];
             $environment = 'development';
-            $content = createConfig( $entries, $environment);
-            if ( empty($content) ) {
-            	throw new RedirectException( '' );
+            try {
+                createConfig( $entries, $environment );
+                go();
             }
-
-            require_once 'views/database/results.php';
+            catch ( DBExceptionNotWritable $e ) {
+                $content = $e->content;
+                require_once 'views/database/notwritable.php';
+            }
         }
-        public function createView( $error, $DbSaid ) {
-        	require_once 'models/database.php';
+        public function createView( $error, $dbSaid ) {
+            require_once 'models/database.php';
 
-        	$environment = 'development';
-        	$configLocal = loadConfig( $environment );
+            $environment = 'development';
+            $configLocal = loadConfig( $environment );
 
-        	require_once 'views/database/create.php';
+            require_once 'views/database/create.php';
         }
 
     }
