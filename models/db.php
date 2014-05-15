@@ -184,11 +184,11 @@
 
     class DBException extends Exception {
         public $error;
-        public $DbSaid;
-        public function __construct( $error, $DbSaid ) {
+        public $dbSaid;
+        public function __construct( $error, $dbSaid ) {
             $this->error = $error;
-            $this->DbSaid = $DbSaid;
-            parent::__construct( 'Database error: ' . $error . ' MySQL said: ' . $DbSaid );
+            $this->dbSaid = $dbSaid;
+            parent::__construct( 'Database error: ' . $error . ' MySQL said: ' . $dbSaid );
         }
     }
 
