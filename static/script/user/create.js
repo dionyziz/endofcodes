@@ -4,6 +4,7 @@ $( document ).ready( function() {
         var password = $( '#password' ).val();  
         var passwordRepeat = $( '#password_repeat' ).val();  
         var email = $( '#email' ).val();  
+
         if ( username == '' ) {
             createError( '#register-form', 'Please type a username' );
             return false;
@@ -42,10 +43,5 @@ $( document ).ready( function() {
             createError( '#register-form', 'This is not a valid email' );
             return false;
         }
-    }); 
-
-    function createError( form, description ) {
-        $( '.alert' ).remove();
-        $( form ).prepend( "<div class='alert alert-danger'>" + description + "</div>" );
-    }
-});
+    } ); 
+} ); 
