@@ -1,9 +1,11 @@
 $( document ).ready( function() { 
     $( '#register-form' ).submit( function() {
+        $.getScript( 'static/script/error.js' );
         var username = $( '#username' ).val();  
         var password = $( '#password' ).val();  
         var passwordRepeat = $( '#password_repeat' ).val();  
         var email = $( '#email' ).val();  
+
         if ( username == '' ) {
             createError( '#register-form', 'Please type a username' );
             return false;
@@ -42,44 +44,6 @@ $( document ).ready( function() {
             createError( '#register-form', 'This is not a valid email' );
             return false;
         }
-    }); 
+    } ); 
+} ); 
 
-    $( '#login-form' ).submit( function() {
-        var form = $("#login-form"); // or $("form"), or any selector matching an element containing your input fields
-        var username = $( "[name='username']", form ).val();
-        var password = $( "[name='password']", form ).val();
-        var token = $( "[name='token']", form ).val();
-        if ( username == '' ) {
-            createError( '#login-form', 'Please type a username' );
-            return false;
-        }
-        if ( password == '' ) {
-            createError( '#login-form', 'Please type a password' );
-            return false;
-        }
-        $.ajax({ 
-            type: "POST",
-            url: "session/create",
-            data: { username: username, password: password, token: token },
-            dataType: "json",
-            async: true,
-            statusCode: { 
-                404: function() {
-                    createError( '#login-form', "Username doesn't exist" );
-                },
-                401: function() { 
-                    createError( '#login-form', 'Password is incorrect' );
-                },
-                200: function() {
-                    window.location.replace( 'dashboard' );
-                }
-            }
-        }); 
-        return false;
-    });
-
-    function createError( form, description ) {
-        $( '.alert' ).remove();
-        $( form ).prepend( "<div class='alert alert-danger'>" + description + "</div>" );
-    }
-});
