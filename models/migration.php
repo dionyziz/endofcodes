@@ -12,8 +12,12 @@
                 throw new MigrationException( $e );
             }
         } 
+
         public static function createLog( $name, $env ) {
-            $array = self::findLast();
+            if ( file_exists( static::$log ) ) {
+                $data = file_get_contents( static::$log );
+                $array = json_decode( $data, true );
+            }
             $array[ $env ] = $name;
             $data = json_encode( $array );
             file_put_contents( static::$log, $data );
@@ -43,21 +47,18 @@
         }
 
         public static function findLast( $env = '' ) {
+            $touched = true;
             if ( !file_exists( static::$log ) ) {
                 $touched = touch( static::$log );
-                if ( !$touched ) {
-                    //todo
-                }
             }
-            if ( !is_writable( static::$log ) ) {
-                //todo
+            if ( $touched ) {
+                $logs = file_get_contents( static::$log );
             }
-            $logs = file_get_contents( static::$log );
             if ( empty( $logs ) ) {
                 throw new ModelNotFoundException();
             }
             $array = json_decode( $logs, true );
-            if ( $env == '' ) {
+            if ( empty( $env ) ) {
                 return $array;
             }
             if ( !isset( $array[ $env ] ) ) {
