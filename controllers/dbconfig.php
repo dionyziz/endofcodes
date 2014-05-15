@@ -11,9 +11,14 @@
             if ( empty($content) ) {
             	throw new RedirectException( '' );
             }
+
             require_once 'views/database/results.php';
         }
         public function createView( $error, $DbSaid ) {
+        	require_once 'models/database.php';
+
+        	$environment = 'development';
+        	$configLocal = loadConfig( $environment );
         	require_once 'views/database/create.php';
         }
 

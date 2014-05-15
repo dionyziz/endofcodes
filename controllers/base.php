@@ -127,7 +127,7 @@
                 $this->outputFormat = 'json';
             }
         }
-        public function init() {
+        protected function init() {
             $this->loadConfig();
             $this->readHTTPAccept();
             try {

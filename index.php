@@ -9,7 +9,6 @@
     }
     try {
         $controller = controllerBase::findController( $resource );
-        $controller->init();
         $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
     }
     catch ( NotImplemented $e ) {

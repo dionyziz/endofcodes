@@ -13,16 +13,24 @@
         	throw new DBException( 'Failed to select MySQL database.', mysql_error() );
     	}
     } 
+    function loadConfig( $environment = '' ) {
+    	$path = 'config/config-local.php';
+    	$config = array();
+		if ( file_exists( $path ) ) {
+            $config = require $path;
+        }
+        if ( !empty($environment) ) {
+        	$config = $config[ $environment ];
+        	$config = $config[ 'db' ];
+        }
+        return $config;
+    }
     function createConfig( $entries, $environment ) {
     	$entries = ['db' => $entries];
     	$entries = [$environment => $entries];
 
     	$path = 'config/config-local.php';
-    	$config = array();
-		if ( file_exists( $path ) ) {
-            $config = require $path;
-            $config = array_replace_recursive( $config, $entries );
-        }
+    	$config = loadConfig();
         $config = array_replace_recursive( $config, $entries );
 
     	$content = '<?php' . PHP_EOL . 'return ' . var_export($config, true) . ';';
