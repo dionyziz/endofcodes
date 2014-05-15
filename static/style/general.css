@@ -19,3 +19,6 @@ ul, li {
 h1 {
     font-size: 120%;
 }
+#logout-form {
+    display: none;
+}

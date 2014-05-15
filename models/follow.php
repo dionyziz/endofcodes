@@ -9,6 +9,8 @@
 
         public function __construct( $followerid = false, $followedid = false ) {
             if ( $followerid !== false && $followedid !== false ) {
+                $this->follower = new User( $followerid );
+                $this->followed = new User( $followedid );
                 try {
                     $res = dbSelectOne(
                         'follows',
@@ -19,17 +21,6 @@
                 catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
-                $this->follower = new User( $followerid );
-                $this->followed = new User( $followedid );
-            }
-        }
-
-        protected function onBeforeSave() {
-            if ( !is_int( $this->follower->id ) ) {
-                throw new ModelValidationException( 'followerid_not_valid' );
-            }
-            if ( !is_int( $this->followed->id ) ) {
-                throw new ModelValidationException( 'followedid_not_valid' );
             }
         }
 

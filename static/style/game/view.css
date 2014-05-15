@@ -29,6 +29,7 @@ div.gameboard {
     background-size: 80px 80px, 80px 80px;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 .gamemeta {
     position: absolute;
@@ -216,4 +217,7 @@ aside ol li.you {
 }
 .next {
     display: inline;
+}
+.highlight {
+    box-shadow: 1px 1px 7px black;
 }
