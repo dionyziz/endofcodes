@@ -127,19 +127,21 @@
                 $this->outputFormat = 'json';
             }
         }
+        protected function dbInit() {
+            require_once 'models/database.php';
+            dbInit();
+        }
         protected function init() {
             $this->loadConfig();
             $this->readHTTPAccept();
             try {
-                if ( $this->resource != 'dbconfig' ) {
-                    dbInit();
-                }
+                $this->dbInit();
             }
             catch ( DBException $e ) {
                 $resource = 'dbconfig';
                 $method = 'create';
-                $url = $resource . '/' . $method . '?' . 'error=' . $e->error . '&DbSaid=' . $e->DbSaid;
-                throw new RedirectException( $url );
+                $arguments = get_object_vars( $e );
+                go( $resource, $method, $arguments );
             }
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
