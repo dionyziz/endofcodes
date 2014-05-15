@@ -19,6 +19,7 @@
 
         	$environment = 'development';
         	$configLocal = loadConfig( $environment );
+
         	require_once 'views/database/create.php';
         }
 
