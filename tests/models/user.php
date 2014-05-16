@@ -246,14 +246,22 @@
         }
         public function testRoles() {
             $user = $this->buildUser( 'regular' );
+            
+            $this->assertFalse( $user->isDeveloper(), 'Regular users should not be developers' );
+            $this->assertEquals( ROLE_USER, $user->role, 'Regular users should have a role of 0 = ROLE_USER' );
+
             $admin = $this->buildUser( 'admin' );
             $admin->role = ROLE_DEVELOPER;
             $admin->save();
 
-            $this->assertFalse( $user->isDeveloper(), 'Regular users should not be developers' );
-            $this->assertEquals( ROLE_USER, $user->role, 'Regular users should have a role of 0 = ROLE_USER' );
             $this->assertTrue( $admin->isDeveloper(), 'Admin users should be developers' );
             $this->assertEquals( ROLE_DEVELOPER, $admin->role, 'Admin users should have a role of 10 = ROLE_DEVELOPER' );
+
+            $negative = $this->buildUser( 'negative' );
+            $negative->role = -50;
+            $negative->save();
+
+            $this->assertEquals( ROLE_USER, $negative->role, 'Negative roles are not allowed and must be set to ROLE_USER' );
         }
     }
 
