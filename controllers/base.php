@@ -4,6 +4,7 @@
         protected $acceptTypes = [];
         public $trusted = false;
         public $outputFormat = 'html';
+        public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -131,6 +132,8 @@
             dbInit();
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
+            $this->pageGenerationBegin = microtime( true );
+
             $this->init();
             $this->sessionCheck();
 
@@ -150,6 +153,9 @@
             $methodReflection = $thisReflection->getMethod( $method );
 
             return $this->callWithNamedArgs( $methodReflection, [ $this, $method ], $vars );
+        }
+        public function getPageGenerationTime() {
+            return microtime( true ) - $this->pageGenerationBegin;
         }
     }
 ?>
