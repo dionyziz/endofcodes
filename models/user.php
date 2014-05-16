@@ -155,7 +155,7 @@
             if ( !isset( $this->boturl ) ) {
                 $this->boturl = '';
             }
-            if ( $this->role < 0 ) {
+            if ( $this->role < 0 || !isset( $this->role ) ) {
                 $this->role = 0;
             }
         }
