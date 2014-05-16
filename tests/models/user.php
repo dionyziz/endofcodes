@@ -244,6 +244,17 @@
             $this->assertTrue( $error != '', 'An error must be given' );
             $this->assertEquals( $currentBoturl, $user->boturl, "The user's boturl must not change" );
         }
+        public function testRoles() {
+            $user = $this->buildUser( 'regular' );
+            $admin = $this->buildUser( 'admin' );
+            $admin->role = ROLE_DEVELOPER;
+            $admin->save();
+
+            $this->assertFalse( $user->isDeveloper(), 'Regular users should not be developers' );
+            $this->assertEquals( ROLE_USER, $user->role, 'Regular users should have a role of 0 = ROLE_USER' );
+            $this->assertTrue( $admin->isDeveloper(), 'Admin users should be developers' );
+            $this->assertEquals( ROLE_DEVELOPER, $admin->role, 'Admin users should have a role of 10 = ROLE_DEVELOPER' );
+        }
     }
 
     return new UserTest();
