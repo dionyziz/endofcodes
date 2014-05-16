@@ -4,7 +4,7 @@
     require_once 'models/image.php';
 
     define( 'ROLE_USER', 0 ); // default role
-    define( 'ROLE_DEVELPER', 10 );
+    define( 'ROLE_DEVELOPER', 10 );
 
     class User extends ActiveRecordBase {
         protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
