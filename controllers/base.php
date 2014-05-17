@@ -9,7 +9,7 @@
             $resource = basename( $resource );
             $filename = 'controllers/' . $resource . '.php';
             if ( !file_exists( $filename ) ) {
-                throw new HTTPNotFoundException();
+                throw new HTTPNotFoundException( 'The resource specified was invalid' );
             }
             require_once $filename;
             $controllername = ucfirst( $resource ) . 'Controller';

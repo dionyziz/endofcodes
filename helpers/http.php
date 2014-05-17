@@ -65,8 +65,8 @@
     }
 
     class HTTPNotFoundException extends HTTPErrorException {
-        public function __construct() {
-            parent::__construct( 404, 'Not Found' );
+        public function __construct( $reason ) {
+            parent::__construct( 404, 'Not Found', $reason );
         }
     }
 
@@ -77,8 +77,8 @@
     }
 
     class HTTPBadRequestException extends HTTPErrorException {
-        public function __construct() {
-            parent::__construct( 400, 'Bad Request' );
+        public function __construct( $reason = '' ) {
+            parent::__construct( 400, 'Bad Request', $reason );
         }
     }
 ?>

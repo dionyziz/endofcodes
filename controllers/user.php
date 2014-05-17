@@ -31,7 +31,7 @@
 
         public function view( $username, $image_invalid ) {
             if ( $username === NULL ) {
-                throw new HTTPNotFoundException();
+                throw new HTTPNotFoundException( 'The username provided was empty' );
             }
             require_once 'models/extentions.php';
             require_once 'models/image.php';
