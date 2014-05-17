@@ -58,11 +58,16 @@
                     }
                 }
                 else {
+                    // dict: creatureid => userid
+                    $creatureDict = [];
                     $usersInfo = dbSelect(
                         'creatures',
                         [ 'userid', 'id' ],
                         compact( 'gameid' )
                     );
+                    foreach ( $usersInfo as $userInfo ) {
+                        $creatureDict[ $userInfo[ 'id' ] ] = $userInfo[ 'userid' ];
+                    }
                 }
 
                 foreach ( $creaturesInfo as $i => $creatureInfo ) {
@@ -75,17 +80,13 @@
                     }
                     else {
                         $id = $creatureInfo[ 'creatureid' ];
-
-                        foreach ( $usersInfo as $userInfo ) {
-                            if ( $userInfo[ 'id' ] == $id ) {
-                                if ( !isset( $usersMap[ $userInfo[ 'userid' ] ] ) ) {
-                                    $user = new User( $userInfo[ 'userid' ] );
-                                    $usersMap[ $user->id ] = $user;
-                                }
-                                else {
-                                    $user = $usersMap[ $userInfo[ 'userid' ] ];
-                                }
-                            }
+                        $userid = $creatureDict[ $id ];
+                        if ( !isset( $usersMap[ $userid ] ) ) {
+                            $user = new User( $userid );
+                            $usersMap[ $user->id ] = $user;
+                        }
+                        else {
+                            $user = $usersMap[ $userid ];
                         }
 
                         $creature->user = $user;
