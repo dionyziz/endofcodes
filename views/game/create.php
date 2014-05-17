@@ -6,5 +6,5 @@
         $self->createSubmit( 'Start game' );
     } );
 
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

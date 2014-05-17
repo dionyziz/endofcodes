@@ -19,5 +19,5 @@
         $self->createSubmit( 'Finish game' );
     } );
 
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

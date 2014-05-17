@@ -3,5 +3,5 @@
 ?>
 <h1>400 Bad Request</h1>
 <?php
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>
