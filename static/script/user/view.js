@@ -83,7 +83,7 @@ var UserView = {
                 dataType: "json",
                 processData: false,
                 contentType: false,
-                success: function() {
+                complete: function() {
                     $( "a#follow" ).replaceWith( 
                         "<a href='#' id='unfollow'><button class='btn btn-primary follow'>Unfollow</button></a>"
                     );
