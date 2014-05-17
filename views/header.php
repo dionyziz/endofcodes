@@ -24,16 +24,18 @@
             includeStyle( "links" );
             includeStyle( "game/view" );
             includeStyle( "user/view" );
+            includeStyle( "debug" );
+
+            includeScript( 'jquery-2.1.0.min' );
+            includeScript( 'bootstrap.min' );
+            includeScript( 'prefixfree.min' );
+            includeScript( 'error' );
+            includeScript( 'logout' );
+            includeScript( 'game/view' );
+            includeScript( 'user/view' );
+            includeScript( 'user/create' );
+            includeScript( 'session/create' );
         ?>
-        <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
-        <script type="text/javascript" src="static/script/bootstrap.min.js"></script>
-        <script type="text/javascript" src="static/script/prefixfree.min.js"></script>
-        <script type="text/javascript" src="static/script/error.js"></script>
-        <script type="text/javascript" src="static/script/logout.js"></script>
-        <script type="text/javascript" src="static/script/game/view.js"></script>
-        <script type="text/javascript" src="static/script/user/view.js"></script>
-        <script type="text/javascript" src="static/script/user/create.js"></script>
-        <script type="text/javascript" src="static/script/session/create.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>

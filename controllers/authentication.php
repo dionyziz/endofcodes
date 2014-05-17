@@ -5,5 +5,11 @@
                 throw new HTTPUnauthorizedException();
             }
         }
+        protected function requireDeveloper() {
+            $this->requireLogin();
+            if ( !$_SESSION[ 'user' ]->isDeveloper() ) {
+                throw new HTTPUnauthorizedException();
+            }
+        }
     }
 ?>
