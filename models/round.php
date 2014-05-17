@@ -47,7 +47,7 @@
 
                 // map: creatureid => user
                 $creatureToUser = [];
-                // map: user => user
+                // map: userid => user
                 $usersMap = [];
                 // genesis is optional, if you want the constructor to run faster
 
