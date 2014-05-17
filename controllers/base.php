@@ -129,20 +129,19 @@
         }
         protected function dbInit() {
             require_once 'models/database.php';
-            dbInit();
+            try {
+                dbInit();
+            }
+            catch ( DBException $e ) {
+                $arguments = get_object_vars( $e );
+                go( 'dbconfig', 'create', $arguments );
+            }
         }
         protected function init() {
             $this->loadConfig();
             $this->readHTTPAccept();
-            try {
-                $this->dbInit();
-            }
-            catch ( DBException $e ) {
-                $resource = 'dbconfig';
-                $method = 'create';
-                $arguments = get_object_vars( $e );
-                go( $resource, $method, $arguments );
-            }
+            $this->dbInit();
+
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
             $this->init();

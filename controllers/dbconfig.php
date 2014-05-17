@@ -5,7 +5,7 @@
         public function create( $user, $pass, $dbname ) {
             require_once 'models/database.php';
 
-            $entries = [ 'user'   => $user, 
+            $entries = [ 'user'   => $user,
                          'pass'   => $pass,
                          'dbname' => $dbname ];
             $environment = 'development';
