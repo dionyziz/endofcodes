@@ -20,7 +20,7 @@
             foreach ( $tests as $test ) {
                 $path = 'tests/' . $test . '.php';
                 if ( !file_exists( $path ) ) {
-                    throw new HTTPNotFoundException();
+                    throw new HTTPNotFoundException( 'No such test' );
                 }
                 $unittest = require_once $path;
                 $unittest->run();

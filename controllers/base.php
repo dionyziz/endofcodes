@@ -10,7 +10,7 @@
             $resource = basename( $resource );
             $filename = 'controllers/' . $resource . '.php';
             if ( !file_exists( $filename ) ) {
-                throw new HTTPNotFoundException();
+                throw new HTTPNotFoundException( 'The resource specified was invalid' );
             }
             require_once $filename;
             $controllername = ucfirst( $resource ) . 'Controller';
@@ -25,7 +25,7 @@
               || $token !== $_SESSION[ 'form' ][ 'token' ]
               || $token == '' )
             && !$this->trusted ) {
-                throw new HTTPUnauthorizedException();
+                throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
             }
         }
         protected function getControllerMethod( $requestedMethod, $httpRequestMethod ) {
