@@ -234,10 +234,6 @@
         public function testCountGameRounds() {
              $game = $this->buildGameWithRoundAndCreatures();
 
-             foreach ( $game->rounds as $round ) {
-                $round->save();
-             }
-
              $game2 = new Game( $game->id );
              $this->assertEquals( 2, count( $game2->rounds ), 'The count of rounds returned by a loaded game must match the number of rounds saved' );
         }
