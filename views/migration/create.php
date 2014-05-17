@@ -65,5 +65,5 @@
         ?></ol><?php
     }
 
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>
