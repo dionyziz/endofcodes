@@ -4,5 +4,5 @@
 <h1>400 Bad Request</h1>
 <?php
     echo htmlspecialchars( $reason );
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

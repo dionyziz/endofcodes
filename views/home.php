@@ -64,5 +64,5 @@
     else {
         ?><p>No games yet. Why not <a href="game/create">start a game now</a>?</p><?php
     }
-    include 'views/footer.php';
+    include 'views/footer/view.php';
 ?>

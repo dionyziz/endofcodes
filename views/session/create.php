@@ -44,5 +44,5 @@
 <p class='text-center'>New to End Of Codes? <a href='user/create'>Create an account</a></p>
 
 <?php
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

@@ -134,5 +134,5 @@
     </span>
 </div>
 <?php
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>
