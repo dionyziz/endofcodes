@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>EndofCodes Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/bootstrap.min.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/general.css" />
+            <style>
+                #user-update-form input[type='text'], 
+                #user-update-form input[type='email'], 
+                #user-update-form input[type='password'],
+                #user-update-form button,
+                #user-update-form #country-input,
+                #delete-account {
+                    width: 25%;
+                }
+                #user-update-form .dob-input {
+                    width: 88px;
+                    margin-left: 15px;
+                }
+                #name-input input:first-child{
+                    margin-bottom: 15px;
+                }
+                h2, h1 {
+                    font-size: initial; 
+                }
+                #user-update-form #password-input input:first-child,
+                #user-update-form #password-input input:nth-child(2) {
+                    margin-bottom: 15px; 
+                } 
+                #user-update-form .form-group {
+                    margin-bottom: 30px;
+                }
+                #user-update-form {
+                    width: 100%;
+                    margin-left: 23%;
+                }
+                #title {
+                    margin-bottom: 38px;
+                    font-size: x-large;
+                }
+            </style>
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right"><li><a 
+                            href="user/view?username=dionyziz ">Profile</a>
+                    </li>
+                    <li>
+                        <a href="#" id="logout">Log out</a>
+                    </li>
+                    <form id="logout-form" action="session/delete" method="post" >
+                        <input type="hidden" name="token"/>
+                    </form>
+                </ul>
+            </div>
+        </div>
+        <div class="container" id="main">
+            <h1 class='text-center' id='title'>Personal Settings<h1>       
+            <form id='user-update-form' class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="pkakelas" disabled='true'/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10" id='name-input'>
+                        <input type="text" class="form-control" placeholder="Name">
+                        <input type="text" class="form-control" placeholder="Surname">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">Date Of Birth</label>
+                    <div id='dob' class="row">
+                        <select class="form-control dob-input">
+                            <option>day</option>
+                        </select>
+                        <select class="form-control dob-input">
+                            <option>month</option>
+                        </select>
+                        <select class="form-control dob-input">
+                            <option>year</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Country</label>
+                    <div class="col-sm-10">
+                        <select id='country-input' class="form-control">
+                            <option>Country</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Password3" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10" id='password-input'>
+                        <input type="password" class="form-control" placeholder="Old Password">
+                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Repeat Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Site</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" placeholder="Site">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Github</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" placeholder="Github">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </form>
+            <div class='text-center'>
+                <button id="delete-acount" class="btn btn-danger">Delete your account</button>
+            </div>
+        </div>
+    </body>
+</html>
