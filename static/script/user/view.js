@@ -67,7 +67,34 @@ var UserView = {
             return false;
         } );
         $( '#follow' ).click( function() {
-            $( '#follow-form' ).submit();
+            var $form = $( "#follow-form" );
+            var followedid = $( "[name='followedid']", $form ).val();
+            var token = $( "[name='token']", $form ).val();
+            var formData = new FormData();
+
+            formData.append( "followedid", followedid );
+            formData.append( "token", token );
+
+            $.ajax( {
+                url: "follow/create",
+                type: "POST",
+                data: formData,
+                cache: false,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                success: function() {
+                    $( "a#follow" ).replaceWith( 
+                        "<a href='#' id='unfollow'><button class='btn btn-primary follow'>Unfollow</button></a>"
+                    );
+                    $( "form#follow-form" ).replaceWith(
+                        "<form id='logout-form' action='session/delete' method='post' > \
+                            <input type='hidden' name='token' value='" + token + "' /> \
+                            <input type='hidden' name='followedid' value='" + followedid + "'  /> \
+                        </form>"
+                    );
+                }
+            } );
             return false;
         } );
         $( "#image" ).change( function() {
