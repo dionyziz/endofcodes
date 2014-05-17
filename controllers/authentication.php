@@ -11,5 +11,11 @@
                 throw new HTTPUnauthorizedException( 'You must be a developer to access this resource.' );
             }
         }
+        protected function requireDeveloper() {
+            $this->requireLogin();
+            if ( !$_SESSION[ 'user' ]->isDeveloper() ) {
+                throw new HTTPUnauthorizedException();
+            }
+        }
     }
 ?>

@@ -3,8 +3,11 @@
     require_once 'models/country.php';
     require_once 'models/image.php';
 
+    define( 'ROLE_USER', 0 ); // default role
+    define( 'ROLE_DEVELOPER', 10 );
+
     class User extends ActiveRecordBase {
-        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
+        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
         public $username;
         public $password;
         public $email;
@@ -17,6 +20,7 @@
         public $dateOfBirth;
         public $boturl;
         public $winCount;
+        public $role;
         protected $dob;
         protected static $tableName = 'users';
 
@@ -62,21 +66,20 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'imageid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ '*' ], compact( "id" ) );
                 }
                 catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
                 $this->winCount = 0;
-                $this->boturl = $user_info[ 'boturl' ];
-                $this->username = $user_info[ 'username' ];
-                $this->email = $user_info[ 'email' ];
+                $attributesToAssign = [ 'boturl', 'username', 'email', 'dob', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
+                foreach ( $attributesToAssign as $key ) {
+                    $this->$key = $user_info[ $key ];
+                }
+
                 $this->country = new Country( $user_info[ 'countryid' ] );
                 $this->image = new Image( $user_info[ 'imageid' ] );
                 $this->id = $id;
-                $this->dob = $user_info[ 'dob' ];
-                $this->forgotpasswordtoken = $user_info[ 'forgotpasswordtoken' ];
-                $this->forgotpasswordrequestcreated = $user_info[ 'forgotpasswordrequestcreated' ];
                 $this->exists = true;
             }
         }
@@ -151,6 +154,9 @@
             }
             if ( !isset( $this->boturl ) ) {
                 $this->boturl = '';
+            }
+            if ( $this->role < 0 || !isset( $this->role ) ) {
+                $this->role = 0;
             }
         }
 
@@ -283,6 +289,10 @@
                 $this->boturl = $oldBoturl;
                 throw new ModelValidationException( $e->error->id );
             }
+        }
+
+        public function isDeveloper() {
+            return $this->role >= ROLE_DEVELOPER;
         }
     }
 ?>
