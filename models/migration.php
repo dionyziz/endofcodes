@@ -4,7 +4,7 @@
         public static $path = 'database/migration/';
         public static $environments = [ 'development', 'test' ];
 
-        protected static function migrate( $sql ) {
+        public static function migrate( $sql ) {
             try {
                 $res = db( $sql );
             }
