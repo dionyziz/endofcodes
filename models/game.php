@@ -46,7 +46,7 @@
                 $countrounds = $data[ 'countrounds' ];
                 if ( $countrounds > 0 ) {
                     $this->rounds[ 0 ] = new Round( $this, 0 );
-                    if ( $roundid && $roundid != 0 ) {
+                    if ( $roundid !== false && $roundid != 0 ) {
                         $this->rounds[ $roundid ] = new Round( $this, $roundid, $this->rounds[ 0 ] );
                     }
                     else if ( $roundid === false ) {
