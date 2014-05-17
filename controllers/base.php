@@ -24,7 +24,7 @@
               || $token !== $_SESSION[ 'form' ][ 'token' ]
               || $token == '' )
             && !$this->trusted ) {
-                throw new HTTPUnauthorizedException();
+                throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
             }
         }
         protected function getControllerMethod( $requestedMethod, $httpRequestMethod ) {

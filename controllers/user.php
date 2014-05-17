@@ -1,5 +1,5 @@
 <?php
-    class UserController extends ControllerBase {
+    class UserController extends AuthenticatedController {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '',
                                 $countryShortname = '', $day = '', $month = '', $year = '' ) {
             require_once 'models/country.php';
@@ -60,10 +60,8 @@
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
                                 $countryShortname = '', $email = '', $day = '', $month = '', $year = '' ) {
+            $this->requireLogin();
             require_once 'models/country.php';
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthorizedException();
-            }
             $user = $_SESSION[ 'user' ];
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
@@ -93,9 +91,7 @@
         }
 
         public function delete() {
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthorizedException();
-            }
+            $this->requireLogin();
             $user = $_SESSION[ 'user' ];
             $user->delete();
             unset( $_SESSION[ 'user' ] );
@@ -118,10 +114,8 @@
 
         public function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong,
                                     $email_invalid, $email_used ) {
+            $this->requireLogin();
             require_once 'models/country.php';
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthorizedException();
-            }
             $user = $_SESSION[ 'user' ];
             $countries = Country::findAll();
             require 'views/user/update.php';
