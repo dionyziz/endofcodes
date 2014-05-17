@@ -23,6 +23,7 @@
                 $oldRound = $a;
                 $this->game = $oldRound->game;
                 $this->id = $oldRound->id + 1;
+
                 foreach ( $oldRound->creatures as $creature ) {
                     $this->creatures[ $creature->id ] = clone $creature;
                     $this->creatures[ $creature->id ]->round = $this;
@@ -37,38 +38,59 @@
                 $this->game = $game;
                 $gameid = $game->id;
                 $roundid = $id;
-                $creatures_info = dbSelect(
+
+                $creaturesInfo = dbSelect(
                     'roundcreatures',
                     [ 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ],
                     compact( 'roundid', 'gameid' )
                 );
+
                 // map: creatureid => user
+                $creatureToUser = [];
+                // map: user => user
                 $usersMap = [];
                 // genesis is optional, if you want the constructor to run faster
+
                 if ( $genesis ) {
+                    // genesis details were provided during the constructor call
                     foreach ( $genesis->creatures as $creature ) {
-                        if ( !isset( $usersMap[ $creature->id ] ) ) {
-                            $usersMap[ $creature->id ] = $creature->user;
-                        }
+                        $creatureToUser[ $creature->id ] = $creature->user;
                     }
                 }
-                foreach ( $creatures_info as $i => $creature_info ) {
-                    $creature = new Creature( $creature_info );
+                else {
+                    $usersInfo = dbSelect(
+                        'creatures',
+                        [ 'userid', 'id' ],
+                        compact( 'gameid' )
+                    );
+                }
+
+                foreach ( $creaturesInfo as $i => $creatureInfo ) {
+                    $creature = new Creature( $creatureInfo );
                     $creature->game = $game;
                     $creature->round = $this;
-                    if ( isset( $usersMap[ $creature->id ] ) ) {
-                        $creature->user = $usersMap[ $creature->id ];
+
+                    if ( isset( $creatureToUser[ $creature->id ] ) ) {
+                        $creature->user = $creatureToUser[ $creature->id ];
                     }
                     else {
-                        $id = $creature_info[ 'creatureid' ];
-                        $user_info = dbSelectOne(
-                            'creatures',
-                            [ 'userid' ],
-                            compact( 'id', 'gameid' )
-                        );
-                        $user = new User( $user_info[ 'userid' ] );
+                        $id = $creatureInfo[ 'creatureid' ];
+
+                        foreach ( $usersInfo as $userInfo ) {
+                            if ( $userInfo[ 'id' ] == $id ) {
+                                if ( !isset( $usersMap[ $userInfo[ 'userid' ] ] ) ) {
+                                    $user = new User( $userInfo[ 'userid' ] );
+                                    $usersMap[ $user->id ] = $user;
+                                }
+                                else {
+                                    $user = $usersMap[ $userInfo[ 'userid' ] ];
+                                }
+                            }
+                        }
+
                         $creature->user = $user;
                     }
+
                     $this->creatures[ $creature->id ] = $creature;
                 }
             }

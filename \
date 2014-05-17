@@ -43,17 +43,21 @@
             go( 'game', 'update', compact( 'gameid' ) );
         }
         public function view( $gameid, $roundid = false, $all = false ) {
+            $start = microtime( true );
             try {
-                if ( $roundid !== false ) {
+                /*if ( $roundid != false ) {
                     $game = new Game( $gameid, $roundid );
                 }
-                else {
+                else {*/
                     $game = new Game( $gameid );
-                }
+                //}
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
             }
+            /*echo "Width: $game->width Height: $game->height \n";
+            echo "Time: " . ( microtime( true ) - $start );
+            die();*/
             if ( $roundid !== false ) {
                 if ( !isset( $game->rounds[ $roundid ] ) ) {
                     throw new HTTPNotFoundException();

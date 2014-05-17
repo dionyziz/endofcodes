@@ -52,6 +52,7 @@
 
             $this->assertTrue( isset( $dbGame->rounds ), 'Constructor of game must find the rounds' );
             $this->assertEquals( 1, count( $dbGame->rounds ), 'Game rounds must be retrieved' );
+            $this->assertEquals( 1, $dbGame->roundCount, 'roundCount attribute must hold the number of rounds' );
         }
         public function testInitiation() {
             $game = $this->buildGame();
@@ -240,6 +241,16 @@
 
              $game2 = new Game( $game->id );
              $this->assertEquals( 2, count( $game2->rounds ), 'The count of rounds returned by a loaded game must match the number of rounds saved' );
+        }
+        public function testInitWithRound() {
+            $game = $this->buildGameWithRoundAndCreatures();
+            $game->save();
+            $dbGame = new Game( $game->id, $game->rounds[ 1 ]->id );
+
+            $this->assertTrue( isset( $dbGame->rounds[ 0 ] ), 'Genesis round must always be set' );
+            $this->assertEquals( 0, $dbGame->rounds[ 0 ]->id, 'Genesis round must be initiated correctly' );
+            $this->assertEquals( isset( $dbGame->rounds[ 1 ] ), 'Constructor must initiate the round specified' );
+            $this->assertEquals( 1, $dbGame->rounds[ 1 ]->id, 'Constructor must initiate the round specified correctly' );
         }
     }
 
