@@ -35,6 +35,7 @@
             includeScript( 'user/view' );
             includeScript( 'user/create' );
             includeScript( 'session/create' );
+            includeScript( 'debug' );
         ?>
         <meta charset="utf-8" />
     </head>

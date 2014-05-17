@@ -7,7 +7,12 @@
 <div class="dev"><?php
     if ( empty( $_SESSION[ 'profiling' ] ) ) {
         // profiling is disabled; display link to enable it
-        ?><a href='' class='enable-profiling'>π</a><?php
+        ?><a href='' title='Show profiling information' class='enable-profiling'>π</a><?php
+        $form = new Form( 'profiling', 'update' );
+        $form->id = 'profiling-form';
+        $form->output( function( $self ) {
+            $self->createInput( 'hidden', 'enable', '', 'true' );
+        } );
     }
     else {
         // profiling is enabled; allow developer to view it
