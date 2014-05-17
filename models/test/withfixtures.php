@@ -88,6 +88,8 @@
             $game = new Game();
             $game->users = [ 1 => $user1, 2 => $user2, 3 => $user3 ];
             $game->rounds = [ 0 => $round1, 1 => $round2 ];
+            $game->save();
+
             $round1->game = $round2->game = $game;
             $round1->save();
             $round2->save();
