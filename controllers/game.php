@@ -44,7 +44,12 @@
         }
         public function view( $gameid, $roundid = false, $all = false ) {
             try {
-                $game = new Game( $gameid );
+                if ( $roundid !== false ) {
+                    $game = new Game( $gameid, $roundid );
+                }
+                else {
+                    $game = new Game( $gameid );
+                }
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException();
