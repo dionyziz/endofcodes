@@ -13,41 +13,41 @@
             rel="stylesheet"
             type="text/css"
             href="http://endofcodes.com/static/style/general.css" />
-            <style>
-                #user-update-form input[type='text'], 
-                #user-update-form input[type='email'], 
-                #user-update-form input[type='password'],
-                #user-update-form button,
-                #user-update-form #country-input,
-                #delete-account {
-                    width: 25%;
-                }
-                #user-update-form .dob-input {
-                    width: 88px;
-                    margin-left: 15px;
-                }
-                #name-input input:first-child{
-                    margin-bottom: 15px;
-                }
-                h2, h1 {
-                    font-size: initial; 
-                }
-                #user-update-form #password-input input:first-child,
-                #user-update-form #password-input input:nth-child(2) {
-                    margin-bottom: 15px; 
-                } 
-                #user-update-form .form-group {
-                    margin-bottom: 30px;
-                }
-                #user-update-form {
-                    width: 100%;
-                    margin-left: 23%;
-                }
-                #title {
-                    margin-bottom: 38px;
-                    font-size: x-large;
-                }
-            </style>
+        <style>
+            #name-input input:first-child { 
+                margin-bottom: 15px;
+            }
+            #user-update-form #password-input input:first-child,
+            #user-update-form #password-input input:nth-child(2) {
+                margin-bottom: 15px; 
+            } 
+            #user-update-form input, 
+            #user-update-form button,
+            #user-update-form #country-input {
+                width: 257px;
+            }
+            #dob select:first-child {
+                margin-left: 15px;
+            }
+            #dob select {
+                margin-right: 6px;
+            }
+            h2, h1 {
+                font-size: initial; 
+            }
+            #user-update-form .form-group {
+                margin-bottom: 30px;
+            }
+            #title {
+                margin-bottom: 38px;
+                font-size: x-large;
+            }
+            #user-update-form {
+                width: 50%;
+                margin-left: auto;
+                margin-right: 20%;
+            }
+        </style>
     </head>
     <body>
         <div class="navbar navbar-default navbar-static-top" role="navigation">
@@ -74,74 +74,75 @@
         </div>
         <div class="container" id="main">
             <h1 class='text-center' id='title'>Personal Settings<h1>       
-            <form id='user-update-form' class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Username</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="pkakelas" disabled='true'/>
+                <form id='user-update-form' class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="pkakelas" disabled='true'/>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Name</label>
-                    <div class="col-sm-10" id='name-input'>
-                        <input type="text" class="form-control" placeholder="Name">
-                        <input type="text" class="form-control" placeholder="Surname">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10" id='name-input'>
+                            <input type="text" class="form-control" placeholder="Name">
+                            <input type="text" class="form-control" placeholder="Surname">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group form-inline">
-                    <label class="col-sm-2 control-label">Date Of Birth</label>
-                    <div id='dob' class="row">
-                        <select class="form-control dob-input">
-                            <option>day</option>
-                        </select>
-                        <select class="form-control dob-input">
-                            <option>month</option>
-                        </select>
-                        <select class="form-control dob-input">
-                            <option>year</option>
-                        </select>
+                    <div class="form-group form-inline">
+                        <label class="col-sm-2 control-label">Birthday</label>
+                        <div id='dob' class="row">
+                            <select class="form-control dob-input">
+                                <option>day</option>
+                            </select>
+                            <select class="form-control dob-input">
+                                <option>month</option>
+                            </select>
+                            <select class="form-control dob-input">
+                                <option>year</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Country</label>
-                    <div class="col-sm-10">
-                        <select id='country-input' class="form-control">
-                            <option>Country</option>
-                        </select>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Country</label>
+                        <div class="col-sm-10">
+                            <select id='country-input' class="form-control">
+                                <option>Country</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="Password3" class="col-sm-2 control-label">Password</label>
-                    <div class="col-sm-10" id='password-input'>
-                        <input type="password" class="form-control" placeholder="Old Password">
-                        <input type="password" class="form-control" placeholder="Password">
-                        <input type="password" class="form-control" placeholder="Repeat Password">
+                    <div class="form-group">
+                        <label for="Password3" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10" id='password-input'>
+                            <input type="password" class="form-control" placeholder="Old Password">
+                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" placeholder="Repeat Password">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" placeholder="Email">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" placeholder="Email">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Site</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" placeholder="Site">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Site</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" placeholder="Site">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Github</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" placeholder="Github">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Github</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" placeholder="Github">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                      <button type="submit" class="btn btn-primary">Update</button>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
             <div class='text-center'>
                 <button id="delete-acount" class="btn btn-danger">Delete your account</button>
             </div>
