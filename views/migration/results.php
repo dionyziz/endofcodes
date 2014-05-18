@@ -3,5 +3,5 @@
 ?>
 <p>All scripts have completed successfully</p>
 <?php
-    include 'views/footer.php';
+    include 'views/footer/view.php';
 ?>
