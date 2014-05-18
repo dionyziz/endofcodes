@@ -62,11 +62,38 @@ var UserView = {
             $( "#image" ).trigger( 'click' );
             return false;
         } );
-        $( '#unfollow' ).click( function() {
-            $( '#unfollow-form' ).submit();
+        $( document ).on( "click", "#unfollow", function() {
+            var $form = $( "#unfollow-form" );
+            var followedid = $( "[name='followedid']", $form ).val();
+            var token = $( "[name='token']", $form ).val();
+            var formData = new FormData();
+
+            formData.append( "followedid", followedid );
+            formData.append( "token", token );
+
+            $.ajax( {
+                url: "follow/delete",
+                type: "POST",
+                data: formData,
+                cache: false,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                complete: function() {
+                    $( "a#unfollow" ).replaceWith( 
+                        "<a href='#' id='follow'><button class='btn btn-primary follow'>Follow</button></a>"
+                    );
+                    $( "form#unfollow-form" ).replaceWith(
+                        "<form id='follow-form' action='follow/create' method='post' > \
+                            <input type='hidden' name='token' value='" + token + "' /> \
+                            <input type='hidden' name='followedid' value='" + followedid + "'  /> \
+                        </form>"
+                    );
+                }
+            } );
             return false;
         } );
-        $( '#follow' ).click( function() {
+        $( document ).on( "click", "#follow", function() {
             var $form = $( "#follow-form" );
             var followedid = $( "[name='followedid']", $form ).val();
             var token = $( "[name='token']", $form ).val();
@@ -88,7 +115,7 @@ var UserView = {
                         "<a href='#' id='unfollow'><button class='btn btn-primary follow'>Unfollow</button></a>"
                     );
                     $( "form#follow-form" ).replaceWith(
-                        "<form id='logout-form' action='session/delete' method='post' > \
+                        "<form id='unfollow-form' action='follow/delete' method='post' > \
                             <input type='hidden' name='token' value='" + token + "' /> \
                             <input type='hidden' name='followedid' value='" + followedid + "'  /> \
                         </form>"
