@@ -4,7 +4,6 @@
         protected $acceptTypes = [];
         public $trusted = false;
         public $outputFormat = 'html';
-        public $resource;
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -16,7 +15,6 @@
             $controllername = ucfirst( $resource ) . 'Controller';
             $controller = new $controllername();
 
-            $controller->resource = $resource;
             return $controller;
         }
         protected function protectFromForgery( $token = '', $httpRequestMethod = '' ) {
