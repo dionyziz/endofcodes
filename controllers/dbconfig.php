@@ -3,26 +3,24 @@
         protected function dbInit() {}
 
         public function create( $user, $pass, $dbname ) {
-            require_once 'models/database.php';
-
-            $entries = [ 'user'   => $user,
-                         'pass'   => $pass,
-                         'dbname' => $dbname ];
-            $environment = 'development';
+            $entries = compact( 'user', 'pass', 'dbname' );
+            $entries = [ 'db' => $entries ];
             try {
-                createConfig( $entries, $environment );
+                updateConfig( $entries, $this->environment );
                 go();
             }
-            catch ( DBExceptionNotWritable $e ) {
+            catch ( FileNotWritableException $e ) {
                 $content = $e->content;
                 require_once 'views/database/notwritable.php';
             }
         }
         public function createView( $error, $dbSaid ) {
-            require_once 'models/database.php';
-
-            $environment = 'development';
-            $configLocal = loadConfig( $environment );
+            global $config;
+            $oldConfig = [ 'user'   => '',
+                           'pass'   => '',
+                           'dbname' => '' ];
+            $oldConfig = [ 'db' => $oldConfig ];
+            $oldConfig = array_replace_recursive( $oldConfig, $config );
 
             require_once 'views/database/create.php';
         }

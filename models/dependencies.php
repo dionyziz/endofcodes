@@ -7,5 +7,5 @@
     require_once 'helpers/html.php';
     require_once 'helpers/pluralize.php';
     require_once 'helpers/config.php';
-    require_once 'helpers/php.php';
+    require_once 'helpers/file.php';
 ?>

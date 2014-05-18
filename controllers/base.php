@@ -95,16 +95,10 @@
             }
             return call_user_func_array( $callable, $arguments );
         }
-        protected function loadConfig() {
-            global $config;
-
+        protected function getEnvironment() {
             if ( getEnv( 'ENVIROMENT' ) !== false ) {
-                $env = getEnv( 'ENVIROMENT' );
-            }
-            else {
-                $env = $this->environment;
-            }
-            $config = getConfig( $env );
+                $this->environment = getEnv( 'ENVIROMENT' );
+            }         
         }
         protected function readHTTPAccept() {
             if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
@@ -128,7 +122,6 @@
             }
         }
         protected function dbInit() {
-            require_once 'models/database.php';
             try {
                 dbInit();
             }
@@ -138,10 +131,12 @@
             }
         }
         protected function init() {
-            $this->loadConfig();
+            $this->getEnvironment();
+            global $config;
+            $config = getConfig( $this->environment );
+
             $this->readHTTPAccept();
             $this->dbInit();
-
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
             $this->init();
