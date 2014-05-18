@@ -24,5 +24,5 @@
     } );
 ?>
 </div><?
-    include 'views/footer.php';
+    include 'views/footer/view.php';
 ?>

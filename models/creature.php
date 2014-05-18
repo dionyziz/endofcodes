@@ -46,7 +46,7 @@
             if ( is_array( $a ) ) {
                 $creature_info = $a;
                 $this->exists = true;
-                $this->id = $creature_info[ 'creatureid' ];
+                $this->id = intval( $creature_info[ 'creatureid' ] );
                 $this->locationx = $creature_info[ 'locationx' ];
                 $this->locationy = $creature_info[ 'locationy' ];
                 $this->hp = $creature_info[ 'hp' ];

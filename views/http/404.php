@@ -3,5 +3,5 @@
 ?>
 <h1>404 Not Found</h1>
 <?php
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>
