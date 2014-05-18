@@ -240,7 +240,7 @@
         public function testInitWithRound() {
             $game = $this->buildGameWithRoundAndCreatures();
             $game->save();
-            $dbGame = new Game( $game->id );
+            $dbGame = new Game( $game->id, $game->rounds[ 1 ]->id );
 
             $this->assertTrue( isset( $dbGame->rounds[ 0 ] ), 'Genesis round must always be set' );
             $this->assertEquals( 0, $dbGame->rounds[ 0 ]->id, 'Genesis round must be initiated correctly' );
