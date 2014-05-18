@@ -12,6 +12,7 @@
     $controller->trusted = true;
     $controller->outputFormat = 'text';
 
+    $vars = [];
     foreach ( $argv as $arg ) {
         list( $key, $value ) = explode( '=', $arg, 2 );
         $vars[ $key ] = $value;

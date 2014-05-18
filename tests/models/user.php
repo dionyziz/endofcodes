@@ -160,7 +160,7 @@
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
                 $oldTokenSuccess = true; 
             }
-            $user->forgotpasswordrequestcreated = time() - 60 * 24 * 2; 
+            $user->forgotpasswordrequestcreated = date( "Y-m-d h:i:s", time() - 60 * 60 * 24 * 2 );
             try {
                 $user->revokePasswordCheck( $user->forgotpasswordtoken );
                 $expiredSuccess = false;
@@ -243,6 +243,31 @@
             $this->assertTrue( $caught, 'A ModelValidationException must be thrown if the boturl is invalid' );
             $this->assertTrue( $error != '', 'An error must be given' );
             $this->assertEquals( $currentBoturl, $user->boturl, "The user's boturl must not change" );
+        }
+        public function testRoles() {
+            $user = $this->buildUser( 'regular' );
+            
+            $this->assertFalse( $user->isDeveloper(), 'Regular users should not be developers' );
+            $this->assertSame( ROLE_USER, $user->role, 'Regular users should have a role of 0 = ROLE_USER' );
+
+            $admin = $this->buildUser( 'admin' );
+            $admin->role = ROLE_DEVELOPER;
+            $admin->save();
+
+            $this->assertTrue( $admin->isDeveloper(), 'Admin users should be developers' );
+            $this->assertSame( ROLE_DEVELOPER, $admin->role, 'Admin users should have a role of 10 = ROLE_DEVELOPER' );
+
+            $negative = $this->buildUser( 'negative' );
+            $negative->role = -50;
+            $negative->save();
+
+            $this->assertSame( ROLE_USER, $negative->role, 'Negative roles are not allowed and must be set to ROLE_USER' );
+
+            $adminLookup = User::findByUsername( 'admin' );
+            $this->assertSame( ROLE_DEVELOPER, $adminLookup->role, 'ROLE_DEVELOPER status must be permanent' );
+
+            $userLookup = User::findByUsername( 'regular' );
+            $this->assertSame( ROLE_USER, $userLookup->role, 'ROLE_USER status must be permanent' );
         }
     }
 

@@ -14,9 +14,15 @@
                 $user = User::findByUsername( $username );
             }
             catch ( ModelNotFoundException $e ) {
+                if ( $this->outputFormat == 'json' ) {
+                    throw new HTTPNotFoundException();
+                }
                 go( 'session', 'create', [ 'username_wrong' => true ] );
             }
             if ( !$user->authenticatesWithPassword( $password ) ) {
+                if ( $this->outputFormat == 'json' ) {
+                    throw new HTTPUnauthorizedException();
+                }
                 go( 'session', 'create', [ 'password_wrong' => true ] );
             }
             if ( $persistent ) {
