@@ -3,7 +3,7 @@
 ?>
 <div class='gamemeta'>
     <h2 data-rounds="<?php
-        echo count( $game->rounds );
+        echo $game->roundCount;
     ?>" data-maxHp="<?php
         echo $game->maxHp;
     ?>">Game <?php
@@ -111,7 +111,7 @@
         echo $round->id;
     ?></span>
     <span class="previous"<?php
-        if ( !isset( $game->rounds[ $round->id - 1 ] ) ) {
+        if ( $round->id - 1 < 0 ) {
             ?> style="display: none"<?php
         }
     ?>>
@@ -122,7 +122,7 @@
         ?>"><span class="glyphicon glyphicon-chevron-left"></span></a>
     </span>
     <span class="next"<?php
-        if ( !isset( $game->rounds[ $round->id + 1 ] ) ) {
+        if ( $round->id + 1 >= $game->roundCount ) {
             ?> style="display: none"<?php
         }
     ?>>
