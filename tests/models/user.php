@@ -264,8 +264,6 @@
             $this->assertSame( ROLE_USER, $negative->role, 'Negative roles are not allowed and must be set to ROLE_USER' );
 
             $adminLookup = User::findByUsername( 'admin' );
-            var_dump( $adminLookup->role );
-            die();
             $this->assertSame( ROLE_DEVELOPER, $adminLookup->role, 'ROLE_DEVELOPER status must be permanent' );
 
             $userLookup = User::findByUsername( 'regular' );
