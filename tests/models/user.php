@@ -160,7 +160,7 @@
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
                 $oldTokenSuccess = true; 
             }
-            $user->forgotpasswordrequestcreated = time() - 60 * 24 * 2; 
+            $user->forgotpasswordrequestcreated = time() - 60 * 60 * 24 * 2;
             try {
                 $user->revokePasswordCheck( $user->forgotpasswordtoken );
                 $expiredSuccess = false;
