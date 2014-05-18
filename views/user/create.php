@@ -98,5 +98,5 @@
         $self->createInput( 'submit', '', '', 'Register' );
     } );
 
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>
