@@ -65,7 +65,7 @@
     }
 
     class HTTPNotFoundException extends HTTPErrorException {
-        public function __construct( $reason ) {
+        public function __construct( $reason = '' ) {
             parent::__construct( 404, 'Not Found', $reason );
         }
     }
