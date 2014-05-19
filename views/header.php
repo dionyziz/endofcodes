@@ -14,6 +14,8 @@
         ?>' />
         <?php
             includeStyle( "bootstrap.min" );
+            includeStyle( "jquery-ui-smoothness" );
+            includeStyle( "jquery.ui.theme" );
             includeStyle( "general" );
             includeStyle( "footer" );
             includeStyle( "navigation" );
