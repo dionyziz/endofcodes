@@ -8,9 +8,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel='icon' type='image/png' href='static/images/gamepad.png' />
         <base href='<?php
-        global $config;
+            global $config;
 
-        echo $config[ 'base' ];
+            echo $config[ 'base' ];
         ?>' />
         <?php
             includeStyle( "bootstrap.min" );
@@ -26,6 +26,7 @@
             includeStyle( "user/view" );
         ?>
         <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="static/script/jquery-ui-1.10.4.min.js"></script>
         <script type="text/javascript" src="static/script/bootstrap.min.js"></script>
         <script type="text/javascript" src="static/script/prefixfree.min.js"></script>
         <script type="text/javascript" src="static/script/error.js"></script>

@@ -177,6 +177,7 @@ var GameView = {
         } );
         $( '.next a' ).click( GameView.getMap );
         $( '.previous a' ).click( GameView.getMap );
+        $( '.slider' ).slider();
     }
 }
 $( document ).ready( GameView.ready );

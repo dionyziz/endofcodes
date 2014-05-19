@@ -132,6 +132,7 @@
             echo htmlspecialchars( $round->id + 1 );
         ?>"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </span>
+    <div class="slider"></div>
 </div>
 <?php
     require 'views/footer/view.php';
