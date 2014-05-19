@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Game #437 - End of Codes</title>
+        <link rel='stylesheet' href='style.css' />
+        <link rel='stylesheet' href='clearfix.css' />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+        <link rel='icon' type='image/png' href='gamepad.png' />
+    </head>
+    <body>
+        <header class='clearfix'>
+            <div class='toolbar'>
+                <a href='#'>gtklocker</a>
+            </div>
+            <h1>End of Codes</h1>
+
+            <div class='gamemeta'>
+                <h2>Game #437</h2>
+                <strong>Nov 24, 2013</strong>
+            </div>
+        </header>
+
+        <div class='content'>
+            <aside>
+                <ol>
+                    <li><span class='blue bubble'></span> dionyziz</li>
+                    <li class='you'><span class='red bubble'></span> gtklocker</li>
+                    <li><span class='black bubble'></span> themicp</li>
+                    <li><span class='green bubble'></span> vitsalis</li>
+                    <li><span class='yellow bubble'></span> <del>pkakelas</del></li>
+                </ol>
+            </aside>
+
+            <div class='game'>
+                <div class='gameboard'>
+                    <div class='grid vertical'>17</div>
+                    <div class='grid horizontal'>42</div>
+
+                    <div class='creature red bubble' id='creature-1'></div>
+                    <div class='creature red bubble' id='creature-2'></div>
+                    <div class='creature blue bubble' id='creature-3'></div>
+                    <div class='creature blue bubble' id='creature-4'></div>
+                    <div class='creature red bubble' id='creature-5'></div>
+                    <div class='creature green bubble' id='creature-6'></div>
+                    <div class='creature black bubble' id='creature-7'></div>
+                    <div class='creature blue bubble' id='creature-8'></div>
+                    <div class='creature red bubble' id='creature-9'></div>
+
+                    <div class='infobubble'>
+                        <span class='hp'>
+                            <span class='damage' style='width: 20%'></span>
+                        </span>
+                        <div class='stats'>
+                            <h3>Creature 71</h3>
+                            Player: <strong>themicp</strong>
+                            Location: <strong>17, 42</strong>
+                        </div>
+                    </div>
+
+                    <div class='nav north'></div>
+                    <div class='nav east'></div>
+                    <div class='nav west'></div>
+                    <div class='nav south'></div>
+                </div>
+
+                <div class='map'>
+                    <div class='minicreature red'></div>
+                    <div class='minicreature red'></div>
+                    <div class='minicreature blue'></div>
+                    <div class='minicreature blue'></div>
+                    <div class='minicreature red'></div>
+                    <div class='minicreature green'></div>
+                    <div class='minicreature black'></div>
+                    <div class='minicreature blue'></div>
+                    <div class='minicreature red'></div>
+                    <div class='indicator'></div>
+                </div>
+            </div>
+            <div class='time'>
+                <span class='control'></span>
+                <span class='round'>Round 38</span>
+                <div class='slider'></div>
+            </div>
+        </div>
+        <script>
+            $('.slider').slider();
+        </script>
+    </body>
+</html>
