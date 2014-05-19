@@ -15,7 +15,7 @@
                 $followed = new User( $followedid );
             }
             catch ( ModelNotfoundException $e ) {
-                throw new HTTPNotFoundException( 'The userid specified (followedid = ' . $followedid . ') does not correspond to a valid user' );
+                throw new HTTPNotFoundException( 'The userid specified (followedid = ' . $followedid . ') does not correspond to a user' );
             }
             $follow = new Follow();
             $follow->follower = $follower;
