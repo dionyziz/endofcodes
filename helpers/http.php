@@ -55,7 +55,6 @@
                 $this->header = "HTTP/1.1 $error";
             }
             parent::__construct( $this->header );
-            
         }
         public function outputErrorPage() {
             $error = $this->error;
