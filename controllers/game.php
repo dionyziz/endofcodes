@@ -24,7 +24,7 @@
                 $game = new Game( $gameid );
             }
             catch ( ModelNotFoundException $e ) {
-                throw new HTTPNotFoundException( 'There is no game with the specified gameid' );
+                throw new HTTPNotFoundException( 'There is no game with the specified gameid (gameid = ' . $gameid . ')' );
             }
 
             if ( $game->ended ) {
