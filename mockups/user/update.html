@@ -13,12 +13,13 @@
             rel="stylesheet"
             type="text/css"
             href="http://endofcodes.com/static/style/general.css" />
+        <script type="text/javascript" src="http://endofcodes.com/static/script/jquery-2.1.0.min.js"></script>
         <style>
             #name-input input:first-child { 
                 margin-bottom: 15px;
             }
-            #user-update-form #password-input input:first-child,
-            #user-update-form #password-input input:nth-child(2) {
+            #user-update-form #password-input input:nth-child(2),
+            #user-update-form #password-input input:nth-child(3) {
                 margin-bottom: 15px; 
             } 
             #user-update-form input, 
@@ -46,6 +47,12 @@
                 width: 50%;
                 margin-left: auto;
                 margin-right: 20%;
+            }
+            #delete-account {
+                color: #d9534f;
+            }
+            #password-input input {
+                display: none;
             }
         </style>
     </head>
@@ -111,14 +118,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="Password3" class="col-sm-2 control-label">Password</label>
-                        <div class="col-sm-10" id='password-input'>
-                            <input type="password" class="form-control" placeholder="Old Password">
-                            <input type="password" class="form-control" placeholder="Password">
-                            <input type="password" class="form-control" placeholder="Repeat Password">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-10">
                             <input type="email" class="form-control" placeholder="Email">
@@ -137,6 +136,15 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="Password3" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10" id='password-input'>
+                            <button  id='pswd-change' class="btn btn-default">Change password</button>
+                            <input type="password" class="form-control" placeholder="Old Password">
+                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" placeholder="Repeat Password">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                           <button type="submit" class="btn btn-primary">Update</button>
                         </div>
@@ -144,8 +152,15 @@
                 </form>
             </div>
             <div class='text-center'>
-                <button id="delete-acount" class="btn btn-danger">Delete your account</button>
+                <a id="delete-account" >Delete your account</a>
             </div>
         </div>
+        <script>
+            $( '#pswd-change' ).click( function() {
+                $( '#pswd-change' ).hide();
+                $( "#password-input input" ).slideDown( "medium" );
+                return false;
+            } );
+        </script>
     </body>
 </html>
