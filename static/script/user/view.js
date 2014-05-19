@@ -83,12 +83,8 @@ var UserView = {
                     $( "a#unfollow" ).replaceWith( 
                         "<a href='#' id='follow'><button class='btn btn-primary follow'>Follow</button></a>"
                     );
-                    $( "form#unfollow-form" ).replaceWith(
-                        "<form id='follow-form' action='follow/create' method='post' > \
-                            <input type='hidden' name='token' value='" + token + "' /> \
-                            <input type='hidden' name='followedid' value='" + followedid + "'  /> \
-                        </form>"
-                    );
+                    $('form#unfollow-form').attr('action', 'follow/create');
+                    $('form#unfollow-form').attr('id', 'follow-form');
                 }
             } );
             return false;
@@ -114,12 +110,8 @@ var UserView = {
                     $( "a#follow" ).replaceWith( 
                         "<a href='#' id='unfollow'><button class='btn btn-primary follow'>Unfollow</button></a>"
                     );
-                    $( "form#follow-form" ).replaceWith(
-                        "<form id='unfollow-form' action='follow/delete' method='post' > \
-                            <input type='hidden' name='token' value='" + token + "' /> \
-                            <input type='hidden' name='followedid' value='" + followedid + "'  /> \
-                        </form>"
-                    );
+                    $('form#follow-form').attr('action', 'follow/delete');
+                    $('form#follow-form').attr('id', 'unfollow-form');
                 }
             } );
             return false;
