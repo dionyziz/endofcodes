@@ -92,8 +92,7 @@ var GameView = {
             }
         }
     },
-    getMap: function() {
-        var href = this.href;
+    loadMap: function( href ) {
         $.getJSON( href, function( creatures ) {
             var gameInfo = GameView.findGameAndRoundId( href );
             var gameid = gameInfo.gameid;
@@ -113,6 +112,9 @@ var GameView = {
 
             GameView.fixUserList( creatures );
         } );
+    },
+    getMap: function() {
+        GameView.loadMap( this.href );
         return false;
     },
     fixPlane: function( $element, attributes ) {
@@ -187,9 +189,7 @@ var GameView = {
                 var gameid = $( '.gamemeta h2' ).attr( 'data-id' );
                 var href = GameView.makeUrl( gameid, ui.value );
 
-                GameView.getMap.call( {
-                    href: href
-                } );
+                GameView.loadMap( href );
             }
         } );
     }
