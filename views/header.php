@@ -20,6 +20,7 @@
             includeStyle( "home" );
             includeStyle( "user/create" );
             includeStyle( "session/create" );
+            includeStyle( "dbconfig/create" );
             includeStyle( "test" );
             includeStyle( "links" );
             includeStyle( "game/view" );
