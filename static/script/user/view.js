@@ -62,8 +62,17 @@ var UserView = {
             $( "#image" ).trigger( 'click' );
             return false;
         } );
-        $( document ).on( "click", "#unfollow", function() {
-            var $form = $( "#unfollow-form" );
+        $( document ).on( "click", ".follow", function() {
+            if ( this.id == 'follow'  ) {
+                var now = { 'method': 'create', 'action': 'follow' };
+                var next = { 'method': 'delete', 'action': 'unfollow' };
+            }
+            else {
+                var now = { 'method': 'delete', 'action': 'unfollow' };
+                var next = { 'method': 'create', 'action': 'follow' };
+            }
+
+            var $form = $( "#" + now.action + "-form" );
             var followedid = $( "[name='followedid']", $form ).val();
             var token = $( "[name='token']", $form ).val();
             var formData = new FormData();
@@ -71,8 +80,9 @@ var UserView = {
             formData.append( "followedid", followedid );
             formData.append( "token", token );
 
+
             $.ajax( {
-                url: "follow/delete",
+                url: "follow/" + now.method,
                 type: "POST",
                 data: formData,
                 cache: false,
@@ -80,38 +90,11 @@ var UserView = {
                 processData: false,
                 contentType: false,
                 complete: function() {
-                    $( "a#unfollow" ).replaceWith( 
-                        "<a href='#' id='follow'><button class='btn btn-primary follow'>Follow</button></a>"
+                    $( "a#" + now.action ).replaceWith( 
+                        "<a href='#' class='follow' id='" + next.action + "'><button class='btn btn-primary'>" + next.action + "</button></a>"
                     );
-                    $('form#unfollow-form').attr('action', 'follow/create');
-                    $('form#unfollow-form').attr('id', 'follow-form');
-                }
-            } );
-            return false;
-        } );
-        $( document ).on( "click", "#follow", function() {
-            var $form = $( "#follow-form" );
-            var followedid = $( "[name='followedid']", $form ).val();
-            var token = $( "[name='token']", $form ).val();
-            var formData = new FormData();
-
-            formData.append( "followedid", followedid );
-            formData.append( "token", token );
-
-            $.ajax( {
-                url: "follow/create",
-                type: "POST",
-                data: formData,
-                cache: false,
-                dataType: "json",
-                processData: false,
-                contentType: false,
-                complete: function() {
-                    $( "a#follow" ).replaceWith( 
-                        "<a href='#' id='unfollow'><button class='btn btn-primary follow'>Unfollow</button></a>"
-                    );
-                    $('form#follow-form').attr('action', 'follow/delete');
-                    $('form#follow-form').attr('id', 'unfollow-form');
+                    $( 'form#' + now.action + '-form' ).attr( 'action', 'follow/' + next.method );
+                    $( 'form#' + now.action + '-form' ).attr( 'id', next.action + '-form' );
                 }
             } );
             return false;

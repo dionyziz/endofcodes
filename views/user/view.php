@@ -54,12 +54,12 @@
             <?php
                 if ( isset( $_SESSION[ 'user' ] ) && !$sameUser ) {
                     if ( $followExists ) {
-                        ?><a href="#" id="unfollow"><button class="btn btn-primary follow">Unfollow</button></a><?php
+                        ?><a href="#" class='follow' id="unfollow"><button class="btn btn-primary">Unfollow</button></a><?php
                         $formId = 'unfollow-form';
                         $followMethod = 'delete';
                     }
                     else {
-                        ?><a href="#" id="follow"><button class="btn btn-primary follow">Follow</button></a><?php
+                        ?><a href="#" class='follow' id="follow"><button class="btn btn-primary">Follow</button></a><?php
                         $formId = 'follow-form';
                         $followMethod = 'create';
                     }
