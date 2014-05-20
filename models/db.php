@@ -2,17 +2,17 @@
     function dbInit() {
         global $config;
 
-        $dbConnected = mysql_connect( $config[ 'db' ][ 'host' ], 
-                                      $config[ 'db' ][ 'user' ], 
+        $dbConnected = mysql_connect( $config[ 'db' ][ 'host' ],
+                                      $config[ 'db' ][ 'user' ],
                                       $config[ 'db' ][ 'pass' ] );
-        if ( !$dbConnected ) { 
+        if ( !$dbConnected ) {
             throw new DBException( 'Failed to connect to MySQL.', mysql_error() );
         }
         $dbSelected = mysql_select_db( $config[ 'db' ][ 'dbname' ] );
-        if ( !$dbSelected ) { 
+        if ( !$dbSelected ) {
             throw new DBException( 'Failed to select MySQL database.', mysql_error() );
         }
-    } 
+    }
     function db( $sql, $bind = [] ) {
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
@@ -194,7 +194,7 @@
 
     function dbListFields( $table ) {
         return array_map( 'array_shift', dbArray( "SHOW COLUMNS FROM $table" ) );
-    }  
+    }
 
     class DBException extends Exception {
         public $error;

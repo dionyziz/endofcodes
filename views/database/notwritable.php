@@ -7,5 +7,5 @@
     echo $content;
 ?></textarea>
 <?php
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

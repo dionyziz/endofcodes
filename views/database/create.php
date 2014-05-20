@@ -18,10 +18,10 @@
         $self->createInput( 'text', 'pass', '', $oldConfig[ 'db' ][ 'pass' ], [ 'class' => 'form-control input-lg' ] );
 
         $self->createLabel( 'user', 'Database Name' );
-        $self->createInput( 'text', 'dbname', '', $oldConfig[ 'db' ][ 'dbname' ], [ 'class' => 'form-control input-lg' ] );  
+        $self->createInput( 'text', 'dbname', '', $oldConfig[ 'db' ][ 'dbname' ], [ 'class' => 'form-control input-lg' ] );
 
-        $self->createSubmit( 'Create Configuration', [ 'class' => 'btn btn-primary' ] ); 
+        $self->createSubmit( 'Create Configuration', [ 'class' => 'btn btn-primary' ] );
     } );
 
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

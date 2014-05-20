@@ -1,5 +1,5 @@
 <?php
-    function getBase() { 
+    function getBase() {
         $protocol = 'http';
         if ( !empty( $_SERVER[ 'HTTPS' ] ) && $_SERVER[ 'HTTPS' ] == 'on' ) {
             $protocol .= 's';
@@ -29,26 +29,30 @@
     function formatConfig( $config ) {
         $content = '<?php' . PHP_EOL . 'return ' . var_export( $config, true ) . ';' . PHP_EOL . '?>';
 
+        //Convert 2-space indentation to 4-space.
+        $content = str_replace( '  ', '    ', $content );
+        //Replace array(...) with [...].
         $content = preg_replace( '/\s*array \(/', ' [', $content );
         $content = str_replace( ')', ']', $content );
-        $content = str_replace( '  ', '    ', $content );
-        // Todo: Indent code inside <?php tags.
-        
+        //Indent code inside <?php tags.
+        $content = preg_replace( '/(^[^(<)|(\?)])/m', '    $1', $content );
+
         return $content;
     }
     function updateConfig( $entries, $environment ) {
+        global $config;
+
         $entries = [ $environment => $entries ];
+        $configPath = 'config/config-local.php';
+
+        if ( file_exists( $configPath ) ) {
+            $old_entries = include $configPath;
+            $entries = array_replace_recursive( $old_entries, $entries );
+        }
 
         $content = formatConfig( $entries );
-        $path = 'config/config-local.php';
-        $touched = @touch( $path );
-        if ( $touched ) {
-            $configSaved = file_put_contents( $path, $content ) !== false;
-        }
-        if ( empty( $configSaved ) ) {
-            throw new FileNotWritableException( $path, $content );
-        }
-        global $config;
+
+        safeWrite( $configPath, $content );
         $config = array_replace_recursive( $config, $entries );
     }
 ?>

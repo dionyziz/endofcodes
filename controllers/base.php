@@ -96,7 +96,12 @@
         protected function getEnvironment() {
             if ( getEnv( 'ENVIROMENT' ) !== false ) {
                 $this->environment = getEnv( 'ENVIROMENT' );
-            }         
+            }
+        }
+        protected function getConfig() {
+            global $config;
+
+            $config = getConfig( $this->environment );
         }
         protected function readHTTPAccept() {
             if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
@@ -130,9 +135,7 @@
         }
         protected function init() {
             $this->getEnvironment();
-            global $config;
-            $config = getConfig( $this->environment );
-
+            $this->getConfig();
             $this->readHTTPAccept();
             $this->dbInit();
         }
@@ -145,7 +148,7 @@
             }
             $method = $this->getControllerMethod( $get[ 'method' ], $httpRequestMethod );
             $vars = $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
-            
+
             $token = '';
             if ( isset( $vars[ 'token' ] ) ) {
                 $token = $vars[ 'token' ];
