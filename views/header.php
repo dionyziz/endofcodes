@@ -8,12 +8,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel='icon' type='image/png' href='static/images/gamepad.png' />
         <base href='<?php
-        global $config;
+            global $config;
 
-        echo $config[ 'base' ];
+            echo $config[ 'base' ];
         ?>' />
         <?php
             includeStyle( "bootstrap.min" );
+            includeStyle( "jquery-ui-smoothness" );
+            includeStyle( "jquery.ui.theme" );
             includeStyle( "general" );
             includeStyle( "footer" );
             includeStyle( "navigation" );
@@ -28,6 +30,7 @@
             includeStyle( "../jquery-ui/jquery.ui.theme" );
 
             includeScript( 'jquery-2.1.0.min' );
+            includeScript( 'jquery-ui-1.10.4.min' );
             includeScript( 'bootstrap.min' );
             includeScript( 'prefixfree.min' );
             includeScript( 'error' );

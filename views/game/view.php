@@ -6,6 +6,8 @@
         echo $game->roundCount;
     ?>" data-maxHp="<?php
         echo $game->maxHp;
+    ?>" data-id="<?php
+        echo $game->id;
     ?>">Game <?php
         echo $game->id;
     ?></h2>
@@ -107,7 +109,9 @@
 </div>
 
 <div class='time'>
-    <span class='roundid'>Round <?php
+    <span class='roundid' data-id="<?php
+        echo $round->id;
+    ?>">Round <?php
         echo $round->id;
     ?></span>
     <span class="previous"<?php
@@ -132,6 +136,7 @@
             echo htmlspecialchars( $round->id + 1 );
         ?>"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </span>
+    <div class="slider"></div>
 </div>
 <?php
     require 'views/footer/view.php';
