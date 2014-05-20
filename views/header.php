@@ -38,6 +38,9 @@
             includeScript( 'user/create' );
             includeScript( 'session/create' );
         ?>
+        <link rel="stylesheet" type="text/css" href="static/jquery-ui/jquery-ui.min.css" />
+        <link rel="stylesheet" type="text/css" href="static/jquery-ui/jquery.ui.theme.css" />
+        <script type="text/javascript" src="static/jquery-ui/jquery-ui-1.10.4.min.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>
