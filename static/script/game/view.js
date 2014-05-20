@@ -94,6 +94,7 @@ var GameView = {
     },
     getMap: function() {
         var href = this.href;
+        var slider = this.slider;
         $.getJSON( href, function( creatures ) {
             var gameInfo = GameView.findGameAndRoundId( href );
             var gameid = gameInfo.gameid;
@@ -102,6 +103,10 @@ var GameView = {
             history.pushState( {}, "", href );
 
             $( '.roundid' ).text( 'Round ' + roundid );
+
+            if ( !slider ) {
+                $( '.slider' ).slider( "value", roundid );
+            }
 
             $( '.next' ).toggle( roundid + 1 < GameView.roundCount );
             $( '.previous' ).toggle( roundid - 1 >= 0 );
@@ -177,7 +182,20 @@ var GameView = {
         } );
         $( '.next a' ).click( GameView.getMap );
         $( '.previous a' ).click( GameView.getMap );
-        $( '.slider' ).slider();
+        $( '.slider' ).slider( {
+            min: 0,
+            max: GameView.roundCount - 1,
+            value: $( '.roundid' ).attr( 'data-id' ),
+            stop: function( e, ui ) {
+                var gameid = $( '.gamemeta h2' ).attr( 'data-id' );
+                var href = GameView.makeUrl( gameid, ui.value );
+
+                GameView.getMap.call( {
+                    href: href,
+                    slider: true
+                } );
+            }
+        } );
     }
 }
 $( document ).ready( GameView.ready );

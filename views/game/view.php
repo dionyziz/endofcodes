@@ -6,6 +6,8 @@
         echo $game->roundCount;
     ?>" data-maxHp="<?php
         echo $game->maxHp;
+    ?>" data-id="<?php
+        echo $game->id;
     ?>">Game <?php
         echo $game->id;
     ?></h2>
@@ -107,7 +109,9 @@
 </div>
 
 <div class='time'>
-    <span class='roundid'>Round <?php
+    <span class='roundid' data-id="<?php
+        echo $round->id;
+    ?>">Round <?php
         echo $round->id;
     ?></span>
     <span class="previous"<?php
