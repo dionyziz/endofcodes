@@ -26,6 +26,8 @@
             includeStyle( "links" );
             includeStyle( "game/view" );
             includeStyle( "user/view" );
+            includeStyle( "../jquery-ui/jquery-ui.min" );
+            includeStyle( "../jquery-ui/jquery.ui.theme" );
 
             includeScript( 'jquery-2.1.0.min' );
             includeScript( 'jquery-ui-1.10.4.min' );
@@ -37,10 +39,8 @@
             includeScript( 'user/view' );
             includeScript( 'user/create' );
             includeScript( 'session/create' );
+            includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
         ?>
-        <link rel="stylesheet" type="text/css" href="static/jquery-ui/jquery-ui.min.css" />
-        <link rel="stylesheet" type="text/css" href="static/jquery-ui/jquery.ui.theme.css" />
-        <script type="text/javascript" src="static/jquery-ui/jquery-ui-1.10.4.min.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>
