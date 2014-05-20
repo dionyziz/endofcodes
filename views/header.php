@@ -14,8 +14,6 @@
         ?>' />
         <?php
             includeStyle( "bootstrap.min" );
-            includeStyle( "jquery-ui-smoothness" );
-            includeStyle( "jquery.ui.theme" );
             includeStyle( "general" );
             includeStyle( "footer" );
             includeStyle( "navigation" );
@@ -30,7 +28,6 @@
             includeStyle( "../jquery-ui/jquery.ui.theme" );
 
             includeScript( 'jquery-2.1.0.min' );
-            includeScript( 'jquery-ui-1.10.4.min' );
             includeScript( 'bootstrap.min' );
             includeScript( 'prefixfree.min' );
             includeScript( 'error' );
