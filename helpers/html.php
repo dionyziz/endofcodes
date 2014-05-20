@@ -41,6 +41,7 @@
         public function __construct( $resource = '', $method = '' ) {
             $this->resource = $resource;
             $this->method = $method;
+            $this->attributes = [];
         }
 
         public function createError( $error_msg ) {
@@ -49,7 +50,7 @@
             ?></p><?php
         }
 
-        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = '' ) {
+        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = [] ) {
             if ( !Form::isValidType( $type ) ) {
                 $type = 'text';
             }
@@ -74,13 +75,11 @@
                         echo htmlspecialchars( $value );
                     ?>" <?php
                 }
-                if ( !empty( $attributes ) ) {
-                    foreach ( $attributes as $key => $value ) {
-                        echo $key; 
-                        ?>="<?php
-                            echo htmlspecialchars( $value );
-                        ?>" <?php
-                    }
+                foreach ( $attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
                 }
             ?> /></p><?php
         }
@@ -174,13 +173,11 @@
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
                 }
-                if ( !empty( $this->attributes ) ) {
-                    foreach ( $this->attributes as $key => $value ) {
-                        echo $key; 
-                        ?>="<?php
-                            echo htmlspecialchars( $value );
-                        ?>" <?php
-                    }
+                foreach ( $this->attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
                 }
                 ?>action="<?php
                     echo htmlspecialchars( $this->resource );
