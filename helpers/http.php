@@ -43,9 +43,11 @@
     class HTTPErrorException extends Exception {
         public $header;
         public $error;
+        public $reason;
 
-        public function __construct( $error, $description = "" ) {
+        public function __construct( $error, $description = "", $reason = '' ) {
             $this->error = $error;
+            $this->reason = $reason;
             if ( !empty( $description ) ) {
                 $this->header = "HTTP/1.1 $error $description";
             }
@@ -53,29 +55,29 @@
                 $this->header = "HTTP/1.1 $error";
             }
             parent::__construct( $this->header );
-            
         }
         public function outputErrorPage() {
             $error = $this->error;
+            $reason = $this->reason;
             require_once "views/http/$error.php";
         }
     }
 
     class HTTPNotFoundException extends HTTPErrorException {
-        public function __construct() {
-            parent::__construct( 404, 'Not Found' );
+        public function __construct( $reason = '' ) {
+            parent::__construct( 404, 'Not Found', $reason );
         }
     }
 
     class HTTPUnauthorizedException extends HTTPErrorException {
-        public function __construct() {
-            parent::__construct( 401, 'Unauthorized' );
+        public function __construct( $reason = '' ) {
+            parent::__construct( 401, 'Unauthorized', $reason );
         }
     }
 
     class HTTPBadRequestException extends HTTPErrorException {
-        public function __construct() {
-            parent::__construct( 400, 'Bad Request' );
+        public function __construct( $reason = '' ) {
+            parent::__construct( 400, 'Bad Request', $reason );
         }
     }
 ?>

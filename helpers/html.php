@@ -221,6 +221,12 @@
             ?>" /><?php
     }
 
+    function includeScript( $path ) {
+        ?><script type="text/javascript" src="static/script/<?php
+            echo $path;
+        ?>.js"></script><?php
+    }
+
     function createSelectPrepare( $array, $title = '', $keys = '' ) {
         if ( empty( $keys ) ) {
             $keys = $array;
