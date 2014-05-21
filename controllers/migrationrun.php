@@ -38,7 +38,7 @@
             $this->environment = $env;
             $this->init();
             if ( !in_array( $name, $migrations ) ) {
-                throw new HTTPNotFoundException( 'No such migration' );
+                throw new HTTPNotFoundException( 'No such migration (name = "' . $name . '")' );
             }
             require_once 'database/migration/' . $name;
             Migration::createLog( $name, $env );

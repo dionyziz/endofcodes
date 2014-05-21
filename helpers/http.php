@@ -55,7 +55,6 @@
                 $this->header = "HTTP/1.1 $error";
             }
             parent::__construct( $this->header );
-            
         }
         public function outputErrorPage() {
             $error = $this->error;
@@ -65,7 +64,7 @@
     }
 
     class HTTPNotFoundException extends HTTPErrorException {
-        public function __construct( $reason ) {
+        public function __construct( $reason = '' ) {
             parent::__construct( 404, 'Not Found', $reason );
         }
     }

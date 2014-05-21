@@ -9,6 +9,7 @@ var UserView = {
             UserView.fixImageSize( $image );
         } );
         $( ".avatar" ).append( $image );
+        $( ".nav li img" ).attr( "src", source );
     },
     createImageError: function() {
         $( '.text-center' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )

@@ -17,6 +17,7 @@
         public $grid = [ [] ];
         public $attributesInitiated = false;
         public $ended = false;
+        public $roundCount;
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
@@ -27,7 +28,7 @@
             return new Game( $game[ 0 ][ 'id' ] );
         }
 
-        public function __construct( $id = false ) {
+        public function __construct( $id = false, $roundid = false ) {
             require_once 'models/round.php';
             if ( $id !== false ) {
                 $this->exists = true;
@@ -45,8 +46,13 @@
                 $countrounds = $data[ 'countrounds' ];
                 if ( $countrounds > 0 ) {
                     $this->rounds[ 0 ] = new Round( $this, 0 );
-                    for ( $i = 1; $i < $countrounds; ++$i ) {
-                        $this->rounds[ $i ] = new Round( $this, $i, $this->rounds[ 0 ] );
+                    if ( $roundid !== false && $roundid != 0 ) {
+                        $this->rounds[ $roundid ] = new Round( $this, $roundid, $this->rounds[ 0 ] );
+                    }
+                    else if ( $roundid === false ) {
+                        for ( $i = 1; $i < $countrounds; ++$i ) {
+                            $this->rounds[ $i ] = new Round( $this, $i, $this->rounds[ 0 ] );
+                        }
                     }
                     if ( isset( $this->rounds[ 0 ]->creatures[ 1 ] ) ) {
                         $this->maxHp = $this->rounds[ 0 ]->creatures[ 1 ]->hp;
@@ -64,6 +70,7 @@
                 else {
                     $this->ended = true;
                 }
+                $this->roundCount = $countrounds;
             }
             else {
                 $this->rounds = [];

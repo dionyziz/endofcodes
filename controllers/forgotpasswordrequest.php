@@ -59,7 +59,7 @@
                     $user = User::findByUsername( $username );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    throw new HTTPNotFoundException( 'No such username' );
+                    throw new HTTPNotFoundException( 'No such username "' . $username . '"' );
                 }
                 try {
                     $user->revokePasswordCheck( $password_token );

@@ -6,11 +6,11 @@ $( document ).ready( function() {
         var token = $( "[name='token']", $form ).val();
 
         if ( username == '' ) {
-            createError( '#login-form', 'Please type a username' );
+            createFormError( '#login-form', 'username', 'Please type a username' );
             return false;
         }
         if ( password == '' ) {
-            createError( '#login-form', 'Please type a password' );
+            createFormError( '#login-form', 'password', 'Please type a password' );
             return false;
         }
         $.ajax( { 
@@ -21,12 +21,10 @@ $( document ).ready( function() {
             async: true,
             statusCode: { 
                 404: function() {
-                    createError( '#login-form', "Username doesn't exist" );
-                    $( "[name='username']", $form ).focus();
+                    createFormError( '#login-form', 'username', "Username doesn't exist" );
                 },
                 401: function() { 
-                    createError( '#login-form', 'Password is incorrect' );
-                    $( "[name='password']", $form ).focus();
+                    createFormError( '#login-form', 'password', 'Password is incorrect' );
                 },
                 200: function() {
                     window.location.replace( 'dashboard' );

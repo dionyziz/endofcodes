@@ -24,7 +24,7 @@
                 $game = new Game( $gameid );
             }
             catch ( ModelNotFoundException $e ) {
-                throw new HTTPNotFoundException( 'There is no game with the specified gameid' );
+                throw new HTTPNotFoundException( 'There is no game with the specified gameid (gameid = ' . $gameid . ')' );
             }
 
             if ( $game->ended ) {
@@ -44,14 +44,19 @@
         }
         public function view( $gameid, $roundid = false, $all = false ) {
             try {
-                $game = new Game( $gameid );
+                if ( $roundid !== false ) {
+                    $game = new Game( $gameid, $roundid );
+                }
+                else {
+                    $game = new Game( $gameid );
+                }
             }
             catch ( ModelNotFoundException $e ) {
-                throw new HTTPNotFoundException( 'There is no game with the specified gameid' );
+                throw new HTTPNotFoundException( 'There is no game with the specified gameid (gameid = ' . $gameid . ')' );
             }
             if ( $roundid !== false ) {
                 if ( !isset( $game->rounds[ $roundid ] ) ) {
-                    throw new HTTPNotFoundException( 'The game specified does not contain the specified round' );
+                    throw new HTTPNotFoundException( 'The game specified (gameid = ' . $gameid . ') does not contain the specified round (roundid = ' . $roundid . ')' );
                 }
                 $round = $game->rounds[ $roundid ];
             }
@@ -82,7 +87,7 @@
                 $game = new Game( $gameid );
             }
             catch ( ModelNotFoundException $e ) {
-                throw new HTTPNotFoundException( 'There is no game with the specified gameid' );
+                throw new HTTPNotFoundException( 'There is no game with the specified gameid (gameid = ' . $gameid . ')' );
             }
             require 'views/game/update.php';
         }
