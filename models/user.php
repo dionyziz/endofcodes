@@ -122,6 +122,12 @@
             if ( preg_match( '#[^a-zA-Z0-9._]#', $this->username ) ) {
                 throw new ModelValidationException( 'username_invalid' );
             }
+            if ( preg_match( '#[^a-zA-Z]#', $this->name ) ) {
+                throw new ModelValidationException( 'name_invalid' );
+            }
+            if ( preg_match( '#[^a-zA-Z]#', $this->surname ) ) {
+                throw new ModelValidationException( 'surname_invalid' );
+            }
             if ( empty( $this->password ) && !$this->exists ) {
                 throw new ModelValidationException( 'password_empty' );
             }

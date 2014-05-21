@@ -23,8 +23,8 @@
 <?php
     $form = new Form( 'user', 'create' );
     $form->id = 'register-form';
-    $form->output( function( $self ) use( $username_empty, $username_invalid, $password_empty,
-            $email_empty, $username_used, $password_small,
+    $form->output( function( $self ) use( $username_empty, $username_invalid, $name_invalid, 
+            $surname_invalid, $password_empty, $email_empty, $username_used, $password_small,
             $password_not_matched, $email_used, $email_invalid, $countries, $location ) {
         global $config;
 
@@ -79,8 +79,14 @@
             $email_value = "";
         }
         $self->createInput( 'text', 'email', 'email' );
+        if ( isset( $name_invalid ) ) {
+            $self->createError( 'Names can contain only letters' );
+        }
         $self->createLabel( 'name', 'Name' );
         $self->createInput( 'text', 'name' );
+        if ( isset( $surname_invalid ) ) {
+            $self->createError( 'Surnames can contain only letters' );
+        }
         $self->createLabel( 'surname', 'Surname' );
         $self->createInput( 'text', 'surname' );
         $self->createLabel( 'website', 'Website' );
