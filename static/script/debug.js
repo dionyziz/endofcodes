@@ -1,18 +1,34 @@
 var Debug = {
     init: function() {
         $( '.enable-profiling' ).click( function() {
+            return toggleProfiling.bind( this )( true );
+        } );
+        $( '.disable-profiling' ).click( function() {
+            return toggleProfiling.bind( this )( false );
+        } );
+
+        function toggleProfiling( enable ) {
+            var text;
             var token = $( "#profiling-form input[name=token]" ).val();
 
-            $( '.enable-profiling' ).remove();
-            $( '.dev' ).append( '<span class="measure">Measuring...</span>' );
+            if ( enable ) {
+                $( this ).remove();
+                text = 'Measuring...';
+            }
+            else {
+                text = 'Disabling...';
+            }
+            $( '.dev' ).append( '<span class="measure">' + text + '</span>' );
+
             $.post( 'debugging/update', {
                 token: token,
-                enable: true
+                enable: enable? 1: 0
             }, function() {
                 window.location.reload();
             } );
+
             return false;
-        } );
+        };
 
         $( '.profiling-link' ).click( function() {
             $( '.debug-window' ).show();

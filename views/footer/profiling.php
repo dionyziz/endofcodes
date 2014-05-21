@@ -30,7 +30,13 @@
                     <table class='table table-condensed'>
                         <tr><td colspan='3'>Page rendered in Δt = <?php
                             echo round( 1000 * $this->getPageGenerationTime(), 2 );
-                        ?>ms</td></tr>
+                        ?>ms (<a href='' class='disable-profiling'>disable profiling</a>)<?php
+                        $form = new Form( 'profiling', 'update' );
+                        $form->id = 'profiling-form';
+                        $form->output( function( $self ) {
+                            $self->createInput( 'hidden', 'enable', '', 'false' );
+                        } );
+                        ?></td></tr>
                         <tr><td colspan='3'><?php
                             global $debugger;
 
