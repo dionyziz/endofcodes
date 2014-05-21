@@ -140,23 +140,12 @@
                 }
                 throw new ModelValidationException( 'password_small' );
             }
-            if ( !empty( $this->website ) ) { 
-                if ( !filter_var( $this->website, FILTER_VALIDATE_URL ) ) {
+            if ( !empty( $this->website ) && !filter_var( $this->website, FILTER_VALIDATE_URL ) ) {
                     throw new ModelValidationException( 'website_invalid' );
-                }
-                if ( !checkdnsrr( $this->website, 'A' ) ) {
-                    throw new ModelValidationException( 'website_not_exists' );
-                }
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
                 throw new ModelValidationException( 'email_invalid' );
             }
-            //if ( !empty( $this->github ) ) {  Please ignore it for now
-            //    $handle = curl_init( 'https://github.com/' . $this->github );
-            //    if ( curl_getinfo( $handle, CURLINFO_HTTP_CODE ) == 404 ) {
-            //        throw new ModelValidationException( 'github_invalid' );
-            //    }
-            //}
             if ( isset( $this->password ) ) {
                 $array = encrypt( $this->password );
                 $this->password = $array[ 'hash' ];
