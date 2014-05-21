@@ -9,7 +9,8 @@
     ?><p><a href='bot/update'>Configure Bot.</a></p><?php
     $form = new Form( 'user', 'update' );
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong, $name_invalid, $surname_invalid,
-                                          $password_new_not_matched, $password_new_small, $countries, $user ) {
+                                          $password_new_not_matched, $password_new_small, $countries, $user, $website_invalid,
+                                          $website_not_exists, $github_invalid ) {
         global $config;
 
         ?><p>Change email</p><?php
@@ -64,9 +65,18 @@
         }
         $self->createLabel( 'surname', 'Surname' );
         $self->createInput( 'text', 'surname' );
+        if ( isset( $website_invalid ) ) {
+            $self->createError( 'Please enter a valid website' );
+        }
+        if ( isset( $website_not_exists ) ) {
+            $self->createError( 'This website is not registered' );
+        }
         $self->createLabel( 'website', 'Website' );
         $self->createInput( 'text', 'website' );
-        $self->createLabel( 'github', 'Github' );
+        if ( isset( $github_invalid ) ) {
+            $self->createError( 'Please enter a valid github username' );
+        }
+        $self->createLabel( 'github', 'Github username' );
         $self->createInput( 'text', 'github' );
         $self->createSubmit( 'Save settings' );
     } );

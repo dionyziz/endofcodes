@@ -25,7 +25,8 @@
     $form->id = 'register-form';
     $form->output( function( $self ) use( $username_empty, $username_invalid, $name_invalid, 
             $surname_invalid, $password_empty, $email_empty, $username_used, $password_small,
-            $password_not_matched, $email_used, $email_invalid, $countries, $location ) {
+            $password_not_matched, $email_used, $email_invalid, $countries, $location, $website_invalid,
+            $website_not_exists, $github_invalid ) {
         global $config;
 
         if ( isset( $username_empty ) ) {
@@ -89,9 +90,18 @@
         }
         $self->createLabel( 'surname', 'Surname' );
         $self->createInput( 'text', 'surname' );
+        if ( isset( $website_invalid ) ) {
+            $self->createError( 'Please enter a valid website' );
+        }
+        if ( isset( $website_not_exists ) ) {
+            $self->createError( 'This website is not registered' );
+        }
         $self->createLabel( 'website', 'Website' );
         $self->createInput( 'text', 'website' );
-        $self->createLabel( 'github', 'Github' );
+        if ( isset( $github_invalid ) ) {
+            $self->createError( 'Please enter a valid github username' );
+        }
+        $self->createLabel( 'github', 'Github username' );
         $self->createInput( 'text', 'github' );
         $self->createLabel( 'dob', 'Date of birth' );
         $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
