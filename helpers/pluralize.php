@@ -7,8 +7,12 @@
             echo $singular;
         }
         else {
-            echo $singular;
-            ?>s<?php
+            if ( $singular[ strlen( $singular ) - 1 ] == 'y' ) {
+                echo substr( $singular, 0, strlen( $singular ) - 1 ) . 'ies';
+            }
+            else {
+                echo $singular . 's';
+            }
         }
         return ob_get_clean();
     }
