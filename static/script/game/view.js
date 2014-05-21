@@ -128,7 +128,7 @@ var GameView = {
 
         $( '.creature[data-userid=' + userid + ']' ).toggleClass( 'highlight', addShadow );
     },
-    loadFromSlider: function( roundid ) {
+    loadFromRoundid: function( roundid ) {
         var gameid = $( '.gamemeta h2' ).attr( 'data-id' );
         var href = GameView.makeUrl( gameid, roundid );
 
@@ -149,7 +149,7 @@ var GameView = {
         var roundid = $slider.slider( 'value' ) + 1;
 
         $slider.slider( 'value', roundid );
-        GameView.loadFromSlider( roundid );
+        GameView.loadFromRoundid( roundid );
 
         if ( roundid >= GameView.roundCount - 1 ) {
             GameView.togglePlay();
@@ -228,7 +228,7 @@ var GameView = {
             max: GameView.roundCount - 1,
             value: $( '.roundid' ).attr( 'data-id' ),
             stop: function( e, ui ) {
-                GameView.loadFromSlider( ui.value );
+                GameView.loadFromRoundid( ui.value );
             }
         } );
     }
