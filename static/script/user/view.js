@@ -63,13 +63,15 @@ var UserView = {
             return false;
         } );
         $( document ).on( "click", ".follow", function() {
+            var now = next = {};
+
             if ( this.id == 'follow'  ) {
-                var now = { 'method': 'create', 'action': 'follow' };
-                var next = { 'method': 'delete', 'action': 'unfollow' };
+                now = { 'method': 'create', 'action': 'follow' };
+                next = { 'method': 'delete', 'action': 'unfollow' };
             }
             else {
-                var now = { 'method': 'delete', 'action': 'unfollow' };
-                var next = { 'method': 'create', 'action': 'follow' };
+                now = { 'method': 'delete', 'action': 'unfollow' };
+                next = { 'method': 'create', 'action': 'follow' };
             }
 
             var $form = $( "#" + now.action + "-form" );
@@ -90,8 +92,9 @@ var UserView = {
                 processData: false,
                 contentType: false,
                 complete: function() {
+                    var btn_text = next.action.substr(0, 1).toUpperCase() + next.action.substr(1); 
                     $( "a#" + now.action ).replaceWith( 
-                        "<a href='#' class='follow' id='" + next.action + "'><button class='btn btn-primary'>" + next.action + "</button></a>"
+                        "<a href='#' class='follow' id='" + next.action + "'><button class='btn btn-primary'>" + btn_text + "</button></a>"
                     );
                     $( 'form#' + now.action + '-form' ).attr( 'action', 'follow/' + next.method );
                     $( 'form#' + now.action + '-form' ).attr( 'id', next.action + '-form' );
