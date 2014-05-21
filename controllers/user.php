@@ -1,7 +1,8 @@
 <?php
     class UserController extends AuthenticatedController {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '',
-                                $countryShortname = '', $day = '', $month = '', $year = '' ) {
+                                $countryShortname = '', $day = '', $month = '', $year = '', $name = '', $surname = '',
+                                $website = '', $github = '' ) {
             require_once 'models/country.php';
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', [ 'password_not_matched' => true ] );
@@ -18,6 +19,10 @@
             $user->password = $password;
             $user->email = $email;
             $user->country = $country;
+            $user->name = $name;
+            $user->surname = $surname;
+            $user->website = $website;
+            $user->github = $github;
             $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->save();
@@ -59,7 +64,8 @@
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
-                                $countryShortname = '', $email = '', $day = '', $month = '', $year = '' ) {
+                                $countryShortname = '', $email = '', $day = '', $month = '', $year = '', $name,
+                                $surname, $website, $github ) {
             $this->requireLogin();
             require_once 'models/country.php';
             $user = $_SESSION[ 'user' ];
@@ -75,6 +81,10 @@
                 }
             }
             $user->email = $email;
+            $user->name = $name;
+            $user->surname = $surname;
+            $user->website = $website;
+            $user->github = $github;
             $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->country = Country::findByShortname( $countryShortname );

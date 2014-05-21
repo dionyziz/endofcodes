@@ -54,6 +54,14 @@
             'Select Year'
         );
         $self->createSelect( $years, 'year' );
+        $self->createLabel( 'name', 'Name' );
+        $self->createInput( 'text', 'name' );
+        $self->createLabel( 'surname', 'Surname' );
+        $self->createInput( 'text', 'surname' );
+        $self->createLabel( 'website', 'Website' );
+        $self->createInput( 'text', 'website' );
+        $self->createLabel( 'github', 'Github' );
+        $self->createInput( 'text', 'github' );
         $self->createSubmit( 'Save settings' );
     } );
 

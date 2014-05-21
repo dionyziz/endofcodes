@@ -7,9 +7,11 @@
     define( 'ROLE_DEVELOPER', 10 );
 
     class User extends ActiveRecordBase {
-        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
+        protected static $attributes = [ 'username', 'password', 'name', 'surname', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'website', 'github', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
         public $username;
         public $password;
+        public $name;
+        public $surname;
         public $email;
         public $country;
         public $forgotpasswordrequestcreated;
@@ -18,6 +20,8 @@
         public $sessionid;
         public $salt;
         public $dateOfBirth;
+        public $website;
+        public $github;
         public $boturl;
         public $winCount;
         public $role;
@@ -72,7 +76,7 @@
                     throw new ModelNotFoundException();
                 }
                 $this->winCount = 0;
-                $attributesToAssign = [ 'boturl', 'username', 'email', 'dob', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
+                $attributesToAssign = [ 'boturl', 'username', 'email', 'name', 'surname', 'dob', 'website', 'github', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
                 foreach ( $attributesToAssign as $key ) {
                     $this->$key = $user_info[ $key ];
                 }

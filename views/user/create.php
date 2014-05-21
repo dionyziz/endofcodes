@@ -78,7 +78,15 @@
         else {
             $email_value = "";
         }
-        $self->createInput( 'text', 'email', 'email', $email_value );
+        $self->createInput( 'text', 'email', 'email' );
+        $self->createLabel( 'name', 'Name' );
+        $self->createInput( 'text', 'name' );
+        $self->createLabel( 'surname', 'Surname' );
+        $self->createInput( 'text', 'surname' );
+        $self->createLabel( 'website', 'Website' );
+        $self->createInput( 'text', 'website' );
+        $self->createLabel( 'github', 'Github' );
+        $self->createInput( 'text', 'github' );
         $self->createLabel( 'dob', 'Date of birth' );
         $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
         $self->createSelect( $days, 'day' );
