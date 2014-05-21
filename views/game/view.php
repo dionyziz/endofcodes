@@ -125,6 +125,8 @@
             echo htmlspecialchars( $round->id - 1 );
         ?>"><span class="glyphicon glyphicon-chevron-left"></span></a>
     </span>
+    <span class="play"><a href="#"><span class="glyphicon glyphicon-play"></span></a></span>
+    <span class="pause"><a href="#"><span class="glyphicon glyphicon-pause"></span></a></span>
     <span class="next"<?php
         if ( $round->id + 1 >= $game->roundCount ) {
             ?> style="display: none"<?php
