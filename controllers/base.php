@@ -127,9 +127,20 @@
             }
         }
         protected function init() {
+            $this->initDebug();
             $this->loadConfig();
             $this->readHTTPAccept();
             dbInit();
+        }
+        public function initDebug() {
+            global $debugger;
+
+            if ( isset( $_SESSION[ 'debug' ] ) ) {
+                $debugger = new Debugger();
+            }
+            else {
+                $debugger = new DummyDebugger();
+            }
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
             $this->pageGenerationBegin = microtime( true );
