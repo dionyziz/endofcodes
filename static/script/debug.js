@@ -1,16 +1,25 @@
 var Debug = {
     init: function() {
         $( '.enable-profiling' ).click( function() {
-            var token = $( ".profiling-form input[type=hidden]" ).val();
+            var token = $( "#profiling-form input[name=token]" ).val();
 
             $( '.enable-profiling' ).remove();
             $( '.dev' ).append( '<span class="measure">Measuring...</span>' );
-            $.post( 'profiling/update', {
+            $.post( 'debugging/update', {
+                token: token,
                 enable: true
             }, function() {
-                alert( 'Profiling is now enabled' );
+                window.location.reload();
             } );
             return false;
+        } );
+
+        $( '.profiling-link' ).click( function() {
+            $( '.debug-window' ).show();
+            return false;
+        } );
+        $( '.debug-window .close' ).click( function() {
+            $( '.debug-window' ).hide();
         } );
     }
 };
