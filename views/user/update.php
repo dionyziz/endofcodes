@@ -59,12 +59,12 @@
             $self->createError( 'Names can contain only letters' );
         }
         $self->createLabel( 'name', 'Name' );
-        $self->createInput( 'text', 'name' );
+        $self->createInput( 'text', 'name', '', htmlspecialchars( $user->name ) );
         if ( isset( $surname_invalid ) ) {
             $self->createError( 'Surnames can contain only letters' );
         }
         $self->createLabel( 'surname', 'Surname' );
-        $self->createInput( 'text', 'surname' );
+        $self->createInput( 'text', 'surname', '', htmlspecialchars( $user->surname ) );
         if ( isset( $website_invalid ) ) {
             $self->createError( 'Please enter a valid website' );
         }
@@ -72,12 +72,12 @@
             $self->createError( 'This website is not registered' );
         }
         $self->createLabel( 'website', 'Website' );
-        $self->createInput( 'text', 'website' );
+        $self->createInput( 'text', 'website', '', htmlspecialchars( $user->website ) );
         if ( isset( $github_invalid ) ) {
             $self->createError( 'Please enter a valid github username' );
         }
         $self->createLabel( 'github', 'Github username' );
-        $self->createInput( 'text', 'github' );
+        $self->createInput( 'text', 'github', '', htmlspecialchars( $user->github ) );
         $self->createSubmit( 'Save settings' );
     } );
 
