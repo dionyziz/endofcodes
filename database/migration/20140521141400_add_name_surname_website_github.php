@@ -4,4 +4,3 @@
     Migration::addField( 'users', 'website', 'VARCHAR(100) NOT NULL' );
     Migration::addField( 'users', 'github', 'VARCHAR(100) NOT NULL' );
 ?>
-
