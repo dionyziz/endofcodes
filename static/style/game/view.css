@@ -213,10 +213,7 @@ aside ol li.you {
 .next {
     display: inline;
 }
-.next a, .next a:link, .next a:visited,
-.previous a, .previous a:link, .previous a:visited,
-.play a, .play a:link, .play a:visited,
-.pause a, .pause a:link, .pause a:visited {
+.game-tool a, .game-tool a:link, .game-tool a:visited {
     color: black;
     font-size: 15pt;
 }
