@@ -13,6 +13,10 @@
             $user->username = $username;
             $user->password = 'secret1234';
             $user->email = "$username@gmail.com";
+            $user->name = "Frank";
+            $user->surname = $username . 'poulos';
+            $user->website = "https://$username.com";
+            $user->github = "https://github.com/$username";
             $user->boturl = $config[ 'base' ] . 'bots/php';
             $user->save();
 
