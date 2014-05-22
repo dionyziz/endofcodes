@@ -139,10 +139,19 @@
             throw new HTMLFormInvalidException( $method );
         }
 
-        public function createLabel( $for, $text ) {
+        public function createLabel( $for, $text, $attributes = '' ) {
             ?><label for="<?php
                 echo htmlspecialchars( $for );
-            ?>"><?php
+            ?>" <?php
+            if ( !empty( $attributes ) ) {
+                foreach ( $attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
+                }
+            }
+            ?>><?php
                 echo htmlspecialchars( $text );
             ?></label><?php
         }

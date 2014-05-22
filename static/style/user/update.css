@@ -1,0 +1,60 @@
+#name-input input:first-child { 
+    margin-bottom: 15px;
+}
+#user-update-form #password-input input:nth-child(2),
+#user-update-form #password-input input:nth-child(3) {
+    margin-bottom: 15px; 
+} 
+#user-update-form input, 
+#user-update-form button,
+#user-update-form #country-input {
+    width: 257px;
+}
+#dob select:first-child {
+    margin-left: 15px;
+}
+#dob select {
+    margin-right: 6px;
+}
+h2, h1 {
+    font-size: initial; 
+}
+#user-update-form .form-group {
+    margin-bottom: 30px;
+}
+#title {
+    margin-bottom: 38px;
+    font-size: x-large;
+}
+#user-update-form {
+    width: 50%;
+    margin-left: auto;
+    margin-right: 20%;
+}
+#delete-account {
+    color: #d9534f;
+}
+#dob p {
+    display: inline;
+}
+#password-input input, #pswd-label {
+    display: none;
+}
+#pswd-change {
+    margin-left: 99px;
+}
+#default-popup {
+    padding-bottom: 210px;
+    padding-top: 10px;
+    width: 370px;
+}
+#close-modal {
+    margin-right: 15px;
+}
+#default-popup p {
+    margin-bottom: 34px;
+    margin-top: 34px;
+}
+a {
+    cursor: pointer;
+}

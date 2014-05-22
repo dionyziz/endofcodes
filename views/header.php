@@ -14,6 +14,7 @@
         ?>' />
         <?php
             includeStyle( "bootstrap.min" );
+            includeStyle( "avgrund" );
             includeStyle( "general" );
             includeStyle( "footer" );
             includeStyle( "navigation" );
@@ -24,16 +25,19 @@
             includeStyle( "links" );
             includeStyle( "game/view" );
             includeStyle( "user/view" );
+            includeStyle( "user/update" );
             includeStyle( "../jquery-ui/jquery-ui.min" );
             includeStyle( "../jquery-ui/jquery.ui.theme" );
 
             includeScript( 'jquery-2.1.0.min' );
             includeScript( 'bootstrap.min' );
             includeScript( 'prefixfree.min' );
+            includeScript( 'avgrund' );
             includeScript( 'error' );
             includeScript( 'logout' );
             includeScript( 'game/view' );
             includeScript( 'user/view' );
+            includeScript( 'user/update' );
             includeScript( 'user/create' );
             includeScript( 'session/create' );
             includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
