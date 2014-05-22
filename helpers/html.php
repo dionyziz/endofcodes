@@ -84,7 +84,7 @@
             ?> /></p><?php
         }
 
-        public function createSubmit( $value, $attributes = '' ) {
+        public function createSubmit( $value, $attributes = [] ) {
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
