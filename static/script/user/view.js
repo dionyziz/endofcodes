@@ -64,9 +64,9 @@ var UserView = {
             return false;
         } );
         $( document ).on( "click", ".follow", function() {
-            var now = next = {};
+            var now, next;
 
-            if ( this.id == 'follow'  ) {
+            if ( this.id == 'follow' ) {
                 now = { 'method': 'create', 'action': 'follow' };
                 next = { 'method': 'delete', 'action': 'unfollow' };
             }
@@ -93,7 +93,7 @@ var UserView = {
                 processData: false,
                 contentType: false,
                 complete: function() {
-                    var btn_text = next.action.substr(0, 1).toUpperCase() + next.action.substr(1); 
+                    var btn_text = next.action.substr( 0, 1 ).toUpperCase() + next.action.substr( 1 ); 
                     $( "a#" + now.action ).replaceWith( 
                         "<a href='#' class='follow' id='" + next.action + "'><button class='btn btn-primary'>" + btn_text + "</button></a>"
                     );
