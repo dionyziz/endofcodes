@@ -10,11 +10,19 @@
 #user-update-form #country-input {
     width: 257px;
 }
+#user-update-form .alert-danger {
+    margin-left: 115px;
+    text-align: center;
+    width: 257px;
+}
+#user-update-form #password-input .alert-danger {
+    margin-left: 0px;
+}
 #dob select:first-child {
     margin-left: 15px;
 }
 #dob select {
-    margin-right: 6px;
+    margin-right: -7px;
 }
 h2, h1 {
     font-size: initial; 
