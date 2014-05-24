@@ -19,6 +19,27 @@
 
             $this->assertTrue( $loaded == $config );
         }
+        public function testUpdateConfig() {
+            global $config;
+
+            $oldConfig = $config;
+            $oldLocalConfig = include 'config/config-local.php';
+
+            $entries = [ 'some_entry' => 'some_value' ];
+            $environment = 'test';
+            updateConfig( $entries, $environment );
+
+            $this->assertTrue( array_diff_recursive( $config, $oldConfig ) == $entries );
+
+            $localConfig = include 'config/config-local.php';
+            $this->assertTrue( array_diff_recursive( $localConfig, $oldLocalConfig ) == [ $environment => $entries ] );
+
+            updateConfig( [ 'some_entry' => '' ], $environment ); // Clean up.
+            $this->assertTrue( $oldConfig == $config );
+
+            $localConfig = include 'config/config-local.php';
+            $this->assertTrue( $oldLocalConfig == $localConfig );
+        }
     }
 
     return new ConfigHelperTest();
