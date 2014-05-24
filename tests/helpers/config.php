@@ -23,7 +23,10 @@
             global $config;
 
             $oldConfig = $config;
-            $oldLocalConfig = include 'config/config-local.php';
+            $oldLocalConfig = [];
+            if ( file_exists( 'config/config-local.php' ) ) {
+                $oldLocalConfig = include 'config/config-local.php';
+            }
 
             $entries = [ 'some_entry' => 'some_value' ];
             $environment = 'test';
