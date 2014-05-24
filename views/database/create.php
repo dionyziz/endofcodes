@@ -4,14 +4,14 @@
     if ( !empty( $error ) ) {
         ?><h2>Database Error: <?php
             echo $error;
-        ?></h2><?
+        ?></h2><?php
             if ( !empty( $dbSaid ) ) {
                 ?><p class="alert alert-danger">MySQL said: <?php
                     echo $dbSaid;
-                ?></p><?
+                ?></p><?php
             }
         ?><div id="dbconfig">
-        <p>EndOfCodes is unable to run because you have not configured your database. We will now create the file config-local.php for you. Please enter your database credentials below: </p><?
+        <p>EndOfCodes is unable to run because you have not configured your database. We will now create the file config-local.php for you. Please enter your database credentials below: </p><?php
     }
     $form = new Form( 'dbconfig', 'create' );
     $form->output( function( $self ) use ( $oldConfig ) {
