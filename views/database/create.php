@@ -1,15 +1,18 @@
 <?php
     require 'views/header.php';
-?>
-<h2>Database Error: <?php
-    echo $error;
-?></h2><p class="alert alert-danger">MySQL said: <?php
-    echo $dbSaid;
-?></p>
-<div id="dbconfig">
-<p>EndOfCodes is unable to run because you have not configured your database. 
-    We will now create the file config-local.php for you. Please enter your database credentials below: </p>
-<?php
+
+    if ( !empty( $error ) ) {
+        ?><h2>Database Error: <?php
+            echo $error;
+        ?></h2><?
+            if ( !empty( $dbSaid ) ) {
+                ?><p class="alert alert-danger">MySQL said: <?php
+                    echo $dbSaid;
+                ?></p><?
+            }
+        ?><div id="dbconfig">
+        <p>EndOfCodes is unable to run because you have not configured your database. We will now create the file config-local.php for you. Please enter your database credentials below: </p><?
+    }
     $form = new Form( 'dbconfig', 'create' );
     $form->output( function( $self ) use ( $oldConfig ) {
         $self->createLabel( 'user', 'Database User' );
