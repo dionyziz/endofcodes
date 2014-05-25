@@ -39,11 +39,11 @@
                         <tr><td colspan='3'>Page rendered in Δt = <?php
                             echo round( 1000 * $this->getPageGenerationTime(), 2 );
                         ?>ms (<a href='' class='disable-profiling'>disable profiling</a>)<?php
-                        $form = new Form( 'profiling', 'update' );
-                        $form->id = 'profiling-form';
-                        $form->output( function( $self ) {
-                            $self->createInput( 'hidden', 'enable', '', 'false' );
-                        } );
+                            $form = new Form( 'profiling', 'update' );
+                            $form->id = 'profiling-form';
+                            $form->output( function( $self ) {
+                                $self->createInput( 'hidden', 'enable', '', 'false' );
+                            } );
                         ?></td></tr>
                         <tr><td colspan='3'><?php
                             global $debugger;
@@ -51,7 +51,7 @@
                             $numQueries = $debugger->getTotalQueriesExecuted();
                             
                             ?><strong><?php
-                            echo pluralize( $numQueries, 'query' );
+                                echo pluralize( $numQueries, 'query' );
                             ?> executed.</strong> <?php
                             if ( $numQueries > 50 ) {
                                 ?><span class="label label-danger">Too many</span><?php
@@ -59,13 +59,13 @@
                         ?></td></tr><?php
                             foreach ( $debugger->queryGroups as $queryGroup ) {
                                 ?><tr<?php
-                                if ( count( $queryGroup->queries ) > 10 ) {
-                                    ?> class='danger'<?php
-                                }
+                                    if ( count( $queryGroup->queries ) > 10 ) {
+                                        ?> class='danger'<?php
+                                    }
                                 ?>><td class='num'><span class='badge'><?php
-                                echo count( $queryGroup->queries );
+                                    echo count( $queryGroup->queries );
                                 ?></span></td><td><?php
-                                echo htmlspecialchars( $queryGroup->queryLiteral );
+                                    echo htmlspecialchars( $queryGroup->queryLiteral );
                                 ?></td></tr><?php
                             }
                         ?>
