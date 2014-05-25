@@ -57,7 +57,7 @@
     // represents a group of queries with the same literal query but potentially different params
     class DebuggerQueryGroup {
         public $queryLiteral;
-        public $queries;
+        public $queries = [];
 
         public function __construct( $queryLiteral ) {
             $this->queryLiteral = $queryLiteral;
