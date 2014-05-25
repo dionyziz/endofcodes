@@ -1,5 +1,5 @@
 var Debug = {
-    init: function() {
+    ready: function() {
         $( '.enable-profiling' ).click( function() {
             return toggleProfiling.bind( this )( true );
         } );
@@ -40,4 +40,4 @@ var Debug = {
     }
 };
 
-$( document ).ready( Debug.init );
+$( document ).ready( Debug.ready );
