@@ -7,10 +7,8 @@
     class DummyDebugger implements DebuggerInterface {
         public $queryGroups = [];
 
-        public function beginQueryExecution( DebuggerQuery $query ) {
-        }
-        public function finishQueryExecution() {
-        }
+        public function beginQueryExecution( DebuggerQuery $query ) {}
+        public function finishQueryExecution() {}
     }
 
     class Debugger implements DebuggerInterface {
