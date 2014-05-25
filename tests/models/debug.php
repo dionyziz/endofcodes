@@ -2,6 +2,9 @@
     require_once 'models/debug.php';
 
     class DebuggerTest extends UnitTest {
+        protected $queryLiteral;
+        protected $params;
+
         protected function getQueryFixture() {
             $this->queryLiteral = 'SELECT meaning FROM life WHERE value = :value';
             $this->params = [ 'value' => 42 ];
