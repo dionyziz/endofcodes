@@ -37,6 +37,7 @@
             $queryGroup->add( $query );
 
             $this->assertEquals( 2, $queryGroup->getTotalExecutionTime(), 'queryGroup must add individual query times' );
+            $this->assertEquals( 2, count( $queryGroup->queries ), 'queryGroup must add individual queries' );
         }
         public function testDummyDebugger() {
             $debugger = new DummyDebugger();
@@ -53,6 +54,7 @@
 
             $this->assertEquals( 1, count( $debugger->queryGroups ), 'Debugger must record each query exactly once' );
             $this->assertTrue( isset( $debugger->queryGroups[ $query->queryLiteral ] ), 'Debugger must record each query by literal' );
+            $this->assertEquals( 1, count( $debugger->queryGroups[ $query->queryLiteral ]->queries ), 'Debugger must record each query only once within its respective query group' );
 
             $debugger->beginQueryExecution( $query );
             $debugger->finishQueryExecution();
