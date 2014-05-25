@@ -5,6 +5,14 @@
     }
 ?>
 <div class="dev"><?php
+    /*
+        $_SESSION[ 'debug' ] is:
+
+        * not set if debugging is not configured
+        * set to false if debugging is configured as disabled
+        * set to true if debugging is configured as enabled
+        * only developers can configure their debugging flag
+    */
     if ( empty( $_SESSION[ 'debug' ] ) ) {
         // debugging is disabled; display link to enable it
         ?><a href='' title='Show profiling information' class='enable-profiling'>π</a><?php
