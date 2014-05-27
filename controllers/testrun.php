@@ -8,6 +8,7 @@
             }
 
             require_once 'models/test/base.php';
+            require_once 'models/test/functional.php';
             require_once 'models/test/withfixtures.php';
 
             if ( $all ) {
