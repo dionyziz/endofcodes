@@ -1,10 +1,10 @@
 <?php
     class UserControllerTest extends FunctionalTest {
         public function testCreate() {
-            $response = $this->request( 'user', 'create', [
+            $response = $this->request( 'user', 'create', 'POST', [
                 'username'         => 'dionyziz',
-                'password'         => 'secret',
-                'password_repeat'  => 'secret',
+                'password'         => 'secret1234567',
+                'password_repeat'  => 'secret1234567',
                 'email'            => 'dionyziz@gmail.com',
                 'countryShortname' => 'GR',
                 'day'              => 30,
