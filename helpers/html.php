@@ -4,7 +4,7 @@
         protected $resource;
         protected $method;
         public $id;
-        public $attributes;
+        public $attributes = [];
         public $formMethod;
         protected $hasFile = false;
         protected $token;
@@ -41,7 +41,6 @@
         public function __construct( $resource = '', $method = '' ) {
             $this->resource = $resource;
             $this->method = $method;
-            $this->attributes = [];
         }
 
         public function createError( $error_msg ) {
