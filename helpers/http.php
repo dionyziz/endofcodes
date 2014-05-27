@@ -14,6 +14,7 @@
         private $url;
         public $resource;
         public $method;
+        public $args;
 
         public function getURL() {
             return $this->url;
@@ -38,6 +39,7 @@
                     $args[ $key ] = "$key=" . urlencode( $arg );
                 }
                 $this->method = $method;
+                $this->args = $args;
                 $this->url = $this->resource . '/' . $this->method . '?' . implode( "&", $args );
             }
         }
