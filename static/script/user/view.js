@@ -83,7 +83,7 @@ var UserView = {
             formData.append( "followedid", followedid );
             formData.append( "token", token );
 
-            $( '.follow' ).fadeOut( 100, function() {
+            $( '.follow button' ).fadeOut( 500, function() {
                 $.ajax( {
                     url: "follow/" + now.method,
                     type: "POST",
