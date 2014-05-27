@@ -32,11 +32,11 @@
             unset( $bind[ $key ] );
         }
         $finalsql = strtr( $sql, $bind );
-        $res = mysql_query( $finalsql );
-        if ( $res === false ) {
-            throw new DBException( '', mysql_error() );
+        $result = mysql_query( $finalsql );
+        if ( $result === false ) {
+            throw new DBException( 'Failed to execute query', mysql_error() );
         }
-        return $res;
+        return $result;
     }
 
     function dbInsert( $table, $row ) {
@@ -206,7 +206,7 @@
             if ( !empty( $dbSaid ) ) {
                 $message .= ' MySQL said: ' . $dbSaid;
             }
-            parent::__construct(  );
+            parent::__construct( $message );
         }
     }
 
