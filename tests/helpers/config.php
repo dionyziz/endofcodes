@@ -28,20 +28,23 @@
                 $oldLocalConfig = include 'config/config-local.php';
             }
 
-            $entries = [ 'some_entry' => 'some_value' ];
+            $entries = [ 'some_entry' => 'some_value', 'some_array' => [ 'jpg', 'png' ] ];
             $environment = 'test';
+
             updateConfig( $entries, $environment );
-
-            $this->assertTrue( array_diff_recursive( $config, $oldConfig ) == $entries );
-
-            $localConfig = include 'config/config-local.php';
-            $this->assertTrue( array_diff_recursive( $localConfig, $oldLocalConfig ) == [ $environment => $entries ] );
-
-            updateConfig( [ 'some_entry' => '' ], $environment ); // Clean up.
-            $this->assertTrue( $oldConfig == $config );
+            $this->assertEquals( $entries, array_diff_recursive( $config, $oldConfig ) );
 
             $localConfig = include 'config/config-local.php';
-            $this->assertTrue( $oldLocalConfig == $localConfig );
+            $this->assertEquals( [ $environment => $entries ], array_diff_recursive( $localConfig, $oldLocalConfig ) );
+
+            $nullEntries = array_map( function( $entry ) {
+                return NULL;
+            }, $entries);
+            updateConfig( $nullEntries, $environment ); // Clean up.
+            $this->assertEquals( $oldConfig, $config );
+
+            $localConfig = include 'config/config-local.php';
+            $this->assertEquals( $oldLocalConfig, $localConfig );
         }
     }
 

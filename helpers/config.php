@@ -39,41 +39,45 @@
 
         return $content;
     }
+    // Returns the elements of $minuend that are not elements of $subtrahend.
+    // Ignores NULL elements.
     function array_diff_recursive( $minuend, $subtrahend = [] ) {
         $difference = [];
-        if ( !is_array( $minuend ) ) {
-            if ( $minuend != $subtrahend ) {
-                $difference = $minuend;
-            }
-            return $difference;
-        }
         foreach ( $minuend as $key => $value ) {
-            if ( !isset( $subtrahend[ $key ] ) ) {
-                $subtrahend[ $key ] = '';
+            if ( $value === NULL ) {
+                continue;
             }
-            $difference[ $key ] = array_diff_recursive( $value, $subtrahend[ $key ] );
-            if ( empty( $difference[ $key ] ) ) {
-                unset( $difference[ $key ] );
+            if ( is_array( $value ) && $value !== [] ) {
+                if ( !isset( $subtrahend[ $key ] ) ) {
+                    $subtrahend[ $key ] = [];
+                }
+                $result = array_diff_recursive( $value, $subtrahend[ $key ] );
+                if ( $result !== [] ) {
+                    $difference[ $key ] = $result;
+                }
+            }
+            elseif ( !isset( $subtrahend[ $key ] ) || $value !== $subtrahend[ $key ] ) {
+                $difference[ $key ] = $value;
             }
         }
         return $difference;
     }
+    // Can be used to delete entries that are set to NULL.
     function updateConfig( $entries, $environment ) {
         global $config;
+
+        $config = array_replace_recursive( $config, $entries );
+        $config = array_diff_recursive( $config ); // Remove NULL entries.
 
         $entries = [ $environment => $entries ];
         $configPath = 'config/config-local.php';
 
         if ( file_exists( $configPath ) ) {
-            $old_entries = include $configPath;
-            $entries = array_replace_recursive( $old_entries, $entries );
+            $localEntries = include $configPath;
+            $entries = array_replace_recursive( $localEntries, $entries );
         }
-        $config = array_replace_recursive( $config, $entries[ $environment ] );
-        $config = array_diff_recursive( $config ); // Remove empty entries.
-
-        $entries = array_diff_recursive( $entries ); // Remove empty entries.
+        $entries = array_diff_recursive( $entries ); // Remove NULL entries.
         $content = formatConfig( $entries );
         safeWrite( $configPath, $content );
-
     }
 ?>
