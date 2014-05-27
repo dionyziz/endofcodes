@@ -101,7 +101,7 @@
         protected function getConfig() {
             global $config;
 
-            $config = getConfig( $this->environment );
+            $config = loadConfig( $this->environment );
         }
         protected function readHTTPAccept() {
             if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {

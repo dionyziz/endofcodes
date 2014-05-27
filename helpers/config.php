@@ -15,7 +15,7 @@
         }
         return $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $relativePath;
     }
-    function getConfig( $environment ) {
+    function loadConfig( $environment ) {
         $config = require 'config/config.php';
         if ( file_exists( 'config/config-local.php' ) ) {
             $configLocal = require 'config/config-local.php';
