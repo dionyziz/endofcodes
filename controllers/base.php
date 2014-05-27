@@ -1,7 +1,7 @@
 <?php
     abstract class ControllerBase {
-        protected $environment = 'development';
         protected $acceptTypes = [];
+        public $environment = 'development';
         public $trusted = false;
         public $outputFormat = 'html';
 

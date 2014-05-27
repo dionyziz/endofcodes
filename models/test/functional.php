@@ -17,6 +17,7 @@
                     else {
                         $post = array_merge( $post, $vars );
                     }
+                    $controller->environment = 'test';
                     $controller->dispatch( $get, $post, [], $verb );
                     $returned = true;
                 }

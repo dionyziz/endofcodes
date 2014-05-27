@@ -1,6 +1,6 @@
 <?php
     class TestrunController extends ControllerBase {
-        protected $environment = 'test';
+        public $environment = 'test';
 
         public function create( $name, $all = false ) {
             if ( $all ) {
