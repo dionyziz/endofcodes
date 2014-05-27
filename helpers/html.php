@@ -49,7 +49,7 @@
             ?></p><?php
         }
 
-        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = '' ) {
+        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = [] ) {
             if ( !Form::isValidType( $type ) ) {
                 $type = 'text';
             }
@@ -74,22 +74,20 @@
                         echo htmlspecialchars( $value );
                     ?>" <?php
                 }
-                if ( !empty( $attributes ) ) {
-                    foreach ( $attributes as $key => $value ) {
-                        echo $key; 
-                        ?>="<?php
-                            echo htmlspecialchars( $value );
-                        ?>" <?php
-                    }
+                foreach ( $attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
                 }
             ?> /></p><?php
         }
 
-        public function createSubmit( $value, $attributes = '' ) {
+        public function createSubmit( $value, $attributes = [] ) {
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $optionArray, $name = '', $selected = '', $id = '', $attributes = '' ) {
+        public function createSelect( $optionArray, $name = '', $selected = '', $id = '', $attributes = [] ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -101,13 +99,11 @@
                         echo htmlspecialchars( $id );
                     ?>" <?php
                 }
-                if ( !empty( $attributes ) ) {
-                    foreach ( $attributes as $key => $value ) {
-                        echo $key; 
-                        ?>="<?php
-                            echo htmlspecialchars( $value );
-                        ?>" <?php
-                    }
+                foreach ( $attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
                 }
             ?>><?php
             foreach ( $optionArray as $value => $content ) {
@@ -139,17 +135,15 @@
             throw new HTMLFormInvalidException( $method );
         }
 
-        public function createLabel( $for, $text, $attributes = '' ) {
+        public function createLabel( $for, $text, $attributes = [] ) {
             ?><label for="<?php
                 echo htmlspecialchars( $for );
             ?>" <?php
-            if ( !empty( $attributes ) ) {
-                foreach ( $attributes as $key => $value ) {
-                    echo $key; 
-                    ?>="<?php
-                        echo htmlspecialchars( $value );
-                    ?>" <?php
-                }
+            foreach ( $attributes as $key => $value ) {
+                echo $key; 
+                ?>="<?php
+                    echo htmlspecialchars( $value );
+                ?>" <?php
             }
             ?>><?php
                 echo htmlspecialchars( $text );
