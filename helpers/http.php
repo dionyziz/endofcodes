@@ -12,6 +12,8 @@
 
     class RedirectException extends Exception {
         private $url;
+        public $resource;
+        public $method;
 
         public function getURL() {
             return $this->url;
@@ -25,7 +27,7 @@
                 $this->url = $resource_or_url;
             }
             else {
-                $resource = $resource_or_url;
+                $this->resource = $resource_or_url;
                 foreach ( $args as $key => $arg ) {
                     if ( $arg === true ) {
                         $arg = 'yes';
@@ -35,7 +37,8 @@
                     }
                     $args[ $key ] = "$key=" . urlencode( $arg );
                 }
-                $this->url = "$resource/$method?" . implode( "&", $args );
+                $this->method = $method;
+                $this->url = $this->resource . '/' . $this->method . '?' . implode( "&", $args );
             }
         }
     }
