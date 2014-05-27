@@ -3,33 +3,57 @@
 
     abstract class FunctionalTest extends UnitTest {
         public function request( $resource, $method, $verb = 'GET', $vars = [] ) {
-            $returned = false;
-            do {
-                ob_start();
-                try {
-                    $controller = controllerBase::findController( $resource );
-                    $controller->trusted = true;
-                    $get = [ 'method' => $method ];
-                    $post = [];
-                    if ( $verb == 'GET' ) {
-                        $get = array_merge( $get, $vars );
-                    }
-                    else {
-                        $post = array_merge( $post, $vars );
-                    }
-                    $controller->environment = 'test';
-                    $controller->dispatch( $get, $post, [], $verb );
-                    $returned = true;
-                }
-                catch ( RedirectException $e ) {
-                    die( 'redirect to ' . $e->resource . ', ' . $e->method );
-                    $resource = $e->resource;
-                    $method = $e->method;
-                }
-                $content = ob_get_clean();
-            } while ( !$returned );
+            $request = new FunctionalTestRequest( $this, $resource, $method, [], $verb, $vars );
+            return $request->execute();
+        }
+    }
 
-            return new FunctionalTestResponse( $this, $content );
+    class FunctionalTestRequest {
+        protected $unittest;
+        public $resource;
+        public $method;
+        public $verb;
+        public $vars;
+        public $session;
+
+        public function __construct( UnitTest $unittest, $resource, $method, $session, $verb, $vars ) {
+            $this->unittest = $unittest;
+            $this->resource = $resource;
+            $this->method = $method;
+            $this->verb = $verb;
+            $this->vars = $vars;
+            $this->session = $session;
+        }
+        public function execute() {
+            $oldSession = $_SESSION;
+            try {
+                ob_start();
+                $controller = controllerBase::findController( $this->resource );
+                $controller->trusted = true;
+                $get = [ 'method' => $this->method ];
+                $post = [];
+                if ( $this->verb == 'GET' ) {
+                    $get = array_merge( $get, $this->vars );
+                }
+                else {
+                    $post = array_merge( $post, $this->vars );
+                }
+                $controller->environment = 'test';
+                $controller->dispatch( $get, $post, [], $this->verb );
+                $content = ob_get_clean();
+
+                $response = new FunctionalTestResponse( $this->unittest, $content );
+            }
+            catch ( RedirectException $e ) {
+                // maintain $_SESSION across redirect
+                $redirect = new FunctionalTestRequest( $this->unittest, $e->resource, $e->method, $_SESSION, 'GET', $e->args );
+
+                $response = $redirect->execute();
+            }
+            // clean up
+            $_SESSION = $oldSession;
+
+            return $response;
         }
     }
 
@@ -38,7 +62,7 @@
         public $content;
         public $dom;
 
-        public function __construct( $unittest, $content ) {
+        public function __construct( UnitTest $unittest, $content ) {
             $this->content = $content;
             $this->unittest = $unittest;
             $this->dom = str_get_html( $content );
