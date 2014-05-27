@@ -10,15 +10,15 @@
             $grader->initiateBots();
             $grader->initiate();
             $grader->createGame();
-            if ( $game->ended ) {
-                go();
-            }
 
             switch ( $this->outputFormat ) {
                 case 'text':
-                    return $game->id;
+                    echo $game->id;
                     break;
                 case 'html':
+                    if ( $game->ended ) {
+                        go();
+                    }
                     go( 'game', 'update', [ 'gameid' => $game->id ] );
                     break;
             }
@@ -32,10 +32,6 @@
             }
             catch ( ModelNotFoundException $e ) {
                 throw new HTTPNotFoundException( 'There is no game with the specified gameid (gameid = ' . $gameid . ')' );
-            }
-
-            if ( $game->ended ) {
-                go();
             }
 
             $grader = new Grader( $game );
