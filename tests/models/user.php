@@ -149,7 +149,7 @@
             $oldToken = $user->forgotpasswordtoken;
             $user->createforgotpasswordlink();
             $this->assertThrows(
-                function() use ( $user ) {
+                function() use ( $user, $oldToken ) {
                     $user->revokePasswordCheck( $oldToken );
                 },
                 'ForgotPasswordModelInvalidTokenException',
