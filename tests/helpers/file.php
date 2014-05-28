@@ -9,16 +9,17 @@
 
             chmod( $filename, 0444 ); //Read permission for everybody.
             $newContent = 'I have a bad premonition';
-            $catched = false;
-            try {
-                safeWrite( $filename, $newContent );
-            }
-            catch ( FileNotWritableException $e ) {
-                $catched = true;
-                $this->assertEquals( $filename, $e->filename );
-                $this->assertEquals( $newContent, $e->content );
-            }
-            $this->assertTrue( $catched );
+            $this->assertThrows(
+                function() use ( $filename, $newContent ) {
+                    safeWrite( $filename, $newContent );
+                },
+                'FileNotWritableException',
+                'safeWrite() must throw an Exception when attempting to write a read-only file.',
+                function( FileNotWritableException $e ) use ( $filename, $newContent ) {
+                    $this->assertEquals( $filename, $e->filename );
+                    $this->assertEquals( $newContent, $e->content );
+                }
+            );
 
             chmod( $filename, 0666 );
             unlink($filename);
