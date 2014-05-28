@@ -27,7 +27,9 @@
         return $config;
     }
     function formatConfig( $config ) {
-        $content = '<?php' . PHP_EOL . 'return ' . var_export( $config, true ) . ';' . PHP_EOL . '?>';
+        $content = '<?php' . PHP_EOL
+                 . 'return ' . var_export( $config, true ) . ';' . PHP_EOL
+                 . '?>' . PHP_EOL ;
 
         // Convert 2-space indentation to 4-space.
         $content = str_replace( '  ', '    ', $content );

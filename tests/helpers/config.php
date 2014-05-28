@@ -1,7 +1,8 @@
 <?php
     class ConfigHelperTest extends UnitTest {
-        public function testFormatConfig() {
-            $config = [
+        public function setUp() {
+            echo 'test0';
+            $this->config = [
                 'development' => [
                     'db' => [
                         'user' => 'endofcodes',
@@ -10,18 +11,26 @@
                     ]
                 ]
             ];
-            $output = formatConfig( $config );
+            $this->tempConfigFile = 'tests/helpers/config-test.temp';
+            touch( $this->tempConfigFile );
+            file_put_contents( 'tests/helpers/formatConfig.prototype', formatConfig($this->config) );
+            $this->prototypeContent = file_get_contents( 'tests/helpers/formatConfig.prototype' );
+        }
+        public function testFormatConfig() {
+            echo 'test1';
+            $output = formatConfig( $this->config );
 
-            $filename = 'config-test.php';
-            file_put_contents( $filename, $output );
-            $loaded = require $filename;
-            unlink( $filename );
+            file_put_contents( $this->tempConfigFile, $output );
+            $loaded = require $this->tempConfigFile;
+            $this->assertTrue( $loaded, 'The produced content must be valid, "includable" php code.' );
+            $this->assertSame( $this->config, $loaded, 'The original config must be recovered successfully.' );
 
-            $this->assertTrue( $loaded == $config );
+            // The function seems to be working but we are also going to check the formmating by comparing against a prototype file.
+            $this->assertEquals( $this->prototypeContent, $output, 'The formating must be the same as in the prototype.' );
         }
         public function testUpdateConfig() {
             global $config;
-
+            echo 'test2';
             $oldConfig = $config;
             $oldLocalConfig = [];
             if ( file_exists( 'config/config-local.php' ) ) {
@@ -45,6 +54,10 @@
 
             $localConfig = include 'config/config-local.php';
             $this->assertEquals( $oldLocalConfig, $localConfig );
+        }
+        public function tearDown() {
+            echo 'test-1';
+            unlink( $this->tempConfigFile );
         }
     }
 
