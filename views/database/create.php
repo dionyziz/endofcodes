@@ -3,11 +3,11 @@
 
     if ( !empty( $error ) ) {
         ?><h2>Database Error: <?php
-            echo $error;
+            echo htmlspecialchars( $error );
         ?></h2><?php
             if ( !empty( $dbSaid ) ) {
                 ?><p class="alert alert-danger">MySQL said: <?php
-                    echo $dbSaid;
+                    echo htmlspecialchars( $dbSaid );
                 ?></p><?php
             }
         ?><div id="dbconfig">
