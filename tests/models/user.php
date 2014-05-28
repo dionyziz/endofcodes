@@ -125,21 +125,21 @@
 
             $user->createForgotPasswordLink();
             $this->assertDoesNotThrow(
-                function() {
+                function() use ( $user ) {
                     $user->revokePasswordCheck( $user->forgotpasswordtoken );
                 },
                 'ForgotPasswordModelInvalidTokenException',
                 'revokePasswordCheck() should validate correct tokens.'
             );
             $this->assertThrows(
-                function() {
+                function() use ( $user ) {
                     $user->revokePasswordCheck( 'dsafasfjsakf21ekjwlrfhkl321jhl' );
                 },
                 'ForgotPasswordModelInvalidTokenException',
                 'revokePasswordCheck() should not validate invalid tokens.'
             );
             $this->assertThrows(
-                function() {
+                function() use ( $user ) {
                     $user->revokePasswordCheck( '' );
                 },
                 'ForgotPasswordModelInvalidTokenException',
@@ -149,7 +149,7 @@
             $oldToken = $user->forgotpasswordtoken;
             $user->createforgotpasswordlink();
             $this->assertThrows(
-                function() {
+                function() use ( $user ) {
                     $user->revokePasswordCheck( $oldToken );
                 },
                 'ForgotPasswordModelInvalidTokenException',
@@ -158,7 +158,7 @@
 
             $user->forgotpasswordrequestcreated = date( "Y-m-d h:i:s", time() - 60 * 60 * 24 * 2 );
             $this->assertThrows(
-                function() {
+                function() use ( $user ) {
                     $user->revokePasswordCheck( $user->forgotpasswordtoken );
                 },
                 'ModelValidationException',
@@ -168,21 +168,21 @@
         public function testPasswordValidate() {
             $user = $this->buildUser( 'pkakelas' );
             $this->assertDoesNotThrow(
-                function() {
+                function() use ( $user ) {
                     $user->passwordValidate( 'Bob and Alice' );
                 },
                 'ModelValidationException',
                 'passwordValidate() should validate the default password that we have set.'
             );
             $this->assertThrows(
-                function() {
+                function() use ( $user ) {
                     $user->passwordValidate( '' );
                 },
                 'ModelValidationException',
                 'passwordValidate() should not validate empty passwords.'
             );
             $this->assertThrows(
-                function() {
+                function() use ( $user ) {
                     $user->passwordValidate( 'Bob' );
                 },
                 'ModelValidationException',
@@ -219,7 +219,7 @@
             $currentBoturl = $user->boturl;
 
             $this->assertThrows(
-                function() {
+                function() use ( $user ) {
                     $user->setBoturl( 'invalid_boturl' );
                 },
                 'ModelValidationException',
