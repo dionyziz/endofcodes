@@ -8,12 +8,12 @@
             $this->prototypeContent = file_get_contents( 'tests/helpers/formatConfig.prototype' );
 
             $this->localConfigPath = 'config/config-local.php';
-            $this->originalLocalConfigContents = file_get_contents( $this->localConfigPath );
-            $this->originalConfig = $config;
             $this->originalLocalConfig = [];
-            if ( file_exists( 'config/config-local.php' ) ) {
+            if ( file_exists( $this->localConfigPath ) ) {
                 $this->originalLocalConfig = include $this->localConfigPath;
+                $this->originalLocalConfigContents = file_get_contents( $this->localConfigPath );
             }
+            $this->originalConfig = $config;
         }
         public function testFormatConfig() {
             $someConfig = [
@@ -59,8 +59,14 @@
 
             unlink( $this->tempConfigFile );
 
+            if ( isset( $this->originalLocalConfigContents ) ) {
+                file_put_contents( $this->localConfigPath, $this->originalLocalConfigContents );
+            }
+            else if ( file_exists( $this->localConfigPath ) ) {
+                unlink( $this->localConfigPath );
+            }
             $config = $this->originalConfig;
-            file_put_contents( $this->localConfigPath, $this->originalLocalConfigContents );
+
         }
     }
 
