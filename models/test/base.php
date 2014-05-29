@@ -83,7 +83,7 @@
         }
         protected function makeEqualDescription( $expected, $actual, $description = '' ) {
             if ( $description != '' ) {
-                $description .= '. ';
+                $description .= ' ';
             }
             if ( is_array( $expected ) ) {
                 $expected = "Array " . implode( ",", $expected );
@@ -121,7 +121,7 @@
             $exceptionData = $this->callAndGetException( $function );
 
             if ( $description != '' ) {
-                $description .= '. ';
+                $description .= ' ';
             }
             $description .= "Expected exception $exception to be thrown, but it was not thrown.";
 
@@ -141,7 +141,7 @@
             $exceptionData = $this->callAndGetException( $function );
 
             if ( $description != '' ) {
-                $description .= '. ';
+                $description .= ' ';
             }
             $description .= "Expected exception $exception to be avoided, but it was thrown.";
 
