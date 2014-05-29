@@ -2,7 +2,9 @@
     class TestrunController extends ControllerBase {
         public $environment = 'test';
 
-        public function create( $name, $all = false ) {
+        public function create( $name = '' ) {
+            $all = $name == '';
+
             if ( $all ) {
                 set_time_limit( 360 );
             }
