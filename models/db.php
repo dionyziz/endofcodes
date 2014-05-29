@@ -14,6 +14,8 @@
         }
     }
     function db( $sql, $bind = [] ) {
+        global $debugger;
+
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
                 $value = mysql_real_escape_string( $value );
@@ -32,7 +34,11 @@
             unset( $bind[ $key ] );
         }
         $finalsql = strtr( $sql, $bind );
+
+        $debugger->beginQueryExecution( new DebuggerQuery( $sql, $bind ) );
         $result = mysql_query( $finalsql );
+        $debugger->finishQueryExecution();
+
         if ( $result === false ) {
             throw new DBException( 'Failed to execute query', mysql_error() );
         }

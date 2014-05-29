@@ -1,4 +1,5 @@
 <?php
+    require_once 'models/debug.php';
     require_once 'models/db.php';
     require_once 'models/base.php';
     require_once 'models/user.php';

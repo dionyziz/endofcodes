@@ -1,5 +1,5 @@
 <?php
-    class ForgotPasswordRequestController extends ControllerBase {
+    class ForgotPasswordRequestController extends AuthenticatedController {
         public function create( $input ) {
             if ( empty( $input ) ) {
                 go( 'forgotpasswordrequest', 'create', [ 'input_empty' => true ] );
@@ -27,17 +27,13 @@
             if ( $password !== $password_repeat ) {
                 go( 'forgotpasswordrequest', 'update', [ 'password_not_matched' => true, 'password_token' => $password_token ] );
             }
-            if ( isset( $_SESSION[ 'user' ] ) ) {
-                $user = $_SESSION[ 'user' ];
-            }
-            else {
-                throw new HTTPUnauthorizedException();
-            }
+            $this->requireLogin();
+            $user = $_SESSION[ 'user' ];
             try {
                 $user->revokePasswordCheck( $password_token );
             }
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
-                throw new HTTPUnauthorizedException();
+                throw new HTTPUnauthorizedException( 'Password token specified is invalid' );
             }
             try {
                 $user::passwordValidate( $password );
@@ -63,14 +59,14 @@
                     $user = User::findByUsername( $username );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    throw new HTTPNotFoundException();
+                    throw new HTTPNotFoundException( 'No such username "' . $username . '"' );
                 }
                 try {
                     $user->revokePasswordCheck( $password_token );
                     $_SESSION[ 'user' ] = $user;
                 }
                 catch ( ForgotPasswordModelInvalidTokenException $e ) {
-                    throw new HTTPUnauthorizedException();
+                    throw new HTTPUnauthorizedException( 'Password token specified is invalid' );
                 }
             }
             if ( !empty( $_SESSION[ 'user' ] ) ) {

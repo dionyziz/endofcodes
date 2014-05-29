@@ -4,12 +4,13 @@
         protected $acceptTypes = [];
         public $trusted = false;
         public $outputFormat = 'html';
+        public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
             $filename = 'controllers/' . $resource . '.php';
             if ( !file_exists( $filename ) ) {
-                throw new HTTPNotFoundException();
+                throw new HTTPNotFoundException( 'The resource "' . $filename . '" specified was invalid' );
             }
             require_once $filename;
             $controllername = ucfirst( $resource ) . 'Controller';
@@ -24,7 +25,7 @@
               || $token !== $_SESSION[ 'form' ][ 'token' ]
               || $token == '' )
             && !$this->trusted ) {
-                throw new HTTPUnauthorizedException();
+                throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
             }
         }
         protected function getControllerMethod( $requestedMethod, $httpRequestMethod ) {
@@ -136,10 +137,23 @@
         protected function init() {
             $this->getEnvironment();
             $this->getConfig();
+            $this->initDebug();
             $this->readHTTPAccept();
             $this->dbInit();
         }
+        public function initDebug() {
+            global $debugger;
+
+            if ( isset( $_SESSION[ 'debug' ] ) ) {
+                $debugger = new Debugger();
+            }
+            else {
+                $debugger = new DummyDebugger();
+            }
+        }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
+            $this->pageGenerationBegin = microtime( true );
+
             $this->init();
             $this->sessionCheck();
 
@@ -158,6 +172,9 @@
             $methodReflection = $thisReflection->getMethod( $method );
 
             return $this->callWithNamedArgs( $methodReflection, [ $this, $method ], $vars );
+        }
+        public function getPageGenerationTime() {
+            return microtime( true ) - $this->pageGenerationBegin;
         }
     }
 ?>

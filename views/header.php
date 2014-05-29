@@ -8,9 +8,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel='icon' type='image/png' href='static/images/gamepad.png' />
         <base href='<?php
-        global $config;
+            global $config;
 
-        echo $config[ 'base' ];
+            echo $config[ 'base' ];
         ?>' />
         <?php
             includeStyle( "bootstrap.min" );
@@ -25,16 +25,22 @@
             includeStyle( "links" );
             includeStyle( "game/view" );
             includeStyle( "user/view" );
+            includeStyle( "debug" );
+            includeStyle( "../jquery-ui/jquery-ui.min" );
+            includeStyle( "../jquery-ui/jquery.ui.theme" );
+
+            includeScript( 'jquery-2.1.0.min' );
+            includeScript( 'bootstrap.min' );
+            includeScript( 'prefixfree.min' );
+            includeScript( 'error' );
+            includeScript( 'logout' );
+            includeScript( 'game/view' );
+            includeScript( 'user/view' );
+            includeScript( 'user/create' );
+            includeScript( 'session/create' );
+            includeScript( 'debug' );
+            includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
         ?>
-        <script type="text/javascript" src="static/script/jquery-2.1.0.min.js"></script>
-        <script type="text/javascript" src="static/script/bootstrap.min.js"></script>
-        <script type="text/javascript" src="static/script/prefixfree.min.js"></script>
-        <script type="text/javascript" src="static/script/error.js"></script>
-        <script type="text/javascript" src="static/script/logout.js"></script>
-        <script type="text/javascript" src="static/script/game/view.js"></script>
-        <script type="text/javascript" src="static/script/user/view.js"></script>
-        <script type="text/javascript" src="static/script/user/create.js"></script>
-        <script type="text/javascript" src="static/script/session/create.js"></script>
         <meta charset="utf-8" />
     </head>
     <body>

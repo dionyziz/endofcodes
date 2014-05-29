@@ -3,12 +3,15 @@ var UserView = {
     IMAGE_HEIGHT: 168,
     IMAGE_WIDTH: 168,
     showUploadedImage: function( source ) {
-        $( ".avatar img" ).remove();
         $image = $( '<img src="' + source + '" alt="Profile Picture" />' );
         $image.load( function() {
+            $image.width( this.width );
+            $image.height( this.height );
             UserView.fixImageSize( $image );
+            $( ".avatar img" ).remove();
+            $( ".avatar" ).append( $image );
         } );
-        $( ".avatar" ).append( $image );
+        $( ".nav li img" ).attr( "src", source );
     },
     createImageError: function() {
         $( '.text-center' ).prepend( "<div class='alert alert-danger'>This isn't an image</div>" )
@@ -22,11 +25,13 @@ var UserView = {
 
         if ( imgWidth > imgHeight ) {
             $image.height( UserView.IMAGE_HEIGHT );
+            $image.width( Math.floor( UserView.IMAGE_HEIGHT * imgWidth / imgHeight ) );
             $image.css( 'top', 0 );
             $image.css( 'left', -Math.floor( ( $image.width() - UserView.IMAGE_WIDTH ) / 2 ) );
         }
         else {
             $image.width( UserView.IMAGE_WIDTH );
+            $image.height( Math.floor( UserView.IMAGE_WIDTH * imgHeight / imgWidth ) );
             $image.css( 'left', 0 );
             $image.css( 'top', -Math.floor( ( $image.height() - UserView.IMAGE_HEIGHT ) / 2 ) );
         }

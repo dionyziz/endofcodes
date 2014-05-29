@@ -1,7 +1,22 @@
 @charset "UTF-8";
+* {
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+}
+body {
+    font-family: 'Trebuchet MS', Verdana, sans-serif;
+    margin: 0;
+}
+ol, ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 div.game {
     border: 1px solid #999;
-    position: static;
+    position: absolute;
     top: 40px;
     left: 0;
     right: 200px;
@@ -24,9 +39,15 @@ div.gameboard {
     background-size: 80px 80px, 80px 80px;
     width: 100%;
     height: 100%;
-    overflow: hidden;
 }
-.gamemeta {
+header {
+    z-index: 0;
+    padding: 10px;
+    background-color: #eee;
+    position: relative;
+    width: 100%;
+}
+header .gamemeta {
     position: absolute;
     left: 0;
     right: 0;
@@ -34,9 +55,70 @@ div.gameboard {
 
     z-index: -1;
 }
-.gamemeta strong {
+header .gamemeta strong {
     font-weight: normal;
     font-size: 80%;
+}
+header .toolbar {
+    float: right;
+}
+header .toolbar a:after {
+    content: '▼';
+    padding: 5px;
+    font-size: 50%;
+    display: block;
+    float: right;
+}
+aside {
+    float: right;
+    width: 210px;
+}
+h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 110%;
+    font-weight: normal;
+    float: left;
+}
+h2 {
+    display: inline;
+    font-size: 100%;
+}
+h2:after {
+    content: ', ';
+}
+.content {
+    padding: 9px 0;
+}
+.breadcrumbs a:before {
+    content: '« ';
+}
+aside ol {
+    border-top: 1px solid #eee;
+}
+.bubble {
+    border-radius: 50px;
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 3px 0px rgba( 0, 0, 0, 0.5 );
+}
+aside ol span {
+    background-color: yellow;
+    display: block;
+    float: left;
+    margin-right: 5px;
+}
+aside ol li {
+    border-bottom: 1px solid #eee;
+    padding: 5px 3px 5px 8px;
+    font-size: 90%;
+    line-height: 19px;
+}
+aside ol li del {
+    color: #999;
+}
+aside ol li.you {
+    background-color: #ffffca;
 }
 .yellow {
     background: #fceabb; /* Old browsers */
@@ -97,74 +179,115 @@ div.gameboard {
     background-color: #333;
     border-radius: 50px;
 }
-.time {
-    position: static;
-    bottom: 0;
-    margin: 5px;
-    left: 0;
-    right: 0;
-    margin-right: 210px;
-    margin-left: 10px;
+#creature-1 {
+    left: 40px;
+    top: 40px;
 }
-.time .roundid {
-    float: right;
-    font-size: 90%;
+#creature-2 {
+    left: 60px;
+    top: 40px;
 }
-aside {
-    float: right;
-    width: 210px;
+#creature-3 {
+    left: 40px;
+    top: 60px;
 }
-aside li {
-    white-space: nowrap;
-    overflow: hidden;
+
+#creature-4 {
+    left: 500px;
+    top: 140px;
 }
-aside li:first-child {
-    border-top: 1px solid #eee;
+#creature-5 {
+    left: 500px;
+    top: 180px;
 }
-.bubble {
-    border-radius: 50px;
-    width: 20px;
-    height: 20px;
-    box-shadow: 0 0 3px 0px rgba( 0, 0, 0, 0.5 );
+#creature-6 {
+    left: 420px;
+    top: 180px;
 }
-aside ol span {
-    background-color: yellow;
+
+#creature-7 {
+    left: 320px;
+    top: 380px;
+}
+#creature-8 {
+    left: 520px;
+    top: 380px;
+}
+#creature-9 {
+    left: 620px;
+    top: 300px;
+}
+.nav {
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+    position: absolute;
     display: block;
-    float: left;
-    margin-right: 5px;
 }
-aside ol li {
-    border-bottom: 1px solid #eee;
-    padding: 5px 3px 5px 8px;
-    font-size: 90%;
-    line-height: 19px;
+.north {
+    left: 50%;
+    top: 0;
+    margin-left: -16px;
+    background-image: url('up.png');
 }
-aside ol li del {
-    color: #999;
+.south {
+    left: 50%;
+    bottom: 0;
+    margin-left: -16px;
+    background-image: url('down.png');
 }
-aside ol li.you {
-    background-color: #ffffca;
+.west {
+    left: 0;
+    bottom: 50%;
+    margin-top: -16px;
+    background-image: url('left.png');
+}
+.east {
+    right: 0;
+    bottom: 50%;
+    margin-top: -16px;
+    background-image: url('right.png');
+}
+.grid {
+    position: absolute;
+    background-color: rgba(255, 255, 200, 0.3);
+    font-size: 50%;
+    line-height: 20px;
+}
+.grid.vertical {
+    width: 20px;
+    height: 100%;
+    left: 320px;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    text-align: center;
+}
+.grid.horizontal {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    top: 380px;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    vertical-align: middle;
+    padding: 0 3px;
 }
 .infobubble {
-    z-index: 1001;
-    display: none;
     background-color: rgba(0, 0, 0, 0.7);
     color: #ccc;
     width: 150px;
     border-radius: 5px;
     position: absolute;
+    top: 290px;
+    left: 200px;
     font-size: 90%;
 }
 .infobubble:after {
     content: '▼';
     color: rgba(0, 0, 0, 0.7);
     position: absolute;
-    bottom: -15px;
+    bottom: -14px;
     right: 13px;
-}
-.infobubble.reversed:after {
-    content: '▲';
-    top: -15px;
 }
 .infobubble h3 {
     color: white;
@@ -178,48 +301,117 @@ aside ol li.you {
 }
 .infobubble .hp {
     width: 100%;
-    height: 17px;
+    height: 6px;
+    background-color: rgba(50, 255, 50, 1);
     display: block;
-    background: #92d192; /* Old browsers */
-    background: -moz-linear-gradient(top,  #92d192 0%, #5bc65b 17%, #52b152 33%, #009900 67%, #008e00 80%, #007a00 89%, #007000 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#92d192), color-stop(17%,#5bc65b), color-stop(33%,#52b152), color-stop(67%,#009900), color-stop(80%,#008e00), color-stop(89%,#007a00), color-stop(100%,#007000)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #92d192 0%,#5bc65b 17%,#52b152 33%,#009900 67%,#008e00 80%,#007a00 89%,#007000 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #92d192 0%,#5bc65b 17%,#52b152 33%,#009900 67%,#008e00 80%,#007a00 89%,#007000 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #92d192 0%,#5bc65b 17%,#52b152 33%,#009900 67%,#008e00 80%,#007a00 89%,#007000 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #92d192 0%,#5bc65b 17%,#52b152 33%,#009900 67%,#008e00 80%,#007a00 89%,#007000 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#92d192', endColorstr='#007000',GradientType=0 ); /* IE6-9 */
 }
 .infobubble .hp .damage {
-    background-color: rgba(0, 0, 0, 0.7);
-    height: 17px;
+    background-color: rgba(255, 50, 50, 1);
+    height: 6px;
     display: block;
     float: right;
 }
 .infobubble .stats {
-    overflow: hidden;
-    white-space: nowrap;
     padding: 5px;
 }
-.infobubble .numeric {
-    color: white;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
-    margin-left: 5px;
+.map {
+    width: 200px;
+    height: 150px;
+    border: 1px solid #333;
+    margin: 5px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.map .indicator {
+    width: 30px;
+    height: 20px;
+    border: 1px solid white;
+    background-color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    left: 30px;
+    top: 50px;
+}
+.map .minicreature {
+    width: 3px;
+    height: 3px;
+    position: absolute;
+}
+.minicreature:nth-child(1) {
+    top: 55px;
+    left: 35px;
+}
+.minicreature:nth-child(2) {
+    top: 55px;
+    left: 38px;
+}
+.minicreature:nth-child(3) {
+    top: 60px;
+    left: 35px;
+}
+.minicreature:nth-child(4) {
+    top: 65px;
+    left: 45px;
+}
+.minicreature:nth-child(5) {
+    top: 75px;
+    left: 55px;
+}
+.minicreature:nth-child(6) {
+    top: 75px;
+    left: 55px;
+}
+.minicreature:nth-child(7) {
+    top: 85px;
+    left: 55px;
+}
+.minicreature:nth-child(8) {
+    top: 75px;
+    left: 95px;
+}
+.minicreature:nth-child(9) {
+    top: 95px;
+    left: 55px;
+}
+.time {
+    position: absolute;
+    bottom: 0;
+    margin: 5px;
+    left: 0;
+    right: 0;
+    margin-right: 210px;
+    margin-left: 10px;
+}
+.time .slider {
+    margin: 10px 10px 0px 40px;
+    width: 80%;
+}
+.time .round {
+    float: right;
     position: relative;
-    top: 0px;
+    top: 5px;
+    font-size: 90%;
 }
-.previous {
-    display: inline;
+.time .ui-slider-horizontal {
+    height: 7px;
 }
-.next {
-    display: inline;
+.time .ui-slider-horizontal .ui-slider-handle {
+    top: -7px;
+    margin-left: -5px;
+    width: 10px;
 }
-.game-tool a, .game-tool a:link, .game-tool a:visited {
-    color: black;
-    font-size: 15pt;
+.time .control {
+    background-image: url('play.png');
+    background-repeat: no-repeat;
+    float: left;
+    width: 32px;
+    height: 32px;
+    position: relative;
+    top: -2px;
 }
-.pause {
-    display: none;
-}
-.highlight {
-    box-shadow: 1px 1px 7px black;
+form {
+    margin: auto;
+    width: 500px;
+    border: 1px solid #ccc;
 }

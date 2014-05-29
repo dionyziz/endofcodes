@@ -4,6 +4,7 @@ var GameView = {
     roundCount: 0,
     maxHp: 0,
     PIXEL_MULTIPLIER: 20,
+    playTimer: false,
     findGameAndRoundId: function( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
         var attribute, gameid, roundid;
@@ -92,8 +93,7 @@ var GameView = {
             }
         }
     },
-    getMap: function() {
-        var href = this.href;
+    loadMap: function( href ) {
         $.getJSON( href, function( creatures ) {
             var gameInfo = GameView.findGameAndRoundId( href );
             var gameid = gameInfo.gameid;
@@ -103,6 +103,8 @@ var GameView = {
 
             $( '.roundid' ).text( 'Round ' + roundid );
 
+            $( '.slider' ).slider( "value", roundid );
+
             $( '.next' ).toggle( roundid + 1 < GameView.roundCount );
             $( '.previous' ).toggle( roundid - 1 >= 0 );
             GameView.fixUrls( gameid, roundid );
@@ -111,6 +113,9 @@ var GameView = {
 
             GameView.fixUserList( creatures );
         } );
+    },
+    getMap: function() {
+        GameView.loadMap( this.href );
         return false;
     },
     fixPlane: function( $element, attributes ) {
@@ -122,6 +127,36 @@ var GameView = {
         var userid = user.getAttribute( 'data-id' );
 
         $( '.creature[data-userid=' + userid + ']' ).toggleClass( 'highlight', addShadow );
+    },
+    loadFromRoundid: function( roundid ) {
+        var gameid = $( '.gamemeta h2' ).attr( 'data-id' );
+        var href = GameView.makeUrl( gameid, roundid );
+
+        GameView.loadMap( href );
+    },
+    clearTimer: function() {
+        if ( GameView.playTimer ) {
+            clearTimeout( GameView.playTimer );
+        }
+    },
+    togglePlay: function() {
+        $( '.play' ).toggle();
+        $( '.pause' ).toggle();
+        GameView.clearTimer();
+    },
+    automaticPlay: function() {
+        var $slider = $( '.slider' );
+        var roundid = $slider.slider( 'value' ) + 1;
+
+        $slider.slider( 'value', roundid );
+        GameView.loadFromRoundid( roundid );
+
+        if ( roundid >= GameView.roundCount - 1 ) {
+            GameView.togglePlay();
+            return;
+        }
+
+        GameView.playTimer = setTimeout( GameView.automaticPlay, 1000 );
     },
     ready: function() {
         var $game = $( '.game' );
@@ -177,6 +212,25 @@ var GameView = {
         } );
         $( '.next a' ).click( GameView.getMap );
         $( '.previous a' ).click( GameView.getMap );
+        $( '.play a' ).click( function() {
+            GameView.togglePlay();
+            GameView.automaticPlay();
+
+            return false;
+        } );
+        $( '.pause a' ).click( function() {
+            GameView.togglePlay();
+
+            return false;
+        } );
+        $( '.slider' ).slider( {
+            min: 0,
+            max: GameView.roundCount - 1,
+            value: $( '.roundid' ).attr( 'data-id' ),
+            stop: function( e, ui ) {
+                GameView.loadFromRoundid( ui.value );
+            }
+        } );
     }
 }
 $( document ).ready( GameView.ready );
