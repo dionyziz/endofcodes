@@ -9,15 +9,15 @@
     }
 
     class FunctionalTestRequest {
-        protected $unittest;
+        protected $unitTest;
         public $resource;
         public $method;
         public $verb;
         public $vars;
         public $session;
 
-        public function __construct( UnitTest $unittest, $resource, $method, $session, $verb, $vars ) {
-            $this->unittest = $unittest;
+        public function __construct( UnitTest $unitTest, $resource, $method, $session, $verb, $vars ) {
+            $this->unitTest = $unitTest;
             $this->resource = $resource;
             $this->method = $method;
             $this->verb = $verb;
@@ -42,11 +42,11 @@
                 $controller->dispatch( $get, $post, [], $this->verb );
                 $content = ob_get_clean();
 
-                $response = new FunctionalTestResponse( $this->unittest, $content );
+                $response = new FunctionalTestResponse( $this->unitTest, $content );
             }
             catch ( RedirectException $e ) {
                 // maintain $_SESSION across redirect
-                $redirect = new FunctionalTestRequest( $this->unittest, $e->resource, $e->method, $_SESSION, 'GET', $e->args );
+                $redirect = new FunctionalTestRequest( $this->unitTest, $e->resource, $e->method, $_SESSION, 'GET', $e->args );
 
                 $response = $redirect->execute();
             }
@@ -58,17 +58,17 @@
     }
 
     class FunctionalTestResponse {
-        protected $unittest;
+        protected $unitTest;
         public $content;
         public $dom;
 
-        public function __construct( UnitTest $unittest, $content ) {
+        public function __construct( UnitTest $unitTest, $content ) {
             $this->content = $content;
-            $this->unittest = $unittest;
+            $this->unitTest = $unitTest;
             $this->dom = str_get_html( $content );
         }
         public function assertHas( $selector, $description = '' ) {
-            $this->unittest->assertTrue( ( bool )$this->dom->find( $selector ), $description );
+            $this->unitTest->assertTrue( ( bool )$this->dom->find( $selector ), $description );
         }
     }
 ?>
