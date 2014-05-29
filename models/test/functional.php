@@ -50,6 +50,10 @@
 
                 $response = $redirect->execute();
             }
+            catch ( HTTPErrorException $e ) {
+                $response = new FunctionalTestResponse( $this->unittest, '' );
+                $response->status = $e->error;
+            }
             // clean up
             $_SESSION = $oldSession;
 
@@ -59,6 +63,7 @@
 
     class FunctionalTestResponse {
         protected $unittest;
+        public $status = 200;
         public $content;
         public $dom;
 
@@ -69,6 +74,12 @@
         }
         public function assertHas( $selector, $description = '' ) {
             $this->unittest->assertTrue( ( bool )$this->dom->find( $selector ), $description );
+        }
+        public function assertContains( $text, $description = '' ) {
+            $this->unittest->assertTrue( strpos( $this->dom->save(), $text ) !== false, $description );
+        }
+        public function assertStatusIs( $status, $description = '' ) {
+            $this->unittest->assertEquals( $status, $this->status, $description . ". Expected $status, found " . $this->status . "." );
         }
     }
 ?>
