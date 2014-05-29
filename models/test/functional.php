@@ -68,7 +68,7 @@
             $this->dom = str_get_html( $content );
         }
         public function assertHas( $selector, $description = '' ) {
-            $this->unitTest->assertTrue( ( bool )$this->dom->find( $selector ), $description );
+            $this->unitTest->assertTrue( $this->dom->find( $selector ), $description );
         }
     }
 ?>
