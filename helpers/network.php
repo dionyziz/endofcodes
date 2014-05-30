@@ -23,14 +23,28 @@
         public function exec() {
             $response = curl_exec( $this->ch );
             if ( $response === false ) {
-                throw new CurlException( curl_errno( $this->ch ) );
+                throw new NetworkException( curl_errno( $this->ch ) );
             }
             $this->response = $response;
             $this->responseCode = curl_getinfo( $this->ch, CURLINFO_HTTP_CODE );
         }
     }
 
-    class CurlException extends Exception {
+    interface URLRetrieverInterface {
+        public function readURL( $url );
+    }
+
+    class URLRetriever implements URLRetrieverInterface {
+        public function readURL( $url ) {
+            $contents = @file_get_contents( $url );
+            if ( $contents === false ) {
+                throw new NetworkException( "Could not retrieve URL '$url'" );
+            }
+            return $contents;
+        }
+    }
+
+    class NetworkException extends Exception {
         public $error;
 
         public function __construct( $error = '' ) {
