@@ -1,5 +1,5 @@
 <?php
-    require_once 'models/curl.php';
+    require_once 'helpers/network.php';
     require_once 'models/error.php';
 
     interface GraderBotInterface {
