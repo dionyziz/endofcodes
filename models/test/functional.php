@@ -76,10 +76,10 @@
             $this->unitTest->assertTrue( $this->dom->find( $selector ), $description );
         }
         public function assertContains( $text, $description = '' ) {
-            $this->unittest->assertTrue( strpos( $this->dom->save(), $text ) !== false, $description );
+            $this->unitTest->assertTrue( strpos( $this->dom->save(), $text ) !== false, $description );
         }
         public function assertStatusIs( $status, $description = '' ) {
-            $this->unittest->assertEquals( $status, $this->status, $description . ". Expected $status, found " . $this->status . "." );
+            $this->unitTest->assertEquals( $status, $this->status, $description . ". Expected $status, found " . $this->status . "." );
         }
     }
 ?>
