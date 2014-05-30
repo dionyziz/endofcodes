@@ -5,7 +5,6 @@
 
     $form = new Form( 'testrun', 'create' );
     $form->output( function( $self ) {
-        $self->createInput( 'hidden', 'all', '', true );
         $self->createSubmit( 'Run all tests' );
     } );
 

@@ -6,8 +6,8 @@
     go( "user", "view", [ "example" => "argument" ] ); // resource & method
     go(); // home page
     */
-    function go( $resource_or_url = false, $method = false, $args = [] ) {
-        throw new RedirectException( $resource_or_url, $method, $args );
+    function go( $resourceOrURL = false, $method = false, $args = [] ) {
+        throw new RedirectException( $resourceOrURL, $method, $args );
     }
 
     class RedirectException extends Exception {
@@ -20,15 +20,15 @@
             return $this->url;
         }
 
-        public function __construct( $resource_or_url = false, $method = false, $args = [] ) {
-            if ( $resource_or_url === false ) {
+        public function __construct( $resourceOrURL = false, $method = false, $args = [] ) {
+            if ( $resourceOrURL === false ) {
                 $this->__construct( 'dashboard', 'view' );
             }
             else if ( $method === false ) {
-                $this->url = $resource_or_url;
+                $this->url = $resourceOrURL;
             }
             else {
-                $this->resource = $resource_or_url;
+                $this->resource = $resourceOrURL;
                 foreach ( $args as $key => $arg ) {
                     if ( $arg === true ) {
                         $arg = 'yes';
@@ -40,7 +40,7 @@
                 }
                 $this->method = $method;
                 $this->args = $args;
-                $this->url = $this->resource . '/' . $this->method . '?' . implode( "&", $args );
+                $this->url = $this->resource . '/' . $this->method . '?' . implode( '&', $args );
             }
         }
     }
