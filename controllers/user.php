@@ -104,7 +104,12 @@
             require_once 'models/country.php';
             $countries = Country::findAll();
             try {
-                $location = Location::getCountryName( $_SERVER[ 'REMOTE_ADDR' ] );
+                if ( isset( $_SERVER[ 'REMOTE_ADDR' ] ) ) {
+                    $location = Location::getCountryName( $_SERVER[ 'REMOTE_ADDR' ] );
+                }
+                else {
+                    $location = '';
+                }
             }
             catch ( ModelNotFoundException $e ) {
                 $location = ''; 
