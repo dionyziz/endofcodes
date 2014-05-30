@@ -70,6 +70,12 @@
             $this->response = $this->request( 'user', 'view', 'GET', [ 'username' => 'waldo' ] );
             $this->response->assertStatusIs( 404, 'Non-existing user must yield 404' );
         }
+
+        /* delete */
+        public function testDeleteLoggedout() {
+            $this->response = $this->request( 'user', 'delete', 'POST' );
+            $this->response->assertStatusIs( 401, 'Logged out user must not be able to delete any accounts' );
+        }
     }
 
     return new UserControllerTest();
