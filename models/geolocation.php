@@ -1,11 +1,13 @@
 <?php
     class Location {
+        public static $URLRetrieverObject = null;
+
         protected static function info( $ip ) {
-            return unserialize(
-                file_get_contents(
-                    'http://www.geoplugin.net/php.gp?ip=' . $ip
-                )
-            );
+            if ( is_null( self::URLRetrieverObject ) ) {
+                self::URLRetrieverObject = new URLRetriever();
+            }
+            $geoInfo = self::URLRetrieverObject->readURL( 'http://www.geoplugin.net/php.gp?ip=' . $ip );
+            return unserialize( $geoInfo );
         }
 
         public static function getCountryCode( $ip ) {
