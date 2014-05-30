@@ -40,7 +40,7 @@
                 }
                 $this->method = $method;
                 $this->args = $args;
-                $this->url = $this->resource . '/' . $this->method . '?' . implode( '&', $args );
+                $this->url = $this->resource . '/' . $this->method . '?' . implode( '&', $this->args );
             }
         }
     }

@@ -28,7 +28,7 @@
             $oldSession = $_SESSION;
             try {
                 ob_start();
-                $controller = controllerBase::findController( $this->resource );
+                $controller = ControllerBase::findController( $this->resource );
                 $controller->trusted = true;
                 $get = [ 'method' => $this->method ];
                 $post = [];
