@@ -51,7 +51,7 @@
                 $response = $redirect->execute();
             }
             catch ( HTTPErrorException $e ) {
-                $response = new FunctionalTestResponse( $this->unittest, '' );
+                $response = new FunctionalTestResponse( $this->unitTest, '' );
                 $response->status = $e->error;
             }
             // clean up
