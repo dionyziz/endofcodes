@@ -105,7 +105,12 @@
             $countries = Country::findAll();
             try {
                 if ( isset( $_SERVER[ 'REMOTE_ADDR' ] ) ) {
-                    $location = Location::getCountryName( $_SERVER[ 'REMOTE_ADDR' ] );
+                    try {
+                        $location = Location::getCountryName( $_SERVER[ 'REMOTE_ADDR' ] );
+                    }
+                    catch ( LocationException $e ) {
+                        $location = '';
+                    }
                 }
                 else {
                     $location = '';
