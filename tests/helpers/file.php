@@ -18,7 +18,10 @@
             );
         }
         private function emptyWritableDirectory() {
-            chmod( $this->directory, 0666 );
+            //chmod( $this->directory, 0666 );
+            echo exec('pwd');
+            $ls = exec('ls -l ' . $this->directory);
+            print_r( $ls );
             $this->assertDoesNotThrow(
                 function() {
                     safeWrite( $this->filename, $this->content );
@@ -48,12 +51,22 @@
             $this->emptyWritableDirectory();
             $this->readOnlyFile();
         }
-        public function tearDown() {
-            chmod( $this->filename, 0666 );
-            unlink( $this->filename );
+        private function safeUnlink( $filename ) {
+            if ( file_exists( $filename ) ) {
 
-            chmod( $this->directory, 0666 );
-            rmdir( $this->directory );
+                chmod( $filename, 0666 );
+
+                if ( is_dir( $filename ) ) {
+                    rmdir( $this->directory );
+                }
+                else {
+                    unlink( $filename );
+                }
+            }
+        }
+        public function tearDown() {
+            $this->safeUnlink( $this->filename );
+            $this->safeUnlink( $this->directory );
         }
     }
 

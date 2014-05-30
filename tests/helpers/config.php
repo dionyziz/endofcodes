@@ -32,8 +32,9 @@
             $this->assertTrue( $loaded, 'The produced content must be valid, "includable" php code.' );
             $this->assertSame( $someConfig, $loaded, 'The original config must be recovered successfully.' );
 
+            xdiff_string_diff($this->prototypeContent, $output);
             // The function seems to be working but we are also going to check the formmating by comparing against a prototype file.
-            $this->assertEquals( $this->prototypeContent, $output, 'The formating must be the same as in the prototype.' );
+            $this->assertSame( $this->prototypeContent, $output, 'The formating must be the same as in the prototype.' );
         }
         public function testUpdateConfig() {
             global $config;
