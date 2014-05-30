@@ -1,6 +1,24 @@
 <?php
     require_once 'models/geolocation.php';
 
+    class URLRetrieverMock implements URLRetrieverInterface {
+        public $realURLRetriever;
+        public $forceFail = false;
+        public $forceSuccess = false;
+        public $contents = '';
+
+        public function readFile( $url ) {
+            if ( $forceFail ) {
+                throw new NetworkException( 'Mocked URLRetriever failure' );
+            }
+            if ( $forcesuccess ) {
+                return $contents;
+            }
+            $realURLRetriever = new URLRetriever();
+            return $realURLRetriever->readFile( $url );
+        }
+    }
+
     class GeolocationTest extends UnitTestWithFixtures {
         public function testGetCountryCode() {
             $ip = '83.212.120.21'; // Gunther's IP. Located in Greece.
@@ -31,6 +49,18 @@
                 'ModelNotFoundException', 
                 'GetCountryName() must return Exception when $_SERVER[ "REMOTE_ADDR" ] does not hold a valid public ip address' 
             );
+        }
+        public function testFailure() {
+            Location::URLRetrieverObject = new URLRetrieverMock();
+            $this->assertThrows( function() {
+                Location::getCountryName( '82.212.120.21' );
+            }, 'NetworkException' );
+            $this->assertThrows( function() {
+                Location::getCountryCode( '82.212.120.21' );
+            }, 'NetworkException' );
+        }
+        public function tearDown() {
+            Location::URLRetrieverObject = new URLRetriever();
         }
     }
     
