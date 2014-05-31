@@ -1,6 +1,6 @@
 var GameView = {
     ARROW_HEIGHT: 14,
-    ARROW_WIDTH: 30,
+    ARROW_WIDTH: 27.5,
     roundCount: 0,
     maxHp: 0,
     PIXEL_MULTIPLIER: 20,
@@ -165,8 +165,8 @@ var GameView = {
             else { // bubble doesn't fit on the screen
                 positioning = -$infobubble.height() - GameView.ARROW_HEIGHT;
             }
-            $infobubble.css( 'top', $this.position().top + positioning );
-            $infobubble.css( 'left', $this.position().left - $infobubble.width() + GameView.ARROW_WIDTH );
+            $infobubble.css( 'top', $this.offset().top + positioning );
+            $infobubble.css( 'left', $this.offset().left - $infobubble.width() + GameView.ARROW_WIDTH );
         } );
         $( document ).on( "mouseout", ".creature", function() {
             var $infobubble = $( '.infobubble' );

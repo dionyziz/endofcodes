@@ -64,6 +64,17 @@
 ?>" data-height="<?php
     echo $game->height;
 ?>">
+    <div class='infobubble'>
+        <span class='hp'>
+            <span class='numeric'></span>
+            <span class='damage'></span>
+        </span>
+        <div class='stats'>
+            <h3 class="creatureid"></h3>
+            <div>Player: <strong class="player"></strong></div>
+            <div>Location: <strong class="location"></strong></div>
+        </div>
+    </div>
     <div class='gameboard'>
         <?php
             foreach ( $round->creatures as $creature ) {
@@ -94,17 +105,6 @@
                 }
             }
         ?>
-        <div class='infobubble'>
-            <span class='hp'>
-                <span class='numeric'></span>
-                <span class='damage'></span>
-            </span>
-            <div class='stats'>
-                <h3 class="creatureid"></h3>
-                <div>Player: <strong class="player"></strong></div>
-                <div>Location: <strong class="location"></strong></div>
-            </div>
-        </div>
     </div>
 </div>
 
