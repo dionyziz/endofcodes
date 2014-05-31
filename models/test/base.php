@@ -1,4 +1,5 @@
 <?php
+    require_once 'models/test/withfixtures.php';
     class UnitTestMethod {
         public $unittest;
         public $methodName;
@@ -190,7 +191,7 @@
         public function tearDown() {} // override me
     }
 
-    abstract class FunctionalTest extends UnitTest {}
+    abstract class FunctionalTest extends UnitTestWithFixtures {}
 
     class UnitTestFailedException extends Exception {
         public function __construct( $description ) {
