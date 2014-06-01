@@ -14,23 +14,20 @@
                     safeWrite( $this->filename, $this->content );
                 },
                 'FileNotWritableException',
-                'safeWrite() must throw an Exception when attempting to write to a read-only directory.'
+                'safeWrite() must throw an Exception when attempting to write to a read-only directory'
             );
         }
         private function emptyWritableDirectory() {
-            //chmod( $this->directory, 0666 );
-            echo exec('pwd');
-            $ls = exec('ls -l ' . $this->directory);
-            print_r( $ls );
+            // chmod( $this->directory, 0666 );
             $this->assertDoesNotThrow(
                 function() {
                     safeWrite( $this->filename, $this->content );
                 },
                 'FileNotWritableException',
-                'safeWrite() must not throw an Exception when attempting to write to an empty, writable directory.'
+                'safeWrite() must not throw an Exception when attempting to write to an empty, writable directory'
             );
             $read = file_get_contents( $this->filename );
-            $this->assertEquals( $this->content, $read, 'Content read must be the same passed to safeWrite().' );
+            $this->assertEquals( $this->content, $read, 'Content read must be the same passed to safeWrite()' );
         }
         private function readOnlyFile() {
             chmod( $this->filename, 0444 );
@@ -39,7 +36,7 @@
                     safeWrite( $this->filename, $this->content );
                 },
                 'FileNotWritableException',
-                'safeWrite() must throw an Exception when attempting to write a read-only file.',
+                'safeWrite() must throw an Exception when attempting to write a read-only file',
                 function( FileNotWritableException $e ) {
                     $this->assertEquals( $this->filename, $e->filename );
                     $this->assertEquals( $this->content, $e->content );
