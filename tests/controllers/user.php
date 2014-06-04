@@ -11,7 +11,7 @@
                 'month'            => 11,
                 'year'             => 1987
             ] );
-            $response->assertHas( 'a[href="user/view?username=dionyziz"]', 'User must be logged in after registration' );
+            $response->assertHas( '.navbar-nav a[href="user/view?username=dionyziz"]', 'User must be logged in after registration' );
         }
     }
 
