@@ -1,7 +1,7 @@
 <?php
     abstract class ControllerBase {
-        protected $environment = 'development';
         protected $acceptTypes = [];
+        public $environment = 'development';
         public $trusted = false;
         public $outputFormat = 'html';
         public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
@@ -97,8 +97,8 @@
         protected function loadConfig() {
             global $config;
 
-            if ( getEnv( 'ENVIROMENT' ) !== false ) {
-                $env = getEnv( 'ENVIROMENT' );
+            if ( getEnv( 'ENVIRONMENT' ) !== false ) {
+                $env = getEnv( 'ENVIRONMENT' );
             }
             else {
                 $env = $this->environment;
