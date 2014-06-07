@@ -1,14 +1,14 @@
 <?php
+    require_once 'helpers/copy.php';
     class GamescriptTest extends FunctionalTest {
         public function testGamescript() {
             global $config;
 
-            $user = new User();
-            $user->username = 'sample_username';
-            $user->email = 'sample@gmail.com';
-            $user->password = 'secret1234';
-            $user->boturl = $config[ 'base' ] . 'bots/php';
-            $user->save();
+            $copyName = $config[ 'base' ] . 'bots/mock';
+            recurse_copy( $config[ 'base' ] . 'bots/php', $copyName );
+            file_put_contents( $copyName, str_replace( 'sample_username', 'sample_username2', file_get_contents( $copyName ) );
+            $this->buildUser( 'sample_username' );
+            $this->buildUser( 'sample_username2', $copyName );
             exec( "ENVIRONMENT=test ./gamescript.sh", $output );
             $created = true;
             try {
