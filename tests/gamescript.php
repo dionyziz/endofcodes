@@ -23,7 +23,6 @@
                 $created = false;
             }
             $this->assertTrue( $created, 'A game must be created' );
-            die( '' . count( $lastGame->rounds ) );
             $this->assertTrue( $lastGame->ended, 'The game must be finished' );
         }
     }
