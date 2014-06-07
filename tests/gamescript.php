@@ -2,6 +2,7 @@
     require_once 'helpers/file.php';
     class GamescriptTest extends FunctionalTest {
         protected $mockPath = 'bots/mock';
+
         public function setUp() {
             $mockPath = $this->mockPath;
             recursiveCopy( 'bots/php', $mockPath );
