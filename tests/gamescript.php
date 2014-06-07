@@ -4,7 +4,7 @@
         protected $mockPath = 'bots/mock';
         public function setUp() {
             $mockPath = $this->mockPath;
-            recurse_copy( 'bots/php', $mockPath );
+            recursiveCopy( 'bots/php', $mockPath );
             file_put_contents( $mockPath . '/bot.php', str_replace( 'sample_username', 'sample_username2', file_get_contents( $mockPath . '/bot.php' ) ) );
         }
         public function tearDown() {
@@ -27,6 +27,5 @@
             $this->assertTrue( $lastGame->ended, 'The game must be finished' );
         }
     }
-    
     return new GamescriptTest();
 ?>
