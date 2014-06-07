@@ -8,7 +8,7 @@
             file_put_contents( $mockPath . '/bot.php', str_replace( 'sample_username', 'sample_username2', file_get_contents( $mockPath . '/bot.php' ) ) );
         }
         public function tearDown() {
-            recurse_delete( 'bots/mock' );
+            $this->rrmdir( 'bots/mock' );
         }
         public function testGamescript() {
             global $config;
