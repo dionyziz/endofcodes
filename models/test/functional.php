@@ -1,7 +1,7 @@
 <?php
     require_once 'models/lib/simple_html_dom.php';
 
-    abstract class FunctionalTest extends UnitTest {
+    abstract class FunctionalTest extends UnitTestWithFixtures {
         public function request( $resource, $method, $verb = 'GET', $vars = [] ) {
             $request = new FunctionalTestRequest( $this, $resource, $method, [], $verb, $vars );
             return $request->execute();

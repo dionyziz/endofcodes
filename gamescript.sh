@@ -1,3 +1,2 @@
 #!/bin/bash
-php run game create;
-php run game update gameid=$( command ) finishit=yes;
+php run game update gameid=$( php run game create ) finishit=yes;
