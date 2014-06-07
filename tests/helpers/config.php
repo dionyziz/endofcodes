@@ -6,8 +6,6 @@
             $this->tempConfigFile = 'tests/helpers/config-test.temp';
             touch( $this->tempConfigFile );
             $this->prototypeContent = file_get_contents( 'tests/helpers/formatConfig.prototype' );
-            // Convert all newlines to \n.
-            $this->prototypeContent = preg_replace( '/(\r\n|\r|\n)/', "\n", $this->prototypeContent );
 
             $this->localConfigPath = 'config/config-local.php';
             $this->originalLocalConfig = [];
