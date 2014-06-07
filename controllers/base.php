@@ -1,9 +1,10 @@
 <?php
     abstract class ControllerBase {
-        protected $environment = 'development';
         protected $acceptTypes = [];
+        public $environment = 'development';
         public $trusted = false;
         public $outputFormat = 'html';
+        public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -126,11 +127,24 @@
             }
         }
         protected function init() {
+            $this->initDebug();
             $this->loadConfig();
             $this->readHTTPAccept();
             dbInit();
         }
+        public function initDebug() {
+            global $debugger;
+
+            if ( isset( $_SESSION[ 'debug' ] ) ) {
+                $debugger = new Debugger();
+            }
+            else {
+                $debugger = new DummyDebugger();
+            }
+        }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
+            $this->pageGenerationBegin = microtime( true );
+
             $this->init();
             $this->sessionCheck();
 
@@ -150,6 +164,9 @@
             $methodReflection = $thisReflection->getMethod( $method );
 
             return $this->callWithNamedArgs( $methodReflection, [ $this, $method ], $vars );
+        }
+        public function getPageGenerationTime() {
+            return microtime( true ) - $this->pageGenerationBegin;
         }
     }
 ?>

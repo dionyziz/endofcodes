@@ -1,9 +1,4 @@
 @charset "UTF-8";
-.next a, .next a:link, .next a:visited,
-.previous a, .previous a:link, .previous a:visited {
-    color: black;
-    font-size: 15pt;
-}
 div.game {
     border: 1px solid #999;
     position: static;
@@ -217,6 +212,13 @@ aside ol li.you {
 }
 .next {
     display: inline;
+}
+.game-tool a, .game-tool a:link, .game-tool a:visited {
+    color: black;
+    font-size: 15pt;
+}
+.pause {
+    display: none;
 }
 .highlight {
     box-shadow: 1px 1px 7px black;
