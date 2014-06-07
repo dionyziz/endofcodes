@@ -1,5 +1,5 @@
 <?php
-    require_once 'helpers/copy.php';
+    require_once 'helpers/file.php';
     class GamescriptTest extends FunctionalTest {
         public function setUp() {
             $copyName = 'bots/mock';
