@@ -30,11 +30,4 @@
         closedir( $dir );
         rmdir( $src );
     }
-    function recurse_chmod( $src, $mode ) {
-        $iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $src ), RecursiveIteratorIterator::SELF_FIRST );
-
-        foreach ( $iterator as $item ) {
-            chmod( $item, $mode );
-        }
-    }
 ?>
