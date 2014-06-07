@@ -1,10 +1,11 @@
 <?php
     require_once 'helpers/file.php';
     class GamescriptTest extends FunctionalTest {
+        protected $mockPath = 'bots/mock';
         public function setUp() {
-            $copyName = 'bots/mock';
-            recurse_copy( 'bots/php', $copyName );
-            file_put_contents( $copyName . '/bot.php', str_replace( 'sample_username', 'sample_username2', file_get_contents( $copyName . '/bot.php' ) ) );
+            $mockPath = $this->mockPath;
+            recurse_copy( 'bots/php', $mockPath );
+            file_put_contents( $mockPath . '/bot.php', str_replace( 'sample_username', 'sample_username2', file_get_contents( $mockPath . '/bot.php' ) ) );
         }
         public function tearDown() {
             recurse_delete( 'bots/mock' );
@@ -13,7 +14,7 @@
             global $config;
 
             $this->buildUser( 'sample_username' );
-            $this->buildUser( 'sample_username2', $config[ 'base' ] . 'bots/mock' );
+            $this->buildUser( 'sample_username2', $config[ 'base' ] . $this->mockPath );
             exec( "ENVIRONMENT=test ./gamescript.sh", $output );
             $created = true;
             try {

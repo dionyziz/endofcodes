@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule bot bot.php
+RewriteRule game game.php
+RewriteRule round round.php
