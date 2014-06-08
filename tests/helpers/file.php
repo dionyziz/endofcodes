@@ -1,17 +1,21 @@
 <?php
     require_once 'helpers/file.php';
     class TestFile extends UnitTestWithFixtures {
-        public function tearDown() {
-            $this->rrmdir( 'tests/mock' );
-        }
-        public function testRecursiveCopy() {
-            $base = 'tests/mock';
-            $path = 'depth1/depth2/depth3';
-            mkdir( $base . '/' . $path, 0777, true );
-            file_put_contents( $base . '/' . $path . '/magic.php', '' );
+        protected $mockPath = 'tests/mock/';
+        protected $copyPath = 'tests/mock2/';
 
-            recursiveCopy( $base, $base . '/deeper' );
-            $this->assertTrue( file_exists( $base . '/deeper/' . $path . '/magic.php' ), 'The folder must be copied' );
+        public function testRecursiveCopy() {
+            $path = 'depth1/depth2/depth3';
+            mkdir( $this->mockPath . $path, 0777, true );
+            mkdir( $this->copyPath, 0777, true );
+            touch( $this->mockPath . $path . '/magic.php' );
+
+            recursiveCopy( $this->mockPath, $this->copyPath . 'deeper' );
+            $this->assertTrue( file_exists( $this->copyPath . 'deeper/' . $path . '/magic.php' ), 'The folder must be copied' );
+        }
+        public function tearDown() {
+            $this->rrmdir( $this->copyPath );
+            $this->rrmdir( $this->mockPath );
         }
     }
     return new TestFile();
