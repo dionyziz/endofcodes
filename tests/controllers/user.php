@@ -14,8 +14,6 @@
                 'month'            => 11,
                 'year'             => 1987
             ];
-            $this->makeCreateRequest();
-            $this->response->assertHas( '.navbar-nav a[href="user/view?username=dionyziz"]', 'User must be logged in after registration' );
         }
 
         /* create */
@@ -29,18 +27,18 @@
         }
         public function testCreate() {
             $this->makeCreateRequest();
-            $this->response->assertHas( 'a[href="user/view?username=dionyziz"]', 'User must be logged in after registration' );
+            $this->response->assertHas( '.navbar-nav a[href="user/view?username=dionyziz"]', 'User must be logged in after registration' );
         }
         public function testCreateWithoutDob() {
             unset( $this->userDetails[ 'day' ] );
             unset( $this->userDetails[ 'month' ] );
             unset( $this->userDetails[ 'year' ] );
             $this->makeCreateRequest();
-            $this->response->assertHas( 'a[href="user/view?username=dionyziz"]', 'Date of birth must be optional during registration' );
+            $this->response->assertHas( '.navbar-nav a[href="user/view?username=dionyziz"]', 'Date of birth must be optional during registration' );
         }
         public function testPasswordRepeat() {
             $this->assertValidates(
-                [ 'password_repeat' => 'secretWRONG' ], 
+                [ 'password_repeat' => 'secretWRONG' ],
                 'Passwords do not match',
                 'User must not be created if passwords do not match'
             );
