@@ -4,9 +4,9 @@
 
         protected static function info( $ip ) {
             if ( is_null( self::URLRetrieverObject ) ) {
-                self::URLRetrieverObject = new URLRetriever();
+                self::$URLRetrieverObject = new URLRetriever();
             }
-            $geoInfo = self::URLRetrieverObject->readURL( 'http://www.geoplugin.net/php.gp?ip=' . $ip );
+            $geoInfo = self::$URLRetrieverObject->readURL( 'http://www.geoplugin.net/php.gp?ip=' . $ip );
             return unserialize( $geoInfo );
         }
 
