@@ -12,6 +12,7 @@
     $controller->trusted = true;
     $controller->outputFormat = 'text';
 
+    $vars = [];
     foreach ( $argv as $arg ) {
         list( $key, $value ) = explode( '=', $arg, 2 );
         $vars[ $key ] = $value;
@@ -19,6 +20,9 @@
 
     try {
         exit( $controller->dispatch( [ 'method' => $method ], $vars, [], 'POST' ) );
+    }
+    catch ( HTTPErrorException $e ) {
+        die( 'An HTTP error occurred: ' . $e->header );
     }
     catch ( NotImplemented $e ) {
         die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() . "\n" );

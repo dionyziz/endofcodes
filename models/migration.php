@@ -1,31 +1,10 @@
 <?php
     abstract class Migration {
-        protected static function migrate( $sql ) {
-            global $config;
-            
-            $env = getEnv( 'ENVIRONMENT' );
+        public static $log = 'database/migration/.history';
+        public static $path = 'database/migration/';
+        public static $environments = [ 'development', 'test' ];
 
-            if ( $env === false ) { 
-                $pref = "";
-                $env = 'test';
-            }
-            else {
-                $pref = "../../";
-            }
-            
-            if ( file_exists( $pref . 'config/config-local.php' ) ) {
-                require_once $pref . 'config/config-local.php';
-            }
-            else {
-                require_once $pref . 'config/config.php';
-            }
-            require_once $pref . 'models/database.php';
-            require_once $pref . 'models/db.php';
-
-
-            $config = getConfig()[ $env ]; 
-            dbInit();
-
+        public static function migrate( $sql ) {
             try {
                 $res = db( $sql );
             }
@@ -33,19 +12,73 @@
                 throw new MigrationException( $e );
             }
         } 
-        
-        public static function run( $sql ) {
+
+        public static function createLog( $name, $env ) {
+            if ( file_exists( static::$log ) ) {
+                $data = file_get_contents( static::$log );
+                $array = json_decode( $data, true );
+            }
+            $array[ $env ] = $name;
+            $data = json_encode( $array );
+            file_put_contents( static::$log, $data );
+        }
+
+        public static function findUnexecuted( $env = '' ) {
+            if ( empty( $env ) ) {
+                $list = [];
+                foreach ( static::$environments as $env ) {
+                    $list[ $env ] = self::getUnexecuted( $env );
+                }
+                return $list;
+            } 
+            return self::getUnexecuted( $env );
+        }
+
+        protected static function getUnexecuted( $env ) {
             try {
-                self::migrate( $sql );
+                $last = self::findLast( $env );
             }
-            catch ( MigrationException $e ) {
-                throw $e;
+            catch ( ModelNotFoundException $e ) {
+                return self::findAll();
             }
-            echo "Migration successful.\n"; 
+            $migrations = self::findAll();
+            $position = array_search( $last, $migrations );
+            return array_slice( $migrations, $position + 1 );
+        }
+
+        public static function findLast( $env = '' ) {
+            $touched = true;
+            if ( !file_exists( static::$log ) ) {
+                $touched = touch( static::$log );
+            }
+            if ( $touched ) {
+                $logs = file_get_contents( static::$log );
+            }
+            if ( empty( $logs ) ) {
+                throw new ModelNotFoundException();
+            }
+            $array = json_decode( $logs, true );
+            if ( empty( $env ) ) {
+                return $array;
+            }
+            if ( !isset( $array[ $env ] ) ) {
+                throw new ModelNotFoundException();
+            }
+            return $array[ $env ];
+        }
+
+        public static function findAll() {
+            $array = [];
+            foreach ( glob( static::$path . '*.php' ) as $filename ) {
+                $filename = str_replace( static::$path, '', $filename );
+                $array[] = $filename;
+            }
+            sort( $array );
+            return $array;
         }
 
         public static function addField( $table, $field, $description ) {
-            self::run( 
+            self::migrate( 
                 "ALTER TABLE
                     $table
                 ADD COLUMN
@@ -54,7 +87,7 @@
         }
  
         public static function alterField( $table, $oldName, $newName, $description ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 CHANGE
@@ -63,7 +96,7 @@
         }
     
         public static function dropField( $table, $field ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 DROP COLUMN
@@ -72,14 +105,14 @@
         }
 
         public static function dropTable( $table ) {
-            self::run(
+            self::migrate(
                 "DROP TABLE 
                     $table;"
             ); 
         }
 
         public static function dropPrimaryKey( $table ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 DROP PRIMARY KEY;"
@@ -88,7 +121,7 @@
 
         public static function addPrimaryKey( $table, $name, $columns = [] ) {
             $columns = implode( ',', $columns );
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 ADD CONSTRAINT $name PRIMARY KEY ( $columns );"
@@ -96,7 +129,7 @@
         }
 
         public static function dropIndex( $table, $name ) {
-            self::run(
+            self::migrate(
                 "ALTER TABLE
                     $table
                 DROP INDEX
@@ -150,7 +183,7 @@
                 $attributes = array_merge( $attributes, $args );
             } 
             $attributes = implode( ',', $attributes );
-            self::run(
+            self::migrate(
                 "CREATE TABLE IF NOT EXISTS
                     $tableName (
                         $attributes

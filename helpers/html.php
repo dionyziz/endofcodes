@@ -4,6 +4,7 @@
         protected $resource;
         protected $method;
         public $id;
+        public $attributes;
         public $formMethod;
         protected $hasFile = false;
         protected $token;
@@ -43,12 +44,12 @@
         }
 
         public function createError( $error_msg ) {
-            ?><p class="error"><?php
+            ?><p class="alert alert-danger"><?php
                 echo htmlspecialchars( $error_msg );
             ?></p><?php
         }
 
-        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $checked = false ) {
+        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = '' ) {
             if ( !Form::isValidType( $type ) ) {
                 $type = 'text';
             }
@@ -73,17 +74,22 @@
                         echo htmlspecialchars( $value );
                     ?>" <?php
                 }
-                if ( $type == 'checkbox' && $checked ) {
-                    ?>checked="yes"<?php
+                if ( !empty( $attributes ) ) {
+                    foreach ( $attributes as $key => $value ) {
+                        echo $key; 
+                        ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
                 }
             ?> /></p><?php
         }
 
-        public function createSubmit( $value ) {
-            $this->createInput( 'submit', '', '', $value );
+        public function createSubmit( $value, $attributes = '' ) {
+            $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $name = '', $id = '', $option_array ) {
+        public function createSelect( $optionArray, $name = '', $selected = '', $id = '', $attributes = '' ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -95,16 +101,25 @@
                         echo htmlspecialchars( $id );
                     ?>" <?php
                 }
+                if ( !empty( $attributes ) ) {
+                    foreach ( $attributes as $key => $value ) {
+                        echo $key; 
+                        ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
+                }
             ?>><?php
-            foreach ( $option_array as $option ) {
-                ?><option <?php
-                    if ( isset( $option[ 'value' ] ) ) {
-                        ?>value="<?php
-                            echo htmlspecialchars( $option[ 'value' ] );
-                        ?>"<?php
+            foreach ( $optionArray as $value => $content ) {
+                ?><option 
+                    value="<?php
+                        echo htmlspecialchars( $value );
+                    ?>"<?php
+                    if ( $selected == $content ) {
+                        ?> selected="selected"<?php
                     }
                 ?>><?php
-                    echo htmlspecialchars( $option[ 'content' ] );
+                    echo htmlspecialchars( $content );
                 ?></option><?php
             }
             ?></select></p><?php
@@ -132,10 +147,15 @@
             ?></label><?php
         }
 
-        public function output( $callable ) {
-            ob_start();
-            $callable( $this );
-            $out = ob_get_clean();
+        public function output( $callable = false ) {
+            if ( $callable != false ) {
+                ob_start();
+                $callable( $this );
+                $out = ob_get_clean();
+            }
+            else {
+                $out = "";
+            }
             if ( !isset( $_SESSION[ 'form' ][ 'token' ] ) ) {
                 $this->token = $_SESSION[ 'form' ][ 'token' ] = FormToken::create();
             }
@@ -153,6 +173,14 @@
                     ?>id="<?php
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
+                }
+                if ( isset( $this->attributes ) ) {
+                    foreach( $this->attributes as $key => $value ) {
+                        echo $key; 
+                        ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
                 }
                 ?>action="<?php
                     echo htmlspecialchars( $this->resource );
@@ -191,5 +219,22 @@
             href="<?php
                 echo htmlspecialchars( "static/style/" . $path . ".css" );
             ?>" /><?php
+    }
+
+    function includeScript( $path ) {
+        ?><script type="text/javascript" src="static/script/<?php
+            echo $path;
+        ?>.js"></script><?php
+    }
+
+    function createSelectPrepare( $array, $title = '', $keys = '' ) {
+        if ( empty( $keys ) ) {
+            $keys = $array;
+        }
+        $array = array_combine( $keys, $array );
+        if ( !empty( $title ) ) {
+            $array = compact( 'title' ) + $array;
+        }
+        return $array; 
     }
 ?>

@@ -1,6 +1,8 @@
 <?php
     require 'views/header.php';
+?>
 
+<div class="text-center"><?php
     if( isset( $valid_bot ) ) {
         ?><p>Your bot is set up to play the next game</p><?php
     }
@@ -8,6 +10,8 @@
     $form = new Form( 'user', 'update' );
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong,
                                           $password_new_not_matched, $password_new_small, $countries, $user ) {
+        global $config;
+
         ?><p>Change email</p><?php
         $self->createLabel( 'email', 'Email' );
         if ( isset( $email_invalid ) ) {
@@ -34,28 +38,31 @@
         $self->createLabel( 'password_repeat', 'Repeat' );
         $self->createInput( 'password', 'password_repeat', 'password_repeat' );
         ?><p>Change country</p><?php
-        $countries_select_array = [ [ 'content' => 'Select Country' ] ];
+        $countries_select_array[] = 'Select Country';
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
+            $countries_select_array[ $country->shortname ] = $country->name;
         }
-        $self->createSelect( 'countryid', '', $countries_select_array );
-        $self->createInput( 'submit', '', '', 'Save settings' );
-    } );
-
-    $form = new Form( 'image', 'create' );
-    $form->output( function( $self ) use( $image_invalid ) {
-        $self->createLabel( 'image', 'Upload an avatar' );
-        if ( isset( $image_invalid ) ) {
-            $self->createError( "This isn't an image" );
-        }
-        $self->createInput( 'file', 'image', 'image' );
-        $self->createInput( 'submit', '', '', 'Upload' );
+        $self->createSelect( $countries_select_array, 'countryShortname' );
+        $self->createLabel( 'dob', 'Date of birth' );
+        $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
+        $self->createSelect( $days, 'day' );
+        $months = createSelectPrepare( range( 1, 12 ), 'Select Month' );
+        $self->createSelect( $months, 'month' );
+        $current_year = date( 'Y' );
+        $years = createSelectPrepare (
+            range( $current_year - $config[ 'age' ][ 'min' ], $current_year - $config[ 'age' ][ 'max' ] ),
+            'Select Year'
+        );
+        $self->createSelect( $years, 'year' );
+        $self->createSubmit( 'Save settings' );
     } );
 
     $form = new Form( 'user', 'delete' );
     $form->output( function( $self ) {
-        $self->createInput( 'submit', '', '', 'Delete your account' );
+        $self->createSubmit( 'Delete your account' );
     } );
+?></div>
 
-    require 'views/footer.php';
+<?php
+    require 'views/footer/view.php';
 ?>

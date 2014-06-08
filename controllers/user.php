@@ -1,13 +1,13 @@
 <?php
-    class UserController extends ControllerBase {
+    class UserController extends AuthenticatedController {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '',
-                                $countryid = '', $day = '', $month = '', $year = '' ) {
+                                $countryShortname = '', $day = '', $month = '', $year = '' ) {
             require_once 'models/country.php';
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', [ 'password_not_matched' => true ] );
             }
             try {
-                $country = new Country( $countryid );
+                $country = Country::findByShortname( $countryShortname );
             }
             catch ( ModelNotFoundException $e ) {
                 $country = new Country();
@@ -29,9 +29,9 @@
             go();
         }
 
-        public function view( $username ) {
+        public function view( $username, $image_invalid ) {
             if ( $username === NULL ) {
-                throw new HTTPNotFoundException();
+                throw new HTTPNotFoundException( 'The username provided was empty' );
             }
             require_once 'models/extentions.php';
             require_once 'models/image.php';
@@ -44,23 +44,24 @@
                 throw new HTTPNotFoundException();
             }
             if ( isset( $_SESSION[ 'user' ] ) ) {
-                try {
-                    $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id );
-                    $followExists = true;
-                }
-                catch ( ModelNotFoundException $e ) {
-                    $followExists = false;
+                $sameUser = $_SESSION[ 'user' ]->id == $user->id;
+                if ( !$sameUser ) {
+                    try {
+                        $follow = new Follow( $_SESSION[ 'user' ]->id, $user->id );
+                        $followExists = true;
+                    }
+                    catch ( ModelNotFoundException $e ) {
+                        $followExists = false;
+                    }
                 }
             }
             require_once 'views/user/view.php';
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
-                $countryid = '', $email = '' ) {
+                                $countryShortname = '', $email = '', $day = '', $month = '', $year = '' ) {
+            $this->requireLogin();
             require_once 'models/country.php';
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthorizedException();
-            }
             $user = $_SESSION[ 'user' ];
             if ( !empty( $password_new ) || !empty( $password_repeat ) ) {
                 if ( $user->authenticatesWithPassword( $password ) ) {
@@ -74,8 +75,9 @@
                 }
             }
             $user->email = $email;
+            $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
-                $user->country = new Country( $countryid );
+                $user->country = Country::findByShortname( $countryShortname );
             }
             catch ( ModelNotFoundException $e ) {
             }
@@ -89,9 +91,7 @@
         }
 
         public function delete() {
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthorizedException();
-            }
+            $this->requireLogin();
             $user = $_SESSION[ 'user' ];
             $user->delete();
             unset( $_SESSION[ 'user' ] );
@@ -99,18 +99,23 @@
         }
 
         public function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid,
-                $password_empty, $password_not_matched, $password_small ) {
+                                    $password_empty, $password_not_matched, $password_small ) {
+            require_once 'models/geolocation.php';
             require_once 'models/country.php';
             $countries = Country::findAll();
+            try {
+                $location = Location::getCountryName( $_SERVER[ 'REMOTE_ADDR' ] );
+            }
+            catch ( ModelNotFoundException $e ) {
+                $location = ''; 
+            }
             require 'views/user/create.php';
         }
 
         public function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong,
-                $email_invalid, $email_used ) {
+                                    $email_invalid, $email_used ) {
+            $this->requireLogin();
             require_once 'models/country.php';
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthorizedException();
-            }
             $user = $_SESSION[ 'user' ];
             $countries = Country::findAll();
             require 'views/user/update.php';

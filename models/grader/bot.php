@@ -1,5 +1,6 @@
 <?php
     require_once 'models/curl.php';
+    require_once 'models/error.php';
 
     interface GraderBotInterface {
         public function __construct( User $user );
@@ -21,6 +22,23 @@
             $this->curlConnectionObject = new CurlConnection();
             $this->user = $user;
             $this->url = $user->boturl;
+        }
+        protected function reportError( $description, $expected = '', $actual = '' ) {
+            $this->errors[] = [
+                'description' => $description,
+                'expected' => $expected,
+                'actual' => $actual
+            ];
+            $error = new Error();
+            $error->description = $description;
+            $error->expected = $expected;
+            $error->actual = $actual;
+            $error->user = $this->user;
+            if ( isset( $this->game ) ) {
+                $error->game = $this->game;
+            }
+            $error->save();
+            throw new GraderBotException( $error );
         }
         protected function httpRequest( $endpoint = '', $method = 'view', $data = array() ) {
             switch ( $method ) {
@@ -73,6 +91,11 @@
                 }
                 throw $e;
             }
+            $expectedJson = json_encode( [
+                'botname' => 'your_botname',
+                'version' => 'your_botversion',
+                'username' => $this->user->username
+            ] );
 
             if ( $ch->responseCode !== 200 ) {
                 $this->reportError( 'initiate_http_code_not_ok', '200', $ch->responseCode );
@@ -80,19 +103,19 @@
 
             $decodedResponse = json_decode( $ch->response );
             if ( $decodedResponse === null ) {
-                $this->reportError( 'initiate_invalid_json' );
+                $this->reportError( 'initiate_invalid_json', $expectedJson, $ch->response );
             }
             $requiredAttributes = [ 'botname', 'version', 'username' ];
             foreach ( $requiredAttributes as $attribute ) {
                 if ( !isset( $decodedResponse->$attribute ) ) {
-                    $this->reportError( 'initiate_' . $attribute . '_not_set' );
+                    $this->reportError( 'initiate_' . $attribute . '_not_set', $expectedJson, $ch->response );
                 }
             }
             if ( count( ( array )$decodedResponse ) > count( $requiredAttributes ) ) {
-                $this->reportError( 'initiate_additional_data' );
+                $this->reportError( 'initiate_additional_data', $expectedJson, $ch->response );
             }
             if ( $this->user->username !== $decodedResponse->username ) {
-                $this->reportError( 'initiate_username_mismatch' );
+                $this->reportError( 'initiate_username_mismatch', $this->user->username, $decodedResponse->username );
             }
             $this->version = $decodedResponse->version;
             $this->botname = $decodedResponse->botname;
@@ -112,14 +135,6 @@
                 $this->reportError( 'game_additional_data' );
             }
         }
-        protected function reportError( $error, $expected = '', $actual = '' ) {
-            $this->errors[] = [
-                'error' =>$error,
-                'expected' => $expected,
-                'actual' => $actual
-            ];
-            throw new GraderBotException( $error, $expected, $actual );
-        }
         public function sendRoundRequest( Round $round ) {
             $gameid = $round->game->id;
             try {
@@ -135,6 +150,9 @@
             if ( !isset( $decodedResponse->intent ) ) {
                 $this->reportError( 'round_intent_not_set' );
             }
+            if ( count( ( array )$decodedResponse ) > 1 ) {
+                $this->reportError( 'round_additional_data' );
+            }
             $requiredAttributes = [ 'creatureid', 'direction', 'action' ];
             foreach ( $decodedResponse->intent as $creatureIntent ) {
                 foreach ( $requiredAttributes as $attribute ) {
@@ -146,12 +164,12 @@
                     }
                 }
             }
-            if ( count( ( array )$decodedResponse->intent[ 0 ] ) > count( $requiredAttributes ) ) {
-                $this->reportError( 'round_additional_data' );
-            }
             $collection = [];
             $round = $this->game->getCurrentRound();
             foreach ( $decodedResponse->intent as $creatureIntentData ) {
+                if ( count( ( array )$creatureIntentData ) > count( $requiredAttributes ) ) {
+                    $this->reportError( 'round_intent_additional_data' );
+                }
                 if ( !isset( $round->creatures[ $creatureIntentData->creatureid ] ) ) {
                     $this->reportError( 'round_invalid_creatureid' );
                 }
@@ -181,12 +199,10 @@
 
     class GraderBotException extends Exception {
         public $error;
-        public $expected;
-        public $actual;
 
-        public function __construct( $error, $expected = '', $actual = '' ) {
+        public function __construct( Error $error ) {
             $this->error = $error;
-            parent::__construct( "Grader bot error: $error" );
+            parent::__construct( "Grader bot error: $error->description. Expected: $error->expected. Actual: $error->actual." );
         }
     }
 ?>

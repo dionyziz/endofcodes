@@ -25,7 +25,7 @@
     $form->id = 'register-form';
     $form->output( function( $self ) use( $username_empty, $username_invalid, $password_empty,
             $email_empty, $username_used, $password_small,
-            $password_not_matched, $email_used, $email_invalid, $countries ) {
+            $password_not_matched, $email_used, $email_invalid, $countries, $location ) {
         global $config;
 
         if ( isset( $username_empty ) ) {
@@ -80,32 +80,23 @@
         }
         $self->createInput( 'text', 'email', 'email', $email_value );
         $self->createLabel( 'dob', 'Date of birth' );
-        $days_select_array = [ [ 'content' => 'Select Day' ] ];
-        for ( $i = 1; $i <= 31; ++$i ) {
-            $days_select_array[] = [ 'value' => $i, 'content' => $i ];
-        }
-        $self->createSelect( 'day', 'dob', $days_select_array );
-        $months_select_array = [ [ 'content' => 'Select Month' ] ];
-        for ( $i = 1; $i <= 12; ++$i ) {
-            $months_select_array[] = [
-                'value' => $i,
-                'content' => date( 'M', mktime( 0, 0, 0, $i, 1, 2000 ) )
-            ];
-        }
-        $self->createSelect( 'month', '', $months_select_array );
-        $years_select_array = [ [ 'content' => 'Select Year' ] ];
+        $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
+        $self->createSelect( $days, 'day' );
+        $months = createSelectPrepare( range( 1, 12 ), 'Select Month' );
+        $self->createSelect( $months, 'month' );
         $current_year = date( 'Y' );
-        for ( $i = $current_year - $config[ 'age' ][ 'min' ]; $i >= $current_year - $config[ 'age' ][ 'max' ]; --$i ) {
-            $years_select_array[] = [ 'value' => $i, 'content' => $i ];
-        }
-        $self->createSelect( 'year', '', $years_select_array );
-        $countries_select_array = [ [ 'content' => 'Select Country' ] ];
+        $years = createSelectPrepare (
+            range( $current_year - $config[ 'age' ][ 'min' ], $current_year - $config[ 'age' ][ 'max' ] ),
+            'Select Year'
+        );
+        $self->createSelect( $years, 'year' );
+        $countriesSelectArray[] = 'Select Country';
         foreach ( $countries as $key => $country ) {
-            $countries_select_array[] = [ 'value' => $key + 1, 'content' => $country->name ];
+            $countriesSelectArray[ $country->shortname ] = $country->name;
         }
-        $self->createSelect( 'countryid', '', $countries_select_array );
+        $self->createSelect( $countriesSelectArray, 'countryShortname', $location );
         $self->createInput( 'submit', '', '', 'Register' );
     } );
 
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

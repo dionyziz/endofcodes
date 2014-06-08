@@ -3,8 +3,11 @@
     require_once 'models/country.php';
     require_once 'models/image.php';
 
+    define( 'ROLE_USER', 0 ); // default role
+    define( 'ROLE_DEVELOPER', 10 );
+
     class User extends ActiveRecordBase {
-        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'avatarid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated' ];
+        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
         public $username;
         public $password;
         public $email;
@@ -16,6 +19,8 @@
         public $salt;
         public $dateOfBirth;
         public $boturl;
+        public $winCount;
+        public $role;
         protected $dob;
         protected static $tableName = 'users';
 
@@ -23,7 +28,7 @@
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "username" ) );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );
@@ -40,7 +45,7 @@
                     compact( "sessionid" )
                 );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $row[ 'id' ] );
@@ -61,29 +66,44 @@
             if ( $id ) {
                 // existing active record object
                 try {
-                    $user_info = dbSelectOne( 'users', [ 'boturl', 'dob', 'username', 'email', 'countryid', 'avatarid', 'forgotpasswordrequestcreated', 'forgotpasswordtoken' ], compact( "id" ) );
+                    $user_info = dbSelectOne( 'users', [ '*' ], compact( "id" ) );
                 }
-                catch ( DBException $e ) {
+                catch ( DBExceptionWrongCount $e ) {
                     throw new ModelNotFoundException();
                 }
-                $this->boturl = $user_info[ 'boturl' ];
-                $this->username = $user_info[ 'username' ];
-                $this->email = $user_info[ 'email' ];
+                $this->winCount = 0;
+                $attributesToAssign = [ 'boturl', 'username', 'email', 'dob', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
+                foreach ( $attributesToAssign as $key ) {
+                    $this->$key = $user_info[ $key ];
+                }
+
                 $this->country = new Country( $user_info[ 'countryid' ] );
-                $this->image = new Image( $user_info[ 'avatarid' ] );
+                $this->image = new Image( $user_info[ 'imageid' ] );
                 $this->id = $id;
-                $this->dob = $user_info[ 'dob' ];
-                $this->forgotpasswordtoken = $user_info[ 'forgotpasswordtoken' ];
-                $this->forgotpasswordrequestcreated = $user_info[ 'forgotpasswordrequestcreated' ];
                 $this->exists = true;
             }
         }
         
+        public function getWinCount() {
+            $games = Game::findAll();
+            foreach ( $games as $game ) {
+                $ratings = $game->getGlobalRatings();
+                if ( isset( $ratings[ 1 ] ) ) {
+                    foreach ( $ratings[ 1 ] as $winner ) {
+                        if ( $winner->id == $this->id ) {
+                            $this->winCount += 1;
+                            break;
+                        }
+                    }
+                }
+            }
+            return $this->winCount;
+        }
         public static function findByEmail( $email ) {
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "email" ) );
             }
-            catch ( DBException $e ) {
+            catch ( DBExceptionWrongCount $e ) {
                 throw new ModelNotFoundException();
             }
             return new User( $user[ 'id' ] );
@@ -135,18 +155,19 @@
             if ( !isset( $this->boturl ) ) {
                 $this->boturl = '';
             }
+            if ( $this->role < 0 || !isset( $this->role ) ) {
+                $this->role = 0;
+            }
         }
 
         protected function onBeforeCreate() {
-            $day = intval( $this->dateOfBirth[ 'day' ] );
-            $month = intval( $this->dateOfBirth[ 'month' ] );
-            $year = intval( $this->dateOfBirth[ 'year' ] );
-            if ( !checkdate( $day, $month, $year ) ) {
-                $day = $month = $year = 0;
-            }
-            $dob = $this->dob = $year . '-' . $month . '-' . $day;
-            $this->avatarid = 0;
+            $this->prepareDob();
+            $this->imageid = 0;
             $this->generateSessionId();
+        }
+
+        protected function onBeforeUpdate() {
+            $this->prepareDob();
         }
 
         protected function onSave() {
@@ -154,7 +175,7 @@
             unset( $this->salt );
         }
 
-        protected function onCreateError( $e ) {
+        protected function onCreateError( $eDb ) {
             try {
                 User::findByUsername( $this->username );
                 throw new ModelValidationException( 'username_used' );
@@ -165,7 +186,7 @@
                     throw new ModelValidationException( 'email_used' );
                 } 
                 catch ( ModelNotFoundException $e ) {
-                    throw $e;
+                    throw $eDb;
                 }
             }
         }
@@ -178,6 +199,16 @@
             $value = openssl_random_pseudo_bytes( 32 );
             $sessionid = base64_encode( $value );
             $this->sessionid = $sessionid;
+        }
+
+        protected function prepareDob() {
+            $day = intval( $this->dateOfBirth[ 'day' ] );
+            $month = intval( $this->dateOfBirth[ 'month' ] );
+            $year = intval( $this->dateOfBirth[ 'year' ] );
+            if ( !checkdate( $day, $month, $year ) ) {
+                $day = $month = $year = 0;
+            }
+            $this->dob = $year . '-' . $month . '-' . $day;
         }
 
         public function authenticatesWithPassword( $password ) {
@@ -243,6 +274,25 @@
             if ( $period > $config[ 'forgot_password_exp_time' ] ) {
                 throw new ModelValidationException( 'link_expired' );
             } 
+        }
+
+        public function setBoturl( $boturl ) {
+            $oldBoturl = $this->boturl;
+            $this->boturl = $boturl;
+
+            $bot = new GraderBot( $this );
+            try {
+                $bot->sendInitiateRequest();
+                $this->save();
+            }
+            catch ( GraderBotException $e ) {
+                $this->boturl = $oldBoturl;
+                throw new ModelValidationException( $e->error->id );
+            }
+        }
+
+        public function isDeveloper() {
+            return $this->role >= ROLE_DEVELOPER;
         }
     }
 ?>

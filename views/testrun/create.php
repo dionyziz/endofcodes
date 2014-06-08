@@ -5,7 +5,6 @@
 
     $form = new Form( 'testrun', 'create' );
     $form->output( function( $self ) {
-        $self->createInput( 'hidden', 'all', '', true );
         $self->createSubmit( 'Run all tests' );
     } );
 
@@ -17,5 +16,5 @@
         } );
     }
 
-    require 'views/footer.php';
+    require 'views/footer/view.php';
 ?>

@@ -2,48 +2,98 @@
 
 <html lang="en">
     <head>
+        <meta charset="utf-8" />
         <title>EndofCodes Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel='icon' type='image/png' href='static/images/gamepad.png' />
         <base href='<?php
-        global $config;
+            global $config;
 
-        echo $config[ 'base' ];
+            echo $config[ 'base' ];
         ?>' />
         <?php
+            includeStyle( "bootstrap.min" );
             includeStyle( "general" );
-            includeStyle( "header" );
             includeStyle( "footer" );
             includeStyle( "navigation" );
             includeStyle( "home" );
-            includeStyle( "register" );
-            includeStyle( "login" );
+            includeStyle( "user/create" );
+            includeStyle( "session/create" );
             includeStyle( "test" );
             includeStyle( "links" );
-        ?>
-        <script type="text/javascript" src="../script/cssrefresh.js"></script>
+            includeStyle( "game/view" );
+            includeStyle( "user/view" );
+            includeStyle( "debug" );
+            includeStyle( "../jquery-ui/jquery-ui.min" );
+            includeStyle( "../jquery-ui/jquery.ui.theme" );
 
+            includeScript( 'jquery-2.1.0.min' );
+            includeScript( 'bootstrap.min' );
+            includeScript( 'prefixfree.min' );
+            includeScript( 'error' );
+            includeScript( 'logout' );
+            includeScript( 'game/view' );
+            includeScript( 'user/view' );
+            includeScript( 'user/create' );
+            includeScript( 'session/create' );
+            includeScript( 'debug' );
+            includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
+        ?>
         <meta charset="utf-8" />
     </head>
     <body>
-        <div id="header">
-            <ul>
-                <?php
-                    if ( isset( $_SESSION[ 'user' ] ) ) {
-                        ?><li id="login" class="username"><?php
-                            echo htmlspecialchars( $_SESSION[ 'user' ]->username );
-                        ?></li><?php
-                    }
-                    else {
-                        ?><li id="login"><a href="session/create">Login</a> or <a href="user/create">Register</a></li><?php
-                    }
-                ?>
-                <li><h1><a href="index.php">End of Codes</a></h1></li>
-                <?php
-                    if ( isset( $_SESSION[ 'user' ] ) ) {
-                        ?><li><a href="index.php?resource=user&amp;method=view&amp;username=<?php
-                            echo htmlspecialchars( $_SESSION[ 'user' ]->username );
-                        ?>">Profile</a></li><?php
-                    }
-                ?>
-            </ul>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <?php
+                        if ( isset( $_SESSION[ 'user' ] ) ) {
+                            $currentUser = $_SESSION[ 'user' ];
+                            ?><li><a href="user/view?username=<?php
+                                echo $currentUser->username;
+                            ?>"><img src="<?php
+                                if ( isset( $currentUser->image ) ) {
+                                    echo $currentUser->image->target_path;
+                                }
+                                else {
+                                    ?>static/images/default-profile.jpg<?php
+                                }
+                            ?>" /><?php
+                                echo $currentUser->username;
+                            ?></a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="settings-icon glyphicon glyphicon-cog"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li role="presentation">
+                                        <a href="user/update">Settings</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#" id="logout">Sign out</a>
+                                        <?php
+                                            $form = new Form( 'session', 'delete' );
+                                            $form->id = 'logout-form';
+                                            $form->output();
+                                        ?>
+                                    </li>
+                                </ul>
+                            </li><?php
+                        }
+                        else {
+                            ?><li><a href="session/create">Login</a></li>
+                            <li class="active"><a href="user/create">Register</a></li><?php
+                        }
+                    ?>
+                </ul>
+            </div>
         </div>
-        <div class='content'>
+        <div class="container" id="main">

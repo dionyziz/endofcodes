@@ -1,4 +1,5 @@
 <?php
+    require_once 'models/test/withfixtures.php';
     class UnitTestMethod {
         public $unittest;
         public $methodName;
@@ -117,7 +118,7 @@
 
             return compact( 'caught', 'name', 'exception' );
         }
-        public function assertThrows( $function, $exception, $description = '' ) {
+        public function assertThrows( $function, $exception, $description = '', $callback = false ) {
             $exceptionData = $this->callAndGetException( $function );
 
             if ( $description != '' ) {
@@ -132,6 +133,10 @@
                 }
             }
             $this->assertTrue( $exceptionData[ 'caught' ], $description );
+
+            if ( $callback !== false ) {
+                $callback( $exceptionData[ 'exception' ] );
+            }
         }
         public function assertDoesNotThrow( $function, $exception, $description = '' ) {
             $exceptionData = $this->callAndGetException( $function );

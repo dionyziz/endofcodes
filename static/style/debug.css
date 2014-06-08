@@ -1,0 +1,63 @@
+.enable-profiling {
+    font-family: "Times New Roman";
+    font-size: 20pt;
+    line-height: 17pt;
+}
+.measure {
+    background-color: #c44;
+    color: white;
+    padding: 7px;
+    border-radius: 5px;
+    animation: debug-pulse 1s infinite;
+}
+.profiling-form {
+    display: none;
+}
+@keyframes debug-pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.debug-window {
+    display: none;
+    position: fixed;
+    width: 600px;
+    height: 300px;
+    bottom: 25px;
+    right: 5px;
+    margin: 5px;
+    border-radius: 5px;
+}
+.debug-window .header {
+    padding: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.debug-contents {
+    text-align: left;
+    height: 275px; /* .debug-window - .debug-window .header */
+    padding: 5px;
+    overflow: auto;
+}
+.debug-window h2 {
+    font-size: 100%;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+.debug-window tr {
+    white-space: nowrap;
+}
+.debug-window .modal-header {
+    padding: 10px;
+    border: none;
+}
+table .num {
+    text-align: right;
+}

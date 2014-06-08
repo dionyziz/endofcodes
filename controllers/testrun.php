@@ -1,14 +1,15 @@
 <?php
     class TestrunController extends ControllerBase {
-        protected $environment = 'test';
+        public $environment = 'test';
 
-        public function create( $name, $all = false ) {
-            set_time_limit( 360 );
-
+        public function create( $name = '' ) {
             require_once 'models/test/base.php';
+            require_once 'models/test/functional.php';
             require_once 'models/test/withfixtures.php';
 
-            if ( $all ) {
+            if ( $name == '' ) {
+                set_time_limit( 360 );
+
                 $tests = UnitTest::findAll();
             }
             else {
@@ -20,7 +21,7 @@
             foreach ( $tests as $test ) {
                 $path = 'tests/' . $test . '.php';
                 if ( !file_exists( $path ) ) {
-                    throw new HTTPNotFoundException();
+                    throw new HTTPNotFoundException( 'No such test "' . $path . '"' );
                 }
                 $unittest = require_once $path;
                 $unittest->run();
