@@ -1,5 +1,6 @@
 <?php
     require_once 'models/geolocation.php';
+    require_once 'models/network.php';
 
     class URLRetrieverMock implements URLRetrieverInterface {
         public $realURLRetriever;
@@ -7,11 +8,11 @@
         public $forceSuccess = false;
         public $contents = '';
 
-        public function readFile( $url ) {
-            if ( $forceFail ) {
+        public function readURL( $url ) {
+            if ( $this->forceFail ) {
                 throw new NetworkException( 'Mocked URLRetriever failure' );
             }
-            if ( $forcesuccess ) {
+            if ( $this->forceSuccess ) {
                 return $contents;
             }
             $realURLRetriever = new URLRetriever();
