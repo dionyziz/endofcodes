@@ -1,2 +1,3 @@
 #!/bin/bash
-php run game update gameid=$( php run game create ) finishit=yes;
+BASEDIR=$(dirname $0);
+php $BASEDIR/run game update gameid=$( php $BASEDIR/run game create ) finishit=yes;
