@@ -64,7 +64,7 @@
         public function outputErrorPage() {
             $error = $this->error;
             $reason = $this->reason;
-            require_once "views/http/$error.php";
+            require "views/http/$error.php";
         }
     }
 

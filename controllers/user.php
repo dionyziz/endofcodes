@@ -55,7 +55,7 @@
                     }
                 }
             }
-            require_once 'views/user/view.php';
+            require 'views/user/view.php';
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
