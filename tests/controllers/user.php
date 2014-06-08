@@ -29,6 +29,7 @@
             $this->makeCreateRequest();
             $this->response->assertHas( '.navbar-nav a[href="user/view?username=dionyziz"]', 'User must be logged in after registration' );
         }
+        /*
         public function testCreateWithoutDob() {
             unset( $this->userDetails[ 'day' ] );
             unset( $this->userDetails[ 'month' ] );
@@ -36,6 +37,7 @@
             $this->makeCreateRequest();
             $this->response->assertHas( '.navbar-nav a[href="user/view?username=dionyziz"]', 'Date of birth must be optional during registration' );
         }
+        */
         public function testPasswordRepeat() {
             $this->assertValidates(
                 [ 'password_repeat' => 'secretWRONG' ],

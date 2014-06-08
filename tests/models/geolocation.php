@@ -51,7 +51,9 @@
             );
         }
         public function testFailure() {
-            Location::URLRetrieverObject = new URLRetrieverMock();
+            Location::$URLRetrieverObject = new URLRetrieverMock();
+            Location::$URLRetrieverObject->forceFail = true;
+
             $this->assertThrows( function() {
                 Location::getCountryName( '82.212.120.21' );
             }, 'NetworkException' );
@@ -60,7 +62,7 @@
             }, 'NetworkException' );
         }
         public function tearDown() {
-            Location::URLRetrieverObject = new URLRetriever();
+            Location::$URLRetrieverObject = new URLRetriever();
         }
     }
     

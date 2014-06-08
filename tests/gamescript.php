@@ -1,5 +1,5 @@
 <?php
-    require_once 'helpers/file.php';
+    require_once 'models/file.php';
     class GamescriptTest extends FunctionalTest {
         protected $mockPath = 'bots/mock';
         protected $currentPath;
