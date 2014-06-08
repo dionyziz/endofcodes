@@ -3,7 +3,7 @@
         public static $URLRetrieverObject = null;
 
         protected static function info( $ip ) {
-            if ( is_null( self::URLRetrieverObject ) ) {
+            if ( is_null( self::$URLRetrieverObject ) ) {
                 self::$URLRetrieverObject = new URLRetriever();
             }
             $geoInfo = self::$URLRetrieverObject->readURL( 'http://www.geoplugin.net/php.gp?ip=' . $ip );
