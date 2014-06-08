@@ -1,4 +1,6 @@
 <?php
+    require_once 'models/network.php';
+
     class Location {
         public static $URLRetrieverObject = null;
 
