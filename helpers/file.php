@@ -1,12 +1,7 @@
 <?php
     function safeWrite( $filename, $content ) {
-        if ( !file_exists( $filename ) ) {
-            @touch( $filename );
-        }
-        if ( is_writable( $filename ) ) {
-            $success = file_put_contents( $filename, $content );
-        }
-        if ( empty( $success ) ) {
+        $success = file_put_contents( $filename, $content );
+        if ( !$success ) {
             throw new FileNotWritableException( $filename, $content );
         }
     }
