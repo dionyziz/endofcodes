@@ -83,25 +83,24 @@ var UserView = {
             formData.append( "followedid", followedid );
             formData.append( "token", token );
 
-            $( '.follow button' ).fadeOut( 100, function() {
-                $.ajax( {
-                    url: "follow/" + now.method,
-                    type: "POST",
-                    data: formData,
-                    cache: false,
-                    dataType: "json",
-                    processData: false,
-                    contentType: false,
-                    complete: function() {
+            $.ajax( {
+                url: "follow/" + now.method,
+                type: "POST",
+                data: formData,
+                cache: false,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                complete: function() {
+                    $( '.follow button' ).fadeOut( 500, function() {
                         var btn_text = next.action.substr( 0, 1 ).toUpperCase() + next.action.substr( 1 ); 
                         $( "a#" + now.action ).replaceWith( 
                             "<a href='#' class='follow' id='" + next.action + "'><button class='btn btn-primary'>" + btn_text + "</button></a>"
                         );
                         $( 'form#' + now.action + '-form' ).attr( 'action', 'follow/' + next.method );
                         $( 'form#' + now.action + '-form' ).attr( 'id', next.action + '-form' );
-                        $( '.follow' ).fadeIn();
-                    }
-                } );
+                    } );
+                }
             } );
             return false;
         } );
