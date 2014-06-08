@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 <?php
     class FileHelperTest extends UnitTest {
+        protected $mockPath = 'tests/mock/';
+        protected $copyPath = 'tests/mock2/';
+
         public function setUp() {
             $this->content = 'I shall be written safely';
             $this->directory = 'tests/helpers/file/';
@@ -61,9 +65,21 @@
                 }
             }
         }
+        public function testRecursiveCopy() {
+            $path = 'depth1/depth2/depth3';
+            mkdir( $this->mockPath . $path, 0777, true );
+            mkdir( $this->copyPath, 0777, true );
+            touch( $this->mockPath . $path . '/magic.php' );
+
+            recursiveCopy( $this->mockPath, $this->copyPath . 'deeper' );
+            $this->assertTrue( file_exists( $this->copyPath . 'deeper/' . $path . '/magic.php' ), 'The folder must be copied' );
+        }
         public function tearDown() {
             $this->safeUnlink( $this->filename );
             $this->safeUnlink( $this->directory );
+
+            $this->rrmdir( $this->copyPath );
+            $this->rrmdir( $this->mockPath );
         }
     }
 

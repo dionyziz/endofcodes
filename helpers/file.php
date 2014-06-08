@@ -10,6 +10,12 @@
             throw new FileNotWritableException( $filename, $content );
         }
     }
+    function recursiveCopy( $source, $destination ) {
+        $source = escapeshellarg( $source );
+        $destination = escapeshellarg( $destination );
+        exec( "cp -R $source $destination" );
+    }
+
     class FileNotWritableException extends Exception {
         public $filename;
         public $content;
