@@ -1,7 +1,7 @@
 <?php
     require_once 'models/lib/simple_html_dom.php';
 
-    abstract class FunctionalTest extends UnitTest {
+    abstract class FunctionalTest extends UnitTestWithFixtures {
         public function request( $resource, $method, $verb = 'GET', $vars = [] ) {
             $request = new FunctionalTestRequest( $this, $resource, $method, [], $verb, $vars );
             return $request->execute();
@@ -28,7 +28,7 @@
             $oldSession = $_SESSION;
             try {
                 ob_start();
-                $controller = controllerBase::findController( $this->resource );
+                $controller = ControllerBase::findController( $this->resource );
                 $controller->trusted = true;
                 $get = [ 'method' => $this->method ];
                 $post = [];
