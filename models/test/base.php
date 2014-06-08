@@ -1,4 +1,5 @@
 <?php
+    require_once 'models/test/withfixtures.php';
     class UnitTestMethod {
         public $unittest;
         public $methodName;

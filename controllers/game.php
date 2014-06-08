@@ -10,11 +10,18 @@
             $grader->initiateBots();
             $grader->initiate();
             $grader->createGame();
-            if ( $game->ended ) {
-                go();
-            }
 
-            go( 'game', 'update', [ 'gameid' => $game->id ] );
+            switch ( $this->outputFormat ) {
+                case 'text':
+                    echo $game->id;
+                    break;
+                case 'html':
+                    if ( $game->ended ) {
+                        go();
+                    }
+                    go( 'game', 'update', [ 'gameid' => $game->id ] );
+                    break;
+            }
         }
         public function createView() {
             require 'views/game/create.php';
@@ -27,20 +34,21 @@
                 throw new HTTPNotFoundException( 'There is no game with the specified gameid (gameid = ' . $gameid . ')' );
             }
 
-            if ( $game->ended ) {
-                go();
-            }
-
             $grader = new Grader( $game );
             do {
                 if ( $game->ended ) {
-                    go();
+                    if ( $this->outputFormat == 'html' ) {
+                        go();
+                    }
+                    break;
                 }
 
                 $grader->nextRound();
             } while ( $finishit );
 
-            go( 'game', 'update', compact( 'gameid' ) );
+            if ( $this->outputFormat == 'html' ) {
+                go( 'game', 'update', compact( 'gameid' ) );
+            }
         }
         public function view( $gameid, $roundid = false, $all = false ) {
             try {

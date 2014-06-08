@@ -26,6 +26,7 @@
             includeStyle( "game/view" );
             includeStyle( "user/view" );
             includeStyle( "user/update" );
+            includeStyle( "debug" );
             includeStyle( "../jquery-ui/jquery-ui.min" );
             includeStyle( "../jquery-ui/jquery.ui.theme" );
 
@@ -40,6 +41,7 @@
             includeScript( 'user/update' );
             includeScript( 'user/create' );
             includeScript( 'session/create' );
+            includeScript( 'debug' );
             includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
         ?>
         <meta charset="utf-8" />
@@ -62,7 +64,12 @@
                             ?><li><a href="user/view?username=<?php
                                 echo $currentUser->username;
                             ?>"><img src="<?php
-                                echo $currentUser->image->target_path;
+                                if ( isset( $currentUser->image ) ) {
+                                    echo $currentUser->image->target_path;
+                                }
+                                else {
+                                    ?>static/images/default-profile.jpg<?php
+                                }
                             ?>" /><?php
                                 echo $currentUser->username;
                             ?></a></li>

@@ -1,9 +1,10 @@
 var GameView = {
     ARROW_HEIGHT: 14,
-    ARROW_WIDTH: 30,
+    ARROW_WIDTH: 27.5,
     roundCount: 0,
     maxHp: 0,
     PIXEL_MULTIPLIER: 20,
+    playTimer: false,
     findGameAndRoundId: function( href ) {
         var hrefArray = href.split( "?" )[ 1 ].split( "&" );
         var attribute, gameid, roundid;
@@ -127,6 +128,36 @@ var GameView = {
 
         $( '.creature[data-userid=' + userid + ']' ).toggleClass( 'highlight', addShadow );
     },
+    loadFromRoundid: function( roundid ) {
+        var gameid = $( '.gamemeta h2' ).attr( 'data-id' );
+        var href = GameView.makeUrl( gameid, roundid );
+
+        GameView.loadMap( href );
+    },
+    clearTimer: function() {
+        if ( GameView.playTimer ) {
+            clearTimeout( GameView.playTimer );
+        }
+    },
+    togglePlay: function() {
+        $( '.play' ).toggle();
+        $( '.pause' ).toggle();
+        GameView.clearTimer();
+    },
+    automaticPlay: function() {
+        var $slider = $( '.slider' );
+        var roundid = $slider.slider( 'value' ) + 1;
+
+        $slider.slider( 'value', roundid );
+        GameView.loadFromRoundid( roundid );
+
+        if ( roundid >= GameView.roundCount - 1 ) {
+            GameView.togglePlay();
+            return;
+        }
+
+        GameView.playTimer = setTimeout( GameView.automaticPlay, 1000 );
+    },
     ready: function() {
         var $game = $( '.game' );
         var width = $game.attr( 'data-width' );
@@ -165,8 +196,8 @@ var GameView = {
             else { // bubble doesn't fit on the screen
                 positioning = -$infobubble.height() - GameView.ARROW_HEIGHT;
             }
-            $infobubble.css( 'top', $this.position().top + positioning );
-            $infobubble.css( 'left', $this.position().left - $infobubble.width() + GameView.ARROW_WIDTH );
+            $infobubble.css( 'top', $this.offset().top + positioning );
+            $infobubble.css( 'left', $this.offset().left - $infobubble.width() + GameView.ARROW_WIDTH );
         } );
         $( document ).on( "mouseout", ".creature", function() {
             var $infobubble = $( '.infobubble' );
@@ -181,15 +212,23 @@ var GameView = {
         } );
         $( '.next a' ).click( GameView.getMap );
         $( '.previous a' ).click( GameView.getMap );
+        $( '.play a' ).click( function() {
+            GameView.togglePlay();
+            GameView.automaticPlay();
+
+            return false;
+        } );
+        $( '.pause a' ).click( function() {
+            GameView.togglePlay();
+
+            return false;
+        } );
         $( '.slider' ).slider( {
             min: 0,
             max: GameView.roundCount - 1,
             value: $( '.roundid' ).attr( 'data-id' ),
             stop: function( e, ui ) {
-                var gameid = $( '.gamemeta h2' ).attr( 'data-id' );
-                var href = GameView.makeUrl( gameid, ui.value );
-
-                GameView.loadMap( href );
+                GameView.loadFromRoundid( ui.value );
             }
         } );
     }

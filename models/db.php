@@ -1,5 +1,7 @@
 <?php
     function db( $sql, $bind = [] ) {
+        global $debugger;
+
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
                 $value = mysql_real_escape_string( $value );
@@ -18,7 +20,11 @@
             unset( $bind[ $key ] );
         }
         $finalsql = strtr( $sql, $bind );
+
+        $debugger->beginQueryExecution( new DebuggerQuery( $sql, $bind ) );
         $res = mysql_query( $finalsql );
+        $debugger->finishQueryExecution();
+
         if ( $res === false ) {
             throw new DBException( mysql_error() );
         }

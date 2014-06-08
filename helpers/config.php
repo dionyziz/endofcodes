@@ -11,7 +11,7 @@
         }
         if ( !isset( $_SERVER[ 'HTTP_HOST' ] ) ) {
             // using CLI
-            return '';
+            return 'http://localhost/endofcodes/';
         }
         return $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $relativePath;
     }
