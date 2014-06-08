@@ -31,7 +31,7 @@
             $self->createSubmit( 'Login', [ 'class' => 'btn btn-primary' ] ); 
         ?></p><?php
     } );
-    ?><p><span class="round uppercase">OR</span></p>
+    ?><!-- <p><span class="round uppercase">OR</span></p>
     <p>
         <p class="google-before rounded"><span class="fontawesome-google-plus"></span></p>
         <button class="google rounded-left btn btn-primary">Login with Google</button>
@@ -40,7 +40,7 @@
         <p class="github-before rounded"><span class="fontawesome-github"></span></p>
         <button class="github rounded-left btn btn-primary">Login with GitHub</button>
     </p>
-</div>
+</div> -->
 <p class='text-center'>New to End Of Codes? <a href='user/create'>Create an account</a></p>
 
 <?php
