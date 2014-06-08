@@ -1,6 +1,4 @@
 <?php
-    require_once 'migrate.php';
-
     Migration::alterField ( 
         'roundcreatures',
         'desire', 

@@ -1,4 +1,18 @@
 <?php
+    class DebuggerMock implements DebuggerInterface {
+        public $queryRecorded = NULL;
+        public $began = false;
+        public $finished = false;
+
+        public function beginQueryExecution( DebuggerQuery $query ) {
+            $this->queryRecorded = $query;
+            $this->began = true;
+        }
+        public function finishQueryExecution() {
+            $this->finished = true;
+        }
+    }
+
     class DBTest extends UnitTest {
         public function setUp() {
             db(
@@ -106,13 +120,19 @@
             dbInsert( 'test_models', [] );
             $this->assertThrows( function() {
                 dbSelectOne( 'test_models' );
-            }, 'DBException', 'dbSelectOne must throw an exception if more than one rows are found' );
+            }, 'DBExceptionWrongCount', 'dbSelectOne must throw an exception if more than one rows are found', function( $e ) {
+                $this->assertEquals( 1, $e->expected, 'Expected rows in DBExceptionWrongCount for selectOne must always be 1' );
+                $this->assertTrue( $e->actual > 1, 'Actual rows in DBExceptionWrongCount for selectOne must be greater than 1 if more rows are present' );
+            } );
 
             dbDelete( 'test_models' );
 
             $this->assertThrows( function() {
                 dbSelectOne( 'test_models' );
-            }, 'DBException', 'dbSelectOne must throw an exception if no rows are found' );
+            }, 'DBExceptionWrongCount', 'dbSelectOne must throw an exception if no rows are found', function( $e ) {
+                $this->assertEquals( 1, $e->expected, 'Expected rows in DBExceptionWrongCount for selectOne must always be 1' );
+                $this->assertEquals( 0, $e->actual, 'Actual rows in DBExceptionWrongCount for selectOne must be 0 when no rows are present' );
+            } );
         }
         public function testSelectMulti() {
             dbInsertMulti( 'test_models', [
@@ -193,6 +213,20 @@
             $this->assertEquals( 1, count( $rows ), 'When limit = 1 we must get only one row' );
             $this->assertSame( 17, $rows[ 0 ][ 'c' ], 'dbSelect must return the correct row' );
             $this->assertSame( 'toast', $rows[ 0 ][ 'a' ], 'dbSelect must return the correct row' );
+        }
+        public function testDebugger() {
+            // test that the debugger is informed correctly about queries
+            global $debugger;
+
+            $debugger = new DebuggerMock();
+
+            $sql = 'SELECT 1';
+            db( $sql, [] );
+
+            $this->assertTrue( $debugger->began, 'db() must inform the debugger for the beginning of a query' );
+            $this->assertTrue( $debugger->finished, 'db() must inform the debugger for the completion of a query' );
+            $this->assertEquals( $sql, $debugger->queryRecorded->queryLiteral, 'db() must inform the debugger about what query literal it ran' );
+            $this->assertEquals( [], $debugger->queryRecorded->params, 'db() must inform the debugging about the params of the query' );
         }
         public function tearDown() {
             db( 'DROP TABLE test_models' );

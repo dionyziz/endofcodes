@@ -1,15 +1,16 @@
 <?php
     abstract class ControllerBase {
-        protected $environment = 'development';
+        protected $acceptTypes = [];
+        public $environment = 'development';
         public $trusted = false;
         public $outputFormat = 'html';
+        public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
             $filename = 'controllers/' . $resource . '.php';
             if ( !file_exists( $filename ) ) {
-                $resource = 'dashboard';
-                $filename = 'controllers/' . $resource . '.php';
+                throw new HTTPNotFoundException( 'The resource "' . $filename . '" specified was invalid' );
             }
             require_once $filename;
             $controllername = ucfirst( $resource ) . 'Controller';
@@ -24,7 +25,7 @@
               || $token !== $_SESSION[ 'form' ][ 'token' ]
               || $token == '' )
             && !$this->trusted ) {
-                throw new HTTPUnauthorizedException();
+                throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
             }
         }
         protected function getControllerMethod( $requestedMethod, $httpRequestMethod ) {
@@ -69,7 +70,7 @@
                     $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    throw new HTTPUnauthorizedException();
+                    return;
                 }
                 $_SESSION[ 'user' ] = $user;
             }
@@ -96,13 +97,54 @@
         protected function loadConfig() {
             global $config;
 
-            $config = getConfig()[ $this->environment ];
+            if ( getEnv( 'ENVIRONMENT' ) !== false ) {
+                $env = getEnv( 'ENVIRONMENT' );
+            }
+            else {
+                $env = $this->environment;
+            }
+            $config = getConfig( $env );
+        }
+        protected function readHTTPAccept() {
+            if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
+                return;
+            }
+            $accept = strtolower( str_replace( ' ', '', $_SERVER[ 'HTTP_ACCEPT' ] ) );
+            $accept = explode( ',', $accept );
+            $acceptTypes = [];
+            foreach ( $accept as $a ) {
+                if ( strpos( $a, ';q=' ) ) {
+                    list( $a, $q ) = explode( ';q=', $a );
+                    if ( $q === 0 ) {
+                        continue;
+                    }
+                }
+                $acceptTypes[ $a ] = true;
+            }
+            $this->acceptTypes = $acceptTypes;
+            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                $this->outputFormat = 'json';
+            }
         }
         protected function init() {
+            $this->initDebug();
             $this->loadConfig();
+            $this->readHTTPAccept();
             dbInit();
         }
+        public function initDebug() {
+            global $debugger;
+
+            if ( isset( $_SESSION[ 'debug' ] ) ) {
+                $debugger = new Debugger();
+            }
+            else {
+                $debugger = new DummyDebugger();
+            }
+        }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
+            $this->pageGenerationBegin = microtime( true );
+
             $this->init();
             $this->sessionCheck();
 
@@ -122,6 +164,9 @@
             $methodReflection = $thisReflection->getMethod( $method );
 
             return $this->callWithNamedArgs( $methodReflection, [ $this, $method ], $vars );
+        }
+        public function getPageGenerationTime() {
+            return microtime( true ) - $this->pageGenerationBegin;
         }
     }
 ?>

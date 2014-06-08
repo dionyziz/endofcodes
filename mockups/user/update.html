@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>EndofCodes Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../avgrund.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/bootstrap.min.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/general.css" />
+		<link rel="stylesheet" href="avgrund.css">
+		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		<script type="text/javascript" src="avgrund.js"></script>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/jquery-2.1.0.min.js"></script>
+        <style>
+            #name-input input:first-child { 
+                margin-bottom: 15px;
+            }
+            #user-update-form #password-input input:nth-child(2),
+            #user-update-form #password-input input:nth-child(3) {
+                margin-bottom: 15px; 
+            } 
+            #user-update-form input, 
+            #user-update-form button,
+            #user-update-form #country-input {
+                width: 257px;
+            }
+            #dob select:first-child {
+                margin-left: 15px;
+            }
+            #dob select {
+                margin-right: 6px;
+            }
+            h2, h1 {
+                font-size: initial; 
+            }
+            #user-update-form .form-group {
+                margin-bottom: 30px;
+            }
+            #title {
+                margin-bottom: 38px;
+                font-size: x-large;
+            }
+            #user-update-form {
+                width: 50%;
+                margin-left: auto;
+                margin-right: 20%;
+            }
+            #delete-account {
+                color: #d9534f;
+            }
+            #password-input input, #pswd-label {
+                display: none;
+            }
+            #pswd-change {
+                margin-left: 99px;
+            }
+            #default-popup {
+                padding-bottom: 210px;
+                padding-top: 10px;
+                width: 370px;
+            }
+            #close-modal {
+                margin-right: 15px;
+            }
+            #default-popup p {
+                margin-bottom: 34px;
+                margin-top: 34px;
+            }
+            a {
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right"><li><a 
+                            href="user/view?username=dionyziz ">Profile</a>
+                    </li>
+                    <li>
+                        <a href="#" id="logout">Log out</a>
+                    </li>
+                    <form id="logout-form" action="session/delete" method="post" >
+                        <input type="hidden" name="token"/>
+                    </form>
+                </ul>
+            </div>
+        </div>
+        <div class="container" id="main">
+            <h1 class='text-center' id='title'>Settings<h1>       
+                <form id='user-update-form' class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="pkakelas" disabled='true'/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10" id='name-input'>
+                            <input type="text" class="form-control" placeholder="Name">
+                            <input type="text" class="form-control" placeholder="Surname">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="col-sm-2 control-label">Birthday</label>
+                        <div id='dob' class="row">
+                            <select class="form-control dob-input">
+                                <option>day</option>
+                            </select>
+                            <select class="form-control dob-input">
+                                <option>month</option>
+                            </select>
+                            <select class="form-control dob-input">
+                                <option>year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Country</label>
+                        <div class="col-sm-10">
+                            <select id='country-input' class="form-control">
+                                <option>Country</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" value='pkakelas@gmail.com'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Website</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Website">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Github</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Github">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label id='pswd-label' class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10" id='password-input'>
+                            <button id='pswd-change' class="btn btn-default">Change password</button>
+                            <input type="password" class="form-control" placeholder="Old password">
+                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" placeholder="Repeat password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class='text-center'>
+                <a id="delete-account">Delete your account</a>
+            </div>
+        </div>
+        <aside id="default-popup" class="avgrund-popup text-center">
+            <h2 class='text-danger'>Are you sure you want to delete your account?</h2>
+            <p>
+                After the deletion of your End Of Codes account you will not be able to participate to the games.
+            </p>
+            <p>
+            <button class='btn btn-default' id='close-modal'>Cancel</button>
+            <button class='btn btn-danger' id='delete-button'>Delete</button>
+            </p>
+        </aside>
+        <script>
+            $( '#delete-account' ).click( function() {
+                $( ".navbar" ).fadeTo( "slow",0.15 );
+                Avgrund.show( "#default-popup" );
+            } );
+            $( '#close-modal' ).click( function() {
+                $( ".navbar" ).fadeTo( "slow", 1 );
+                Avgrund.hide( "default-popup" );
+            } );
+            $( '#pswd-change' ).click( function() {
+                $( '#pswd-change' ).hide();
+                $( "#password-input input, #pswd-label" ).slideDown( "medium" );
+                return false;
+            } );
+        </script>
+    </body>
+</html>

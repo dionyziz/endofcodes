@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>EndofCodes Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/bootstrap.min.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/general.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/header.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/footer.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/navigation.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/home.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/user/create.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/session/create.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/test.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/links.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/game/view.css" />
+        <style>
+            .avatar {
+                width: 168px;
+                height: 168px;
+                border: 1px solid #ccc;
+                overflow: hidden;
+                position: relative;
+                float: left;
+            }
+            .avatar img {
+                position: absolute;
+            }
+            .profile-header {
+                height: 170px;
+            }
+            .profile-body {
+                clear: both;
+            }
+            .upper-header {
+                overflow: hidden;
+                border-bottom: 1px solid #ccc;
+                text-align: left;
+                height: 84px;
+                line-height: 120px;
+            }
+            .upper-header ul {
+                list-style: none;
+            }
+            .upper-header li {
+                font-size: 20pt;
+                float: left;
+                padding: 0 10px; 
+            }
+            .upper-header li.name {
+                height: 84px;
+            }
+            .upper-header li.country {
+                float: right;
+                font-size: 11pt;
+                line-height: 137px;
+                color: #777;
+                padding-right: 0;
+            }
+            .lower-header {
+                text-align: left;
+                font-size: 12pt;
+                margin: 7px 0 0 178px;
+            }
+            .lower-header button {
+                float: right;
+            }
+            .lower-header .when {
+                color: #999;
+            }
+            .lower-header ul {
+                list-style: none;
+            }
+            .lower-header p {
+                float: left;
+                margin-right: 5px;
+            }
+            .lower-header li {
+                display: inline;
+            }
+            .lower-header li:after {
+                content: "•";
+                margin-left: 5px;
+            }
+            .lower-header li:last-child:after {
+                content: "";
+            }
+            .bot-status {
+                padding: 5px;
+                margin: 15px auto;
+                clear: both;
+                width: 300px;
+                border-radius: 5px;
+            }
+            ul.contact {
+                list-style: none;
+            }
+            ul.contact li {
+                text-align: left;
+            }
+            ul.contact li {
+                display: inline;
+            }
+        </style>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/jquery-2.1.0.min.js"></script>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/logout.js"></script>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/game/view.js"></script>
+        <script type="text/javascript" src="http://endofcodes.com/static/script/prefixfree.min.js"></script>
+        <script type="text/javascript">
+            $( document ).ready( function() {
+                var height, width;
+                var $avatar = $( '.avatar' );
+                var $image = $( '.avatar img' );
+                var imgWidth = $image.width();
+                var imgHeight = $image.height();
+
+                height = width = 168;
+
+                if ( imgWidth > imgHeight ) {
+                    $image.height( height );
+                    $image.css( 'top', 0 );
+                    $image.css( 'left', -Math.floor( ( $image.width() - width ) / 2 ) );
+                }
+                else {
+                    $image.width( width );
+                    $image.css( 'left', 0 );
+                    $image.css( 'top', -Math.floor( ( $image.height() - height ) / 2 ) );
+                }
+            } );
+        </script>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right"><li><a 
+                            href="user/view?username=dionyziz ">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#" id="logout">Log out</a>
+                        </li><form id="logout-form" action="session/delete" method="post" ><p><input type="hidden" name="token" value="cGC6TYpl/4l95HQ2ZF6XVlc4cMAdqNSDv22oRmrbcPk="  /></p></form></ul>
+            </div>
+        </div>
+        <div class="container" id="main">
+            <div class="text-center">
+                <div class="profile-header">
+                    <div class="avatar">
+                        <img src="dionyziz.jpg" alt="Profile Picture" />
+                    </div>
+                    <div class="upper-header">
+                        <ul>
+                            <li class="name">dionyziz</li>
+                            <li class="country">
+                                <img src="http://endofcodes.com/static/images/flags/gr.png" alt="Greece" width="30" height="15" />
+                                Greece
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="lower-header">
+                        <button class="btn btn-primary follow">Follow</button>
+                        <p class='when'>This week:</p>
+                        <ul>
+                            <li>23rd in Greece</li>
+                            <li>152nd worldwide</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="profile-body">
+                    <p class='bot-status bg-success'><img src="http://endofcodes.com/static/images/check.png" alt="check" /> Your bot is working correctly</p>
+
+                    <ul class='contact'>
+                        <li><a href=""><img src="http://www.defaulticon.com/v1/assets/icons/png/16x16/mail.png" alt="mail" /> dionyziz@gmail.com</a></li>
+                        <li><a href=""><img src="http://endofcodes.com/static/images/github-logo.png" width="30" /></a></li>
+                        <li><a href=""><img src="http://endofcodes.com/static/images/facebook-logo.jpeg" width="30" /></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer id="footer" class="panel-footer"> 
+            <ul class="social-buttons">
+                <li>
+                    <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dionyziz&amp;repo=endofcodes&amp;type=watch&amp;count=true" title="Star on GitHub" /></iframe>
+                </li>
+                <li>
+                    <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dionyziz&amp;repo=endofcodes&amp;type=fork&amp;count=true" title="Fork on GitHub"></iframe>
+                </li>
+            </ul>    
+        </footer>
+    </body>
+</html>

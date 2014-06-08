@@ -13,22 +13,31 @@
         public $rounds = [];
         public $users = []; // dictionary from userid to user
         public $creaturesPerPlayer;
-        public $maxHp;
+        public $maxHp = 0;
         public $grid = [ [] ];
         public $attributesInitiated = false;
+        public $ended = false;
+        public $roundCount;
         protected static $tableName = 'games';
         protected static $attributes = [ 'width', 'height', 'created' ];
 
         public static function getLastGame() {
-            $game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 );
-
+            if ( !$game = dbSelect( 'games', [ 'id' ], [], 'created DESC', 1 ) ) {
+                throw new ModelNotFoundException();
+            }
             return new Game( $game[ 0 ][ 'id' ] );
         }
 
-        public function __construct( $id = false ) {
-            if ( $id ) {
+        public function __construct( $id = false, $roundid = false ) {
+            require_once 'models/round.php';
+            if ( $id !== false ) {
                 $this->exists = true;
-                $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
+                try {
+                    $game_info = dbSelectOne( 'games', [ 'created', 'width', 'height' ], compact( 'id' ) );
+                }
+                catch ( DBException $e ) {
+                    throw new ModelNotFoundException();
+                }
                 $this->id = $gameid = $id;
                 $this->created = $game_info[ 'created' ];
                 $this->width = $game_info[ 'width' ];
@@ -36,8 +45,17 @@
                 $data = dbSelectOne( 'roundcreatures', [ 'COUNT(DISTINCT roundid) AS countrounds' ], compact( 'gameid' ) );
                 $countrounds = $data[ 'countrounds' ];
                 if ( $countrounds > 0 ) {
-                    for ( $i = 0; $i < $countrounds; ++$i ) {
-                        $this->rounds[ $i ] = new Round( $this, $i );
+                    $this->rounds[ 0 ] = new Round( $this, 0 );
+                    if ( $roundid !== false && $roundid != 0 ) {
+                        $this->rounds[ $roundid ] = new Round( $this, $roundid, $this->rounds[ 0 ] );
+                    }
+                    else if ( $roundid === false ) {
+                        for ( $i = 1; $i < $countrounds; ++$i ) {
+                            $this->rounds[ $i ] = new Round( $this, $i, $this->rounds[ 0 ] );
+                        }
+                    }
+                    if ( isset( $this->rounds[ 0 ]->creatures[ 1 ] ) ) {
+                        $this->maxHp = $this->rounds[ 0 ]->creatures[ 1 ]->hp;
                     }
                     foreach ( $this->rounds[ 0 ]->creatures as $creature ) {
                         $userid = $creature->user->id;
@@ -45,7 +63,14 @@
                             $this->users[ $userid ] = new User( $userid );
                         }
                     }
+                    if ( end( $this->rounds )->isFinalRound() ) {
+                        $this->ended = true;
+                    }
                 }
+                else {
+                    $this->ended = true;
+                }
+                $this->roundCount = $countrounds;
             }
             else {
                 $this->rounds = [];
@@ -103,7 +128,11 @@
         }
 
         public function genesis() {
-            assert( $this->attributesInitiated, 'game attributes not initiated before genesis' );
+            assert( $this->attributesInitiated/*, 'game attributes not initiated before genesis'*/ );
+            if ( count( $this->users ) === 0 ) {
+                $this->ended = true;
+                return;
+            }
 
             $this->rounds[ 0 ] = new Round();
             $this->rounds[ 0 ]->game = $this;
@@ -119,7 +148,7 @@
                     $creature->hp = $this->maxHp;
                     $creature->alive = true;
                     $creature->intent = new Intent( ACTION_NONE, DIRECTION_NONE );
-                    while ( 1 ) {
+                    while ( true ) {
                         $x = rand( 0, $this->width - 1 );
                         $y = rand( 0, $this->height - 1 );
                         if ( !isset( $this->grid[ $x ][ $y ] ) ) {
@@ -129,22 +158,23 @@
                             break;
                         }
                     }
-                    $this->rounds[ 0 ]->creatures[] = $creature;
+                    $this->rounds[ 0 ]->creatures[ $id ] = $creature;
                 }
             }
             Creature::saveMulti( $this->rounds[ 0 ]->creatures );
             $this->rounds[ 0 ]->save();
+            $this->ended = $this->rounds[ 0 ]->isFinalRound();
         }
 
-        public function killBot( $user, $description ) {
-            $roundid = count( $this->rounds ) - 1;
-            foreach ( $this->rounds[ $roundid ]->creatures as $creature ) {
+        public function killBot( $user, $description, $actual = '', $expected = '' ) {
+            $round = $this->getCurrentRound();
+            foreach ( $round->creatures as $creature ) {
                 if ( $creature->user->id === $user->id ) {
                     $creature->kill();
                 }
             }
 
-            $this->getCurrentRound()->error( $user->id, $description );
+            $this->getCurrentRound()->error( $user->id, $description, $actual, $expected );
         }
 
         public function nextRound() {
@@ -231,6 +261,7 @@
                 }
             }
             $this->rounds[ $roundid ]->save();
+            $this->ended = $this->rounds[ $roundid ]->isFinalRound();
         }
         public function beforeNextRound() {
             foreach ( $this->getCurrentRound()->creatures as $creature ) {

@@ -1,11 +1,22 @@
 <?php
     require_once 'models/follow.php';
-    class FollowController extends ControllerBase {
-        public function create( $followerid, $followedid ) {
-            $followerid = intval( $followerid );
-            $followedid = intval( $followedid );
-            $follower = new User( $followerid );
-            $followed = new User( $followedid );
+    require_once 'helpers/validation.php';
+
+    class FollowController extends AuthenticatedController {
+        public function create( $followedid ) {
+            $this->requireLogin();
+
+            if ( !isWholeNumber( $followedid ) ) {
+                throw new HTTPBadRequestException( 'followedid is not a number' );
+            }
+
+            $follower = $_SESSION[ 'user' ];
+            try {
+                $followed = new User( $followedid );
+            }
+            catch ( ModelNotfoundException $e ) {
+                throw new HTTPNotFoundException( 'The userid specified (followedid = ' . $followedid . ') does not correspond to a user' );
+            }
             $follow = new Follow();
             $follow->follower = $follower;
             $follow->followed = $followed;
@@ -13,14 +24,20 @@
             go( 'user', 'view', [ 'username' => $followed->username ] );
         }
 
-        public function delete( $followerid, $followedid ) {
-            $followerid = intval( $followerid );
-            $followedid = intval( $followedid );
-            if ( $followerid !== $_SESSION[ 'user' ]->id ) {
-                throw new HTTPUnauthorizedException();
+        public function delete( $followedid ) {
+            $this->requireLogin();
+
+            if ( !isWholeNumber( $followedid ) ) {
+                throw new HTTPBadRequestException( 'followedid is not a number' );
             }
-            $follow = new Follow( $followerid, $followedid );
-            $follower = $follow->follower;
+
+            $followerid = $_SESSION[ 'user' ]->id;
+            try {
+                $follow = new Follow( $followerid, $followedid );
+            }
+            catch ( ModelNotFoundException $e ) {
+                throw new HTTPNotFoundException( 'There is no such follow relationship' );
+            }
             $followed = $follow->followed;
             $follow->delete();
             go( 'user', 'view', [ 'username' => $followed->username ] );

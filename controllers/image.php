@@ -1,11 +1,10 @@
 <?php
-    class ImageController extends ControllerBase {
+    class ImageController extends AuthenticatedController {
         public function create( $image ) {
+            $this->requireLogin();
+
             require_once 'models/image.php';
             require_once 'models/extentions.php';
-            if ( !isset( $_SESSION[ 'user' ] ) ) {
-                throw new HTTPUnauthorizedException();
-            }
             $user = $_SESSION[ 'user' ];
             $userImage = new Image();
             $userImage->tmp_name = $image[ 'tmp_name' ];
@@ -17,9 +16,17 @@
                 $user->save();
             }
             catch ( ModelValidationException $e ) {
-                go( 'user', 'update', [ $e->error => true ] );
+                if ( $this->outputFormat == 'json' ) {
+                    throw new HTTPBadRequestException( 'Invalid image' );
+                }
+                go( 'user', 'view', [ 'username' => $user->username, $e->error => true ] );
             }
-            go( 'user', 'view', [ 'username' => $user->username ] );
+            if ( $this->outputFormat == 'json' ) {
+                echo json_encode( $user->image->target_path );
+            }
+            else {
+                go( 'user', 'view', [ 'username' => $user->username ] );
+            }
         }
     }
 ?>

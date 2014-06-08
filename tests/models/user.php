@@ -1,6 +1,7 @@
 <?php
     require_once 'models/user.php';
     require_once 'models/country.php';
+    require_once 'models/grader/bot.php';
 
     class UserTest extends UnitTestWithFixtures {
         public function testCreate() {
@@ -159,7 +160,7 @@
             catch ( ForgotPasswordModelInvalidTokenException $e ) {
                 $oldTokenSuccess = true; 
             }
-            $user->forgotpasswordrequestcreated = time() - 60 * 24 * 2; 
+            $user->forgotpasswordrequestcreated = date( "Y-m-d h:i:s", time() - 60 * 60 * 24 * 2 );
             try {
                 $user->revokePasswordCheck( $user->forgotpasswordtoken );
                 $expiredSuccess = false;
@@ -199,6 +200,74 @@
             $this->assertTrue( $trueSuccess, 'passwordValidate should validate the default password that we have set' );
             $this->assertTrue( $emptySuccess, 'passwordValidate should not validate empty passwords' );
             $this->assertTrue( $smallSuccess, 'passwordValidate should not validate too small passwords' );
+        }
+        public function testSaveImage() {
+            $user = $this->buildUser( 'vitsalis' );
+            $image = new Image();
+            $image->id = 1;
+            $image->name = 'lala.png';
+            $image->user = $user;
+            $image->save();
+            $user->image = $image;
+            $user->save();
+            $dbUser = new User( $user->id );
+            $this->assertSame( 1, $dbUser->image->id, 'The imageid must be correctly stored in the database' );
+        }
+        public function testWinCount() {
+            $game = new Game();
+            $user = $this->buildUser( 'vitsalis' );
+            $game->users = [ $user->id => $user ];
+            $game->initiateAttributes();
+            $game->save();
+            $game->genesis();
+            $dbUser = new User( $user->id );
+            $winCount = $dbUser->getWinCount();
+
+            $this->assertTrue( isset( $dbUser->winCount ), 'winCount must be set for each user' );
+            $this->assertSame( 1, $winCount, 'winCount must represent the number of wins a user has' );
+        }
+        public function testSetBoturl() {
+            $user = $this->buildUser( 'vitsalis' );
+            $currentBoturl = $user->boturl;
+            $caught = false;
+            $error = '';
+
+            try {
+                $user->setBoturl( 'invalid_boturl' );
+            }
+            catch ( ModelValidationException $e ) {
+                $caught = true;
+                $error = $e->error;
+            }
+
+            $this->assertTrue( $caught, 'A ModelValidationException must be thrown if the boturl is invalid' );
+            $this->assertTrue( $error != '', 'An error must be given' );
+            $this->assertEquals( $currentBoturl, $user->boturl, "The user's boturl must not change" );
+        }
+        public function testRoles() {
+            $user = $this->buildUser( 'regular' );
+            
+            $this->assertFalse( $user->isDeveloper(), 'Regular users should not be developers' );
+            $this->assertSame( ROLE_USER, $user->role, 'Regular users should have a role of 0 = ROLE_USER' );
+
+            $admin = $this->buildUser( 'admin' );
+            $admin->role = ROLE_DEVELOPER;
+            $admin->save();
+
+            $this->assertTrue( $admin->isDeveloper(), 'Admin users should be developers' );
+            $this->assertSame( ROLE_DEVELOPER, $admin->role, 'Admin users should have a role of 10 = ROLE_DEVELOPER' );
+
+            $negative = $this->buildUser( 'negative' );
+            $negative->role = -50;
+            $negative->save();
+
+            $this->assertSame( ROLE_USER, $negative->role, 'Negative roles are not allowed and must be set to ROLE_USER' );
+
+            $adminLookup = User::findByUsername( 'admin' );
+            $this->assertSame( ROLE_DEVELOPER, $adminLookup->role, 'ROLE_DEVELOPER status must be permanent' );
+
+            $userLookup = User::findByUsername( 'regular' );
+            $this->assertSame( ROLE_USER, $userLookup->role, 'ROLE_USER status must be permanent' );
         }
     }
 

@@ -7,18 +7,23 @@
         public $game;
         public $errors = []; // dictionary from userid to list of errors
 
-        public function error( $userid, $description ) {
+        public function error( $userid, $description, $actual = '', $expected = '' ) {
             if ( !isset( $this->errors[ $userid ] ) ) {
                 $this->errors[ $userid ] = [];
             }
-            $this->errors[ $userid ][] = $description;
+            $this->errors[ $userid ][] = [
+                'description' => $description,
+                'actual' => $actual,
+                'expected' => $expected
+            ];
         }
-        public function __construct( $a = false, $b = false ) {
+        public function __construct( $a = false, $b = false, $genesis = false ) {
             if ( $a instanceof Round ) {
                 // Clone from existing round: new Round( $oldRound )
                 $oldRound = $a;
                 $this->game = $oldRound->game;
                 $this->id = $oldRound->id + 1;
+
                 foreach ( $oldRound->creatures as $creature ) {
                     $this->creatures[ $creature->id ] = clone $creature;
                     $this->creatures[ $creature->id ]->round = $this;
@@ -33,30 +38,91 @@
                 $this->game = $game;
                 $gameid = $game->id;
                 $roundid = $id;
-                $creatures_info = dbSelect(
+
+                $creaturesInfo = dbSelect(
                     'roundcreatures',
                     [ 'creatureid', 'action', 'direction', 'hp', 'locationx', 'locationy' ],
                     compact( 'roundid', 'gameid' )
                 );
-                foreach ( $creatures_info as $i => $creature_info ) {
-                    $id = $creature_info[ 'creatureid' ];
-                    $user_info = dbSelectOne(
+
+                // map: creatureid => user
+                $creatureToUser = [];
+                // map: userid => user
+                $usersMap = [];
+                // genesis is optional, if you want the constructor to run faster
+
+                if ( $genesis ) {
+                    // genesis details were provided during the constructor call
+                    foreach ( $genesis->creatures as $creature ) {
+                        $creatureToUser[ $creature->id ] = $creature->user;
+                    }
+                }
+                else {
+                    // dict: creatureid => userid
+                    $creatureDict = [];
+                    $usersInfo = dbSelect(
                         'creatures',
-                        [ 'userid' ],
-                        compact( 'id', 'gameid' )
+                        [ 'userid', 'id' ],
+                        compact( 'gameid' )
                     );
-                    $user = new User( $user_info[ 'userid' ] );
-                    $creature = new Creature( $creature_info );
+                    foreach ( $usersInfo as $userInfo ) {
+                        $creatureDict[ $userInfo[ 'id' ] ] = $userInfo[ 'userid' ];
+                    }
+                }
+
+                foreach ( $creaturesInfo as $i => $creatureInfo ) {
+                    $creature = new Creature( $creatureInfo );
                     $creature->game = $game;
                     $creature->round = $this;
-                    $creature->user = $user;
+
+                    if ( isset( $creatureToUser[ $creature->id ] ) ) {
+                        $creature->user = $creatureToUser[ $creature->id ];
+                    }
+                    else {
+                        $id = $creatureInfo[ 'creatureid' ];
+                        $userid = $creatureDict[ $id ];
+                        if ( !isset( $usersMap[ $userid ] ) ) {
+                            $user = new User( $userid );
+                            $usersMap[ $user->id ] = $user;
+                        }
+                        else {
+                            $user = $usersMap[ $userid ];
+                        }
+
+                        $creature->user = $user;
+                    }
+
                     $this->creatures[ $creature->id ] = $creature;
                 }
             }
         }
+        protected function getUsersAlive() {
+            $usersAlive = [];
+            foreach ( $this->creatures as $creature ) {
+                if ( $creature->alive && isset( $creature->user ) ) {
+                    $usersAlive[ $creature->user->id ] = $creature->user;
+                }
+            }
+            return $usersAlive;
+        }
+        public function isFinalRound() {
+            $usersAlive = $this->getUsersAlive();
+
+            return count( $usersAlive ) <= 1;
+        }
+        public function getWinnerId() {
+            if ( !$this->isFinalRound() ) {
+                throw new ModelValidationException( 'There is no winner if the game is not over' );
+            }
+            $usersAlive = $this->getUsersAlive();
+            if ( !empty( $usersAlive ) ) {
+                return end( $usersAlive )->id;
+            }
+            return false;
+        }
 
         protected function create() {
-            assert( $this->game instanceof Game, '$this->game must be an instance of Game when a round is created' );
+            assert( $this->game instanceof Game/*, '$this->game must be an instance of Game when a round is created'*/ );
 
             $rows = [];
             $gameid = $this->game->id;
