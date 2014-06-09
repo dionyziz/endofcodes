@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 <?php
-    class FileHelperTest extends UnitTest {
+    class FileHelperTest extends UnitTestWithFixtures {
         protected $mockPath = 'tests/mock/';
         protected $copyPath = 'tests/mock2/';
 

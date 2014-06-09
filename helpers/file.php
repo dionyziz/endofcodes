@@ -1,6 +1,6 @@
 <?php
     function safeWrite( $filename, $content ) {
-        $success = file_put_contents( $filename, $content );
+        $success = @file_put_contents( $filename, $content );
         if ( !$success ) {
             throw new FileNotWritableException( $filename, $content );
         }
