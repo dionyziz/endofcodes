@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>EndofCodes Demo</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/bootstrap.min.css" /><link
+            rel="stylesheet"
+            type="text/css"
+            href="http://endofcodes.com/static/style/general.css" /><link 
+            rel="stylesheet" 
+            href="avgrund.css"><link 
+            href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' 
+            rel='stylesheet' 
+            type='text/css'>
+		<script 
+            type="text/javascript" 
+            src="avgrund.js">
+        </script>
+        <script 
+            type="text/javascript" 
+            src="http://endofcodes.com/static/script/jquery-2.1.0.min.js">
+        </script>
+        <style>
+            #title {
+                font-size: 20px;
+            }
+            #update {
+                width: 25%;    
+                margin-left: auto; 
+                margin-right: auto; 
+                margin-top: 32px;
+                margin-bottom: 32px;
+            }
+            #submit {
+                width: 117px;
+                margin-left: auto; 
+                margin-right: auto; 
+            }
+            #submit button {
+                width: 117px;
+            }
+            .alert-info, .alert-danger {
+                width: 50%; 
+                margin-left: auto; 
+                margin-right: auto; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right"><li><a 
+                            href="user/view?username=dionyziz">Profile</a>
+                    </li>
+                    <li>
+                        <a href="#" id="logout">Log out</a>
+                    </li>
+                    <form id="logout-form" action="session/delete" method="post" >
+                        <input type="hidden" name="token"/>
+                    </form>
+                </ul>
+            </div>
+        </div>
+        <div class="container" id="main">
+            <h1 class='text-center' id='title'>Bot update<h1>       
+            <p class="alert alert-info text-center">To begin playing, you must set up your bot.
+                <a href=''>Start by reading the tutorial</a>.
+            </p>
+            <div id='update' class="form-group">
+                <input type="text" class="form-control" placeholder="bot address">
+            </div>
+            <div id='submit' class="form-group">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </body>
+</html>
