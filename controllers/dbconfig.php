@@ -16,10 +16,13 @@
         }
         public function createView( $error, $dbSaid ) {
             global $config;
-            $oldConfig = [ 'db' => [
-                           'user'   => '',
-                           'pass'   => '',
-                           'dbname' => '' ] ];
+            $oldConfig = [
+                'db' => [
+                    'user'   => '',
+                    'pass'   => '',
+                    'dbname' => ''
+                ]
+            ];
             $oldConfig = array_replace_recursive( $oldConfig, $config );
 
             require_once 'views/database/create.php';
