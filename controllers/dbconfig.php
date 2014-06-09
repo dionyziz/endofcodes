@@ -11,7 +11,7 @@
             }
             catch ( FileNotWritableException $e ) {
                 $content = $e->content;
-                require_once 'views/database/notwritable.php';
+                require 'views/database/notwritable.php';
             }
         }
         public function createView( $error, $dbSaid ) {
@@ -25,7 +25,7 @@
             ];
             $oldConfig = array_replace_recursive( $oldConfig, $config );
 
-            require_once 'views/database/create.php';
+            require 'views/database/create.php';
         }
 
     }
