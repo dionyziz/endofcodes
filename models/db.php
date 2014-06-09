@@ -2,12 +2,15 @@
     function dbInit() {
         global $config;
 
-        $dbConnected = mysql_connect( $config[ 'db' ][ 'host' ],
-                                      $config[ 'db' ][ 'user' ],
-                                      $config[ 'db' ][ 'pass' ] );
+        $dbConnected = mysql_connect(
+            $config[ 'db' ][ 'host' ],
+            $config[ 'db' ][ 'user' ],
+            $config[ 'db' ][ 'pass' ]
+        );
         if ( !$dbConnected ) {
             throw new DBException( 'Failed to connect to MySQL.', mysql_error() );
         }
+
         $dbSelected = mysql_select_db( $config[ 'db' ][ 'dbname' ] );
         if ( !$dbSelected ) {
             throw new DBException( 'Failed to select MySQL database.', mysql_error() );

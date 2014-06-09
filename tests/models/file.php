@@ -47,7 +47,7 @@
             );
         }
         public function testSafeWrite() {
-            //$this->readOnlyDirectory(); // This test is not functional yet.
+            // $this->readOnlyDirectory(); // This test is not functional yet.
             $this->emptyWritableDirectory();
             $this->readOnlyFile();
         }

@@ -17,7 +17,8 @@
                     'php' => 3
                 ]
             ];
-            $this->assertSame( [
+            $this->assertSame(
+                [
                     'email' => 'bugos@gmail.com',
                     'technologies' => [
                         'php' => 3
@@ -36,7 +37,8 @@
                     'php' => NULL
                 ]
             ];
-            $this->assertSame( [
+            $this->assertSame(
+                [
                     'name' => 'bugos',
                     'technologies' => [
                         'c++' => 5,
