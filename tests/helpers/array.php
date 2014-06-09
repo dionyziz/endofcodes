@@ -24,7 +24,7 @@
                     ]
                 ],
                 array_diff_recursive( $updatedArray, $array ),
-                'array_diff_recursive() must return the entries in $updatedArray that does not exist in $array.'
+                'array_diff_recursive() must return the entries in $updatedArray that do not exist in $array.'
             );
 
             $slicedArray = [
