@@ -51,19 +51,6 @@
             $this->emptyWritableDirectory();
             $this->readOnlyFile();
         }
-        private function safeUnlink( $filename ) {
-            if ( file_exists( $filename ) ) {
-
-                chmod( $filename, 0666 );
-
-                if ( is_dir( $filename ) ) {
-                    rmdir( $this->directory );
-                }
-                else {
-                    unlink( $filename );
-                }
-            }
-        }
         public function testRecursiveCopy() {
             $path = 'depth1/depth2/depth3';
             mkdir( $this->mockPath . $path, 0777, true );
@@ -72,6 +59,19 @@
 
             recursiveCopy( $this->mockPath, $this->copyPath . 'deeper' );
             $this->assertTrue( file_exists( $this->copyPath . 'deeper/' . $path . '/magic.php' ), 'The folder must be copied' );
+        }
+        private function safeUnlink( $filename ) {
+            if ( file_exists( $filename ) ) {
+
+                chmod( $filename, 0666 );
+
+                if ( is_dir( $filename ) ) {
+                    rmdir( $filename );
+                }
+                else {
+                    unlink( $filename );
+                }
+            }
         }
         public function tearDown() {
             $this->safeUnlink( $this->filename );
