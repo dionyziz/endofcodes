@@ -33,7 +33,7 @@
             }
 
             require_once 'models/grader/bot.php';
-            require_once 'views/bot/update.php';
+            require 'views/bot/update.php';
         } 
     }
 ?>

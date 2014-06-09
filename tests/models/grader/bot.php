@@ -4,7 +4,7 @@
     require_once 'models/grader/serializer.php';
     require_once 'models/game.php';
     require_once 'models/round.php';
-    require_once 'models/curl.php';
+    require_once 'models/network.php';
 
     class CurlConnectionMock implements CurlConnectionInterface {
         public $url;
@@ -33,7 +33,7 @@
         }
         public function exec() {
             if ( $this->hasResponseError ) {
-                throw new CurlException( $this->responseError );
+                throw new NetworkException( $this->responseError );
             }
             $this->executed = true;
         }

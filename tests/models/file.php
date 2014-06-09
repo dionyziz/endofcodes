@@ -1,5 +1,5 @@
 <?php
-    require_once 'helpers/file.php';
+    require_once 'models/file.php';
     class TestFile extends UnitTestWithFixtures {
         protected $mockPath = 'tests/mock/';
         protected $copyPath = 'tests/mock2/';

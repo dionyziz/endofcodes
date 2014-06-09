@@ -1,5 +1,5 @@
 <?php
-    require_once 'models/curl.php';
+    require_once 'models/network.php';
     require_once 'models/grader/serializer.php';
     require_once 'models/grader/bot.php';
     require_once 'models/error.php';
