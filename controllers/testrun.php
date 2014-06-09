@@ -33,7 +33,7 @@
 
                 $unittests[] = $unittest;
             }
-            require_once 'views/testrun/results.php';
+            require 'views/testrun/results.php';
 
             if ( $failed ) {
                 return 1;
@@ -45,7 +45,7 @@
             require_once 'models/test/base.php';
 
             $tests = UnitTest::findAll();
-            require_once 'views/testrun/create.php';
+            require 'views/testrun/create.php';
         }
     }
 ?>
