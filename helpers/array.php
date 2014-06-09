@@ -1,9 +1,9 @@
 <?php
     // Returns the elements of $minuend that are not elements of $subtrahend.
-	// This extends array_diff_assoc() to multidimentional arrays.
-	//
+    // This extends array_diff_assoc() to multidimentional arrays.
+    //
     // If any elements of $minuend are set to NULL they are not included in the $difference.
-	// This enables us to use $array = array_diff_recursive( $array ) to remove NULL elements from an array.
+    // This enables us to use $array = array_diff_recursive( $array ) to remove NULL elements from an array.
     function array_diff_recursive( $minuend, $subtrahend = [] ) {
         $difference = [];
         foreach ( $minuend as $key => $value ) {
