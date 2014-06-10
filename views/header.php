@@ -39,6 +39,7 @@
             includeScript( 'user/view' );
             includeScript( 'user/create' );
             includeScript( 'session/create' );
+            includeScript( 'bot/update' );
             includeScript( 'debug' );
             includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
         ?>

@@ -11,7 +11,7 @@
 #bot-update-form #submit {
     margin-left: 7px;
 }
-.bot-update .alert-info, .bot-update .alert-danger {
+.bot-update .alert {
     width: 50%; 
     margin-left: auto; 
     margin-right: auto; 

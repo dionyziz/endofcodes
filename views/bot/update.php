@@ -4,11 +4,11 @@
 
 <div class="text-center bot-update">
     <h1 class='text-center' id='title'>Bot update<h1><?php
-    ?><p class="alert alert-info text-center">To begin playing, you must set up your bot.
+    ?><p id='bot-set-up' class="alert alert-info text-center">To begin playing, you must set up your bot.
         <a href=''>Start by reading the tutorial</a>.
     </p><?php
     if ( !$bot_fail && $user->boturl != '' ) {
-        ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
+        ?><p class='check alert alert-success'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
     else if ( $bot_fail ) {
         ?><p class='alert alert-danger'>Your bot is incorrectly configured <img src='static/images/cancel.png' alt='cross' /></p><?php
