@@ -34,6 +34,9 @@
                 throw new HTTPNotFoundException( 'There is no game with the specified gameid (gameid = ' . $gameid . ')' );
             }
 
+            if ( $game->ended ) {
+                return;
+            }
             $grader = new Grader( $game );
             do {
                 if ( $game->ended ) {

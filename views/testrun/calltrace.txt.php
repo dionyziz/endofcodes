@@ -2,18 +2,20 @@
     global $config;
 
     $numColumns = 3;
-    $columnWidth = floor( ( $config[ 'cli_max_width' ] - 6 ) / $numColumns );
+    $standardColumnWidth = floor( ( $config[ 'cli_max_width' ] - 6 ) / $numColumns );
 
     echo "Calltrace:\n";
     echo "|";
     echo str_repeat( "=", $config[ 'cli_max_width' ] );
     echo "|\n";
     echo "| ";
-    echo str_pad( "Filename", $columnWidth );
+    echo str_pad( "Filename", $standardColumnWidth );
     echo "| ";
-    echo str_pad( "Line", $columnWidth );
+    $lineColumnWidth = round( $standardColumnWidth * ( 1 / 4 ) );
+    echo str_pad( "Line", $lineColumnWidth );
     echo "| ";
-    echo str_pad( "Function", $columnWidth );
+    $functionColumnWidth = round( $standardColumnWidth * ( 7 / 4 ) );
+    echo str_pad( "Function", $functionColumnWidth );
     echo "|\n";
     echo "|";
     echo str_repeat( "=", $config[ 'cli_max_width' ] );
@@ -25,17 +27,17 @@
             if ( substr( $file, 0, strlen( $config[ 'root' ] ) ) == $config[ 'root' ] ) {
                 $file = substr( $file, strlen( $config[ 'root' ] ) );
             }
-            echo str_pad( substr( $file, -$columnWidth, $columnWidth ), $columnWidth );
+            echo str_pad( substr( $file, -$standardColumnWidth, $standardColumnWidth ), $standardColumnWidth );
         }
         else {
-            echo str_repeat( " ", $columnWidth );
+            echo str_repeat( " ", $standardColumnWidth );
         }
         echo "| ";
         if ( isset( $call[ 'line' ] ) ) {
-            echo str_pad( $call[ 'line' ], $columnWidth );
+            echo str_pad( $call[ 'line' ], $lineColumnWidth );
         }
         else {
-            echo str_repeat( " ", $columnWidth );
+            echo str_repeat( " ", $lineColumnWidth );
         }
         echo "| ";
         ob_start();
@@ -52,7 +54,7 @@
         }
         ?>)<?php
         $function = ob_get_clean();
-        echo str_pad( substr( $function, 0, $columnWidth ), $columnWidth );
+        echo str_pad( substr( $function, 0, $functionColumnWidth ), $functionColumnWidth );
         echo "|\n";
     }
     echo "|";

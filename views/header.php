@@ -21,11 +21,13 @@
             includeStyle( "home" );
             includeStyle( "user/create" );
             includeStyle( "session/create" );
+            includeStyle( "dbconfig/create" );
             includeStyle( "test" );
             includeStyle( "links" );
             includeStyle( "game/view" );
             includeStyle( "user/view" );
             includeStyle( "user/update" );
+            includeStyle( "bot/update" );
             includeStyle( "debug" );
             includeStyle( "../jquery-ui/jquery-ui.min" );
             includeStyle( "../jquery-ui/jquery.ui.theme" );
@@ -41,6 +43,7 @@
             includeScript( 'user/update' );
             includeScript( 'user/create' );
             includeScript( 'session/create' );
+            includeScript( 'bot/update' );
             includeScript( 'debug' );
             includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
         ?>

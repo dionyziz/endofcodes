@@ -19,7 +19,7 @@
             foreach ( $migrations as $name ) {
                 $this->run( $name, $env ); 
             }
-            require_once 'views/migration/results.php';
+            require 'views/migration/results.php';
         }
         public function createView() {
             require_once 'models/migration.php';
@@ -31,7 +31,7 @@
             }
             $pending = Migration::findUnexecuted();
             $migrations = Migration::findAll();
-            require_once 'views/migration/create.php';
+            require 'views/migration/create.php';
         }
         protected function run( $name, $env ) {
             $migrations = Migration::findAll();

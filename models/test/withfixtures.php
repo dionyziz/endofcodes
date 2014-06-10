@@ -6,17 +6,23 @@
     require_once 'models/country.php';
 
     class UnitTestWithFixtures extends UnitTest {
-        protected function buildUser( $username, $boturl = '' ) {
+        protected function buildUser( $username, $email = '', $boturl = '' ) {
             global $config;
 
             $user = new User();
             $user->username = $username;
             $user->password = 'secret1234';
-            $user->email = "$username@gmail.com";
+
+            if ( $email == '' ) {
+                $email = "$username@gmail.com";
+            }
+            $user->email = $email;
+
             if ( $boturl == '' ) {
                 $boturl = $config[ 'base' ] . 'bots/php';
             }
             $user->boturl = $boturl;
+
             $user->save();
 
             return $user;

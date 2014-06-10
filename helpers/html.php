@@ -4,7 +4,7 @@
         protected $resource;
         protected $method;
         public $id;
-        public $attributes;
+        public $attributes = [];
         public $formMethod;
         protected $hasFile = false;
         protected $token;
@@ -172,18 +172,16 @@
                 $this->formMethod = 'get';
             }
             ?><form <?php
-                if ( isset( $this->id ) ) {
+                if ( !empty( $this->id ) ) {
                     ?>id="<?php
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
                 }
-                if ( isset( $this->attributes ) ) {
-                    foreach( $this->attributes as $key => $value ) {
-                        echo $key; 
-                        ?>="<?php
-                            echo htmlspecialchars( $value );
-                        ?>" <?php
-                    }
+                foreach ( $this->attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
                 }
                 ?>action="<?php
                     echo htmlspecialchars( $this->resource );

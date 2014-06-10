@@ -94,16 +94,15 @@
             }
             return call_user_func_array( $callable, $arguments );
         }
-        protected function loadConfig() {
+        protected function getEnvironment() {
+            if ( getEnv( 'ENVIRONMENT' ) !== false ) {
+                $this->environment = getEnv( 'ENVIRONMENT' );
+            }
+        }
+        protected function getConfig() {
             global $config;
 
-            if ( getEnv( 'ENVIRONMENT' ) !== false ) {
-                $env = getEnv( 'ENVIRONMENT' );
-            }
-            else {
-                $env = $this->environment;
-            }
-            $config = getConfig( $env );
+            $config = loadConfig( $this->environment );
         }
         protected function readHTTPAccept() {
             if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
@@ -126,11 +125,21 @@
                 $this->outputFormat = 'json';
             }
         }
+        protected function dbInit() {
+            try {
+                dbInit();
+            }
+            catch ( DBException $e ) {
+                $arguments = get_object_vars( $e );
+                go( 'dbconfig', 'create', $arguments );
+            }
+        }
         protected function init() {
+            $this->getEnvironment();
+            $this->getConfig();
             $this->initDebug();
-            $this->loadConfig();
             $this->readHTTPAccept();
-            dbInit();
+            $this->dbInit();
         }
         public function initDebug() {
             global $debugger;
@@ -153,10 +162,9 @@
             }
             $method = $this->getControllerMethod( $get[ 'method' ], $httpRequestMethod );
             $vars = $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
-            if ( !isset( $vars[ 'token' ] ) ) {
-                $token = '';
-            }
-            else {
+
+            $token = '';
+            if ( isset( $vars[ 'token' ] ) ) {
                 $token = $vars[ 'token' ];
             }
             $this->protectFromForgery( $token, $httpRequestMethod );
