@@ -27,6 +27,7 @@
 }
 #login-form input[type="submit"] {
     margin-top: 15px;
+    margin-bottom: 30px;
     height: 43px;
     width: 300px;
 }

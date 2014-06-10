@@ -6,26 +6,29 @@
     go( "user", "view", [ "example" => "argument" ] ); // resource & method
     go(); // home page
     */
-    function go( $resource_or_url = false, $method = false, $args = [] ) {
-        throw new RedirectException( $resource_or_url, $method, $args );
+    function go( $resourceOrURL = false, $method = false, $args = [] ) {
+        throw new RedirectException( $resourceOrURL, $method, $args );
     }
 
     class RedirectException extends Exception {
         private $url;
+        public $resource;
+        public $method;
+        public $args;
 
         public function getURL() {
             return $this->url;
         }
 
-        public function __construct( $resource_or_url = false, $method = false, $args = [] ) {
-            if ( $resource_or_url === false ) {
+        public function __construct( $resourceOrURL = false, $method = false, $args = [] ) {
+            if ( $resourceOrURL === false ) {
                 $this->__construct( 'dashboard', 'view' );
             }
             else if ( $method === false ) {
-                $this->url = $resource_or_url;
+                $this->url = $resourceOrURL;
             }
             else {
-                $resource = $resource_or_url;
+                $this->resource = $resourceOrURL;
                 foreach ( $args as $key => $arg ) {
                     if ( $arg === true ) {
                         $arg = 'yes';
@@ -35,7 +38,9 @@
                     }
                     $args[ $key ] = "$key=" . urlencode( $arg );
                 }
-                $this->url = "$resource/$method?" . implode( "&", $args );
+                $this->method = $method;
+                $this->args = $args;
+                $this->url = $this->resource . '/' . $this->method . '?' . implode( '&', $this->args );
             }
         }
     }
@@ -59,7 +64,7 @@
         public function outputErrorPage() {
             $error = $this->error;
             $reason = $this->reason;
-            require_once "views/http/$error.php";
+            require "views/http/$error.php";
         }
     }
 

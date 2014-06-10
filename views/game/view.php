@@ -64,6 +64,17 @@
 ?>" data-height="<?php
     echo $game->height;
 ?>">
+    <div class='infobubble'>
+        <span class='hp'>
+            <span class='numeric'></span>
+            <span class='damage'></span>
+        </span>
+        <div class='stats'>
+            <h3 class="creatureid"></h3>
+            <div>Player: <strong class="player"></strong></div>
+            <div>Location: <strong class="location"></strong></div>
+        </div>
+    </div>
     <div class='gameboard'>
         <?php
             foreach ( $round->creatures as $creature ) {
@@ -94,17 +105,6 @@
                 }
             }
         ?>
-        <div class='infobubble'>
-            <span class='hp'>
-                <span class='numeric'></span>
-                <span class='damage'></span>
-            </span>
-            <div class='stats'>
-                <h3 class="creatureid"></h3>
-                <div>Player: <strong class="player"></strong></div>
-                <div>Location: <strong class="location"></strong></div>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -114,7 +114,7 @@
     ?>">Round <?php
         echo $round->id;
     ?></span>
-    <span class="previous"<?php
+    <span class="previous game-tool"<?php
         if ( $round->id - 1 < 0 ) {
             ?> style="display: none"<?php
         }
@@ -125,7 +125,9 @@
             echo htmlspecialchars( $round->id - 1 );
         ?>"><span class="glyphicon glyphicon-chevron-left"></span></a>
     </span>
-    <span class="next"<?php
+    <span class="play game-tool"><a href="#"><span class="glyphicon glyphicon-play"></span></a></span>
+    <span class="pause game-tool"><a href="#"><span class="glyphicon glyphicon-pause"></span></a></span>
+    <span class="next game-tool"<?php
         if ( $round->id + 1 >= $game->roundCount ) {
             ?> style="display: none"<?php
         }

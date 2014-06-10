@@ -1,5 +1,24 @@
 <?php
+    function dbInit() {
+        global $config;
+
+        $dbConnected = mysql_connect(
+            $config[ 'db' ][ 'host' ],
+            $config[ 'db' ][ 'user' ],
+            $config[ 'db' ][ 'pass' ]
+        );
+        if ( !$dbConnected ) {
+            throw new DBException( 'Failed to connect to MySQL.', mysql_error() );
+        }
+
+        $dbSelected = mysql_select_db( $config[ 'db' ][ 'dbname' ] );
+        if ( !$dbSelected ) {
+            throw new DBException( 'Failed to select MySQL database.', mysql_error() );
+        }
+    }
     function db( $sql, $bind = [] ) {
+        global $debugger;
+
         foreach( $bind as $key => $value ) {
             if ( is_string( $value ) ) {
                 $value = mysql_real_escape_string( $value );
@@ -18,11 +37,15 @@
             unset( $bind[ $key ] );
         }
         $finalsql = strtr( $sql, $bind );
-        $res = mysql_query( $finalsql );
-        if ( $res === false ) {
-            throw new DBException( mysql_error() );
+
+        $debugger->beginQueryExecution( new DebuggerQuery( $sql, $bind ) );
+        $result = mysql_query( $finalsql );
+        $debugger->finishQueryExecution();
+
+        if ( $result === false ) {
+            throw new DBException( 'Failed to execute query', mysql_error() );
         }
-        return $res;
+        return $result;
     }
 
     function dbInsert( $table, $row ) {
@@ -180,11 +203,19 @@
 
     function dbListFields( $table ) {
         return array_map( 'array_shift', dbArray( "SHOW COLUMNS FROM $table" ) );
-    }  
+    }
 
     class DBException extends Exception {
-        public function __construct( $error ) {
-            parent::__construct( 'Database error: ' . $error );
+        public $error;
+        public $dbSaid;
+        public function __construct( $error, $dbSaid = '' ) {
+            $this->error = $error;
+            $this->dbSaid = $dbSaid;
+            $message = 'Database error: ' . $error;
+            if ( !empty( $dbSaid ) ) {
+                $message .= ' MySQL said: ' . $dbSaid;
+            }
+            parent::__construct( $message );
         }
     }
 

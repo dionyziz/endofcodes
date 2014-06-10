@@ -10,11 +10,11 @@
         } );
     ?>
     <div class="profile-header" data-sameUser="<?php
-        if ( $sameUser ) {
-            echo "yes";
+        if ( isset( $_SESSION[ 'user' ] ) && $sameUser ) {
+            ?>yes<?php
         }
         else {
-            echo "no";
+            ?>no<?php
         }
     ?>">
         <div class="avatar">

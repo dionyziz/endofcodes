@@ -30,14 +30,13 @@
         public function testDelete() {
             $user = $this->buildUser( 'pkakelas' );
             $user->delete();
-            try {
-                $user = User::findByUsername( 'pkakelas' );
-                $success = false;
-            }
-            catch ( ModelNotFoundException $e ) {
-                $success = true;
-            }
-            $this->assertTrue( $success, 'The user must be deleted when the $user->delete() function runs' );
+            $this->assertThrows(
+                function() {
+                    $user = User::findByUsername( 'pkakelas' );
+                },
+                'ModelNotFoundException',
+                'The user should not exist after the execution of $user->delete()'
+            );
         }
         public function testPasswordChange() {
             $user = $this->buildUser( 'pkakelas' );
@@ -84,52 +83,47 @@
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
         public function testDuplicateUsername() {
-            $caught = false;
             $user1 = $this->buildUser( 'pkakelas' );
-            try {
-                $user2 = $this->buildUser( 'pkakelas' );
-            }
-            catch ( ModelValidationException $e ) {
-                $caught = true;
-                $this->assertEquals(
-                    'username_used',
-                    $e->error,
-                    "If the username is used we must get a 'username_used' error"
-                );
-            }
-            $this->assertTrue( $caught, 'A ModelValidationException must be caught if we try to make a duplicate username' );
+            $this->assertThrows(
+                function() {
+                    $user2 = $this->buildUser( 'pkakelas' );
+                },
+                'ModelValidationException',
+                'A ModelValidationException must be thrown when we try to register an existing username',
+                function( ModelValidationException $e ) {
+                    $this->assertEquals(
+                        'username_used',
+                        $e->error,
+                        "We must get a 'username_used' error when we try to register an existing username"
+                    );
+                }
+            );
         }
         public function testDuplicateEmail() {
-            $caught = false;
-            $user1 = new User();
-            $user2 = new User();
-            $user1->username = 'pkakelas';
-            $user2->username = 'dionyziz';
-            $user1->password = $user2->password = 'secret1234';
-            $user1->email = $user2->email = 'duplicate@gmail.com';
-            $user1->save();
-            try {
-                $user2->save();
-            }
-            catch ( ModelValidationException $e ) {
-                $caught = true;
-                $this->assertEquals(
-                    'email_used',
-                    $e->error,
-                    "If the email is used we must get a 'email_used' error"
-                );
-            }
-            $this->assertTrue( $caught, 'A ModelValidationException must be caught if we try to make a duplicate email' );
+            $user1 = $this->buildUser( 'pkakelas', 'duplicate@gmail.com' );
+            $this->assertThrows(
+                function() {
+                    $user2 = $this->buildUser( 'dionyziz', 'duplicate@gmail.com' );
+                },
+                'ModelValidationException',
+                'A ModelValidationException must be thrown when we try to register an existing email',
+                function( ModelValidationException $e ) {
+                    $this->assertEquals(
+                        'email_used',
+                        $e->error,
+                        "We must get a 'email_used' error when we try to register an existing email"
+                    );
+                }
+            );
         }
         public function testFindNonExistentUser() {
-            $caught = false;
-            try {
-                $user = new User( 1 );
-            }
-            catch ( ModelNotFoundException $e ) {
-                $caught = true;
-            }
-            $this->assertTrue( $caught, 'When we try to find a non existent user we must get a ModelNotFoundException' );
+            $this->assertThrows(
+                function() {
+                    $user = new User( 1 );
+                },
+                'ModelNotFoundException',
+                'A ModelNotFoundException must be thrown when we try find a non existent user'
+            );
         }
         public function testFindById() {
             $user = $this->buildUser( 'dionyziz' );
@@ -141,97 +135,91 @@
         public function testFindByUsername() {
             $user = $this->buildUser( 'pkakelas' );
             $dbUser = User::findByUsername( 'pkakelas' );
-            $this->assertEquals( $user->id, intval( $dbUser->id ), "findByUsername must find the correct user" );
+            $this->assertEquals( $user->id, intval( $dbUser->id ), "findByUsername() must find the correct user" );
         }
         public function testAuthenticationAfterRenewSessionId() {
             $user = $this->buildUser( 'pkakelas' );
 
             $user->renewSessionId();
             $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
-            $this->assertTrue( $passwordSuccess, 'Password must not be changed after "renewSessionId" is run' );
+            $this->assertTrue( $passwordSuccess, 'Password should not be changed after "renewSessionId" is run' );
         }
         public function testCreateForgotPasswordLink() {
             $user = $this->buildUser( 'pkakelas' );
-            
+
             $link = $user->createForgotPasswordLink();
             $this->assertTrue( isset( $user->forgotpasswordtoken ), 'CreateForgotPasswordLink must save the token to $user->forgotpasswordtoken' );
-            $this->assertTrue( !empty( $user->forgotpasswordtoken ), '$user->forgotpasswordtokeni must not be empty' );
+            $this->assertTrue( !empty( $user->forgotpasswordtoken ), '$user->forgotpasswordtoken must not be empty' );
             $this->assertTrue( isset( $user->forgotpasswordrequestcreated ), 'CreateForgotPasswordLink must save the time it created the link to $user->forgotpasswordrequestcreated' );
         }
         public function testRevokePasswordCheck() {
             $user = $this->buildUser( 'pkakelas' );
-            
+
             $user->createForgotPasswordLink();
-            try {
-                $user->revokePasswordCheck( $user->forgotpasswordtoken );
-                $trueSuccess = true;
-            } 
-            catch ( ForgotPasswordModelInvalidTokenException $e ) {
-                $trueSuccess = false; 
-            }
-            try {
-                $user->revokePasswordCheck( 'dsafasfjsakf21ekjwlrfhkl321jhl' );
-                $falseSuccess = false;
-            } 
-            catch ( ForgotPasswordModelInvalidTokenException $e ) {
-                $falseSuccess = true; 
-            }
-            try {
-                $user->revokePasswordCheck( '' );
-                $emptySuccess = false;
-            } 
-            catch ( ForgotPasswordModelInvalidTokenException $e ) {
-                $emptySuccess = true; 
-            }
+            $this->assertDoesNotThrow(
+                function() use ( $user ) {
+                    $user->revokePasswordCheck( $user->forgotpasswordtoken );
+                },
+                'ForgotPasswordModelInvalidTokenException',
+                'revokePasswordCheck() should validate correct tokens'
+            );
+            $this->assertThrows(
+                function() use ( $user ) {
+                    $user->revokePasswordCheck( 'dsafasfjsakf21ekjwlrfhkl321jhl' );
+                },
+                'ForgotPasswordModelInvalidTokenException',
+                'revokePasswordCheck() should not validate invalid tokens'
+            );
+            $this->assertThrows(
+                function() use ( $user ) {
+                    $user->revokePasswordCheck( '' );
+                },
+                'ForgotPasswordModelInvalidTokenException',
+                'revokePasswordCheck() should not validate empty tokens'
+            );
+
             $oldToken = $user->forgotpasswordtoken;
             $user->createforgotpasswordlink();
-            try {
-                $user->revokePasswordCheck( $oldToken );
-                $oldTokenSuccess = false;
-            } 
-            catch ( ForgotPasswordModelInvalidTokenException $e ) {
-                $oldTokenSuccess = true; 
-            }
+            $this->assertThrows(
+                function() use ( $user, $oldToken ) {
+                    $user->revokePasswordCheck( $oldToken );
+                },
+                'ForgotPasswordModelInvalidTokenException',
+                'revokePasswordCheck() should not validate with old tokens'
+            );
+
             $user->forgotpasswordrequestcreated = date( "Y-m-d h:i:s", time() - 60 * 60 * 24 * 2 );
-            try {
-                $user->revokePasswordCheck( $user->forgotpasswordtoken );
-                $expiredSuccess = false;
-            }
-            catch ( ModelValidationException $e ) {
-                $expiredSuccess = true;
-            }
-            $this->assertTrue( $trueSuccess, 'revokePasswordCheck should validate correct tokens' );
-            $this->assertTrue( $falseSuccess, 'revokePasswordCheck should not validate invalid tokens' );
-            $this->assertTrue( $emptySuccess, 'revokePasswordCheck should not validate empty tokens' );
-            $this->assertTrue( $oldTokenSuccess, 'revokePasswordCheck should not validate with old tokens' );
-            $this->assertTrue( $expiredSuccess, 'revokePasswordCheck should not validate when request is expired' );
+            $this->assertThrows(
+                function() use ( $user ) {
+                    $user->revokePasswordCheck( $user->forgotpasswordtoken );
+                },
+                'ModelValidationException',
+                'revokePasswordCheck() should not validate when request is expired'
+            );
         }
         public function testPasswordValidate() {
             $user = $this->buildUser( 'pkakelas' );
-            try {
-                $user->passwordValidate( 'Bob and Alice' );
-                $trueSuccess = true;
-            } 
-            catch ( ModelValidationException $e ) {
-                $trueSuccess = false;
-            } 
-            try {
-                $user->passwordValidate( '' );
-                $emptySuccess = false;
-            }
-            catch ( ModelValidationException $e ) {
-                $emptySuccess = true;
-            } 
-            try {
-                $user->passwordValidate( 'Bob' ); 
-                $smallSuccess = false;
-            }
-            catch ( ModelValidationException $e ) {
-                $smallSuccess = true;
-            } 
-            $this->assertTrue( $trueSuccess, 'passwordValidate should validate the default password that we have set' );
-            $this->assertTrue( $emptySuccess, 'passwordValidate should not validate empty passwords' );
-            $this->assertTrue( $smallSuccess, 'passwordValidate should not validate too small passwords' );
+            $this->assertDoesNotThrow(
+                function() use ( $user ) {
+                    $user->passwordValidate( 'Bob and Alice' );
+                },
+                'ModelValidationException',
+                'passwordValidate() should validate the default password that we have set'
+            );
+            $this->assertThrows(
+                function() use ( $user ) {
+                    $user->passwordValidate( '' );
+                },
+                'ModelValidationException',
+                'passwordValidate() should not validate empty passwords'
+            );
+            $this->assertThrows(
+                function() use ( $user ) {
+                    $user->passwordValidate( 'Bob' );
+                },
+                'ModelValidationException',
+                'passwordValidate() should not validate too small passwords'
+            );
         }
         public function testSaveImage() {
             $user = $this->buildUser( 'vitsalis' );
@@ -261,24 +249,22 @@
         public function testSetBoturl() {
             $user = $this->buildUser( 'vitsalis' );
             $currentBoturl = $user->boturl;
-            $caught = false;
-            $error = '';
 
-            try {
-                $user->setBoturl( 'invalid_boturl' );
-            }
-            catch ( ModelValidationException $e ) {
-                $caught = true;
-                $error = $e->error;
-            }
-
-            $this->assertTrue( $caught, 'A ModelValidationException must be thrown if the boturl is invalid' );
-            $this->assertTrue( $error != '', 'An error must be given' );
+            $this->assertThrows(
+                function() use ( $user ) {
+                    $user->setBoturl( 'invalid_boturl' );
+                },
+                'ModelValidationException',
+                'A ModelValidationException must be thrown when the boturl is invalid',
+                function( ModelValidationException $e ) {
+                    $this->assertTrue( !empty( $e->error ), 'An error must be returned if the boturl is invalid' );
+                }
+            );
             $this->assertEquals( $currentBoturl, $user->boturl, "The user's boturl must not change" );
         }
         public function testRoles() {
             $user = $this->buildUser( 'regular' );
-            
+
             $this->assertFalse( $user->isDeveloper(), 'Regular users should not be developers' );
             $this->assertSame( ROLE_USER, $user->role, 'Regular users should have a role of 0 = ROLE_USER' );
 
