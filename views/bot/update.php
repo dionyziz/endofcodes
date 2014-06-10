@@ -2,8 +2,11 @@
     require 'views/header.php';
 ?>
 
-<div class="text-center">
-    <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
+<div class="text-center bot-update">
+    <h1 class='text-center' id='title'>Bot update<h1><?php
+    ?><p class="alert alert-info text-center">To begin playing, you must set up your bot.
+        <a href=''>Start by reading the tutorial</a>.
+    </p><?php
     if ( !$bot_fail && $user->boturl != '' ) {
         ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }
@@ -45,16 +48,25 @@
         }
     }
     $form = new Form( 'bot', 'update' );
+    $form->id = 'bot-update-form';
     $form->output( function( $self ) use( $boturl_empty, $boturl_invalid, $user ) {
-        $self->createLabel( 'boturl', 'Bot URL' );
         if ( $boturl_empty ) {
             $self->createError( 'Please enter your bot URL' );
         }
         if ( $boturl_invalid ) {
             $self->createError( 'Please enter a valid HTTP URL' );
         }
-        $self->createInput( 'text', 'boturl', 'boturl', $user->boturl );
-        $self->createInput( 'submit', '', '', 'Save bot settings' );
+        ?><div id='update' class="form-group"><?php
+            $self->createInput( 'text', 'boturl', 'boturl', $user->boturl, [ 
+                'class' => 'form-control', 
+                'placeholder' => 'bot address'
+            ] );
+        ?></div><?php
+        ?><div id='submit' class="form-group"><?php
+            $self->createInput( 'submit', '', '', 'Save bot settings', [ 
+                'class' => 'btn btn-primary' 
+            ] );
+        ?></div><?php
     } );
 ?></div>
 

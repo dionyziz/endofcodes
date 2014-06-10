@@ -25,6 +25,7 @@
             includeStyle( "links" );
             includeStyle( "game/view" );
             includeStyle( "user/view" );
+            includeStyle( "bot/update" );
             includeStyle( "debug" );
             includeStyle( "../jquery-ui/jquery-ui.min" );
             includeStyle( "../jquery-ui/jquery.ui.theme" );
