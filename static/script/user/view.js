@@ -83,6 +83,8 @@ var UserView = {
             formData.append( "followedid", followedid );
             formData.append( "token", token );
 
+            $( '.follow button' ).fadeTo( 'slow', 0.7 );
+
             $.ajax( {
                 url: "follow/" + now.method,
                 type: "POST",
@@ -98,7 +100,6 @@ var UserView = {
                     );
                     $( 'form#' + now.action + '-form' ).attr( 'action', 'follow/' + next.method );
                     $( 'form#' + now.action + '-form' ).attr( 'id', next.action + '-form' );
-                    $( '.follow button' ).css( 'display', 'none' );
                     $( '.follow button' ).fadeIn( 'slow' );
                 }
             } );
