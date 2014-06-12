@@ -3,7 +3,7 @@
 ?>
 
 <div class="text-center">
-    <p>To begin playing, you must set up your bot.<a href=''> Start by reading the tutorial.</a></p><?php
+    <p>To begin playing, you must set up your bot.<a href='https://github.com/dionyziz/endofcodes/blob/master/docs/getting_started.md'> Start by reading the tutorial.</a></p><?php
     if ( !$bot_fail && $user->boturl != '' ) {
         ?><p class='check'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php
     }

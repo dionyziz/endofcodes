@@ -1,26 +1,6 @@
 <?php
     require 'views/header.php';
-?>
-<div id="steps">
-    <div div="step1" class="steps">
-        <p>Step 1</p>
-        <p><a href="">Download the libraries</a></p>
-    </div>
-    <div id="step2" class="steps">
-        <p>Step 2</p>
-        <p><a href="">Read the basic rules</a></p>
-    </div>
-    <div id="step3" class="steps">
-        <p>Step 3</p>
-        <p>Code your bot</p>
-    </div>
-    <div id="step4" class="steps">
-        <p>Step 4</p>
-        <p>Register to try it out</p>
-    </div>
-</div>
 
-<?php
     $form = new Form( 'user', 'create' );
     $form->id = 'register-form';
     $form->output( function( $self ) use( $username_empty, $username_invalid, $password_empty,
