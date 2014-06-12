@@ -58,7 +58,7 @@ it how it wants to move.
 The game is a strategy game in 2D space. Each bot controls a number of creatures
 in space. Here is a typical game setup with three players:
 
-[[creatures.jpg]]
+![Creatures map](creatures.png)
 
 You can see the creatures as bubbles on the grid. Each creature is on its own
 location - two creatures cannot share the same location. Each creature has a
@@ -91,7 +91,11 @@ take more damage, up to 4 hit points per round if it is surrounded. If two
 creatures try to move to the same location, they will be both bounced back to
 their previous locations.
 
-That's it about the rules. Now let's get to coding your first bot in PHP.
+That's it about the rules. If you want to view our precise rules, you can
+[refer to our specification](https://github.com/dionyziz/endofcodes/blob/master/SPECIFICATION.md#overview),
+although this shouldn't be necessary to make your first bot.
+
+Now let's get to coding your first bot in PHP.
 
 Creating your bot
 -----------------
@@ -104,8 +108,8 @@ We're also planning to develop a protocol that eliminates the need for players
 to port forward. However, for now, you must either enable port forwarding on
 your local network, or have an open network computer, such as a server.
 
-We have prepared [[a sample
-bot]](https://github.com/dionyziz/endofcodes/tree/master/bots/php) that you can use to get started.
+We have prepared [a sample
+bot](https://github.com/dionyziz/endofcodes/tree/master/bots/php) that you can use to get started.
 Start by making a copy of the sample bot: Place the files to your www root. You
 will need to copy all 4 files: `.htaccess`, `bot.php`, `game.php`, and
 `round.php`. `.htaccess` assumes you are running Apache and that mod_rewrite is
@@ -126,7 +130,7 @@ shows the expected JSON data and returns a 200 HTTP OK response.
 Configuring your account
 ------------------------
 Now, make sure you create an account on
-[[endofcodes.com]](http://endofcodes.com). Then go to your settings page and
+[endofcodes.com](http://endofcodes.com). Then go to your settings page and
 change your bot URL to the one you've created. You're ready to play! Games take
 place every day at 18:00 (GMT+2).
 
