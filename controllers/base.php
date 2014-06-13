@@ -1,10 +1,10 @@
 <?php
     abstract class ControllerBase {
         protected $acceptTypes = [];
-        public $environment = 'development';
-        public $trusted = false;
-        public $outputFormat = 'html';
-        public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
+        protected $environment = 'development';
+        protected $trusted = false;
+        protected $outputFormat = 'html';
+        protected $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
         protected $method = 'view'; // Override to specify a default controller method.
 
         public static function findController( $resource ) {
@@ -19,7 +19,7 @@
 
             return $controller;
         }
-        protected function sessionCheck() {
+        private function sessionCheck() {
             global $config;
 
             if ( isset( $_SESSION[ 'user' ] ) ) {
@@ -37,7 +37,7 @@
                 $_SESSION[ 'user' ] = $user;
             }
         }
-        protected function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
+        private function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
             switch ( $httpRequestMethod ) {
                 case 'POST':
                     $vars = array_merge( $post, $files );
@@ -52,7 +52,7 @@
 
             return $vars;
         }
-        protected function protectFromForgery( $vars, $httpRequestMethod ) {
+        private function protectFromForgery( $vars, $httpRequestMethod ) {
             if ( $this->trusted ) {
                 return;
             }
@@ -65,7 +65,7 @@
                 }
             }
         }
-        protected function getControllerMethod( $vars, $httpRequestMethod ) {
+        private function getControllerMethod( $vars, $httpRequestMethod ) {
             if ( isset( $vars[ 'method' ] ) ) {
                 $this->method = $vars[ 'method' ];
             }
@@ -80,7 +80,7 @@
             }
             return $this->method;
         }
-        protected function callWithNamedArgs( $method, $vars ) {
+        private function callWithNamedArgs( $method, $vars ) {
             $controllerReflection = new ReflectionObject( $this );
             try {
                 $methodReflection = $controllerReflection->getMethod( $method );
@@ -117,7 +117,7 @@
 
             $config = loadConfig( $this->environment );
         }
-        protected function readHTTPAccept() {
+        private function readHTTPAccept() {
             if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
                 return;
             }
@@ -151,7 +151,7 @@
                 //go( 'dbconfig', 'create', $arguments );
             }
         }
-        public function initDebug() {
+        private function initDebug() {
             global $debugger;
 
             if ( isset( $_SESSION[ 'debug' ] ) ) {
