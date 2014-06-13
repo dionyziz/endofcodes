@@ -32,9 +32,6 @@ all sorts of skills:
  * ***Programming languages***: As the platform is not restrictive about which
    programming language you can use, you can develop domain-specific languages
    to tackle particular problems in more extensible ways.
- * ***Big data***: You can download historical games into your own database and
-   use big-data techniques to look up information online while your program is
-   playing.
  * ***Algorithms***: Certain parts of the game may be solvable using algorithmic
    techniques. Probabilistic and approximation methods can be appropriate,
    although certain parts such as end-of-game situations may be solvable with
@@ -139,7 +136,7 @@ Modifying your bot
 The sample bot is quite stupid. The basic game logic is written in `round.php`,
 which you can edit. The bot behaves as follows:
 
- * If a creature can attack, make it attack
+ * If a creature can attack, make it attack.
  * If a creature cannot attack, make it randomly either stay in place or move
    towards a random direction.
 
