@@ -45,7 +45,7 @@
         }
     }
 
-    class HTTPErrorException extends Exception {
+    class HTTPErrorException extends ErrorRedirectException {
         public $header;
         public $error;
         public $reason;
@@ -59,13 +59,9 @@
             else {
                 $this->header = "HTTP/1.1 $error";
             }
-            parent::__construct( $this->header );
-        }
-        public function outputErrorPage() {
-            header( $e->header );
-            $error = $this->error;
-            $reason = $this->reason;
-            require "views/http/$error.php";
+            $arguments = get_object_vars( $this );
+            parent::__construct( 'httperror', $arguments );
+            // parent::__construct( $this->header );
         }
     }
 

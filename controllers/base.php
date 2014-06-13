@@ -4,7 +4,7 @@
         protected $environment = 'development';
         protected $trusted = false;
         protected $outputFormat = 'html';
-        protected $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
+        protected $pageGenerationBegin; // Time marking the beginning of page generation, in epoch seconds.
         protected $method = 'view'; // Override to specify a default controller method.
 
         public static function findController( $resource ) {
@@ -143,12 +143,7 @@
                 dbInit();
             }
             catch ( DBException $e ) {
-                $arguments = get_object_vars( $e );
-                $arguments['method'] = 'create';
-                $controller = controllerBase::findController( 'dbconfig' );
-                $controller->dispatch( $arguments, '', '', 'GET' );
-                exit(0);
-                //go( 'dbconfig', 'create', $arguments );
+                throw new ErrorRedirectException( 'dbconfig', get_object_vars( $e ) );
             }
         }
         private function initDebug() {
@@ -182,6 +177,19 @@
         }
         public function getPageGenerationTime() {
             return microtime( true ) - $this->pageGenerationBegin;
+        }
+    }
+
+    class ErrorRedirectException extends Exception {
+        private $controller;
+        private $arguments;
+        public function __construct( $controller, $arguments ) {
+            $this->controller = $controller;
+            $this->arguments = $arguments;
+        }
+        public function callErrorController() {
+            $controller = controllerBase::findController( $this->controller );
+            $controller->dispatch( $this->arguments, '', '', 'GET' );
         }
     }
 ?>
