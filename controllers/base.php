@@ -1,11 +1,11 @@
 <?php
     abstract class ControllerBase {
-        protected $acceptTypes = [];
-        protected $environment = 'development';
-        protected $trusted = false;
-        protected $outputFormat = 'html';
-        protected $pageGenerationBegin; // Time marking the beginning of page generation, in epoch seconds.
-        protected $method = 'view'; // Override to specify a default controller method.
+        public $acceptTypes = [];
+        public $environment = 'development';
+        public $trusted = false;
+        public $outputFormat = 'html';
+        public $pageGenerationBegin; // Time marking the beginning of page generation, in epoch seconds.
+        public $method = 'view'; // Override to specify a default controller method.
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
