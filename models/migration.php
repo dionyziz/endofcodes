@@ -4,67 +4,26 @@
         public static $path = 'database/migration/';
         public static $environments = [ 'development', 'test' ];
 
-        public static function migrate( $sql ) {
+        public static function loadLog() {
             try {
-                $res = db( $sql );
+                $json = safeRead( static::$log );
+                $array = json_decode( $json, true );
             }
-            catch ( DBException $e ) {
-                throw new MigrationException( $e );
+            catch ( FileNotFoundException $e ) {
+                $array = [];
             }
+            return $array;
         }
 
-        public static function createLog( $name, $env ) {
-            if ( file_exists( static::$log ) ) {
-                $data = file_get_contents( static::$log );
-                $array = json_decode( $data, true );
-            }
-            $array[ $env ] = $name;
-            $data = json_encode( $array );
-            file_put_contents( static::$log, $data );
+        public static function writeLog() {
+            $json = json_encode( $log );
+            safeWrite( static::$log, $json );
         }
 
-        public static function findUnexecuted( $env = '' ) {
-            if ( empty( $env ) ) {
-                $list = [];
-                foreach ( static::$environments as $env ) {
-                    $list[ $env ] = self::getUnexecuted( $env );
-                }
-                return $list;
-            }
-            return self::getUnexecuted( $env );
-        }
-
-        protected static function getUnexecuted( $env ) {
-            try {
-                $last = self::findLast( $env );
-            }
-            catch ( ModelNotFoundException $e ) {
-                return self::findAll();
-            }
-            $migrations = self::findAll();
-            $position = array_search( $last, $migrations );
-            return array_slice( $migrations, $position + 1 );
-        }
-
-        public static function findLast( $env = '' ) {
-            $touched = true;
-            if ( !file_exists( static::$log ) ) {
-                $touched = touch( static::$log );
-            }
-            if ( $touched ) {
-                $logs = file_get_contents( static::$log );
-            }
-            if ( empty( $logs ) ) {
-                throw new ModelNotFoundException();
-            }
-            $array = json_decode( $logs, true );
-            if ( empty( $env ) ) {
-                return $array;
-            }
-            if ( !isset( $array[ $env ] ) ) {
-                throw new ModelNotFoundException();
-            }
-            return $array[ $env ];
+        public static function updateLog( $name, $environment ) {
+            $log = self::loadLog();
+            $log[ $environment ] = $name;
+            self::writeLog();
         }
 
         public static function findAll() {
@@ -75,6 +34,27 @@
             }
             sort( $array );
             return $array;
+        }
+
+        public static function findUnexecuted( $environment ) {
+            $allMigrations = self::findAll();
+            $log = self::loadLog();
+            if ( !isset( $log[ $environment ] ) ) {
+                return $allMigrations;
+            }
+            $lastMigrationRun = $log[ $environment ];
+            $position = array_search( $lastMigrationRun, $allMigrations );
+            $unexecuted = array_slice( $allMigrations, $position + 1 );
+            return $unexecuted;
+        }
+
+        public static function migrate( $sql ) {
+            try {
+                db( $sql );
+            }
+            catch ( DBException $e ) {
+                throw new MigrationException( $e );
+            }
         }
 
         public static function addField( $table, $field, $description ) {

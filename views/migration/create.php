@@ -1,32 +1,22 @@
 <?php
     require 'views/header.php';
 
-    $migrations = array_combine( $migrations, $migrations );
-    $envs = [ 'test', 'development' ];
-    $envs = array_combine( $envs, $envs );
-    $form = new Form( 'migrationrun', 'create' );
-    $form->output( function( $self ) use( $migrations, $envs ) {
-        $self->createSelect( $migrations, 'name' );
-        $self->createSelect( $envs, 'env' );
-        $self->createSubmit( 'Run migration' );
-    } );
-    ?><h2>Last Migrations:</h2><?php
-    if ( isset( $last ) ) {
+    $allMigrations = array_combine( $allMigrations, $allMigrations );
+    $environments = array_combine( $environments, $environments );
+
+    ?><h2>Last Migrations Run</h2><?php
+    if ( !empty( $lastMigrationRun ) ) {
         ?><table class="table">
             <tbody>
                 <?php
-                    foreach ( $last as $key => $migration ) {
-                        if ( empty( $migration ) ) {
-                            $migration = 'unknown';
-                        }
+                    foreach ( $lastMigrationRun as $environment => $migration ) {
                         ?><tr>
-                            <td><?php 
-                                echo $key; 
+                            <td><?php
+                                echo $environment;
                             ?></td>
-                            <td><?php 
-                                echo $migration; 
-                            ?></td>
-                        </tr><?php
+                            <td><?php
+                                echo $migration;
+                        ?></tr><?php
                     }
             ?></tbody>
         </table><?php
@@ -34,36 +24,40 @@
     else {
         ?><p>You have not created any logs yet.</p><?php
     }
-    ?><h2>All Migrations <small>in case of new database</small></h2><?php
+
+    ?><h2>Run a migration:</h2><?php
     $form = new Form( 'migrationrun', 'create' );
-    $form->output( function( $self ) use( $envs ) {
-        $self->createSelect( $envs, 'env' );
-        $self->createInput( 'hidden', 'all', 'all', true );
-        $self->createSubmit( "Run all migrations" );
+    $form->output( function( $self ) use( $allMigrations, $environments ) {
+        $self->createSelect( $allMigrations, 'name' );
+        $self->createSelect( $environments, 'environment' );
+        $self->createSubmit( 'Run migration' );
     } );
-    ?><h2>Pending migrations</h2><?php
-    $form = new Form( 'migrationrun', 'create' );
-    $form->output( function( $self ) use( $envs ) {
-        $self->createSelect( $envs, 'env' );
-        $self->createSubmit( "Run pending migrations" );
-    } );
-    foreach ( $pending as $env => $migs ) {
-        ?><h3><?php 
-            echo $env; 
+
+    ?><h2>Pending Migrations</h2><?php
+    foreach ( $pending as $environment => $migrations ) {
+        ?><h3><?php
+            echo $environment;
         ?></h3>
-        <p>Total: <?php 
-            echo count( $migrations ); 
-        ?> Pending: <?php 
-            echo count( $migs ); 
+        <p>Total: <?php
+            echo count( $allMigrations );
+        ?> Pending: <?php
+            echo count( $migrations );
         ?></p>
         <ol><?php
-            foreach ( $migs as $mig ) {
-                ?><li><?php 
-                    echo $mig; 
+            foreach ( $migrations as $migration ) {
+                ?><li><?php
+                    echo $migration;
                 ?></li><?php
             }
         ?></ol><?php
     }
+
+    ?><h2>Run all pending migrations:</h2><?php
+    $form = new Form( 'migrationrun', 'create' );
+    $form->output( function( $self ) use( $environments ) {
+        $self->createSelect( $environments, 'environment' );
+        $self->createSubmit( "Run pending migrations" );
+    } );
 
     require 'views/footer/view.php';
 ?>

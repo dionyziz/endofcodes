@@ -1,47 +1,59 @@
 <?php
     class MigrationRunController extends ControllerBase {
-        public function create( $env, $name = '', $all = false ) {
+        public function create( $environment, $name = '' ) {
             global $config;
 
             require_once 'models/migration.php';
 
-            if ( !empty( $name ) ) {
-                $migrations = [ $name ];
-            }
-            else {
-                if ( $all ) {
-                    $migrations = Migration::findAll();
+            try {
+                if ( $name != '' ) {
+                    $migrations = [ $name ];
                 }
                 else {
-                    $migrations = Migration::findUnexecuted( $env );
+                    $migrations = Migration::findUnexecuted( $environment );
+                }
+
+                foreach ( $migrations as $name ) {
+                    $this->run( $name, $environment );
                 }
             }
-            foreach ( $migrations as $name ) {
-                $this->run( $name, $env ); 
+            catch ( FileNotReadableException $e ) {
+                // ERROR
             }
+            catch ( FileNotWritableException $e ) {
+                // ERROR
+            }
+
             require 'views/migration/results.php';
         }
         public function createView() {
             require_once 'models/migration.php';
-            
+
             try {
-                $last = Migration::findLast();
+                $environments = Migration::$environments;
+                $allMigrations = Migration::findAll();
+                $lastMigrationRun = Migration::loadLog();
+
+                $pending = [];
+                foreach ( Migration::$environments as $environment ) {
+                    $pending[ $environment ] = Migration::findUnexecuted( $environment );
+                }
             }
-            catch ( ModelNotFoundException $e ) {
+            catch ( FileNotReadableException $e ) {
+                // ERROR
             }
-            $pending = Migration::findUnexecuted();
-            $migrations = Migration::findAll();
             require 'views/migration/create.php';
         }
         protected function run( $name, $env ) {
             $migrations = Migration::findAll();
             $this->environment = $env;
-            $this->init();
+            $this->getConfig();
+            $this->dbInit(); // Does this works?
             if ( !in_array( $name, $migrations ) ) {
                 throw new HTTPNotFoundException( 'No such migration (name = "' . $name . '")' );
             }
             require_once 'database/migration/' . $name;
-            Migration::createLog( $name, $env );
+            Migration::updateLog( $name, $env );
         }
     }
 ?>
