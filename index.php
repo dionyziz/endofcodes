@@ -15,14 +15,19 @@
         die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() );
     }
     catch ( RedirectException $e ) {
-        global $config;
+        $controller = controllerBase::findController( $resource );
+        $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
+        // global $config;
 
-        $url = $e->getURL();
+        // $url = $e->getURL();
 
-        header( 'Location: ' . $config[ 'base' ] . $url );
+        // header( 'Location: ' . $config[ 'base' ] . $url );
     }
     catch ( HTTPErrorException $e ) {
-        header( $e->header );
-        $e->outputErrorPage();
+        // $e->outputErrorPage();
+        $arguments = get_object_vars( $e );
+        $arguments['method'] = 'create';
+        $controller = controllerBase::findController( 'httperror' );
+        $controller->dispatch( $arguments, '', '', 'GET' );
     }
 ?>

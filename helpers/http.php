@@ -62,6 +62,7 @@
             parent::__construct( $this->header );
         }
         public function outputErrorPage() {
+            header( $e->header );
             $error = $this->error;
             $reason = $this->reason;
             require "views/http/$error.php";

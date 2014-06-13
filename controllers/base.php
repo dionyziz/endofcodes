@@ -131,7 +131,11 @@
             }
             catch ( DBException $e ) {
                 $arguments = get_object_vars( $e );
-                go( 'dbconfig', 'create', $arguments );
+                $arguments['method'] = 'create';
+                $controller = controllerBase::findController( 'dbconfig' );
+                $controller->dispatch( $arguments, '', '', 'GET' );
+                exit(0);
+                //go( 'dbconfig', 'create', $arguments );
             }
         }
         protected function init() {
