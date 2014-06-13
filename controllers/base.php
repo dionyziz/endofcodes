@@ -5,6 +5,7 @@
         public $trusted = false;
         public $outputFormat = 'html';
         public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
+        protected $method = 'view'; // Override to specify a default controller method.
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -17,45 +18,6 @@
             $controller = new $controllername();
 
             return $controller;
-        }
-        protected function protectFromForgery( $token = '', $httpRequestMethod = '' ) {
-            if ( $httpRequestMethod === 'POST'
-            && ( !isset( $_SESSION[ 'form' ] )
-              || !isset( $_SESSION[ 'form' ][ 'token' ] )
-              || $token !== $_SESSION[ 'form' ][ 'token' ]
-              || $token == '' )
-            && !$this->trusted ) {
-                throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
-            }
-        }
-        protected function getControllerMethod( $requestedMethod, $httpRequestMethod ) {
-            $method = $requestedMethod;
-
-            try {
-                if ( Form::getRESTMethodIdempotence( $method ) === 1 && $httpRequestMethod != 'POST' ) {
-                    $method .= 'View';
-                }
-            }
-            catch ( HTMLFormInvalidException $e ) {
-                $method = 'view';
-            }
-
-            return $method;
-        }
-        protected function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
-            switch ( $httpRequestMethod ) {
-                case 'POST':
-                    $vars = array_merge( $post, $files );
-                    break;
-                case 'GET':
-                    $vars = $get;
-                    break;
-                default:
-                    $vars = [];
-                    break;
-            }
-
-            return $vars;
         }
         protected function sessionCheck() {
             global $config;
@@ -75,7 +37,58 @@
                 $_SESSION[ 'user' ] = $user;
             }
         }
-        protected function callWithNamedArgs( $methodReflection, $callable, $vars ) {
+        protected function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
+            switch ( $httpRequestMethod ) {
+                case 'POST':
+                    $vars = array_merge( $post, $files );
+                    break;
+                case 'GET':
+                    $vars = $get;
+                    break;
+                default:
+                    $vars = [];
+                    break;
+            }
+
+            return $vars;
+        }
+        protected function protectFromForgery( $vars, $httpRequestMethod ) {
+            if ( $this->trusted ) {
+                return;
+            }
+            if ( $httpRequestMethod === 'POST' ) {
+                if ( !isset( $vars[ 'token' ] )
+                    || !isset( $_SESSION[ 'form' ] )
+                    || !isset( $_SESSION[ 'form' ][ 'token' ] )
+                    || $vars[ 'token' ] !== $_SESSION[ 'form' ][ 'token' ] ) {
+                    throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
+                }
+            }
+        }
+        protected function getControllerMethod( $vars, $httpRequestMethod ) {
+            if ( isset( $vars[ 'method' ] ) ) {
+                $this->method = $vars[ 'method' ];
+            }
+            try {
+                $idempotence = Form::getRESTMethodIdempotence( $this->method ) === 1 ;
+            }
+            catch ( HTMLFormInvalidException $e ) {
+                throw new HTTPNotFoundException( $this->method . ' is not a valid REST method.' );
+            }
+            if ( $idempotence && $httpRequestMethod != 'POST' ) {
+                    $this->method .= 'View';
+            }
+            return $this->method;
+        }
+        protected function callWithNamedArgs( $method, $vars ) {
+            $controllerReflection = new ReflectionObject( $this );
+            try {
+                $methodReflection = $controllerReflection->getMethod( $method );
+            }
+            catch ( ReflectionException $e ) {
+                throw new HTTPNotFoundException( $method . ' is not a method of ' . $controllerReflection->getShortName() . '.' );
+            }
+
             $parameters = $methodReflection->getParameters();
             $arguments = [];
 
@@ -92,7 +105,7 @@
                     }
                 }
             }
-            return call_user_func_array( $callable, $arguments );
+            return call_user_func_array( [ $this, $method ], $arguments );
         }
         protected function getEnvironment() {
             if ( getEnv( 'ENVIRONMENT' ) !== false ) {
@@ -138,13 +151,6 @@
                 //go( 'dbconfig', 'create', $arguments );
             }
         }
-        protected function init() {
-            $this->getEnvironment();
-            $this->getConfig();
-            $this->initDebug();
-            $this->readHTTPAccept();
-            $this->dbInit();
-        }
         public function initDebug() {
             global $debugger;
 
@@ -155,27 +161,24 @@
                 $debugger = new DummyDebugger();
             }
         }
+        protected function init() {
+            $this->getEnvironment();
+            $this->getConfig();
+            $this->initDebug();
+            $this->readHTTPAccept();
+            $this->dbInit();
+        }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
             $this->pageGenerationBegin = microtime( true );
 
             $this->init();
             $this->sessionCheck();
 
-            if ( !isset( $get[ 'method' ] ) ) {
-                $get[ 'method' ] = '';
-            }
-            $method = $this->getControllerMethod( $get[ 'method' ], $httpRequestMethod );
             $vars = $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
+            $this->protectFromForgery( $vars, $httpRequestMethod );
 
-            $token = '';
-            if ( isset( $vars[ 'token' ] ) ) {
-                $token = $vars[ 'token' ];
-            }
-            $this->protectFromForgery( $token, $httpRequestMethod );
-            $thisReflection = new ReflectionObject( $this );
-            $methodReflection = $thisReflection->getMethod( $method );
-
-            return $this->callWithNamedArgs( $methodReflection, [ $this, $method ], $vars );
+            $method = $this->getControllerMethod( $vars, $httpRequestMethod );
+            return $this->callWithNamedArgs( $method, $vars );
         }
         public function getPageGenerationTime() {
             return microtime( true ) - $this->pageGenerationBegin;
