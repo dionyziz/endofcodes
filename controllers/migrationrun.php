@@ -13,9 +13,11 @@
                     $migrations = Migration::findUnexecuted( $environment );
                 }
 
+                $this->resetDBEnvironment( $environment );
                 foreach ( $migrations as $name ) {
-                    $this->run( $name, $environment );
+                    $this->run( $name );
                 }
+                Migration::updateLog( end( $migrations ), $environment );
             }
             catch ( FileNotReadableException $e ) {
                 // ERROR
@@ -44,16 +46,19 @@
             }
             require 'views/migration/create.php';
         }
-        protected function run( $name, $env ) {
-            $migrations = Migration::findAll();
-            $this->environment = $env;
+        protected function resetDBEnvironment( $environment ) {
+            $this->environment = $environment;
             $this->getConfig();
-            $this->dbInit(); // Does this works?
+            $this->dbInit(); // Does this work?
+        }
+        protected function run( $name ) {
+            $migrations = Migration::findAll();
+
             if ( !in_array( $name, $migrations ) ) {
                 throw new HTTPNotFoundException( 'No such migration (name = "' . $name . '")' );
             }
             require_once 'database/migration/' . $name;
-            Migration::updateLog( $name, $env );
+
         }
     }
 ?>
