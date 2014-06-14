@@ -14,7 +14,8 @@ following ways:
  * All players play against all others in every game. It's not a one-against-one
    match.
  * You can use any programming language you like, even your own. There are no
-   restrictions.
+   restrictions. (For now, however, we have instructions only for PHP. Libraries
+   will be added for Python and C/C++.)
  * Your programs run on your own machines. You can run them on your laptop, on
    your desktop, on your specialized hardware, on a supercomputer, or on a
    cloud.
@@ -104,6 +105,9 @@ bottle. If you use ruby, you can use sinatra or rails.
 We're also planning to develop a protocol that eliminates the need for players
 to port forward. However, for now, you must either enable port forwarding on
 your local network, or have an open network computer, such as a server.
+
+If you're running your bot on your local computer, you will have to [port forward]
+(https://www.youtube.com/watch?v=usSpl0yJFnY) your bot.
 
 We have prepared [a sample
 bot](https://github.com/dionyziz/endofcodes/tree/master/bots/php) that you can use to get started.
