@@ -10,7 +10,7 @@
     ];
     $form->output( function( $self ) use( $email_invalid, $email_used, $password_wrong,
                                           $password_new_not_matched, $password_new_small, $countries, $user ) {
-        global $config
+        global $config;
 
     ?><div class="form-group"><?php
         $self->createLabel( 'username', 'Username', [ 'class' => 'col-sm-2 control-label' ] );
@@ -59,7 +59,7 @@
             foreach ( $countries as $key => $country ) {
                 $countriesSelectArray[ $country->shortname ] = $country->name;
             }
-            $self->createSelect( $countriesSelectArray, 'countryShortname', '', 'country-input', [ 'class' => 'form-control' ] );
+            $self->createSelect( $countriesSelectArray, 'countryShortname', $user->country->name, 'country-input', [ 'class' => 'form-control' ] );
         ?></div>
     </div>
     <div class="form-group"><?php
@@ -83,16 +83,16 @@
             ?><div class="col-sm-10"><?php
           //      $self->createInput( 'text', 'website', 'website', '', [
           //          'class' => 'form-control',
-          //          'placeholder' => 'Website'
+          //          'placeholder' => htmlspecialchars( $user->website );
           //      ] ); 
             ?></div>
         </div>
         <div class="form-group"><?php
-          //  $self->createLabel( 'github', 'Github', [ 'class' => 'col-sm-2 control-label' ] );
+          //  $self->createLabel( 'github', 'Github link', [ 'class' => 'col-sm-2 control-label' ] );
             ?><div class="col-sm-10"><?php
           //      $self->createInput( 'text', 'github', 'Github', '', [
           //          'class' => 'form-control',
-          //          'placeholder' => 'Github'
+          //          'placeholder' => htmlspecialchars( $user->github );
           //      ] ); 
             ?></div>
         </div>
