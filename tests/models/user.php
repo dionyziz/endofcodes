@@ -92,24 +92,6 @@
                 'ModelValidationException',
                 'The website URL cannot contain special symbols'
             );
-            $this->assertThrows(
-                function() {
-                    $user = $this->buildUser( 'pkakelas' );
-                    $user->website = "pkakelas.com";
-                    $user->save();
-                },
-                'ModelValidationException',
-                'The website URL string must have "http://" in the beginning'
-            );
-            $this->assertThrows(
-                function() {
-                    $user = $this->buildUser( 'pkakelas' );
-                    $user->website = "http://pkakelas123.com";
-                    $user->save();
-                },
-                'ModelValidationException',
-                'The website URL cannot contain numbers'
-            );
         }
         public function testDuplicateUsername() {
             $user1 = $this->buildUser( 'pkakelas' );

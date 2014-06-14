@@ -141,7 +141,7 @@
                 throw new ModelValidationException( 'password_small' );
             }
             if ( !empty( $this->website ) && !filter_var( $this->website, FILTER_VALIDATE_URL ) ) {
-                    throw new ModelValidationException( 'website_invalid' );
+                throw new ModelValidationException( 'website_invalid' );
             }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
                 throw new ModelValidationException( 'email_invalid' );
