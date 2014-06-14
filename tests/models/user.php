@@ -82,6 +82,35 @@
             $user->country = $country;
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
         }
+        public function testWebsiteValidation() {
+            $this->assertThrows(
+                function() {
+                    $user = $this->buildUser( 'pkakelas' );
+                    $user->website = "http://pkakelas*(#.com";
+                    $user->save();
+                },
+                'ModelValidationException',
+                'The website URL cannot contain special symbols'
+            );
+            $this->assertThrows(
+                function() {
+                    $user = $this->buildUser( 'pkakelas' );
+                    $user->website = "pkakelas.com";
+                    $user->save();
+                },
+                'ModelValidationException',
+                'The website URL string must have "http://" in the beginning'
+            );
+            $this->assertThrows(
+                function() {
+                    $user = $this->buildUser( 'pkakelas' );
+                    $user->website = "http://pkakelas123.com";
+                    $user->save();
+                },
+                'ModelValidationException',
+                'The website URL cannot contain numbers'
+            );
+        }
         public function testDuplicateUsername() {
             $user1 = $this->buildUser( 'pkakelas' );
             $this->assertThrows(
