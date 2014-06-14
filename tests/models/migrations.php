@@ -30,7 +30,25 @@
             }
             $this->rrmdir( Migration::$path );
         }
-        public function testupdateLog() {
+        public function testLoadLog() {
+            file_put_contents( Migration::$log, '{"env1":"migr1"}' );
+
+            $logs = Migration::loadLog();
+            $this->assertTrue( is_array( $logs ), 'loadLog must return an array' );
+            $this->assertTrue( isset( $logs[ 'env1' ] ), 'An existing environment must exist as a key in the loadLog array.' );
+            $this->assertEquals( 'migr1', $logs[ 'env1' ], 'The last migration must be the one specified in log file.' );
+
+            // $this->safeUnlink( Migration::$log );
+            // $this->assertDoesNotThrow(
+            //     function() {
+            //         $logs = Migration::loadLog();
+            //         $this->assertEquals( [], $logs, 'loadLog() must return an empty array when log not found.' );
+            //     },
+            //     'FileNotFoundException',
+            //     'loadLog() must not throw an exception when log not found.'
+            // );
+        }
+        public function testUpdateLog() {
             Migration::updateLog( 'migration1', 'env1' );
             Migration::updateLog( 'migration2', 'env2' );
             Migration::updateLog( 'migration3', 'env2' );
@@ -41,14 +59,6 @@
             $this->assertTrue( isset( $logs[ 'env2' ] ), 'The envs of last migrations must exist in the array' );
             $this->assertEquals( 'migration1', $logs[ 'env1' ], 'updateLog must keep the last migration in each environment' );
             $this->assertEquals( 'migration3', $logs[ 'env2' ], 'updateLog must keep the last migration in each environment' );
-        }
-        public function testloadLog() {
-            Migration::updateLog( 'migration1', 'env1' );
-            Migration::updateLog( 'migration2', 'env2' );
-            $logs = Migration::loadLog();
-            $this->assertTrue( is_array( $logs ), 'loadLog must return an array if not attributes are given' );
-            $this->assertEquals( 'migration1', $logs[ 'env1' ], 'Last migration name must have a key its environment' );
-            $this->assertEquals( 'migration2', $logs[ 'env2' ], 'Last migration must have a key its environment' );
         }
         public function testFindAll() {
             file_put_contents( Migration::$path . 'notphp.txt', '' );
