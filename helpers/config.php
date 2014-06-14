@@ -9,11 +9,13 @@
         if ( substr( $relativePath, -1 ) != '/' ) {
             $relativePath .= '/';
         }
-        if ( !isset( $_SERVER[ 'HTTP_HOST' ] ) ) {
-            // using CLI
-            return 'http://localhost/endofcodes/';
-        }
         return $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $relativePath;
+    }
+    function calculateConfigEntries( &$config ) {
+        $config[ 'root' ] = getcwd();
+        if ( isset( $_SERVER[ 'HTTP_HOST' ] ) ) {
+            $config[ 'base' ] = getBase();
+        }
     }
     function loadConfig( $environment ) {
         $config = require 'config/config.php';
@@ -21,9 +23,11 @@
             $configLocal = require 'config/config-local.php';
             $config = array_replace_recursive( $config, $configLocal );
         }
+        $defaults = $config[ 'defaults' ];
         $config = $config[ $environment ];
-        $config[ 'root' ] = getcwd();
-        $config[ 'base' ] = getBase();
+        $config = array_replace_recursive( $defaults, $config );
+
+        calculateConfigEntries( $config );
         return $config;
     }
     function formatConfig( $config ) {
