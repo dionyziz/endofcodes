@@ -23,9 +23,9 @@
 <?php
     $form = new Form( 'user', 'create' );
     $form->id = 'register-form';
-    $form->output( function( $self ) use( $username_empty, $username_invalid, $name_invalid, 
-            $surname_invalid, $password_empty, $email_empty, $username_used, $password_small,
-            $password_not_matched, $email_used, $email_invalid, $countries, $location, $website_invalid ) {
+    $form->output( function( $self ) use( $username_empty, $username_invalid, $password_empty, 
+            $email_empty, $username_used, $password_small, $password_not_matched, $email_used, $email_invalid,
+            $countries, $location ) {
         global $config;
 
         if ( isset( $username_empty ) ) {
@@ -78,7 +78,7 @@
         else {
             $email_value = "";
         }
-        $self->createInput( 'text', 'email', 'email' );
+        $self->createInput( 'text', 'email', 'email', $email_value );
         $self->createLabel( 'dob', 'Date of birth' );
         $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
         $self->createSelect( $days, 'day' );
