@@ -79,23 +79,6 @@
             $email_value = "";
         }
         $self->createInput( 'text', 'email', 'email' );
-        if ( isset( $name_invalid ) ) {
-            $self->createError( 'Names can contain only letters' );
-        }
-        $self->createLabel( 'name', 'Name' );
-        $self->createInput( 'text', 'name' );
-        if ( isset( $surname_invalid ) ) {
-            $self->createError( 'Surnames can contain only letters' );
-        }
-        $self->createLabel( 'surname', 'Surname' );
-        $self->createInput( 'text', 'surname' );
-        if ( isset( $website_invalid ) ) {
-            $self->createError( 'Please enter a valid website' );
-        }
-        $self->createLabel( 'website', 'Website' );
-        $self->createInput( 'text', 'website' );
-        $self->createLabel( 'github', 'Github username' );
-        $self->createInput( 'text', 'github' );
         $self->createLabel( 'dob', 'Date of birth' );
         $days = createSelectPrepare( range( 1, 31 ), 'Select Day' );
         $self->createSelect( $days, 'day' );
