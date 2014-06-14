@@ -15,15 +15,12 @@
             return $array;
         }
 
-        public static function writeLog() {
-            $json = json_encode( $log );
-            safeWrite( static::$log, $json );
-        }
-
         public static function updateLog( $name, $environment ) {
             $log = self::loadLog();
             $log[ $environment ] = $name;
-            self::writeLog();
+
+            $json = json_encode( $log );
+            safeWrite( static::$log, $json );
         }
 
         public static function findAll() {
