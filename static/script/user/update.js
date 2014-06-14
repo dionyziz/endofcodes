@@ -4,7 +4,7 @@ $( document ).ready( function() {
         $( "#password-input input, #pswd-label" ).show();
     }
     $( '#delete-account' ).click( function() {
-        $( ".navbar, footer" ).fadeTo( "slow",0.15 );
+        $( ".navbar, footer" ).fadeTo( "slow", 0.15 );
         Avgrund.show( "#default-popup" );
     } );
     $( '#close-modal' ).click( function() {
