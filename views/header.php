@@ -27,6 +27,7 @@
             includeStyle( "debug" );
             includeStyle( "../jquery-ui/jquery-ui.min" );
             includeStyle( "../jquery-ui/jquery.ui.theme" );
+            includeStyle( "qunit" );
 
             includeScript( 'jquery-2.1.0.min' );
             includeScript( 'bootstrap.min' );
@@ -39,6 +40,7 @@
             includeScript( 'session/create' );
             includeScript( 'debug' );
             includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
+            includeScript( "qunit" );
         ?>
         <meta charset="utf-8" />
     </head>
