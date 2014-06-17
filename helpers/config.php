@@ -17,15 +17,19 @@
             $config[ 'base' ] = getBase();
         }
     }
+    function validateConfigEntries( $config ) {
+        if ( $config[ 'development' ][ 'db' ][ 'dbname' ] == $config[ 'test' ][ 'db' ][ 'dbname' ] ) {
+            throw new ModelValidationException( " Database name for development and testing is the same." );
+        }
+    }
     function loadConfig( $environment ) {
         $config = require 'config/config.php';
         if ( file_exists( 'config/config-local.php' ) ) {
             $configLocal = require 'config/config-local.php';
             $config = array_replace_recursive( $config, $configLocal );
         }
-        $defaults = $config[ 'defaults' ];
-        $config = $config[ $environment ];
-        $config = array_replace_recursive( $defaults, $config );
+        validateConfigEntries( $config );
+        $config = array_replace_recursive( $config[ 'defaults' ], $config[ $environment ] );
 
         calculateConfigEntries( $config );
         return $config;
@@ -45,14 +49,9 @@
 
         return $content;
     }
-    // Updates $config and the config-local.php file to include the given $entries.
+    // Updates the config-local.php file to include the given $entries.
     // Can also be used to delete $entries that are set to NULL.
     function updateConfig( $entries, $environment ) {
-        global $config;
-
-        $config = array_replace_recursive( $config, $entries );
-        $config = array_diff_recursive( $config ); // Remove NULL entries.
-
         $entries = [ $environment => $entries ];
         $configPath = 'config/config-local.php';
 
