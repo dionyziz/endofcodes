@@ -57,6 +57,9 @@
             }
         }
         private function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
+            if ( isset( $get[ 'method' ] ) ) {
+                $this->method = $get[ 'method' ];
+            }
             $this->httpRequestMethod = $httpRequestMethod;
             $this->vars = [];
             switch ( $this->httpRequestMethod ) {
@@ -65,6 +68,8 @@
                     break;
                 case 'GET':
                     $this->vars = $get;
+                    unset( $this->vars[ 'resource' ] );
+                    unset( $this->vars[ 'method' ] );
                     break;
             }
             $this->protectFromForgery();
@@ -80,9 +85,6 @@
             }
         }
         private function getControllerMethod() {
-            if ( isset( $this->vars[ 'method' ] ) ) {
-                $this->method = $this->vars[ 'method' ];
-            }
             try {
                 if ( Form::getRESTMethodIdempotence( $this->method ) && $this->httpRequestMethod != 'POST' ) {
                     $this->method .= 'View';
