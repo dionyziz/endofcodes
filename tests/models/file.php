@@ -60,6 +60,19 @@
             recursiveCopy( $this->mockPath, $this->copyPath . 'deeper' );
             $this->assertTrue( file_exists( $this->copyPath . 'deeper/' . $path . '/magic.php' ), 'The folder must be copied' );
         }
+        private function safeUnlink( $filename ) {
+            if ( file_exists( $filename ) ) {
+
+                chmod( $filename, 0666 );
+
+                if ( is_dir( $filename ) ) {
+                    rmdir( $filename );
+                }
+                else {
+                    unlink( $filename );
+                }
+            }
+        }
         public function tearDown() {
             $this->safeUnlink( $this->filename );
             $this->safeUnlink( $this->directory );
