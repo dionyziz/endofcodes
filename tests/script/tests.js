@@ -70,3 +70,34 @@ QUnit.test( 'findUser test', function( assert ) {
 
     $list.remove();
 } );
+QUnit.test( 'fixUserList test', function( assert ) {
+    // setup
+    var $list = $( "<div><ul><li><li>" ).addClass( 'playerList' );
+    var $li1 = $list.children().eq( 0 ).children().eq( 0 ).text( 'user1' ).attr( 'data-id', 1 );
+    var $li2 = $list.children().eq( 0 ).children().eq( 1 ).text( 'user2' ).attr( 'data-id', 2 );
+    var creatures = [
+        {
+            hp: 10,
+            userid: 1
+        },
+        {
+            hp: 0,
+            userid: 2
+        }
+    ];
+
+    $li1.prepend( $( '<span>' ) );
+    $li2.prepend( $( '<span>' ) );
+
+    $( 'body' ).append( $list );
+
+    GameView.fixUserList( creatures );
+
+    assert.equal( $li1.text(), 'user1', 'nodeValue should not change' );
+    assert.equal( $li2.text(), 'user2', 'nodeValue should not change' );
+    assert.equal( $li1.children().length, 1, 'no new nodes should be created if the user has alive creatures' );
+    assert.equal( $li2.children().eq( 1 ).get( 0 ).tagName, 'DEL', 'a DEL node should be created when the user has no alive creatures' );
+
+    // destruct
+    $( '.playerList' ).remove();
+} );
