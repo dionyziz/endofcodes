@@ -1,14 +1,4 @@
 <?php
-    /*
-    Redirects to a given URL or resource:
-
-    go( "http://www.google.com" ); // full URL
-    go( "user", "view", [ "example" => "argument" ] ); // resource & method
-    go(); // home page
-    */
-    function go( $resourceOrURL = false, $method = false, $args = [] ) {
-        throw new RedirectException( $resourceOrURL, $method, $args );
-    }
 
     function readHTTPAccept() {
         if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
@@ -29,15 +19,23 @@
         return $acceptTypes;
     }
 
-    class RedirectException extends Exception {
-        private $url;
+    /*
+    Redirects to a given URL or resource:
+
+    go( "http://www.google.com" ); // full URL
+    go( "user", "view", [ "example" => "argument" ] ); // resource & method
+    go(); // home page
+    */
+    function go( $resourceOrURL = false, $method = false, $args = [] ) {
+        throw new HTTPRedirectException( $resourceOrURL, $method, $args );
+    }
+
+    // This is a simple HTTP Redirect. The web page is reloaded.
+    class HTTPRedirectException extends Exception {
+        public $url;
         public $resource;
         public $method;
         public $args;
-
-        public function getURL() {
-            return $this->url;
-        }
 
         public function __construct( $resourceOrURL = false, $method = false, $args = [] ) {
             if ( $resourceOrURL === false ) {
@@ -64,6 +62,7 @@
         }
     }
 
+    // When this exception is thrown, the controller is changed to a new one, without reloading the page.
     class ErrorRedirectException extends Exception {
         public $controller;
         public $arguments;

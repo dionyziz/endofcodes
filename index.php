@@ -9,6 +9,12 @@
         catch ( ErrorRedirectException $e ) {
             launchController( $e->controller, $e->arguments );
         }
+        catch ( HTTPRedirectException $e ) {
+            global $config;
+
+            $url = $config[ 'base' ] . $e->url;
+            header( 'Location: ' . $url );
+        }
     }
 
     $resource = 'dashboard';
