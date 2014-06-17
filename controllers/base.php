@@ -5,8 +5,9 @@
         public $trusted = false;
         public $outputFormat = 'html';
         public $pageGenerationBegin; // Time marking the beginning of page generation, in epoch seconds.
-        public $method = 'view'; // Override to specify a default controller method.
+        protected $method = 'view'; // Override to specify a default controller method.
         private $vars;
+        private $httpRequestMethod;
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -21,6 +22,8 @@
             return $controller;
         }
         public function dispatch( $get, $post, $files, $httpRequestMethod ) {
+            $this->initDebug();
+
             $this->init();
             $this->sessionCheck();
             $this->getAcceptTypes();
@@ -29,6 +32,11 @@
 
             $this->getControllerMethod();
             return $this->callWithNamedArgs();
+        }
+        protected function init() {
+            $this->getEnvironment();
+            $this->getConfig();
+            $this->dbInit();
         }
         private function sessionCheck() {
             global $config;
@@ -42,9 +50,16 @@
                 }
             }
         }
+        private function getAcceptTypes() {
+            $this->acceptTypes = readHTTPAccept();
+            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                $this->outputFormat = 'json';
+            }
+        }
         private function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
+            $this->httpRequestMethod = $httpRequestMethod;
             $this->vars = [];
-            switch ( $httpRequestMethod ) {
+            switch ( $this->httpRequestMethod ) {
                 case 'POST':
                     $this->vars = array_merge( $post, $files );
                     break;
@@ -52,14 +67,14 @@
                     $this->vars = $get;
                     break;
             }
-            $this->protectFromForgery( $this->vars, $httpRequestMethod );
+            $this->protectFromForgery();
         }
-        private function protectFromForgery( $vars, $httpRequestMethod ) {
-            if ( $httpRequestMethod === 'POST' && !$this->trusted ) {
-                if ( !isset( $vars[ 'token' ] )
+        private function protectFromForgery() {
+            if ( $this->httpRequestMethod === 'POST' && !$this->trusted ) {
+                if ( !isset( $this->vars[ 'token' ] )
                     || !isset( $_SESSION[ 'form' ] )
                     || !isset( $_SESSION[ 'form' ][ 'token' ] )
-                    || $vars[ 'token' ] !== $_SESSION[ 'form' ][ 'token' ] ) {
+                    || $this->vars[ 'token' ] !== $_SESSION[ 'form' ][ 'token' ] ) {
                     throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
                 }
             }
@@ -85,6 +100,11 @@
             catch ( ReflectionException $e ) {
                 throw new HTTPNotFoundException( $this->method . ' is not a method of ' . $controllerReflection->getShortName() . '.' );
             }
+
+            $arguments = $this->getNamedArguments( $methodReflection );
+            return call_user_func_array( [ $this, $this->method ], $arguments );
+        }
+        private function getNamedArguments( $methodReflection ) {
             $arguments = [];
             foreach ( $methodReflection->getParameters() as $parameter ) {
                 if ( isset( $this->vars[ $parameter->name ] ) ) {
@@ -95,10 +115,11 @@
                         $arguments[] = $parameter->getDefaultValue();
                     }
                     catch ( ReflectionException $e ) {
+                        $arguments[] = null;
                     }
                 }
             }
-            return call_user_func_array( [ $this, $this->method ], $arguments );
+            return $arguments;
         }
         protected function getEnvironment() {
             if ( getEnv( 'ENVIRONMENT' ) !== false ) {
@@ -109,12 +130,6 @@
             global $config;
 
             $config = loadConfig( $this->environment );
-        }
-        private function getAcceptTypes() {
-            $this->acceptTypes = readHTTPAccept();
-            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
-                $this->outputFormat = 'json';
-            }
         }
         protected function dbInit() {
             try {
@@ -136,27 +151,8 @@
                 $debugger = new DummyDebugger();
             }
         }
-        protected function init() {
-            $this->initDebug();
-            $this->getEnvironment();
-            $this->getConfig();
-            $this->dbInit();
-        }
         public function getPageGenerationTime() {
             return microtime( true ) - $this->pageGenerationBegin;
-        }
-    }
-
-    class ErrorRedirectException extends Exception {
-        private $controller;
-        private $arguments;
-        public function __construct( $controller, $arguments ) {
-            $this->controller = $controller;
-            $this->arguments = $arguments;
-        }
-        public function callErrorController() {
-            $controller = controllerBase::findController( $this->controller );
-            $controller->dispatch( $this->arguments, '', '', 'GET' );
         }
     }
 ?>

@@ -64,23 +64,30 @@
         }
     }
 
+    class ErrorRedirectException extends Exception {
+        public $controller;
+        public $arguments;
+        public function __construct( $controller, $arguments ) {
+            $this->controller = $controller;
+            $this->arguments = $arguments;
+            parent::__construct();
+        }
+    }
+
     class HTTPErrorException extends ErrorRedirectException {
         public $header;
         public $error;
         public $reason;
 
-        public function __construct( $error, $description = "", $reason = '' ) {
+        public function __construct( $error, $description = '', $reason = '' ) {
             $this->error = $error;
             $this->reason = $reason;
+            $this->header = "HTTP/1.1 $error";
             if ( !empty( $description ) ) {
-                $this->header = "HTTP/1.1 $error $description";
-            }
-            else {
-                $this->header = "HTTP/1.1 $error";
+                $this->header .= ' ' . $description;
             }
             $arguments = get_object_vars( $this );
             parent::__construct( 'httperror', $arguments );
-            // parent::__construct( $this->header );
         }
     }
 
