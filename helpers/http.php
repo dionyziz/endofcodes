@@ -10,6 +10,25 @@
         throw new RedirectException( $resourceOrURL, $method, $args );
     }
 
+    function readHTTPAccept() {
+        if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
+            return;
+        }
+        $accept = strtolower( str_replace( ' ', '', $_SERVER[ 'HTTP_ACCEPT' ] ) );
+        $accept = explode( ',', $accept );
+        $acceptTypes = [];
+        foreach ( $accept as $a ) {
+            if ( strpos( $a, ';q=' ) ) {
+                list( $a, $q ) = explode( ';q=', $a );
+                if ( $q === 0 ) {
+                    continue;
+                }
+            }
+            $acceptTypes[ $a ] = true;
+        }
+        return $acceptTypes;
+    }
+
     class RedirectException extends Exception {
         private $url;
         public $resource;

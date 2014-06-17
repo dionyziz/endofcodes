@@ -1,11 +1,12 @@
 <?php
     abstract class ControllerBase {
-        public $acceptTypes = [];
+        protected $acceptTypes = [];
         public $environment = 'development';
         public $trusted = false;
         public $outputFormat = 'html';
         public $pageGenerationBegin; // Time marking the beginning of page generation, in epoch seconds.
         public $method = 'view'; // Override to specify a default controller method.
+        private $vars;
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -19,44 +20,42 @@
 
             return $controller;
         }
+        public function dispatch( $get, $post, $files, $httpRequestMethod ) {
+            $this->init();
+            $this->sessionCheck();
+            $this->getAcceptTypes();
+
+            $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
+
+            $this->getControllerMethod();
+            return $this->callWithNamedArgs();
+        }
         private function sessionCheck() {
             global $config;
 
-            if ( isset( $_SESSION[ 'user' ] ) ) {
-                return;
-            }
-            $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
-            if ( isset( $_COOKIE[ $cookiename ] ) ) {
+            if ( !isset( $_SESSION[ 'user' ] ) && isset( $_COOKIE[ $config[ 'persistent_cookie' ][ 'name' ] ] ) ) {
                 require_once 'models/user.php';
                 try {
-                    $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
+                    $_SESSION[ 'user' ] = User::findBySessionId( $_COOKIE[ $cookiename ] );
                 }
                 catch ( ModelNotFoundException $e ) {
-                    return;
                 }
-                $_SESSION[ 'user' ] = $user;
             }
         }
         private function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
+            $this->vars = [];
             switch ( $httpRequestMethod ) {
                 case 'POST':
-                    $vars = array_merge( $post, $files );
+                    $this->vars = array_merge( $post, $files );
                     break;
                 case 'GET':
-                    $vars = $get;
-                    break;
-                default:
-                    $vars = [];
+                    $this->vars = $get;
                     break;
             }
-
-            return $vars;
+            $this->protectFromForgery( $this->vars, $httpRequestMethod );
         }
         private function protectFromForgery( $vars, $httpRequestMethod ) {
-            if ( $this->trusted ) {
-                return;
-            }
-            if ( $httpRequestMethod === 'POST' ) {
+            if ( $httpRequestMethod === 'POST' && !$this->trusted ) {
                 if ( !isset( $vars[ 'token' ] )
                     || !isset( $_SESSION[ 'form' ] )
                     || !isset( $_SESSION[ 'form' ][ 'token' ] )
@@ -65,47 +64,41 @@
                 }
             }
         }
-        private function getControllerMethod( $vars, $httpRequestMethod ) {
-            if ( isset( $vars[ 'method' ] ) ) {
-                $this->method = $vars[ 'method' ];
+        private function getControllerMethod() {
+            if ( isset( $this->vars[ 'method' ] ) ) {
+                $this->method = $this->vars[ 'method' ];
             }
             try {
-                $idempotence = Form::getRESTMethodIdempotence( $this->method ) === 1 ;
+                if ( Form::getRESTMethodIdempotence( $this->method ) && $this->httpRequestMethod != 'POST' ) {
+                    $this->method .= 'View';
+                }
             }
             catch ( HTMLFormInvalidException $e ) {
                 throw new HTTPNotFoundException( $this->method . ' is not a valid REST method.' );
             }
-            if ( $idempotence && $httpRequestMethod != 'POST' ) {
-                    $this->method .= 'View';
-            }
-            return $this->method;
         }
-        private function callWithNamedArgs( $method, $vars ) {
+        private function callWithNamedArgs() {
             $controllerReflection = new ReflectionObject( $this );
             try {
-                $methodReflection = $controllerReflection->getMethod( $method );
+                $methodReflection = $controllerReflection->getMethod( $this->method );
             }
             catch ( ReflectionException $e ) {
-                throw new HTTPNotFoundException( $method . ' is not a method of ' . $controllerReflection->getShortName() . '.' );
+                throw new HTTPNotFoundException( $this->method . ' is not a method of ' . $controllerReflection->getShortName() . '.' );
             }
-
-            $parameters = $methodReflection->getParameters();
             $arguments = [];
-
-            foreach ( $parameters as $parameter ) {
-                if ( isset( $vars[ $parameter->name ] ) ) {
-                    $arguments[] = $vars[ $parameter->name ];
+            foreach ( $methodReflection->getParameters() as $parameter ) {
+                if ( isset( $this->vars[ $parameter->name ] ) ) {
+                    $arguments[] = $this->vars[ $parameter->name ];
                 }
                 else {
                     try {
                         $arguments[] = $parameter->getDefaultValue();
                     }
                     catch ( ReflectionException $e ) {
-                        $arguments[] = null;
                     }
                 }
             }
-            return call_user_func_array( [ $this, $method ], $arguments );
+            return call_user_func_array( [ $this, $this->method ], $arguments );
         }
         protected function getEnvironment() {
             if ( getEnv( 'ENVIRONMENT' ) !== false ) {
@@ -117,23 +110,8 @@
 
             $config = loadConfig( $this->environment );
         }
-        private function readHTTPAccept() {
-            if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
-                return;
-            }
-            $accept = strtolower( str_replace( ' ', '', $_SERVER[ 'HTTP_ACCEPT' ] ) );
-            $accept = explode( ',', $accept );
-            $acceptTypes = [];
-            foreach ( $accept as $a ) {
-                if ( strpos( $a, ';q=' ) ) {
-                    list( $a, $q ) = explode( ';q=', $a );
-                    if ( $q === 0 ) {
-                        continue;
-                    }
-                }
-                $acceptTypes[ $a ] = true;
-            }
-            $this->acceptTypes = $acceptTypes;
+        private function getAcceptTypes() {
+            $this->acceptTypes = readHTTPAccept();
             if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
                 $this->outputFormat = 'json';
             }
@@ -149,6 +127,8 @@
         private function initDebug() {
             global $debugger;
 
+            $this->pageGenerationBegin = microtime( true );
+
             if ( isset( $_SESSION[ 'debug' ] ) ) {
                 $debugger = new Debugger();
             }
@@ -157,23 +137,10 @@
             }
         }
         protected function init() {
+            $this->initDebug();
             $this->getEnvironment();
             $this->getConfig();
-            $this->initDebug();
-            $this->readHTTPAccept();
             $this->dbInit();
-        }
-        public function dispatch( $get, $post, $files, $httpRequestMethod ) {
-            $this->pageGenerationBegin = microtime( true );
-
-            $this->init();
-            $this->sessionCheck();
-
-            $vars = $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
-            $this->protectFromForgery( $vars, $httpRequestMethod );
-
-            $method = $this->getControllerMethod( $vars, $httpRequestMethod );
-            return $this->callWithNamedArgs( $method, $vars );
         }
         public function getPageGenerationTime() {
             return microtime( true ) - $this->pageGenerationBegin;

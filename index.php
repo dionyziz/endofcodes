@@ -1,11 +1,9 @@
 <?php
     require_once 'header.php';
 
+    $resource = 'dashboard';
     if ( isset( $_GET[ 'resource' ] ) ) {
         $resource = $_GET[ 'resource' ];
-    }
-    else {
-        $resource = 'dashboard';
     }
     try {
         $controller = controllerBase::findController( $resource );
