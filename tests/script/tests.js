@@ -52,14 +52,14 @@ QUnit.test( 'createCreature test', function( assert ) {
     assert.equal( $creature.css( 'left' ), 20 * creatureInfo.y + 'px', "left CSS should be 20 times the creature's y coordinate, in pixels" );
 } );
 QUnit.test( 'findUser test', function( assert ) {
-    var userid = 10, $li;
+    var userid = 10;
     var $list = $( "<div><ul>" ).addClass( 'playerList' );
     // create 2 lis to be sure findUser finds the correct one
     $list.append( '<li></li><li></li>' );
 
     // start from 1 because first child is ul
-    $li1 = $list.children().eq( 1 );
-    $li2 = $list.children().eq( 2 );
+    var $li1 = $list.children().eq( 1 );
+    var $li2 = $list.children().eq( 2 );
 
     $li1.attr( 'data-id', userid );
     $li2.attr( 'data-id', userid + 1 );
