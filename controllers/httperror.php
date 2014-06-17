@@ -1,8 +1,8 @@
 <?php
     class HTTPErrorController extends ControllerBase {
-      public $method = 'create';
+      public $method = 'view';
 
-        public function createView( $error, $reason, $header ) {
+        public function view( $error, $reason, $header ) {
             header( $header );
             require "views/http/$error.php";
         }
