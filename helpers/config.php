@@ -49,9 +49,14 @@
 
         return $content;
     }
-    // Updates the config-local.php file to include the given $entries.
+    // Updates $config and the config-local.php file to include the given $entries.
     // Can also be used to delete $entries that are set to NULL.
     function updateConfig( $entries, $environment ) {
+        global $config;
+
+        $config = array_replace_recursive( $config, $entries );
+        $config = array_diff_recursive( $config ); // Remove NULL entries.
+
         $entries = [ $environment => $entries ];
         $configPath = 'config/config-local.php';
 
