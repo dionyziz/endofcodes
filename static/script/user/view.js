@@ -67,12 +67,46 @@ var UserView = {
             $( "#image" ).trigger( 'click' );
             return false;
         } );
-        $( '#unfollow' ).click( function() {
-            $( '#unfollow-form' ).submit();
-            return false;
-        } );
-        $( '#follow' ).click( function() {
-            $( '#follow-form' ).submit();
+        $( document ).on( "click", ".follow", function() {
+            var now, next;
+
+            if ( this.id == 'follow' ) {
+                now = { 'method': 'create', 'action': 'follow' };
+                next = { 'method': 'delete', 'action': 'unfollow' };
+            }
+            else {
+                now = { 'method': 'delete', 'action': 'unfollow' };
+                next = { 'method': 'create', 'action': 'follow' };
+            }
+
+            var $form = $( "#" + now.action + "-form" );
+            var followedid = $( "[name='followedid']", $form ).val();
+            var token = $( "[name='token']", $form ).val();
+            var formData = new FormData();
+
+            formData.append( "followedid", followedid );
+            formData.append( "token", token );
+
+            $( '.follow button' ).fadeTo( 'slow', 0.7 );
+
+            $.ajax( {
+                url: "follow/" + now.method,
+                type: "POST",
+                data: formData,
+                cache: false,
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                complete: function() {
+                    var btn_text = next.action.substr( 0, 1 ).toUpperCase() + next.action.substr( 1 ); 
+                    $( "a#" + now.action ).replaceWith( 
+                        "<a href='#' class='follow' id='" + next.action + "'><button class='btn btn-primary'>" + btn_text + "</button></a>"
+                    );
+                    $( 'form#' + now.action + '-form' ).attr( 'action', 'follow/' + next.method );
+                    $( 'form#' + now.action + '-form' ).attr( 'id', next.action + '-form' );
+                    $( '.follow button' ).fadeIn( 'slow' );
+                }
+            } );
             return false;
         } );
         $( "#image" ).change( function() {
