@@ -27,14 +27,12 @@
             ],
             'forgot_password_exp_time' => 3600 * 24,
             'cli_max_width' => 120,
-            'email' => 'team@endofcodes.com',
-            'root' => '/var/www/',
-            'base' => 'http://localhost/endofcodes/'
+            'email' => 'team@endofcodes.com'
         ],
         'development' => [
             'db' => [
                 'user' => 'endofcodes',
-                'pass' => 'sample_pass',
+                'pass' => 'sample_pass', //override in config-local.php
                 'dbname' => 'endofcodes'
             ],
 
