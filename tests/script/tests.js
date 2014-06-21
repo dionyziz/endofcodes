@@ -1,6 +1,6 @@
 QUnit.test( 'findGameAndRoundId', function( assert ) {
     var gameid = 10, roundid = 13;
-    var href = 'example.com?gameid=' + gameid + '&randomthing=20&roundid=' + roundid;
+    var href = 'http://example.com/?gameid=' + gameid + '&randomthing=20&roundid=' + roundid;
     var gameInfo = GameView.findGameAndRoundId( href );
 
     assert.equal( gameInfo.gameid, gameid, 'Returned gameid should be the same one as the one on href' );
