@@ -1,4 +1,4 @@
-QUnit.test( 'findGameAndRoundId test', function( assert ) {
+QUnit.test( 'findGameAndRoundId', function( assert ) {
     var gameid = 10, roundid = 13;
     var href = 'example.com?gameid=' + gameid + '&randomthing=20&roundid=' + roundid;
     var gameInfo = GameView.findGameAndRoundId( href );
@@ -12,7 +12,7 @@ QUnit.test( 'makeUrl test', function( assert ) {
 
     assert.equal( GameView.makeUrl( gameid, roundid ), expectedUrl, 'makeUrl should create the expected URL' );
 } );
-QUnit.test( 'fixUrls test', function( assert ) {
+QUnit.test( 'fixUrls', function( assert ) {
     var gameid = 10, roundid = 13;
     var $a1 = $( '<a>' ), $a2 = $( '<a>' );
     var $next = $( '<p>' ).addClass( 'next' ).append( $a1 );
@@ -28,7 +28,7 @@ QUnit.test( 'fixUrls test', function( assert ) {
     $next.remove();
     $previous.remove();
 } );
-QUnit.test( 'createCreature test', function( assert ) {
+QUnit.test( 'createCreature', function( assert ) {
     var creatureInfo = {
         creatureid: 1,
         username: 'vitsalis',
@@ -51,7 +51,7 @@ QUnit.test( 'createCreature test', function( assert ) {
     assert.equal( $creature.css( 'top' ), 20 * creatureInfo.x + 'px', "Top CSS should be 20 times the creature's x coordinate, in pixels" );
     assert.equal( $creature.css( 'left' ), 20 * creatureInfo.y + 'px', "left CSS should be 20 times the creature's y coordinate, in pixels" );
 } );
-QUnit.test( 'findUser test', function( assert ) {
+QUnit.test( 'findUser', function( assert ) {
     var userid = 10;
     var $list = $( "<div><ul>" ).addClass( 'playerList' );
     // create 2 lis to be sure findUser finds the correct one
@@ -70,7 +70,7 @@ QUnit.test( 'findUser test', function( assert ) {
 
     $list.remove();
 } );
-QUnit.test( 'fixUserList test', function( assert ) {
+QUnit.test( 'fixUserList', function( assert ) {
     // setup
     var $list = $( "<div><ul><li><li>" ).addClass( 'playerList' );
     var $li1 = $list.children().eq( 0 ).children().eq( 0 ).text( 'user1' ).attr( 'data-id', 1 );
