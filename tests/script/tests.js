@@ -6,12 +6,6 @@ QUnit.test( 'findGameAndRoundId', function( assert ) {
     assert.equal( gameInfo.gameid, gameid, 'Returned gameid should be the same one as the one on href' );
     assert.equal( gameInfo.roundid, roundid, 'Returned roundid should be the same one as the one on href' );
 } );
-QUnit.test( 'makeUrl test', function( assert ) {
-    var gameid = 10, roundid = 13;
-    var expectedUrl = 'game/view?gameid=' + gameid + '&roundid=' + roundid;
-
-    assert.equal( GameView.makeUrl( gameid, roundid ), expectedUrl, 'makeUrl should create the expected URL' );
-} );
 QUnit.test( 'fixUrls', function( assert ) {
     var gameid = 10, roundid = 13;
     var $a1 = $( '<a>' ), $a2 = $( '<a>' );
