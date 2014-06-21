@@ -1,5 +1,6 @@
 <?php
     class DbconfigController extends ControllerBase {
+        protected $method = 'create';
         protected function dbInit() {}
 
         public function create( $user, $pass, $dbname ) {
