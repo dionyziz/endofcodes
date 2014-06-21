@@ -11,13 +11,15 @@ QUnit.test( 'fixUrls', function( assert ) {
     var $a1 = $( '<a>' ), $a2 = $( '<a>' );
     var $next = $( '<p>' ).addClass( 'next' ).append( $a1 );
     var $previous = $( '<p>' ).addClass( 'previous' ).append( $a2 );
+    var regex1 = new RegExp( "roundid=" + ( roundid + 1 ) );
+    var regex2 = new RegExp( "roundid=" + ( roundid - 1 ) );
 
     $( 'body' ).append( $next );
     $( 'body' ).append( $previous );
     GameView.fixUrls( gameid, roundid );
 
-    assert.equal( $a1.attr( 'href' ), GameView.makeUrl( gameid, roundid + 1 ), 'next URL must be created as expected' );
-    assert.equal( $a2.attr( 'href' ), GameView.makeUrl( gameid, roundid - 1 ), 'previous URL must be created as expected' );
+    assert.ok( regex1.test( $a1.attr( 'href' ) ), 'next URL must be created as expected' );
+    assert.ok( regex2.test( $a2.attr( 'href' ) ), 'previous URL must be created as expected' );
 
     $next.remove();
     $previous.remove();
