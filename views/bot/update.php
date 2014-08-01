@@ -5,7 +5,7 @@
 <div class="text-center bot-update">
     <h1 class='text-center' id='title'>Bot update<h1><?php
     ?><p id='bot-set-up' class="alert alert-info text-center">To begin playing, you must set up your bot.
-        <a href=''>Start by reading the tutorial</a>.
+        <a href='https://github.com/dionyziz/endofcodes/blob/master/docs/getting_started.md'>Start by reading the tutorial</a>.
     </p><?php
     if ( !$bot_fail && $user->boturl != '' ) {
         ?><p class='check alert alert-success'>Your bot is correctly configured <img src='static/images/check.png' alt='check' /></p><?php

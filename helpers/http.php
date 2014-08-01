@@ -1,4 +1,24 @@
 <?php
+
+    function readHTTPAccept() {
+        if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
+            return;
+        }
+        $accept = strtolower( str_replace( ' ', '', $_SERVER[ 'HTTP_ACCEPT' ] ) );
+        $accept = explode( ',', $accept );
+        $acceptTypes = [];
+        foreach ( $accept as $a ) {
+            if ( strpos( $a, ';q=' ) ) {
+                list( $a, $q ) = explode( ';q=', $a );
+                if ( $q === 0 ) {
+                    continue;
+                }
+            }
+            $acceptTypes[ $a ] = true;
+        }
+        return $acceptTypes;
+    }
+
     /*
     Redirects to a given URL or resource:
 
@@ -7,18 +27,15 @@
     go(); // home page
     */
     function go( $resourceOrURL = false, $method = false, $args = [] ) {
-        throw new RedirectException( $resourceOrURL, $method, $args );
+        throw new HTTPRedirectException( $resourceOrURL, $method, $args );
     }
 
-    class RedirectException extends Exception {
-        private $url;
+    // This is a simple HTTP Redirect. The web page is reloaded.
+    class HTTPRedirectException extends Exception {
+        public $url;
         public $resource;
         public $method;
         public $args;
-
-        public function getURL() {
-            return $this->url;
-        }
 
         public function __construct( $resourceOrURL = false, $method = false, $args = [] ) {
             if ( $resourceOrURL === false ) {
@@ -45,26 +62,31 @@
         }
     }
 
-    class HTTPErrorException extends Exception {
+    // When this exception is thrown, the controller is changed to a new one, without reloading the page.
+    class ErrorRedirectException extends Exception {
+        public $controller;
+        public $arguments;
+        public function __construct( $controller, $arguments ) {
+            $this->controller = $controller;
+            $this->arguments = $arguments;
+            parent::__construct();
+        }
+    }
+
+    class HTTPErrorException extends ErrorRedirectException {
         public $header;
         public $error;
         public $reason;
 
-        public function __construct( $error, $description = "", $reason = '' ) {
+        public function __construct( $error, $description = '', $reason = '' ) {
             $this->error = $error;
             $this->reason = $reason;
+            $this->header = "HTTP/1.1 $error";
             if ( !empty( $description ) ) {
-                $this->header = "HTTP/1.1 $error $description";
+                $this->header .= ' ' . $description;
             }
-            else {
-                $this->header = "HTTP/1.1 $error";
-            }
-            parent::__construct( $this->header );
-        }
-        public function outputErrorPage() {
-            $error = $this->error;
-            $reason = $this->reason;
-            require "views/http/$error.php";
+            $arguments = get_object_vars( $this );
+            parent::__construct( 'httperror', $arguments );
         }
     }
 

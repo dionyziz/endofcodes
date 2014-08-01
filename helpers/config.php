@@ -9,11 +9,18 @@
         if ( substr( $relativePath, -1 ) != '/' ) {
             $relativePath .= '/';
         }
-        if ( !isset( $_SERVER[ 'HTTP_HOST' ] ) ) {
-            // using CLI
-            return 'http://localhost/endofcodes/';
-        }
         return $protocol . '://' . $_SERVER[ 'HTTP_HOST' ] . $relativePath;
+    }
+    function calculateConfigEntries( &$config ) {
+        $config[ 'root' ] = getcwd();
+        if ( isset( $_SERVER[ 'HTTP_HOST' ] ) ) {
+            $config[ 'base' ] = getBase();
+        }
+    }
+    function validateConfigEntries( $config ) {
+        if ( $config[ 'development' ][ 'db' ][ 'dbname' ] == $config[ 'test' ][ 'db' ][ 'dbname' ] ) {
+            throw new ModelValidationException( " Database name for development and testing is the same." );
+        }
     }
     function loadConfig( $environment ) {
         $config = require 'config/config.php';
@@ -21,9 +28,10 @@
             $configLocal = require 'config/config-local.php';
             $config = array_replace_recursive( $config, $configLocal );
         }
-        $config = $config[ $environment ];
-        $config[ 'root' ] = getcwd();
-        $config[ 'base' ] = getBase();
+        validateConfigEntries( $config );
+        $config = array_replace_recursive( $config[ 'defaults' ], $config[ $environment ] );
+
+        calculateConfigEntries( $config );
         return $config;
     }
     function formatConfig( $config ) {
