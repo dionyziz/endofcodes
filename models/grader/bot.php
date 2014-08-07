@@ -78,7 +78,7 @@
         }
         public function sendInitiateRequest() {
             try {
-                $ch = $this->httpRequest( 'bot', 'create' );
+                $ch = $this->httpRequest( 'bot', 'view' );
             }
             catch ( NetworkException $e ) {
                 $errorMap = [
