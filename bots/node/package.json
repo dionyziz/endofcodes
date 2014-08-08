@@ -1,0 +1,22 @@
+{
+  "name": "sample_bot",
+  "version": "0.1.0",
+  "description": "A sample bot in node for EndOfCodes",
+  "main": "lib/bot.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "body-parser": "^1.6.0",
+    "express": "^4.8.0",
+    "multer": "^0.1.3",
+    "mocha": "^1.4.14",
+    "request": "^2.39.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Vitalis Salis",
+  "license": "ISC"
+}
