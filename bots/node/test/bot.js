@@ -34,6 +34,8 @@ describe( 'game request', function() {
     it( 'should return an empty object', function( done ) {
         agent
             .post( '/game' )
+            .set( 'Accept', 'application/json' )
+            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
                 var expData = '{}';
 
@@ -49,6 +51,8 @@ describe( 'round request', function() {
         agent
             .post( '/round' )
             .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .set( 'Accept', 'application/json' )
+            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
                 var intent = JSON.parse( res.text ).intent;
 
@@ -95,6 +99,8 @@ describe( 'round request', function() {
         agent
             .post( '/round' )
             .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .set( 'Accept', 'application/json' )
+            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
                 var intent = JSON.parse( res.text ).intent;
 
@@ -271,6 +277,8 @@ describe( 'round request', function() {
         agent
             .post( '/round' )
             .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .set( 'Accept', 'application/json' )
+            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
                 var intent = JSON.parse( res.text ).intent;
                 var validActions = [ 'MOVE', 'NONE' ];
@@ -317,6 +325,8 @@ describe( 'round request', function() {
         agent
             .post( '/round' )
             .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .set( 'Accept', 'application/json' )
+            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
                 var intent = JSON.parse( res.text ).intent;
 
