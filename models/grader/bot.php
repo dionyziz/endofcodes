@@ -62,7 +62,9 @@
                     $parts[] = "$key=$value";
                 }
                 $queryString = implode( '&', $parts );
-                $url .= '?' . $queryString;
+                if ( $queryString != '' ) {
+                    $url .= '?' . $queryString;
+                }
             }
 
             $ch->setOpt( CURLOPT_URL, $url );
