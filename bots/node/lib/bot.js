@@ -17,16 +17,16 @@ app.use( multer( {
 app.listen( 8000 );
 
 app.get( '/bot', function( req, res ) {
-    res.send( JSON.stringify( {
+    res.json( {
         botname: 'sample_botname',
         version: '0.1.0',
         username: 'sample_username'
-    } ) );
+    } );
     res.status( 200 ).end();
 } );
 
 app.post( '/game', function( req, res ) {
-    res.send( JSON.stringify( {} ) );
+    res.json( {} );
     res.status( 200 ).end();
 } );
 
@@ -104,9 +104,9 @@ app.post( '/round', function( req, res ) {
         }
     }
 
-    res.send( JSON.stringify( {
+    res.json( {
         'intent': intent
-    } ) );
+    } );
     res.status( 200 ).end();
 } );
 
