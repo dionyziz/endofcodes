@@ -47,10 +47,9 @@ describe( 'game request', function() {
 
 describe( 'round request', function() {
     function requestAndCheckResponse( map, validDirections, validActions, myid, numCreatures, done ) {
-        //console.log( JSON.parse( JSON.stringify( map ) ) );
         agent
             .post( '/round' )
-            .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
@@ -98,7 +97,7 @@ describe( 'round request', function() {
         
         agent
             .post( '/round' )
-            .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
@@ -276,7 +275,7 @@ describe( 'round request', function() {
 
         agent
             .post( '/round' )
-            .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
@@ -324,7 +323,7 @@ describe( 'round request', function() {
 
         agent
             .post( '/round' )
-            .send( 'map=' + JSON.stringify( map ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
