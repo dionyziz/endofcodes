@@ -84,7 +84,7 @@ app.post( '/round', function( req, res ) {
                 } );
             }
             else {
-                if ( !moves.length || Math.random() * 2 < 1 ) {
+                if ( !moves.length || Math.random() < 0.5 ) {
                     intent.push( {
                         'creatureid': creature.creatureid,
                         'action': 'NONE',
