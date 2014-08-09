@@ -33,7 +33,7 @@ describe( 'bot request', function() {
 describe( 'game request', function() {
     it( 'should return an empty object', function( done ) {
         agent
-            .get( '/game' )
+            .post( '/game' )
             .expect( function( res ) {
                 var expData = '{}';
 

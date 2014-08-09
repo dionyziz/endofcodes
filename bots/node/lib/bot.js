@@ -25,7 +25,7 @@ app.get( '/bot', function( req, res ) {
     res.status( 200 ).end();
 } );
 
-app.get( '/game', function( req, res ) {
+app.post( '/game', function( req, res ) {
     res.send( JSON.stringify( {} ) );
     res.status( 200 ).end();
 } );
