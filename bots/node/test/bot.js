@@ -338,4 +338,12 @@ describe( 'round request', function() {
             } )
             .end( done );
     } );
+
+    it( 'should respond with a 400 status code when invalid json is sent', function( done ) {
+        agent
+            .post( '/round' )
+            .send( 'map={fadfas&myid=1&W=10&round=1&gameid=1' )
+            .expect( 400 )
+            .end( done );
+    } );
 } );

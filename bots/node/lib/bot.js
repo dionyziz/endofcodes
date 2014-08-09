@@ -35,7 +35,13 @@ app.post( '/round', function( req, res ) {
     }
 
     var round = req.body.round;
-    var map = JSON.parse( req.body.map );
+    try {
+        var map = JSON.parse( req.body.map );
+    }
+    catch ( e ) {
+        res.status( 400 ).end();
+        return;
+    }
     var gameid = req.body.gameid;
     var myid = req.body.myid;
     var W = req.body.W;
