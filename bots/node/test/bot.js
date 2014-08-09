@@ -229,6 +229,27 @@ describe( 'round request', function() {
         requestAndCheckResponse( map, [], [], 1, 0, done );
     } );
 
+    it( 'should not attack dead creatures', function( done ) {
+        var map = [
+            {
+                creatureid: 1,
+                userid: 1,
+                x: 1,
+                y: 1,
+                hp: 100
+            },
+            {
+                creatureid: 2,
+                userid: 2,
+                x: 1,
+                y: 2,
+                hp: 0
+            }
+        ];
+
+        requestAndCheckResponse( map, [ 'NORTH', 'EAST', 'SOUTH', 'WEST' ], [ 'MOVE', 'NONE' ], 1, 1, done );
+    } );
+
     it( 'should not move to an occupied location', function( done ) {
         var map = [
             {

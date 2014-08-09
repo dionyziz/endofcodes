@@ -66,7 +66,7 @@ app.post( '/round', function( req, res ) {
                         if ( map[ z ].x == newX && map[ z ].y == newY ) {
                             creatureFound = true;
 
-                            if ( map[ z ].userid != myid ) {
+                            if ( map[ z ].userid != myid && map[ z ].hp > 0 ) {
                                 attacks.push( j );
                             }
                         }
