@@ -55,7 +55,7 @@ app.post( '/round', function( req, res ) {
             ];
 
             for ( var j = 0; j < offsets.length; ++j ) {
-                var newX = parseInt( x ) + offsets[ j ][ 0 ], newY = parseInt( y ) + offsets[ j ][ 1 ];
+                var newX = parseInt( x, 10 ) + offsets[ j ][ 0 ], newY = parseInt( y, 10 ) + offsets[ j ][ 1 ];
 
                 if ( newX >= 0 && newX < W && newY >= 0 && newY < H ) {
                     var creatureFound = false;
