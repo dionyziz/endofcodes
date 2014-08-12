@@ -102,7 +102,7 @@
                 foreach ( $countries as $key => $country ) {
                     $countriesSelectArray[ $country->shortname ] = $country->name;
                 }
-                $self->createSelect( $countriesSelectArray, 'countryShortname', '', 'country-input', [ 'class' => 'form-control' ] );
+                $self->createSelect( $countriesSelectArray, 'countryShortname', $location, 'country-input', [ 'class' => 'form-control' ] );
             ?></div>
         </div>
         <div class="form-group">
