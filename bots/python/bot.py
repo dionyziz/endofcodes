@@ -6,7 +6,7 @@ from bottle import route, run, template, request, response, hook
 def contentType():
     response.headers['Content-type'] = 'application/json'
     
-@route('/bot', method='POST')
+@route('/bot', method='GET')
 def bot():
     return json.dumps({
         'botname': 'pythonbot',
