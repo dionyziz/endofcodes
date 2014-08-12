@@ -3,20 +3,6 @@ var assert = require( 'assert' );
 var app = require( '../lib/bot.js' );
 var agent = request.agent( app );
 
-function getAndCheckData( res, check ) {
-    res.setEncoding( 'utf8' );
-
-    var data = "";
-
-    res.on( 'data', function( d ) {
-        data += d;
-    } );
-
-    res.on( 'end', function() {
-        check( data );
-    } );
-}
-
 describe( 'bot request', function() {
     it( 'should return the bot credentials', function( done ) {
         agent
@@ -380,7 +366,7 @@ describe( 'round request', function() {
                 round: 1,
                 gameid: 1
             } )
-            .expect( 500 )
+            .expect( 400 )
             .end( done );
     } );
 } );
