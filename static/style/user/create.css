@@ -20,6 +20,10 @@
 #register-form #dob p {
     display: inline;
 }
-#register-form #password input:first-child {
+#register-form #password-input input:first-child {
     margin-bottom: 15px;
+}
+#register-form .alert-danger {
+    text-align: center;
+    width: 257px;
 }

@@ -14,16 +14,13 @@
             $password_not_matched, $email_used, $email_invalid, $countries, $location ) {
         global $config;
 
-        if ( isset( $username_empty ) ) {
-            $self->createError( 'Please type a username.' );
-        }
-        if ( isset( $username_invalid ) ) {
-            $self->createError( 'Usernames can only have numbers, letters, "." and "_"' );
-        }
-        if ( isset( $password_empty ) ) {
-            $self->createError( 'Please type a password.' );
-        }
         ?><div class="form-group"><?php
+            if ( isset( $username_empty ) ) {
+                $self->createError( 'Please type a username.' );
+            }
+            if ( isset( $username_invalid ) ) {
+                $self->createError( 'Usernames can only have numbers, letters, "." and "_"' );
+            }
             if ( isset( $username_used ) ) {
                 $self->createError( 'Username already exists' );
                 $username_value = "";
@@ -44,7 +41,28 @@
             ?></div>
         </div>
         <div class="form-group"><?php
-            $self->createLabel( 'email', 'Email', [ 'class' => 'col-sm-2 control-label' ] );
+            $self->createLabel( 'password', 'Password', [ 'id' => 'pswd-label', 'class' => 'col-sm-2 control-label' ] );
+            if ( isset( $password_empty ) ) {
+                $self->createError( 'Please type a password.' );
+            }
+            if ( isset( $password_small ) ) {
+                $self->createError( 'Password should be at least 7 characters long' );
+            }
+            if ( isset( $password_not_matched ) ) {
+                $self->createError( 'Passwords do not match' );
+            }
+            ?><div class="col-sm-10" id='password-input'><?php
+                $self->createInput( 'password', 'password', 'password', '', [
+                    'class' => 'form-control',
+                    'placeholder' => 'Password'
+                ] );
+                $self->createInput( 'password', 'password_repeat', 'password_repeat', '', [
+                    'class' => 'form-control',
+                    'placeholder' => 'Repeat password'
+                ] );
+            ?></div>
+        </div>
+        <div class="form-group"><?php
             if ( isset( $email_empty ) ) {
                 $self->createError( 'Please type an email.' );
             }
@@ -54,29 +72,11 @@
             if ( isset( $email_used ) ) {
                 $self->createError( 'Email is already in use' );
             }
+            $self->createLabel( 'email', 'Email', [ 'class' => 'col-sm-2 control-label' ] );
             ?><div class="col-sm-10"><?php
                 $self->createInput( 'text', 'email', 'email', '', [
                     'class' => 'form-control',
                     'placeholder' => 'Email'
-                ] );
-            ?></div>
-        </div>
-        <div class="form-group"><?php
-            $self->createLabel( 'password', 'Password', [ 'id' => 'pswd-label', 'class' => 'col-sm-2 control-label' ] );
-            if ( isset( $password_small ) ) {
-                $self->createError( 'Password should be at least 7 characters long' );
-            }
-            if ( isset( $password_not_matched ) ) {
-                $self->createError( 'Passwords do not match' );
-            }
-            ?><div class="col-sm-10" id='password'><?php
-                $self->createInput( 'password', 'password', '', '', [
-                    'class' => 'form-control',
-                    'placeholder' => 'Password'
-                ] );
-                $self->createInput( 'password', 'password_repeat', '', '', [
-                    'class' => 'form-control',
-                    'placeholder' => 'Repeat password'
                 ] );
             ?></div>
         </div>
