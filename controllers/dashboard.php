@@ -11,7 +11,7 @@
             }
             catch ( ModelNotFoundException $e ) {
             }
-            require_once 'views/home.php';
+            require 'views/home.php';
         }
     }
 ?>

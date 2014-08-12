@@ -11,7 +11,7 @@
             catch ( DBException $e ) {
                 throw new MigrationException( $e );
             }
-        } 
+        }
 
         public static function createLog( $name, $env ) {
             if ( file_exists( static::$log ) ) {
@@ -30,7 +30,7 @@
                     $list[ $env ] = self::getUnexecuted( $env );
                 }
                 return $list;
-            } 
+            }
             return self::getUnexecuted( $env );
         }
 
@@ -78,14 +78,14 @@
         }
 
         public static function addField( $table, $field, $description ) {
-            self::migrate( 
+            self::migrate(
                 "ALTER TABLE
                     $table
                 ADD COLUMN
                     $field $description;"
             );
         }
- 
+
         public static function alterField( $table, $oldName, $newName, $description ) {
             self::migrate(
                 "ALTER TABLE
@@ -94,7 +94,7 @@
                     $oldName $newName $description;"
             );
         }
-    
+
         public static function dropField( $table, $field ) {
             self::migrate(
                 "ALTER TABLE
@@ -108,7 +108,7 @@
             self::migrate(
                 "DROP TABLE 
                     $table;"
-            ); 
+            );
         }
 
         public static function dropPrimaryKey( $table ) {
@@ -117,7 +117,7 @@
                     $table
                 DROP PRIMARY KEY;"
             );
-        } 
+        }
 
         public static function addPrimaryKey( $table, $name, $columns = [] ) {
             $columns = implode( ',', $columns );
@@ -181,7 +181,7 @@
                     }
                 }
                 $attributes = array_merge( $attributes, $args );
-            } 
+            }
             $attributes = implode( ',', $attributes );
             self::migrate(
                 "CREATE TABLE IF NOT EXISTS

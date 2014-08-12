@@ -4,7 +4,7 @@
         protected $resource;
         protected $method;
         public $id;
-        public $attributes;
+        public $attributes = [];
         public $formMethod;
         protected $hasFile = false;
         protected $token;
@@ -49,7 +49,7 @@
             ?></p><?php
         }
 
-        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = '' ) {
+        public function createInput( $type = 'text', $name = '', $id = '', $value = '', $attributes = [] ) {
             if ( !Form::isValidType( $type ) ) {
                 $type = 'text';
             }
@@ -74,18 +74,16 @@
                         echo htmlspecialchars( $value );
                     ?>" <?php
                 }
-                if ( !empty( $attributes ) ) {
-                    foreach ( $attributes as $key => $value ) {
-                        echo $key; 
-                        ?>="<?php
-                            echo htmlspecialchars( $value );
-                        ?>" <?php
-                    }
+                foreach ( $attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
                 }
             ?> /></p><?php
         }
 
-        public function createSubmit( $value, $attributes = '' ) {
+        public function createSubmit( $value, $attributes = [] ) {
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
@@ -133,10 +131,10 @@
                 'update' => 1,
                 'view' => 0
             ];
-            if ( isset( $methods[ $method ] ) ) {
-                return $methods[ $method ];
+            if ( !isset( $methods[ $method ] ) ) {
+                throw new HTMLFormInvalidException( $method );
             }
-            throw new HTMLFormInvalidException( $method );
+            return $methods[ $method ];
         }
 
         public function createLabel( $for, $text ) {
@@ -169,18 +167,16 @@
                 $this->formMethod = 'get';
             }
             ?><form <?php
-                if ( isset( $this->id ) ) {
+                if ( !empty( $this->id ) ) {
                     ?>id="<?php
                         echo htmlspecialchars( $this->id );
                     ?>" <?php
                 }
-                if ( isset( $this->attributes ) ) {
-                    foreach( $this->attributes as $key => $value ) {
-                        echo $key; 
-                        ?>="<?php
-                            echo htmlspecialchars( $value );
-                        ?>" <?php
-                    }
+                foreach ( $this->attributes as $key => $value ) {
+                    echo $key; 
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
                 }
                 ?>action="<?php
                     echo htmlspecialchars( $this->resource );

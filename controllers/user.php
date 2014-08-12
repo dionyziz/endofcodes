@@ -55,7 +55,7 @@
                     }
                 }
             }
-            require_once 'views/user/view.php';
+            require 'views/user/view.php';
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
@@ -104,7 +104,17 @@
             require_once 'models/country.php';
             $countries = Country::findAll();
             try {
-                $location = Location::getCountryName( $_SERVER[ 'REMOTE_ADDR' ] );
+                if ( isset( $_SERVER[ 'REMOTE_ADDR' ] ) ) {
+                    try {
+                        $location = Location::getCountryName( $_SERVER[ 'REMOTE_ADDR' ] );
+                    }
+                    catch ( LocationException $e ) {
+                        $location = '';
+                    }
+                }
+                else {
+                    $location = '';
+                }
             }
             catch ( ModelNotFoundException $e ) {
                 $location = ''; 

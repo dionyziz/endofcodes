@@ -1,5 +1,5 @@
 <?php
-    require_once 'helpers/file.php';
+    require_once 'models/file.php';
     class GamescriptTest extends FunctionalTest {
         protected $mockPath = 'bots/mock';
         protected $currentPath;
@@ -15,7 +15,7 @@
             global $config;
 
             $this->buildUser( 'sample_username' );
-            $this->buildUser( 'sample_username2', $config[ 'base' ] . $this->mockPath );
+            $this->buildUser( 'sample_username2', '', $config[ 'base' ] . $this->mockPath );
             exec( "ENVIRONMENT=test ./gamescript.sh", $output );
             $this->assertDoesNotThrow( function() {
                 $lastGame = Game::getLastGame();
