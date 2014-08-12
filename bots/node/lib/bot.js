@@ -22,7 +22,7 @@ function tryFn( fn ) {
             fn( req, res );
         }
         catch ( e ) {
-            res.send( 500 ).end();
+            res.status( 400 ).end();
         }
     }
 };
@@ -46,13 +46,7 @@ app.post( '/v1/round', tryFn( function( req, res ) {
     }
 
     var round = req.body.round;
-    try {
-        var map = JSON.parse( req.body.map );
-    }
-    catch ( e ) {
-        res.status( 400 ).end();
-        return;
-    }
+    var map = JSON.parse( req.body.map );
     var gameid = req.body.gameid;
     var myid = req.body.myid;
     var W = req.body.W;

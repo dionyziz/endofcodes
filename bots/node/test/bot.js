@@ -22,9 +22,9 @@ describe( 'bot request', function() {
         agent
             .get( '/v1/bot' )
             .expect( function( res ) {
-                var expData = '{"botname":"sample_botname","version":"0.1.0","username":"sample_username"}';
+                var expData = {"botname":"sample_botname","version":"0.1.0","username":"sample_username"};
 
-                assert.strictEqual( expData, res.text );
+                assert.deepEqual( expData, JSON.parse( res.text ) );
             } )
             .end( done );
     } );
@@ -35,11 +35,10 @@ describe( 'game request', function() {
         agent
             .post( '/v1/game' )
             .set( 'Accept', 'application/json' )
-            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
-                var expData = '{}';
+                var expData = {};
 
-                assert.strictEqual( expData, res.text );
+                assert.deepEqual( expData, JSON.parse( res.text ) );
             } )
             .end( done );
     } );
@@ -49,9 +48,16 @@ describe( 'round request', function() {
     function requestAndCheckResponse( map, validDirections, validActions, myid, numCreatures, done ) {
         agent
             .post( '/v1/round' )
-            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .type( 'form' )
+            .send( {
+                map: JSON.stringify( map ),
+                myid: 1,
+                W: 10,
+                H: 10,
+                round: 1,
+                gameid: 1
+            } )
             .set( 'Accept', 'application/json' )
-            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
                 var intent = JSON.parse( res.text ).intent;
 
@@ -97,9 +103,16 @@ describe( 'round request', function() {
         
         agent
             .post( '/v1/round' )
-            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .type( 'form' )
+            .send( {
+                map: JSON.stringify( map ),
+                myid: 1,
+                W: 10,
+                H: 10,
+                round: 1,
+                gameid: 1
+            } )
             .set( 'Accept', 'application/json' )
-            .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
                 var intent = JSON.parse( res.text ).intent;
 
@@ -275,7 +288,15 @@ describe( 'round request', function() {
 
         agent
             .post( '/v1/round' )
-            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .type( 'form' )
+            .send( {
+                map: JSON.stringify( map ),
+                myid: 1,
+                W: 10,
+                H: 10,
+                round: 1,
+                gameid: 1
+            } )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
@@ -323,7 +344,15 @@ describe( 'round request', function() {
 
         agent
             .post( '/v1/round' )
-            .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
+            .type( 'form' )
+            .send( {
+                map: JSON.stringify( map ),
+                myid: 1,
+                W: 10,
+                H: 10,
+                round: 1,
+                gameid: 1
+            } )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
@@ -342,8 +371,16 @@ describe( 'round request', function() {
     it( 'should respond with a 400 status code when invalid json is sent', function( done ) {
         agent
             .post( '/v1/round' )
-            .send( 'map={fadfas&myid=1&W=10&round=1&gameid=1' )
-            .expect( 400 )
+            .type( 'form' )
+            .send( {
+                map: '{fadfasf',
+                myid: 1,
+                W: 10,
+                H: 10,
+                round: 1,
+                gameid: 1
+            } )
+            .expect( 500 )
             .end( done );
     } );
 } );
