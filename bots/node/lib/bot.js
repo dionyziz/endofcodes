@@ -16,19 +16,30 @@ app.use( multer( {
 
 app.listen( 8000 );
 
-app.get( '/v1/bot', function( req, res ) {
+function tryFn( fn ) {
+    return function( req, res ) {
+        try {
+            fn( req, res );
+        }
+        catch ( e ) {
+            res.send( 500 ).end();
+        }
+    }
+};
+
+app.get( '/v1/bot', tryFn( function( req, res ) {
     res.json( {
         botname: 'sample_botname',
         version: '0.1.0',
         username: 'sample_username'
     } );
-} );
+} ) );
 
-app.post( '/v1/game', function( req, res ) {
+app.post( '/v1/game', tryFn( function( req, res ) {
     res.json( {} );
-} );
+} ) );
 
-app.post( '/v1/round', function( req, res ) {
+app.post( '/v1/round', tryFn( function( req, res ) {
     function randomDirection( array ) {
         var directions = [ 'NORTH', 'EAST', 'SOUTH', 'WEST' ];
         return directions[ array[ Math.floor( Math.random() * array.length ) ] ];
@@ -111,6 +122,6 @@ app.post( '/v1/round', function( req, res ) {
     res.json( {
         'intent': intent
     } );
-} );
+} ) );
 
 module.exports = app;
