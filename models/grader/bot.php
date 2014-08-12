@@ -62,7 +62,9 @@
                     $parts[] = "$key=$value";
                 }
                 $queryString = implode( '&', $parts );
-                $url .= '?' . $queryString;
+                if ( $queryString != '' ) {
+                    $url .= '?' . $queryString;
+                }
             }
 
             $ch->setOpt( CURLOPT_URL, $url );
@@ -78,7 +80,7 @@
         }
         public function sendInitiateRequest() {
             try {
-                $ch = $this->httpRequest( 'bot', 'create' );
+                $ch = $this->httpRequest( 'bot', 'view' );
             }
             catch ( NetworkException $e ) {
                 $errorMap = [

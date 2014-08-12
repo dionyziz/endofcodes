@@ -131,10 +131,10 @@
                 'update' => 1,
                 'view' => 0
             ];
-            if ( isset( $methods[ $method ] ) ) {
-                return $methods[ $method ];
+            if ( !isset( $methods[ $method ] ) ) {
+                throw new HTMLFormInvalidException( $method );
             }
-            throw new HTMLFormInvalidException( $method );
+            return $methods[ $method ];
         }
 
         public function createLabel( $for, $text, $attributes = [] ) {
