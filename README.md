@@ -38,11 +38,10 @@ End of Codes has been tested under MySQL 5.5 and 5.6 and Apache 2.2, but it may 
 
 ### Environment Setup
 
-* Fork the repository & Clone it on your machine. This will automatically create a new folder (in the current working directory) containing the repo.
+* Fork the repository & clone it on your machine. This will automatically create a new folder (in the current working directory) containing the repo. You can find more information about this step at [CONTRIBUTING.MD](https://github.com/dionyziz/endofcodes/tree/blob/CONTRIBUTING.md#workflow)
 * Create a new database called 'endofcodes'. 
-* Import the **database/db_schema.sql** into the db through phpMyAdmin, or dump it through the command line. Like so: `mysql -u user -p pass endofcodes < absolute/path/to/dump/db_schema.sql` 
+* Open **config/config-local.php** and set your 'user' and 'pass' for an existing user in the database. Alternatively you can open endofcodes in a web browser (localhost/endofcodes/) and fill in the database details.
 
-* Open **config/config.php** and set your 'user' and 'pass' for an existing user in the database.
 Note: this applies just to the 'development' environment!
 ```
 'development' => [
@@ -53,10 +52,14 @@ Note: this applies just to the 'development' environment!
         'dbname' => 'endofcodes'
     ],
 ```
+* On migrations page (localhost/endofcodes/testrun/create) run all migrations scripts in both environments in order to have the full database schema. 
 
 ### Vhost Setup
-* Vhost is a custom domain name on your local server, that points to a directory. This way you can identify and access your local projects through reasonable naming in the browser.
-* If you're on Mac, w/ MAMP & Ports set to MySQL defaults, open **/private/etc/hosts** and add `127.0.0.1  endofgames.loc`. Like so:
+* Vhost is a custom domain name on your local server that points to a directory. This way you can identify and access your local projects through reasonable naming in the browser.
+
+#### Mac
+
+* If you're on Mac, with MAMP & Ports set to MySQL defaults, open **/private/etc/hosts** and add `127.0.0.1  endofgames.loc`. Like so:
 
 ```
 127.0.0.1       localhost
@@ -82,8 +85,9 @@ Next open **Applications/MAMP/conf/apache/extra/httpd-vhosts.conf** and add this
 ```
 Restart MAMP and open http://endofcodes.loc in the broswer.
 
-* If you're on Linux [this](https://www.digitalocean.com/community/articles/how-to-set-up-apache-virtual-hosts-on-ubuntu-12-04-lts) tutorial explains a similar process.
+#### Linux
 
+* If you're on Linux [this](https://www.digitalocean.com/community/articles/how-to-set-up-apache-virtual-hosts-on-ubuntu-12-04-lts) tutorial explains a similar process.
 
 Blog
 ====
