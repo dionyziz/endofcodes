@@ -62,4 +62,8 @@ def round():
 
     return json.dumps({'intent': intents})
 
+if len(sys.argv) != 3:
+    print('Syntax: python bot.py <username> <port>')
+    sys.exit(0)
+
 run(host='localhost', port=sys.argv[2], reloader=True)
