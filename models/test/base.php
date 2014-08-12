@@ -128,7 +128,7 @@
 
             if ( $exceptionData[ 'caught' ] ) {
                 if ( strtolower( $exceptionData[ 'name' ] ) != strtolower( $exception ) ) {
-                    $description .= " A " . $exceptionData[ 'name' ] . " exception was thrown instead.";
+                    $description .= " A " . $exceptionData[ 'name' ] . " exception was thrown instead";
                     $exceptionData[ 'caught' ] = false;
                 }
             }
@@ -144,7 +144,7 @@
             if ( $description != '' ) {
                 $description .= '. ';
             }
-            $description .= "Expected exception $exception to be avoided, but it was thrown.";
+            $description .= "Expected exception $exception to be avoided, but it was thrown";
 
             if ( $exceptionData[ 'caught' ] ) {
                 if ( strtolower( $exceptionData[ 'name' ] ) != strtolower( $exception ) ) {

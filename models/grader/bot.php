@@ -1,5 +1,5 @@
 <?php
-    require_once 'models/curl.php';
+    require_once 'models/network.php';
     require_once 'models/error.php';
 
     interface GraderBotInterface {
@@ -62,7 +62,9 @@
                     $parts[] = "$key=$value";
                 }
                 $queryString = implode( '&', $parts );
-                $url .= '?' . $queryString;
+                if ( $queryString != '' ) {
+                    $url .= '?' . $queryString;
+                }
             }
 
             $ch->setOpt( CURLOPT_URL, $url );
@@ -78,9 +80,9 @@
         }
         public function sendInitiateRequest() {
             try {
-                $ch = $this->httpRequest( 'bot', 'create' );
+                $ch = $this->httpRequest( 'bot', 'view' );
             }
-            catch ( CurlException $e ) {
+            catch ( NetworkException $e ) {
                 $errorMap = [
                     CURLE_COULDNT_RESOLVE_HOST => 'initiate_could_not_resolve',
                     CURLE_COULDNT_CONNECT => 'initiate_could_not_connect',
@@ -124,7 +126,7 @@
             try {
                 $ch = $this->httpRequest( 'game', 'create', GraderSerializer::gameRequestParams( $game ) );
             }
-            catch ( CurlException $e ) {
+            catch ( NetworkException $e ) {
                 $this->reportError( $e->error );
             }
             $decodedResponse = json_decode( $ch->response );
@@ -140,7 +142,7 @@
             try {
                 $ch = $this->httpRequest( "round", 'create', GraderSerializer::roundRequestParams( $round, $this->user, $this->game ) );
             }
-            catch ( CurlException $e ) {
+            catch ( NetworkException $e ) {
                 $this->reportError( $e->error );
             }
             $decodedResponse = json_decode( $ch->response );

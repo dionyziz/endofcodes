@@ -4,12 +4,12 @@
     require_once 'models/grader/serializer.php';
     require_once 'models/game.php';
     require_once 'models/round.php';
-    require_once 'models/curl.php';
+    require_once 'models/network.php';
 
     class CurlConnectionMock implements CurlConnectionInterface {
         public $url;
         public $data;
-        public $requestMethod;
+        public $requestMethod = 'GET';
         public $executed = false;
         public $response;
         protected $responseError;
@@ -33,7 +33,7 @@
         }
         public function exec() {
             if ( $this->hasResponseError ) {
-                throw new CurlException( $this->responseError );
+                throw new NetworkException( $this->responseError );
             }
             $this->executed = true;
         }
@@ -82,7 +82,7 @@
             $bot->sendInitiateRequest();
 
             $this->assertEquals( $botbase . '/bot', $curlConnectionMock->url, 'Initiation must send a request to the URL {{botbase}}/bot' );
-            $this->assertEquals( 'POST', $curlConnectionMock->requestMethod, 'Initiation must do a POST request' );
+            $this->assertEquals( 'GET', $curlConnectionMock->requestMethod, 'Initiation must do a GET request' );
             $this->assertTrue( $curlConnectionMock->executed, 'Initiation must execute curl request' );
         }
         public function testInitiateUsernameInvalid() {

@@ -1,0 +1,11 @@
+<?php
+    return [
+        'development' => [
+            'db' => [
+                'user' => 'endofcodes',
+                'pass' => 'sample_password',
+                'dbname' => 'endofcodes',
+            ],
+        ],
+    ];
+?>

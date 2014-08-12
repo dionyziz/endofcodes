@@ -4,7 +4,10 @@
         public $environment = 'development';
         public $trusted = false;
         public $outputFormat = 'html';
-        public $pageGenerationBegin; // time marking the beginning of page generation, in epoch seconds
+        public $pageGenerationBegin; // Time marking the beginning of page generation, in epoch seconds.
+        protected $method = 'view'; // Override to specify a default controller method.
+        private $vars;
+        private $httpRequestMethod;
 
         public static function findController( $resource ) {
             $resource = basename( $resource );
@@ -18,70 +21,96 @@
 
             return $controller;
         }
-        protected function protectFromForgery( $token = '', $httpRequestMethod = '' ) {
-            if ( $httpRequestMethod === 'POST'
-            && ( !isset( $_SESSION[ 'form' ] )
-              || !isset( $_SESSION[ 'form' ][ 'token' ] )
-              || $token !== $_SESSION[ 'form' ][ 'token' ]
-              || $token == '' )
-            && !$this->trusted ) {
-                throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
+        public function dispatch( $get, $post, $files, $httpRequestMethod ) {
+            $this->initDebug();
+
+            $this->init();
+            $this->sessionCheck();
+            $this->getAcceptTypes();
+
+            $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
+
+            $this->getControllerMethod();
+            return $this->callWithNamedArgs();
+        }
+        protected function init() {
+            $this->getEnvironment();
+            $this->getConfig();
+            $this->dbInit();
+        }
+        private function sessionCheck() {
+            global $config;
+
+            if ( !isset( $_SESSION[ 'user' ] ) && isset( $_COOKIE[ $config[ 'persistent_cookie' ][ 'name' ] ] ) ) {
+                require_once 'models/user.php';
+                try {
+                    $_SESSION[ 'user' ] = User::findBySessionId( $_COOKIE[ $cookiename ] );
+                }
+                catch ( ModelNotFoundException $e ) {
+                }
             }
         }
-        protected function getControllerMethod( $requestedMethod, $httpRequestMethod ) {
-            $method = $requestedMethod;
-
+        private function getAcceptTypes() {
+            $this->acceptTypes = readHTTPAccept();
+            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
+                $this->outputFormat = 'json';
+            }
+        }
+        private function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
+            if ( isset( $get[ 'method' ] ) ) {
+                $this->method = $get[ 'method' ];
+            }
+            $this->httpRequestMethod = $httpRequestMethod;
+            $this->vars = [];
+            switch ( $this->httpRequestMethod ) {
+                case 'POST':
+                    $this->vars = array_merge( $post, $files );
+                    break;
+                case 'GET':
+                    $this->vars = $get;
+                    unset( $this->vars[ 'resource' ] );
+                    unset( $this->vars[ 'method' ] );
+                    break;
+            }
+            $this->protectFromForgery();
+        }
+        private function protectFromForgery() {
+            if ( $this->httpRequestMethod === 'POST' && !$this->trusted ) {
+                if ( !isset( $this->vars[ 'token' ] )
+                    || !isset( $_SESSION[ 'form' ] )
+                    || !isset( $_SESSION[ 'form' ][ 'token' ] )
+                    || $this->vars[ 'token' ] !== $_SESSION[ 'form' ][ 'token' ] ) {
+                    throw new HTTPUnauthorizedException( 'Your CSRF token was invalid.' );
+                }
+            }
+        }
+        private function getControllerMethod() {
             try {
-                if ( Form::getRESTMethodIdempotence( $method ) === 1 && $httpRequestMethod != 'POST' ) {
-                    $method .= 'View';
+                if ( Form::getRESTMethodIdempotence( $this->method ) && $this->httpRequestMethod != 'POST' ) {
+                    $this->method .= 'View';
                 }
             }
             catch ( HTMLFormInvalidException $e ) {
-                $method = 'view';
-            }
-
-            return $method;
-        }
-        protected function getControllerVars( $get, $post, $files, $httpRequestMethod ) {
-            switch ( $httpRequestMethod ) {
-                case 'POST':
-                    $vars = array_merge( $post, $files );
-                    break;
-                case 'GET':
-                    $vars = $get;
-                    break;
-                default:
-                    $vars = [];
-                    break;
-            }
-
-            return $vars;
-        }
-        protected function sessionCheck() {
-            global $config;
-
-            if ( isset( $_SESSION[ 'user' ] ) ) {
-                return;
-            }
-            $cookiename = $config[ 'persistent_cookie' ][ 'name' ];
-            if ( isset( $_COOKIE[ $cookiename ] ) ) {
-                require_once 'models/user.php';
-                try {
-                    $user = User::findBySessionId( $_COOKIE[ $cookiename ] );
-                }
-                catch ( ModelNotFoundException $e ) {
-                    return;
-                }
-                $_SESSION[ 'user' ] = $user;
+                throw new HTTPNotFoundException( $this->method . ' is not a valid REST method.' );
             }
         }
-        protected function callWithNamedArgs( $methodReflection, $callable, $vars ) {
-            $parameters = $methodReflection->getParameters();
+        private function callWithNamedArgs() {
+            $controllerReflection = new ReflectionObject( $this );
+            try {
+                $methodReflection = $controllerReflection->getMethod( $this->method );
+            }
+            catch ( ReflectionException $e ) {
+                throw new HTTPNotFoundException( $this->method . ' is not a method of ' . $controllerReflection->getShortName() . '.' );
+            }
+
+            $arguments = $this->getNamedArguments( $methodReflection );
+            return call_user_func_array( [ $this, $this->method ], $arguments );
+        }
+        private function getNamedArguments( $methodReflection ) {
             $arguments = [];
-
-            foreach ( $parameters as $parameter ) {
-                if ( isset( $vars[ $parameter->name ] ) ) {
-                    $arguments[] = $vars[ $parameter->name ];
+            foreach ( $methodReflection->getParameters() as $parameter ) {
+                if ( isset( $this->vars[ $parameter->name ] ) ) {
+                    $arguments[] = $this->vars[ $parameter->name ];
                 }
                 else {
                     try {
@@ -92,48 +121,30 @@
                     }
                 }
             }
-            return call_user_func_array( $callable, $arguments );
+            return $arguments;
         }
-        protected function loadConfig() {
+        protected function getEnvironment() {
+            if ( getEnv( 'ENVIRONMENT' ) !== false ) {
+                $this->environment = getEnv( 'ENVIRONMENT' );
+            }
+        }
+        protected function getConfig() {
             global $config;
 
-            if ( getEnv( 'ENVIRONMENT' ) !== false ) {
-                $env = getEnv( 'ENVIRONMENT' );
-            }
-            else {
-                $env = $this->environment;
-            }
-            $config = getConfig( $env );
+            $config = loadConfig( $this->environment );
         }
-        protected function readHTTPAccept() {
-            if ( !isset( $_SERVER[ 'HTTP_ACCEPT' ] ) ) {
-                return;
+        protected function dbInit() {
+            try {
+                dbInit();
             }
-            $accept = strtolower( str_replace( ' ', '', $_SERVER[ 'HTTP_ACCEPT' ] ) );
-            $accept = explode( ',', $accept );
-            $acceptTypes = [];
-            foreach ( $accept as $a ) {
-                if ( strpos( $a, ';q=' ) ) {
-                    list( $a, $q ) = explode( ';q=', $a );
-                    if ( $q === 0 ) {
-                        continue;
-                    }
-                }
-                $acceptTypes[ $a ] = true;
-            }
-            $this->acceptTypes = $acceptTypes;
-            if ( isset( $this->acceptTypes[ 'application/json' ] ) ) {
-                $this->outputFormat = 'json';
+            catch ( DBException $e ) {
+                throw new ErrorRedirectException( 'dbconfig', get_object_vars( $e ) );
             }
         }
-        protected function init() {
-            $this->initDebug();
-            $this->loadConfig();
-            $this->readHTTPAccept();
-            dbInit();
-        }
-        public function initDebug() {
+        private function initDebug() {
             global $debugger;
+
+            $this->pageGenerationBegin = microtime( true );
 
             if ( isset( $_SESSION[ 'debug' ] ) ) {
                 $debugger = new Debugger();
@@ -141,29 +152,6 @@
             else {
                 $debugger = new DummyDebugger();
             }
-        }
-        public function dispatch( $get, $post, $files, $httpRequestMethod ) {
-            $this->pageGenerationBegin = microtime( true );
-
-            $this->init();
-            $this->sessionCheck();
-
-            if ( !isset( $get[ 'method' ] ) ) {
-                $get[ 'method' ] = '';
-            }
-            $method = $this->getControllerMethod( $get[ 'method' ], $httpRequestMethod );
-            $vars = $this->getControllerVars( $get, $post, $files, $httpRequestMethod );
-            if ( !isset( $vars[ 'token' ] ) ) {
-                $token = '';
-            }
-            else {
-                $token = $vars[ 'token' ];
-            }
-            $this->protectFromForgery( $token, $httpRequestMethod );
-            $thisReflection = new ReflectionObject( $this );
-            $methodReflection = $thisReflection->getMethod( $method );
-
-            return $this->callWithNamedArgs( $methodReflection, [ $this, $method ], $vars );
         }
         public function getPageGenerationTime() {
             return microtime( true ) - $this->pageGenerationBegin;
