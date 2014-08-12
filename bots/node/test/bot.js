@@ -20,7 +20,7 @@ function getAndCheckData( res, check ) {
 describe( 'bot request', function() {
     it( 'should return the bot credentials', function( done ) {
         agent
-            .get( '/bot' )
+            .get( '/v1/bot' )
             .expect( function( res ) {
                 var expData = '{"botname":"sample_botname","version":"0.1.0","username":"sample_username"}';
 
@@ -33,7 +33,7 @@ describe( 'bot request', function() {
 describe( 'game request', function() {
     it( 'should return an empty object', function( done ) {
         agent
-            .post( '/game' )
+            .post( '/v1/game' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
             .expect( function( res ) {
@@ -48,7 +48,7 @@ describe( 'game request', function() {
 describe( 'round request', function() {
     function requestAndCheckResponse( map, validDirections, validActions, myid, numCreatures, done ) {
         agent
-            .post( '/round' )
+            .post( '/v1/round' )
             .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
@@ -96,7 +96,7 @@ describe( 'round request', function() {
         ];
         
         agent
-            .post( '/round' )
+            .post( '/v1/round' )
             .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
@@ -274,7 +274,7 @@ describe( 'round request', function() {
         ];
 
         agent
-            .post( '/round' )
+            .post( '/v1/round' )
             .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
@@ -322,7 +322,7 @@ describe( 'round request', function() {
         ];
 
         agent
-            .post( '/round' )
+            .post( '/v1/round' )
             .send( 'map=' + encodeURIComponent( JSON.stringify( map ) ) +'&myid=1&W=10&H=10&round=1&gameid=1' )
             .set( 'Accept', 'application/json' )
             .expect( 'Content-Type', /json/ )
@@ -341,7 +341,7 @@ describe( 'round request', function() {
 
     it( 'should respond with a 400 status code when invalid json is sent', function( done ) {
         agent
-            .post( '/round' )
+            .post( '/v1/round' )
             .send( 'map={fadfas&myid=1&W=10&round=1&gameid=1' )
             .expect( 400 )
             .end( done );

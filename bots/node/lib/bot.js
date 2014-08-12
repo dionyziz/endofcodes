@@ -16,7 +16,7 @@ app.use( multer( {
 
 app.listen( 8000 );
 
-app.get( '/bot', function( req, res ) {
+app.get( '/v1/bot', function( req, res ) {
     res.json( {
         botname: 'sample_botname',
         version: '0.1.0',
@@ -24,11 +24,11 @@ app.get( '/bot', function( req, res ) {
     } );
 } );
 
-app.post( '/game', function( req, res ) {
+app.post( '/v1/game', function( req, res ) {
     res.json( {} );
 } );
 
-app.post( '/round', function( req, res ) {
+app.post( '/v1/round', function( req, res ) {
     function randomDirection( array ) {
         var directions = [ 'NORTH', 'EAST', 'SOUTH', 'WEST' ];
         return directions[ array[ Math.floor( Math.random() * array.length ) ] ];
