@@ -84,15 +84,15 @@
             $self->createLabel( 'day', 'Birthday', [ 'class' => 'col-sm-2 control-label' ] );
             ?><div id='dob' class="row"><?php
                 $days = createSelectPrepare( range( 1, 31 ), 'day' );
-                $self->createSelect( $days, 'day', '', '', [ 'class' => 'form-control dob-input'] );
+                $self->createSelect( $days, 'day', '', '', [ 'class' => 'form-control dob-input' ] );
                 $months = createSelectPrepare( range( 1, 12 ), 'month' );
-                $self->createSelect( $months, 'month', '', '', [ 'class' => 'form-control dob-input'] );
+                $self->createSelect( $months, 'month', '', '', [ 'class' => 'form-control dob-input' ] );
                 $current_year = date( 'Y' );
                 $years = createSelectPrepare (
                     range( $current_year - $config[ 'age' ][ 'min' ], $current_year - $config[ 'age' ][ 'max' ] ),
                     'year'
                 );
-                $self->createSelect( $years, 'year', '', '', [ 'class' => 'form-control dob-input'] );
+                $self->createSelect( $years, 'year', '', '', [ 'class' => 'form-control dob-input' ] );
             ?></div>
         </div>
         <div class="form-group"><?php
@@ -107,7 +107,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10"><?php
-                $self->createSubmit( 'Register', [ 'class' => 'btn btn-primary'] );
+                $self->createSubmit( 'Register', [ 'class' => 'btn btn-primary' ] );
             ?></div>
         </div><?php
     } ); ?>
