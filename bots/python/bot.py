@@ -1,6 +1,7 @@
 import json, random, sys
 from urlparse import parse_qs
 from bottle import route, run, template, request, response, hook
+from pprint import pprint 
 
 @hook('after_request')
 def contentType():
@@ -20,15 +21,22 @@ def game():
 
 @route('/round', method='POST')
 def round():
-    vars = parse_qs(request.query_string)
-    print(json.dumps(vars))
+    vars = {
+        'map': request.forms.get('map'),
+        'gameid': request.forms.get('gameid'),
+        'W': request.forms.get('W'),
+        'H': request.forms.get('H'),
+        'round': request.forms.get('round'),
+        'myid': request.forms.get('myid')
+    }
+    pprint(vars)
 
     map = json.loads(vars['map'])
     game_id, my_id = vars['gameid'], vars['myid']
     round, W, H = vars['round'], vars['W'], vars['H']
 
-    my_creatures = [creature for creature in map if creature['userid'] == myid]
-    enemy_creatures = [creature for creature in map if creature['userid'] != myid]
+    my_creatures = [creature for creature in map if creature['userid'] == my_id]
+    enemy_creatures = [creature for creature in map if creature['userid'] != my_id]
 
     occupied = set([creature['x'] + creature['y'] * 1j for creature in map])
     enemy_occupied = set([creature['x'] + creature['y'] * 1j for creature in enemy_creatures])
