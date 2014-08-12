@@ -23,11 +23,7 @@
         if ( isset( $password_empty ) ) {
             $self->createError( 'Please type a password.' );
         }
-        if ( isset( $email_empty ) ) {
-            $self->createError( 'Please type an email.' );
-        }
         ?><div class="form-group"><?php
-            $self->createLabel( 'username', 'Username', [ 'class' => 'col-sm-2 control-label' ] );
             if ( isset( $username_used ) ) {
                 $self->createError( 'Username already exists' );
                 $username_value = "";
@@ -39,6 +35,7 @@
             else {
                 $username_value = "";
             }
+            $self->createLabel( 'username', 'Username', [ 'class' => 'col-sm-2 control-label' ] );
             ?><div class="col-sm-10"><?php
             $self->createInput( 'text', 'username', 'username', '', [
                 'class' => 'form-control',
@@ -48,6 +45,9 @@
         </div>
         <div class="form-group"><?php
             $self->createLabel( 'email', 'Email', [ 'class' => 'col-sm-2 control-label' ] );
+            if ( isset( $email_empty ) ) {
+                $self->createError( 'Please type an email.' );
+            }
             if ( isset( $email_invalid ) ) {
                 $self->createError( 'Email is not valid' );
             }
@@ -69,7 +69,7 @@
             if ( isset( $password_not_matched ) ) {
                 $self->createError( 'Passwords do not match' );
             }
-            ?><div class="col-sm-10" id='password-input'><?php
+            ?><div class="col-sm-10" id='password'><?php
                 $self->createInput( 'password', 'password', '', '', [
                     'class' => 'form-control',
                     'placeholder' => 'Password'
