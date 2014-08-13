@@ -8,7 +8,11 @@ describe( 'bot request', function() {
         agent
             .get( '/v1/bot' )
             .expect( function( res ) {
-                var expData = {"botname":"sample_botname","version":"0.1.0","username":"sample_username"};
+                var expData = {
+                    "botname": "sample_botname",
+                    "version": "0.1.0",
+                    "username": "sample_username"
+                };
 
                 assert.deepEqual( expData, JSON.parse( res.text ) );
             } )
