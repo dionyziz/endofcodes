@@ -22,7 +22,12 @@ function tryFn( fn ) {
             fn( req, res );
         }
         catch ( e ) {
-            res.status( 400 ).end();
+            if ( e instanceof TypeError ) {
+                res.status( 500 ).end();
+            }
+            else {
+                res.status( 400 ).end();
+            }
         }
     }
 };
