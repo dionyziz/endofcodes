@@ -22,7 +22,8 @@
         ?><div class="form-group"><?php
             $self->createInput( 'text', 'username', 'username', '' , [
                 'class' => 'form-control',
-                'placeholder' => 'Username'
+                'placeholder' => 'Username',
+                'autofocus' => '1'
             ] );
         ?></div><?php
         ?><div id='submit' class="form-group"><?php
