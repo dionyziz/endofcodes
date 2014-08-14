@@ -16,3 +16,8 @@
 #password-reset input[type=submit] {
     margin-left: 17%;
 }
+#link-sent-p {
+    width: 45%;
+    margin: auto;
+    margin-top: 15px;
+}
