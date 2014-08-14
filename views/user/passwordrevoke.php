@@ -20,7 +20,7 @@
             $self->createError( "This username doesn't exist" );
         }
         ?><div class="form-group"><?php
-            $self->createInput( 'text', 'username', 'username', '' , [
+            $self->createInput( 'text', 'input', 'username', '' , [
                 'class' => 'form-control',
                 'placeholder' => 'Username',
                 'autofocus' => '1'
