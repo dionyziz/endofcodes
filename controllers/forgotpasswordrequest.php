@@ -69,9 +69,10 @@
                     throw new HTTPUnauthorizedException( 'Password token specified is invalid' );
                 }
             }
-            if ( !empty( $_SESSION[ 'user' ] ) ) {
-                $user = $_SESSION[ 'user' ];
+            if ( empty( $_SESSION[ 'user' ] ) ) {
+                throw new HTTPUnauthorizedException( 'You have not specified any user' );
             }
+            $user = $_SESSION[ 'user' ];
             try {
                 $user->revokePasswordCheck( $password_token ); 
             }

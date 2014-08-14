@@ -122,7 +122,7 @@
         }
     }
 
-    class ForgotPasswordModelInvalidTokenException extends ModelException {
+    class ForgotPasswordModelInvalidTokenException extends ModelValidationException {
         public function __construct() {
             parent::__construct( 'Invalid Token' );
         }
