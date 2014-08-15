@@ -97,6 +97,7 @@
             $user = $_SESSION[ 'user' ];
             $user->delete();
             unset( $_SESSION[ 'user' ] );
+            flash( 'Your account have been deleted successfully. Welcome!' );
             go();
         }
 

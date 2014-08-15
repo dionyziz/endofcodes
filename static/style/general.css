@@ -22,3 +22,7 @@ h1 {
 #logout-form {
     display: none;
 }
+.flash {
+    width: 50%;
+    margin: 10px auto 30px auto;
+}
