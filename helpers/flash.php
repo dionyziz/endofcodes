@@ -1,5 +1,5 @@
 <?php
-    function flash( $message, $type = 'error' ) {
+    function flash( $message, $type = 'success' ) {
         switch ( $type ) {
             case 'error':
             case 'warning':

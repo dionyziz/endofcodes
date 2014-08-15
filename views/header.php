@@ -104,6 +104,7 @@
         <div class="container" id="main">
         <?php
             if ( !empty( $_SESSION[ 'alert' ] ) ) {
-                ?><p class=<?= "flash alert alert-{$_SESSION[ 'alert' ][ 'type' ]}" ?>><?= $_SESSION[ 'alert' ][ 'message' ] ?></p><?php
+                ?><p class='<?= "alert alert-{$_SESSION[ 'alert' ][ 'type' ]} text-center" ?>'><?= $_SESSION[ 'alert' ][ 'message' ] ?></p><?php
             }
+            unset( $_SESSION[ 'alert' ] );
         ?>
