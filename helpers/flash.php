@@ -4,7 +4,10 @@
             case 'error':
             case 'warning':
             case 'success':
-                $_SESSION[ 'alert' ] = [ $message, $type ];
+                $_SESSION[ 'alert' ] = [
+                    'message' => $message,
+                    'type' => $type
+                ];
                 break;
         }
     }

@@ -102,3 +102,8 @@
             </div>
         </div>
         <div class="container" id="main">
+        <?php
+            if ( !empty( $_SESSION[ 'alert' ] ) ) {
+                ?><p class=<?= "flash alert alert-{$_SESSION[ 'alert' ][ 'type' ]}" ?>><?= $_SESSION[ 'alert' ][ 'message' ] ?></p><?php
+            }
+        ?>
