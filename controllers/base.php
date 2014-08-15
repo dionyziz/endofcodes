@@ -68,6 +68,7 @@
                     break;
                 case 'GET':
                     $this->vars = $get;
+                    $this->resource = $this->vars[ 'resource' ];
                     unset( $this->vars[ 'resource' ] );
                     unset( $this->vars[ 'method' ] );
                     break;

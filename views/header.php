@@ -47,7 +47,10 @@
         ?>
         <meta charset="utf-8" />
     </head>
-    <body>
+    <?php
+        $id = "body-{$this->resource}-" . str_replace( 'View', '', $this->method  );
+    ?>
+    <body id=<?= $id ?>>
         <div class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
