@@ -10,4 +10,5 @@
     require_once 'helpers/pluralize.php';
     require_once 'helpers/config.php';
     require_once 'helpers/array.php';
+    require_once 'helpers/flash.php';
 ?>
