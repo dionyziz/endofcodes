@@ -5,6 +5,7 @@
         public $trusted = false;
         public $outputFormat = 'html';
         public $pageGenerationBegin; // Time marking the beginning of page generation, in epoch seconds.
+        public $resource;
         protected $method = 'view'; // Override to specify a default controller method.
         private $vars;
         private $httpRequestMethod;
