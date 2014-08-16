@@ -18,6 +18,7 @@
             require_once $filename;
             $controllername = ucfirst( $resource ) . 'Controller';
             $controller = new $controllername();
+            $controller->resource = $resource;
 
             return $controller;
         }
@@ -68,7 +69,6 @@
                     break;
                 case 'GET':
                     $this->vars = $get;
-                    $this->resource = $this->vars[ 'resource' ];
                     unset( $this->vars[ 'resource' ] );
                     unset( $this->vars[ 'method' ] );
                     break;
