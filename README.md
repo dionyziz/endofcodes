@@ -52,7 +52,25 @@ Note: this applies just to the 'development' environment!
         'dbname' => 'endofcodes'
     ],
 ```
-* On migrations page (localhost/endofcodes/testrun/create) run all migrations scripts in both environments in order to have the full database schema. 
+If you want to be able to run tests in the project, you should set up a second environment called 'test'. To achieve this you must set up a new database the same way you did for the 'development' environment. Afterwards, you should add the second environment configuration to config-local.php so your config looks like this:
+```
+'development' => [
+    'db' => [
+        'host' => 'localhost',
+        'user' => 'endofcodes',
+        'pass' => 'sample_pass',
+        'dbname' => 'endofcodes'
+    ],
+],
+'test' => [
+    'db' => [
+        'host' => 'localhost',
+        'user' => 'endofcodes',
+        'pass' => 'sample_pass',
+        'dbname' => 'eoc-test'
+    ],
+```
+* On migrations page (localhost/endofcodes/testrun/create) run all migrations scripts in both environments by selecting in order to have the full database schema.
 
 ### Vhost Setup
 * Vhost is a custom domain name on your local server that points to a directory. This way you can identify and access your local projects through reasonable naming in the browser.
