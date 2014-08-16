@@ -27,7 +27,6 @@
             $self->createInput( 'text', 'password_repeat', '', '' , [
                 'class' => 'form-control',
                 'placeholder' => 'Repeat',
-                'autofocus' => '1'
             ] );
         ?></div><?php
         $self->createInput( 'hidden', 'password_token', '', $password_token );
