@@ -26,7 +26,7 @@
                 go( 'user', 'create', [ $e->error => true ] );
             }
             $_SESSION[ 'user' ] = $user;
-            flash( 'Your account have been created successfully. Welcome!' );
+            flash( 'Your account has been created successfully. Welcome!' );
             go();
         }
 
@@ -97,7 +97,7 @@
             $user = $_SESSION[ 'user' ];
             $user->delete();
             unset( $_SESSION[ 'user' ] );
-            flash( 'Your account have been deleted successfully. Welcome!' );
+            flash( 'Your account has been deleted successfully' );
             go();
         }
 
