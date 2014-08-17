@@ -56,12 +56,19 @@ h2, h1 {
     padding-top: 10px;
     width: 370px;
 }
+#default-popup h2 {
+    font-weight: bold;
+}
 #close-modal {
     margin-right: 15px;
 }
 #default-popup p {
-    margin-bottom: 34px;
-    margin-top: 34px;
+    margin: 33px auto -4px auto;
+    width: 290px;
+    font-size: 14px;
+}
+.delete-description {
+    opacity: 0.85;
 }
 a {
     cursor: pointer;

@@ -138,9 +138,9 @@
     $form = new Form( 'user', 'delete' );
     $form->id = 'user-delete-form';
     $form->output( function( $self ) {} );
-    ?><h2 class='text-danger'>Are you sure you want to delete your account?</h2>
-    <p>
-        After the deletion of your End Of Codes account you will not be able to participate to the games.
+    ?><h2 class='text-danger'>Do you want to delete your account?</h2>
+    <p class='delete-description'>
+        After deleting your End Of Codes account you will not be able to participate to the games.
     </p>
     <p>
     <button class='btn btn-default' id='close-modal'>Cancel</button>
