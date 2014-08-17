@@ -26,6 +26,7 @@
                 go( 'user', 'create', [ $e->error => true ] );
             }
             $_SESSION[ 'user' ] = $user;
+            flash( 'Your account has been created successfully. Welcome!' );
             go();
         }
 
@@ -87,6 +88,7 @@
             catch ( ModelValidationException $e ) {
                 go( 'user', 'update', [ $e->error => true ] );
             }
+            flash( 'Your settings have changed successfully.' );
             go();
         }
 
@@ -95,6 +97,7 @@
             $user = $_SESSION[ 'user' ];
             $user->delete();
             unset( $_SESSION[ 'user' ] );
+            flash( 'Your account has been deleted successfully.' );
             go();
         }
 
