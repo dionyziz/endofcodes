@@ -21,7 +21,8 @@
                 }
             }
             $user->createForgotPasswordLink();
-            include 'views/user/forgot/link.php'; 
+            flash( 'You will shortly receive an e-mail with instructions to reset your password.' );
+            go();
         }
         public function update( $password, $password_repeat, $password_token ) {
             if ( $password !== $password_repeat ) {

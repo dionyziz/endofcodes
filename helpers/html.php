@@ -75,7 +75,7 @@
                     ?>" <?php
                 }
                 foreach ( $attributes as $key => $value ) {
-                    echo $key; 
+                    echo $key;
                     ?>="<?php
                         echo htmlspecialchars( $value );
                     ?>" <?php
@@ -101,7 +101,7 @@
                 }
                 if ( !empty( $attributes ) ) {
                     foreach ( $attributes as $key => $value ) {
-                        echo $key; 
+                        echo $key;
                         ?>="<?php
                             echo htmlspecialchars( $value );
                         ?>" <?php
@@ -109,7 +109,7 @@
                 }
             ?>><?php
             foreach ( $optionArray as $value => $content ) {
-                ?><option 
+                ?><option
                     value="<?php
                         echo htmlspecialchars( $value );
                     ?>"<?php
@@ -137,10 +137,17 @@
             return $methods[ $method ];
         }
 
-        public function createLabel( $for, $text ) {
+        public function createLabel( $for, $text, $attributes = [] ) {
             ?><label for="<?php
                 echo htmlspecialchars( $for );
-            ?>"><?php
+                ?>" <?php
+                foreach ( $attributes as $key => $value ) {
+                    echo $key;
+                    ?>="<?php
+                        echo htmlspecialchars( $value );
+                    ?>" <?php
+                }
+                ?>><?php
                 echo htmlspecialchars( $text );
             ?></label><?php
         }
@@ -173,7 +180,7 @@
                     ?>" <?php
                 }
                 foreach ( $this->attributes as $key => $value ) {
-                    echo $key; 
+                    echo $key;
                     ?>="<?php
                         echo htmlspecialchars( $value );
                     ?>" <?php
@@ -231,6 +238,6 @@
         if ( !empty( $title ) ) {
             $array = compact( 'title' ) + $array;
         }
-        return $array; 
+        return $array;
     }
 ?>
