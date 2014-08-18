@@ -30,6 +30,12 @@ def round():
     }
 
     map = json.loads(vars['map'])
+    # FIX DUMB API SENDING X AND Y AS STRING
+    for i in range( len( map ) ):
+        map[ i ][ 'x' ] = int( map[ i ][ 'x' ] )
+        map[ i ][ 'y' ] = int( map[ i ][ 'y' ] )
+        
+    
     game_id, my_id = vars['gameid'], vars['myid']
     round, W, H = vars['round'], vars['W'], vars['H']
 

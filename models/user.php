@@ -99,6 +99,19 @@
             }
             return $this->winCount;
         }
+
+        public function lastGameCreaturesCount() { //Returns an int with the number of creatures that survived in the last game.
+            $game = Game::getLastGame();
+            $res = db(
+                'SELECT roundcreatures.creatureid, userid, roundcreatures.roundid FROM roundcreatures
+                INNER JOIN creatures ON roundcreatures.creatureid = creatures.id
+                LEFT JOIN roundcreatures AS b
+                ON b.roundid > roundcreatures.roundid AND b.creatureid = roundcreatures.creatureid AND b.gameid = roundcreatures.gameid
+                WHERE roundcreatures.gameid = 6 AND userid = 1 AND b.roundid IS NULL;' //change id's
+            );
+            return count( mysql_fetch_array( $res ) );
+        }
+
         public static function findByEmail( $email ) {
             try {
                 $user = dbSelectOne( 'users', [ 'id' ], compact( "email" ) );
@@ -277,6 +290,7 @@
         }
 
         public function setBoturl( $boturl ) {
+            require_once 'models/grader/bot.php';
             $oldBoturl = $this->boturl;
             $this->boturl = $boturl;
 
