@@ -1,28 +1,26 @@
 <?php
     require_once 'header.php';
 
+    function launchController( $resource, $get, $post = '', $files = '', $httpRequestMethod = 'GET' ) {
+        try {
+            $controller = controllerBase::findController( $resource );
+            $controller->dispatch( $get, $post, $files, $httpRequestMethod );
+        }
+        catch ( ErrorRedirectException $e ) {
+            launchController( $e->controller, $e->arguments );
+        }
+        catch ( HTTPRedirectException $e ) {
+            global $config;
+
+            $url = $config[ 'base' ] . $e->url;
+            header( 'Location: ' . $url );
+        }
+    }
+
+    $resource = 'dashboard';
     if ( isset( $_GET[ 'resource' ] ) ) {
         $resource = $_GET[ 'resource' ];
     }
-    else {
-        $resource = 'dashboard';
-    }
-    try {
-        $controller = controllerBase::findController( $resource );
-        $controller->dispatch( $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
-    }
-    catch ( NotImplemented $e ) {
-        die( 'An attempt was made to call a not implemented function: ' . $e->getFunctionName() );
-    }
-    catch ( RedirectException $e ) {
-        global $config;
 
-        $url = $e->getURL();
-
-        header( 'Location: ' . $config[ 'base' ] . $url );
-    }
-    catch ( HTTPErrorException $e ) {
-        header( $e->header );
-        $e->outputErrorPage();
-    }
+    launchController( $resource, $_GET, $_POST, $_FILES, $_SERVER[ 'REQUEST_METHOD' ] );
 ?>

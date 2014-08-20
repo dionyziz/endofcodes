@@ -1,17 +1,29 @@
-div.steps {
-    width: 15%;
-    float:left;
-    margin-right: 9%;
-    border: 1px solid black;
+#register-form .form-group {
+    margin-bottom: 30px;
 }
 #register-form {
-    clear: both;
-    text-align: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: 20%;
 }
-#steps {
-    margin-left: 11%;
-    margin-top: 5%;
-    height: 86px;
-    margin-bottom: 7%;
+#register-form input,
+#register-form button,
+#register-form #country-input {
+    width: 257px;
+}
+#register-form #dob select:first-child {
+    margin-left: 15px;
+}
+#register-form #dob select {
+    margin-right: -7px;
+}
+#register-form #dob p {
+    display: inline;
+}
+#register-form #password-input input:first-child {
+    margin-bottom: 15px;
+}
+#register-form .alert-danger {
     text-align: center;
+    width: 257px;
 }

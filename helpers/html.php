@@ -75,7 +75,7 @@
                     ?>" <?php
                 }
                 foreach ( $attributes as $key => $value ) {
-                    echo $key; 
+                    echo $key;
                     ?>="<?php
                         echo htmlspecialchars( $value );
                     ?>" <?php
@@ -99,15 +99,17 @@
                         echo htmlspecialchars( $id );
                     ?>" <?php
                 }
-                foreach ( $attributes as $key => $value ) {
-                    echo $key; 
-                    ?>="<?php
-                        echo htmlspecialchars( $value );
-                    ?>" <?php
+                if ( !empty( $attributes ) ) {
+                    foreach ( $attributes as $key => $value ) {
+                        echo $key;
+                        ?>="<?php
+                            echo htmlspecialchars( $value );
+                        ?>" <?php
+                    }
                 }
             ?>><?php
             foreach ( $optionArray as $value => $content ) {
-                ?><option 
+                ?><option
                     value="<?php
                         echo htmlspecialchars( $value );
                     ?>"<?php
@@ -129,10 +131,10 @@
                 'update' => 1,
                 'view' => 0
             ];
-            if ( isset( $methods[ $method ] ) ) {
-                return $methods[ $method ];
+            if ( !isset( $methods[ $method ] ) ) {
+                throw new HTMLFormInvalidException( $method );
             }
-            throw new HTMLFormInvalidException( $method );
+            return $methods[ $method ];
         }
 
         public function createLabel( $for, $text, $attributes = [] ) {
@@ -178,7 +180,7 @@
                     ?>" <?php
                 }
                 foreach ( $this->attributes as $key => $value ) {
-                    echo $key; 
+                    echo $key;
                     ?>="<?php
                         echo htmlspecialchars( $value );
                     ?>" <?php
@@ -236,6 +238,6 @@
         if ( !empty( $title ) ) {
             $array = compact( 'title' ) + $array;
         }
-        return $array; 
+        return $array;
     }
 ?>

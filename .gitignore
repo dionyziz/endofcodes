@@ -7,3 +7,4 @@ avatars
 .DS_STORE
 tags
 .history
+node_modules/

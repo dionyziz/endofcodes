@@ -31,6 +31,7 @@
             includeStyle( "debug" );
             includeStyle( "../jquery-ui/jquery-ui.min" );
             includeStyle( "../jquery-ui/jquery.ui.theme" );
+            includeStyle( "qunit" );
 
             includeScript( 'jquery-2.1.0.min' );
             includeScript( 'bootstrap.min' );
@@ -46,10 +47,14 @@
             includeScript( 'bot/update' );
             includeScript( 'debug' );
             includeScript( '../jquery-ui/jquery-ui-1.10.4.min' );
+            includeScript( "qunit" );
         ?>
         <meta charset="utf-8" />
     </head>
-    <body>
+    <?php
+        $id = htmlspecialchars( "body-{$this->resource}-" . str_replace( 'View', '', $this->method  ) );
+    ?>
+    <body id='<?= $id ?>'>
         <div class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -104,3 +109,13 @@
             </div>
         </div>
         <div class="container" id="main">
+        <?php
+            if ( !empty( $_SESSION[ 'alert' ] ) ) {
+                ?><p class='flash alert alert-<?=
+                    $_SESSION[ 'alert' ][ 'type' ];
+                ?> text-center'><?=
+                    htmlspecialchars( $_SESSION[ 'alert' ][ 'message' ] );
+                ?></p><?php
+            }
+            unset( $_SESSION[ 'alert' ] );
+        ?>
