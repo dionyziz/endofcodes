@@ -1,0 +1,17 @@
+#body-botcomparison-create .alert-danger {
+    margin-bottom: 28px;
+    margin: 30px auto;
+    width: 778px;
+    text-align: center;
+}
+#body-botcomparison-create .error {
+    width: 100%;
+}
+#botcomparison-desc {
+    width: 795px; 
+    margin: auto;
+}
+#botcomparison-form {
+    width: 23%;
+    margin: 20px auto;
+}
