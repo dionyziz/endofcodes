@@ -4,10 +4,6 @@
         protected function dbInit() {}
 
         public function create( $user, $pass, $dbname ) {
-            if ( $this->environment == 'production' ) {
-                go();
-            }
-            
             $entries = compact( 'user', 'pass', 'dbname' );
             $entries = [ 'db' => $entries ];
             try {
@@ -21,11 +17,6 @@
         }
         public function createView( $error, $dbSaid ) {
             global $config;
-            
-            if ( $this->environment == 'production' ) {
-                go();
-            }
-            
             $oldConfig = [
                 'db' => [
                     'user'   => '',
