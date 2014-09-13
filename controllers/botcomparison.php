@@ -40,9 +40,9 @@
             catch ( ModelNotFoundException $e ) {
             }
             $creatures = $user->lastGameCreaturesCount();
-                $winner = $ratings[1][0]->username;
-                flash( $winner . ' won with ' . $creatures . ' creatures.' );
-                go( 'botcomparison', 'create' );
+            $winner = $ratings[1][0]->username;
+            flash( $winner . ' won with ' . $creatures . ' creatures.' );
+            go( 'botcomparison', 'create' );
         }
         public function createView( $emptyUrl, $bot_fail, $errorid = false, $whichBot = '' ) {
             require_once 'models/error.php';

@@ -78,8 +78,7 @@
         <div class="form-group text-center"><?php
             $self->createSubmit( 'Run Battle', [ 'class' => 'btn btn-primary' ] );
         ?></div><?php
-    } ); ?>
+    } );
 
-<?php
     require 'views/footer/view.php';
 ?>
