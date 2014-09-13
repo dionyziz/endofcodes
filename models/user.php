@@ -107,7 +107,7 @@
                 INNER JOIN creatures ON roundcreatures.creatureid = creatures.id
                 LEFT JOIN roundcreatures AS b
                 ON b.roundid > roundcreatures.roundid AND b.creatureid = roundcreatures.creatureid AND b.gameid = roundcreatures.gameid
-                WHERE roundcreatures.gameid = 6 AND userid = 1 AND b.roundid IS NULL;' //change id's
+                WHERE roundcreatures.gameid = ' . $game->id . ' AND userid = ' . $this->id . ' AND b.roundid IS NULL;'
             );
             return count( mysql_fetch_array( $res ) );
         }
