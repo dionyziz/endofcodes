@@ -12,6 +12,12 @@
             $user = new User();
             $user->username = $username;
             $user->password = 'secret1234';
+            $user->email = "$username@gmail.com";
+            $user->name = "Frank";
+            $user->surname = 'Sinatra';
+            $user->website = "https://example.com";
+            $user->github = "https://github.com/$username";
+            $user->boturl = $config[ 'base' ] . 'bots/php';
 
             if ( $email == '' ) {
                 $email = "$username@gmail.com";

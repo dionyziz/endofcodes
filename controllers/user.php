@@ -1,7 +1,8 @@
 <?php
     class UserController extends AuthenticatedController {
         public function create( $username = '', $password = '', $password_repeat = '', $email = '',
-                                $countryShortname = '', $day = '', $month = '', $year = '' ) {
+                                $countryShortname = '', $day = '', $month = '', $year = '', $name = '', $surname = '',
+                                $website = '', $github = '' ) {
             require_once 'models/country.php';
             if ( $password !== $password_repeat ) {
                 go( 'user', 'create', [ 'password_not_matched' => true ] );
@@ -18,6 +19,10 @@
             $user->password = $password;
             $user->email = $email;
             $user->country = $country;
+            $user->name = $name;
+            $user->surname = $surname;
+            $user->website = $website;
+            $user->github = $github;
             $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->save();
@@ -60,7 +65,8 @@
         }
 
         public function update( $password = '', $password_new = '', $password_repeat = '',
-                                $countryShortname = '', $email = '', $day = '', $month = '', $year = '' ) {
+                                $countryShortname = '', $email = '', $day = '', $month = '', $year = '', $name,
+                                $surname, $website, $github ) {
             $this->requireLogin();
             require_once 'models/country.php';
             $user = $_SESSION[ 'user' ];
@@ -76,6 +82,10 @@
                 }
             }
             $user->email = $email;
+            $user->name = $name;
+            $user->surname = $surname;
+            $user->website = $website;
+            $user->github = $github;
             $user->dateOfBirth = compact( 'day', 'month', 'year' );
             try {
                 $user->country = Country::findByShortname( $countryShortname );
@@ -101,8 +111,9 @@
             go();
         }
 
-        public function createView( $username_empty, $username_invalid, $username_used, $email_empty, $email_used, $email_invalid,
-                                    $password_empty, $password_not_matched, $password_small ) {
+        public function createView( $username_empty, $username_invalid, $username_used, $name_invalid, $surname_invalid,
+                                    $email_empty, $email_used, $email_invalid, $password_empty, $password_not_matched, 
+                                    $password_small, $website_invalid ) {
             require_once 'models/geolocation.php';
             require_once 'models/country.php';
             $countries = Country::findAll();
@@ -126,7 +137,7 @@
         }
 
         public function updateView( $image_invalid, $password_new_small, $password_new_not_matched, $password_wrong,
-                                    $email_invalid, $email_used ) {
+                                    $email_invalid, $email_used, $name_invalid, $surname_invalid, $website_invalid ) {
             $this->requireLogin();
             require_once 'models/country.php';
             $user = $_SESSION[ 'user' ];

@@ -9,11 +9,19 @@
             $user->username = 'pkakelas';
             $user->password = 'secret1234';
             $user->email = 'pkakelas@gmail.com';
+            $user->name = 'Dimitris';
+            $user->surname = 'Lamprinos';
+            $user->github = 'https://github.com/pkakelas';
+            $user->website = 'https://pkakelas.com';
             $user->save();
             $passwordSuccess = $user->authenticatesWithPassword( 'secret1234' );
             $this->assertTrue( $passwordSuccess, 'Password must be the one associated during creation' );
             $this->assertEquals( 'pkakelas', $user->username, 'Username must be the one associated during creation' );
             $this->assertEquals( 'pkakelas@gmail.com', $user->email, 'Email must be the one associated during creation' );
+            $this->assertEquals( 'Dimitris', $user->name, 'Name must be the one associated during creation' );
+            $this->assertEquals( 'Lamprinos', $user->surname, 'Surname must be the one associated during creation' );
+            $this->assertEquals( 'https://github.com/pkakelas', $user->github, 'Github must be the one associated during creation' );
+            $this->assertEquals( 'https://pkakelas.com', $user->website, 'Website must be the one associated during creation' );
         }
         public function testAuthenticatesWithPassword() {
             $user = $this->buildUser( 'pkakelas' );
@@ -43,12 +51,47 @@
             $user->save();
             $this->assertEquals( 'pkakelas2@gmail.com', $user->email, 'Email must be the one associated during update' );
         }
+        public function testNameChange() {
+            $user = $this->buildUser( 'pkakelas' );
+            $user->name = 'Dimitris';
+            $user->save();
+            $this->assertEquals( 'Dimitris', $user->name, 'Name must be the one associated during update' );
+        }
+        public function testSurnameChange() {
+            $user = $this->buildUser( 'pkakelas' );
+            $user->surname = 'Lamprinos';
+            $user->save();
+            $this->assertEquals( 'Lamprinos', $user->surname, 'Surname must be the one associated during update' );
+        }
+        public function testWebsiteChange() {
+            $user = $this->buildUser( 'pkakelas' );
+            $user->website = 'https://pkakelas.com';
+            $user->save();
+            $this->assertEquals( 'https://pkakelas.com', $user->website, 'Website must be the one associated during update' );
+        }
+        public function testGithubChange() {
+            $user = $this->buildUser( 'pkakelas' );
+            $user->github = 'https://github.com/pkakelas';
+            $user->save();
+            $this->assertEquals( 'https://github.com/pkakelas', $user->github, 'Github must be the one associated during update' );
+        }
         public function testSetCountry() {
             $country = $this->buildCountry( 'Greece', 'GR' );
 
             $user = $this->buildUser( 'pkakelas' );
             $user->country = $country;
             $this->assertEquals( 1, $user->country->id, 'Country must be the one associated during update' );
+        }
+        public function testWebsiteValidation() {
+            $this->assertThrows(
+                function() {
+                    $user = $this->buildUser( 'pkakelas' );
+                    $user->website = "http://pkakelas*(#.com";
+                    $user->save();
+                },
+                'ModelValidationException',
+                'The website URL cannot contain special symbols'
+            );
         }
         public function testDuplicateUsername() {
             $user1 = $this->buildUser( 'pkakelas' );

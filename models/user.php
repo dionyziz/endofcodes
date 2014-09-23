@@ -7,9 +7,11 @@
     define( 'ROLE_DEVELOPER', 10 );
 
     class User extends ActiveRecordBase {
-        protected static $attributes = [ 'username', 'password', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
+        protected static $attributes = [ 'username', 'password', 'name', 'surname', 'dob', 'salt', 'boturl', 'countryid', 'imageid', 'email', 'website', 'github', 'sessionid', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
         public $username;
         public $password;
+        public $name;
+        public $surname;
         public $email;
         public $country;
         public $forgotpasswordrequestcreated;
@@ -18,6 +20,8 @@
         public $sessionid;
         public $salt;
         public $dateOfBirth;
+        public $website;
+        public $github;
         public $boturl;
         public $winCount;
         public $role;
@@ -72,7 +76,7 @@
                     throw new ModelNotFoundException();
                 }
                 $this->winCount = 0;
-                $attributesToAssign = [ 'boturl', 'username', 'email', 'dob', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
+                $attributesToAssign = [ 'boturl', 'username', 'email', 'name', 'surname', 'dob', 'website', 'github', 'forgotpasswordtoken', 'forgotpasswordrequestcreated', 'role' ];
                 foreach ( $attributesToAssign as $key ) {
                     $this->$key = $user_info[ $key ];
                 }
@@ -118,6 +122,12 @@
             if ( preg_match( '#[^a-zA-Z0-9._]#', $this->username ) ) {
                 throw new ModelValidationException( 'username_invalid' );
             }
+            if ( preg_match( '#[^a-zA-Z]#', $this->name ) ) {
+                throw new ModelValidationException( 'name_invalid' );
+            }
+            if ( preg_match( '#[^a-zA-Z]#', $this->surname ) ) {
+                throw new ModelValidationException( 'surname_invalid' );
+            }
             if ( empty( $this->password ) && !$this->exists ) {
                 throw new ModelValidationException( 'password_empty' );
             }
@@ -130,10 +140,12 @@
                 }
                 throw new ModelValidationException( 'password_small' );
             }
+            if ( !empty( $this->website ) && !filter_var( $this->website, FILTER_VALIDATE_URL ) ) {
+                throw new ModelValidationException( 'website_invalid' );
+            }
             if ( !filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
                 throw new ModelValidationException( 'email_invalid' );
             }
-
             if ( isset( $this->password ) ) {
                 $array = encrypt( $this->password );
                 $this->password = $array[ 'hash' ];
