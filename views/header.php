@@ -27,6 +27,7 @@
             includeStyle( "user/view" );
             includeStyle( "bot/update" );
             includeStyle( "debug" );
+            includeStyle( "user/forgot" );
             includeStyle( "../jquery-ui/jquery-ui.min" );
             includeStyle( "../jquery-ui/jquery.ui.theme" );
             includeStyle( "qunit" );

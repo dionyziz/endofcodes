@@ -1,0 +1,23 @@
+#pass-revoke-title, #pass-reset-title {
+    font-size: 22px;
+    margin-bottom: 22px;
+}
+#password-revoke #username, #password-reset {
+    width: 23%;
+    margin: auto;
+    margin-bottom: 15px;
+}
+#password-revoke .alert, .logged-notice {
+    text-align: center;
+    width: 28%;
+    margin: auto;
+    margin-bottom: 20px;
+} 
+#password-reset input[type=submit] {
+    margin-left: 17%;
+}
+#link-sent-p {
+    width: 45%;
+    margin: auto;
+    margin-top: 15px;
+}
