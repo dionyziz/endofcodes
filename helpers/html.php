@@ -87,7 +87,7 @@
             $this->createInput( 'submit', '', '', $value, $attributes );
         }
 
-        public function createSelect( $optionArray, $name = '', $selected = '', $id = '', $attributes = '' ) {
+        public function createSelect( $optionArray, $name = '', $selected = '', $id = '', $attributes = [] ) {
             ?><p><select <?php
                 if ( isset( $name ) ) {
                     ?>name="<?php
@@ -140,14 +140,14 @@
         public function createLabel( $for, $text, $attributes = [] ) {
             ?><label for="<?php
                 echo htmlspecialchars( $for );
+            ?>" <?php
+            foreach ( $attributes as $key => $value ) {
+                echo $key; 
+                ?>="<?php
+                    echo htmlspecialchars( $value );
                 ?>" <?php
-                foreach ( $attributes as $key => $value ) {
-                    echo $key;
-                    ?>="<?php
-                        echo htmlspecialchars( $value );
-                    ?>" <?php
-                }
-                ?>><?php
+            }
+            ?>><?php
                 echo htmlspecialchars( $text );
             ?></label><?php
         }
