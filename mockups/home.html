@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>End Of Codes</title>
+        <link rel="stylesheet" type="text/css" href="../static/style/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="bootstrap-social.css">
+        <link rel="stylesheet" type="text/css" href="../static/style/general.css">
+        <link rel="stylesheet" type="text/css" href="../static/style/header.css">
+        <link rel="stylesheet" type="text/css" href="../static/style/footer.css">
+        <link rel="stylesheet" type="text/css" href="../static/style/session/create.css">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <style>
+            @import "bootstrap-social.less";
+            .jumbotron {
+                height: 435px;
+                margin-bottom: 20px;
+                background-color: rgb(224, 229, 236);
+            } 
+            #descr {
+                float: left;
+                width: 565px;
+                margin-top: 26px;
+            }
+            #descr h1 {
+                font-size: 41px;
+                color: royalblue;
+                font-family: serif;
+                margin-bottom: 10px;
+                font-size: 41px;
+                margin-left: 25px;
+                width: 100%;
+            }
+            #descr ul {
+                margin-left: 150px;
+                margin-top: 20px;
+                font-size: 23px;
+            }
+            #form {
+                float: right;
+                margin-top: 20px;
+                margin-right: 10%;
+            }
+            #form form input {
+                margin-bottom: 20px;
+                width: 280px;
+                height: 42px;
+            }
+            #form input[type='submit']  {
+                width: 200px;
+                margin-left: 40px;
+                margin-bottom: 20px;
+                font-size: 17px;
+                height: 40px;
+            }
+            #ext-login li:last-child {
+                margin-left: 16px;
+            } 
+            #form p {
+                text-align: center;
+            }
+            #form a {
+                width: 125px;
+            }
+            #prevGameStatistics {
+                float: left;
+                margin-left: 15%;
+                margin-top: 35px;
+            }
+            #prevGameStatistics table {
+                font-size: 17px;
+            }
+            #prevGameStatistics table th {
+                padding-right: 0px;
+            }
+            #prevGameScreenshot {
+                float: right;
+                margin-top: 113px;
+                margin-right: 15%;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">End Of Codes</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="">Home</a></li>
+                    <li><a href="">Rules</a></li>
+                    <li><a href="http://blog.endofcodes.com">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="session/create">Login</a></li>
+                    <li class="active"><a href="user/create">Register</a></li>
+               </ul>
+            </div>
+        </div>
+        <div class='jumbotron'>
+            <div id='descr'>
+                <h1 class='text-center'>Programming Fighting</h1>
+                <ul>
+                    <li>A game targetting programmers</li>
+                    <li>Code your bot</li>
+                    <li>Try to eliminate other players</li>
+                    <li>Get good rankings</li>
+                </ul>
+            </div>
+            <div id='form'>
+                <form role='form'>
+                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Username">
+                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="text" class="form-control" placeholder="Email">
+                    <input type="submit" class="btn btn-primary" value='Create Account' placeholder="Email">
+                </form>
+                <p>Or use:</p>
+                <ul id='ext-login' class='list-inline'>
+                <li>
+                <a class="btn btn-block btn-social btn-google-plus">
+                    <i class="fa fa-google-plus"></i>Google
+                </a>
+                </li>
+                <li>
+                <a class="btn btn-block btn-social btn-github">
+                    <i class="fa fa-github"></i>Github
+                </a>
+                </li>
+                </ul>
+            </div>
+        </div>
+        <div id='prevGameStatistics'>
+            <h2 class=text-center>
+                <a href="game/view?gameid=2">Last game</a> Ratings
+            </h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Country</th>
+                        <th>Games won</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <a href="user/view?username=dionyziz">dionyziz</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <a href="user/view?username=vitsalis">vitsalis</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr> 
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            <a href="user/view?username=dionyziz">dionyziz</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>
+                            <a href="user/view?username=dionyziz">dionyziz</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>
+                            <a href="user/view?username=vitsalis">vitsalis</a>
+                        </td>
+                        <td>Greece</td>
+                        <td>Coming soon</td>
+                    </tr> 
+                </tbody>
+            </table> 
+        </div>
+        <div id='prevGameScreenshot'>
+            <img src='screenshot.png' alt='prevGameScreenshot' />
+        </div>
+        <footer id="footer" class="panel-footer"> 
+            <ul class="social-buttons">
+                <li>
+                    <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dionyziz&amp;repo=endofcodes&amp;type=watch&amp;count=true" title="Star on GitHub" /></iframe>
+                </li>
+                <li>
+                    <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dionyziz&amp;repo=endofcodes&amp;type=fork&amp;count=true" title="Fork on GitHub"></iframe>
+                </li>
+            </ul>
+        </footer>
+        <div class="container" id="main">
+    </body>
+</html>
